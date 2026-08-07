@@ -118,6 +118,47 @@
     </p>
   </section>
 
+  <!-- ── Grid ─────────────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Grid</h2>
+    <p class="demo__note">
+      Carbon's 2x grid: 16 columns from <code>lg</code> up, 8 on
+      <code>md</code>, 4 on <code>sm</code>. The column count changing is the
+      whole idea — <code>ds-col-span-8</code> is half the page on a laptop and
+      the entire width of a tablet, from one class.
+    </p>
+    <p class="demo__note">
+      Resize the window and watch the row below re-flow. The gutter is padding on
+      the columns rather than <code>gap</code>, which is Carbon's choice: a gap
+      would leave visible stripes between filled columns, where padding lets a
+      column's background run edge to edge and insets only its content.
+    </p>
+
+    <div class="ds-grid ds-grid--full-width ds-grid--row-gap demo-grid">
+      @for (n of gridCells; track n) {
+        <div class="ds-col-span-4"><span class="demo-grid__cell">span 4</span></div>
+      }
+      <div class="ds-col-span-8"><span class="demo-grid__cell">span 8</span></div>
+      <div class="ds-col-span-8"><span class="demo-grid__cell">span 8</span></div>
+      <div class="ds-col-span-16"><span class="demo-grid__cell">span 16</span></div>
+    </div>
+
+    <p class="demo__note">
+      Breakpoint-scoped spans read "from here up", the same as Carbon:
+      <code>ds-col-md-4</code> applies from <code>md</code>, and anything below
+      it falls back to the unprefixed span or to a single track.
+    </p>
+
+    <div class="ds-grid ds-grid--full-width ds-grid--row-gap demo-grid">
+      <div class="ds-col-span-4 ds-col-md-2 ds-col-lg-8">
+        <span class="demo-grid__cell">4 / md 2 / lg 8</span>
+      </div>
+      <div class="ds-col-span-4 ds-col-md-6 ds-col-lg-8">
+        <span class="demo-grid__cell">4 / md 6 / lg 8</span>
+      </div>
+    </div>
+  </section>
+
   <!-- ── Active route ─────────────────────────────────────────────────────── -->
   <section class="demo__section">
     <h2 class="demo__title">Active route</h2>

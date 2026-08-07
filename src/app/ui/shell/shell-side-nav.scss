@@ -165,9 +165,24 @@ $shell-rail-width: rem(48px);
 // A fill plus weight, where the header nav uses a rule. The side nav is a
 // column, so an underline would be read as a divider between rows.
 // See the note in shell.scss: the attribute is what the router sets.
+//
+// Fill, weight, and a 3px rule down the leading edge. The bar is the part that
+// actually reads — `$background-selected` is a faint grey, and in a column of
+// rows a fill alone is easy to miss. The header nav puts its rule underneath
+// instead, because there the items sit in a row.
 .ds-shell-side-nav .ds-shell-link--current,
 .ds-shell-side-nav .ds-shell-link[aria-current='page'] {
+  position: relative;
   background-color: $background-selected;
   color: $text-primary;
   font-weight: 600;
+
+  &::before {
+    position: absolute;
+    width: rem(3px);
+    background-color: $border-interactive;
+    content: '';
+    inset-block: 0;
+    inset-inline-start: 0;
+  }
 }

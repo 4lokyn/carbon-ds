@@ -1,0 +1,146 @@
+// Carbon's 16-column grid, on our class names.
+//
+// Carbon ships this as CSS already — `@include grid.css-grid()` would emit the
+// whole thing in one line. We generate it instead, because that include brings
+// `.cds--css-grid` and `.cds--col-span-4` with it, and app templates are the one
+// place this repo has been strict about: markup and class names are ours. The
+// cost is the ~120 lines below; the benefit is that dropping Carbon later does
+// not mean editing every template.
+//
+// Everything here is derived from Carbon's own `$grid-breakpoints` and
+// `$grid-gutter`, so the numbers are theirs even though the selectors are not.
+
+// `@carbon/grid` directly, NOT `@carbon/styles/scss/grid`. That second one ends
+// with a bare `@include grid.css-grid()`, so merely `@use`-ing it emits Carbon's
+// entire grid — and because this file was reachable from the `ds` facade, every
+// component stylesheet got a copy. It took the bundle from 786 kB to 1.3 MB and
+// blew four per-file budgets at once. The raw package only forwards.
+@use 'sass:list';
+@use 'sass:map';
+@use '@carbon/styles/scss/breakpoint' as *;
+@use '@carbon/grid' as grid;
+
+/// 32px, split 16px each side of a column.
+$grid-gutter: grid.$grid-gutter;
+
+/// 1px. Carbon calls this condensed; it is for dense data layouts.
+$grid-gutter-condensed: grid.$grid-gutter-condensed;
+
+/// The column count changes with the breakpoint — 4 on small, 8 on medium, 16
+/// from large up. A `span 8` is therefore half the grid on lg and the whole of
+/// it on md, which is the point: one class, three sensible layouts.
+$grid-breakpoints: grid.$grid-breakpoints;
+
+@mixin grid-classes {
+  .ds-grid {
+    display: grid;
+    width: 100%;
+    margin-inline: auto;
+
+    // The gutter is padding on the columns, not `gap`. Carbon does it this way
+    // so a column's background runs edge to edge and only its *content* is
+    // inset — a gap would leave visible stripes between filled columns.
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    padding-inline: 0;
+
+    > * {
+      padding-inline: calc(#{$grid-gutter} / 2);
+    }
+
+    @each $name, $spec in $grid-breakpoints {
+      @include breakpoint($name) {
+        max-width: map.get($spec, width);
+        padding-inline: map.get($spec, margin);
+        grid-template-columns: repeat(map.get($spec, columns), minmax(0, 1fr));
+      }
+    }
+  }
+
+  // Runs the full viewport instead of stopping at the breakpoint width. For a
+  // page header or a table that should not be boxed in.
+  .ds-grid--full-width {
+    max-width: 100%;
+  }
+
+  // 1px gutters. The columns still exist; they just stop being separated.
+  .ds-grid--condensed > * {
+    padding-inline: calc(#{$grid-gutter-condensed} / 2);
+  }
+
+  // No gutters at all, and the outer margin removed with them — the content
+  // sits flush to the grid's edge. Carbon calls this narrow.
+  .ds-grid--narrow {
+    padding-inline: 0;
+
+    > * {
+      padding-inline: 0;
+    }
+  }
+
+  // `gap` would fight the padding-based gutter horizontally, so only the row
+  // axis is set. Off by default: a grid of full-bleed tiles wants no row gap.
+  .ds-grid--row-gap {
+    row-gap: $grid-gutter;
+  }
+
+  // A column that is itself a grid, inheriting the parent's tracks rather than
+  // starting a new 16 of its own. Without this a nested grid re-divides the
+  // space it was given, and nothing lines up with the page.
+  .ds-grid__subgrid {
+    display: grid;
+    grid-template-columns: subgrid;
+    padding-inline: 0;
+  }
+
+  // ── Aspect ratios ─────────────────────────────────────────────────────────
+  //
+  // The other half of the 2x grid, and the half that is easy to miss: Carbon
+  // sizes boxes by picking a ratio and multiplying the 8px mini-unit, rather
+  // than by setting heights. A column gives the width; this gives the height.
+  //
+  // The native `aspect-ratio` property, not Carbon's padding-top trick — that
+  // technique predates browser support and costs a pseudo-element plus an
+  // absolutely positioned child. The ratios are Carbon's.
+  @each $pair in ((16, 9), (9, 16), (2, 1), (1, 2), (4, 3), (3, 4), (3, 2), (2, 3), (1, 1)) {
+    $w: list.nth($pair, 1);
+    $h: list.nth($pair, 2);
+
+    .ds-aspect-#{$w}x#{$h} {
+      aspect-ratio: #{$w} / #{$h};
+    }
+  }
+
+  // ── Spans ─────────────────────────────────────────────────────────────────
+  //
+  // Unprefixed by breakpoint means "from here up", which is how Carbon reads
+  // too: `ds-col-span-4` applies everywhere, `ds-col-md-4` from md up. A column
+  // with no span class fills one track.
+
+  @for $i from 1 through 16 {
+    .ds-col-span-#{$i} {
+      grid-column: span #{$i} / span #{$i};
+    }
+  }
+
+  @each $name, $spec in $grid-breakpoints {
+    @include breakpoint($name) {
+      @for $i from 1 through map.get($spec, columns) {
+        .ds-col-#{$name}-#{$i} {
+          grid-column: span #{$i} / span #{$i};
+        }
+      }
+
+      // Explicit placement, for the cases a span cannot express — pushing a
+      // column right without an empty one in front of it.
+      @for $i from 1 through map.get($spec, columns) {
+        .ds-col-#{$name}-start-#{$i} {
+          grid-column-start: #{$i};
+        }
+      }
+
+      .ds-col-#{$name}-hide {
+        display: none;
+      }
+    }
+  }
+}

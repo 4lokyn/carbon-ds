@@ -137,3 +137,20 @@ code {
 
   @include type-style('body-01');
 }
+
+// Demo-local. The grid itself draws nothing — these cells exist so the columns
+// are visible.
+.demo-grid {
+  margin-bottom: $spacing-05;
+}
+
+.demo-grid__cell {
+  display: block;
+  padding: $spacing-05 $spacing-03;
+  border: rem(1px) dashed $border-strong-01;
+  background-color: $layer-accent-01;
+  color: $text-secondary;
+  text-align: center;
+
+  @include type-style('label-01');
+}

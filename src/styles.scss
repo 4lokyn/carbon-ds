@@ -10,8 +10,13 @@
 @use './styles/themes';
 @use '@carbon/styles/scss/reset';
 @use './styles/ds' as *;
+@use './styles/grid' as *;
 
 @include reset.reset;
+
+// The grid is global by nature — one set of classes for every page, emitted
+// once here rather than pulled into a component's stylesheet.
+@include grid-classes;
 
 html {
   // Carbon computes all type and spacing against a 16px root. Leave it alone.

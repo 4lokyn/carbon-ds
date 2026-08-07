@@ -1,0 +1,300 @@
+# Using carbon-ds
+
+How to build with it. The *why* behind the decisions is in `README.md`; the
+conventions for *adding* a component are in `src/app/ui/README.md`.
+
+## Importing
+
+Everything comes from one place. Never reach into a component folder — the file
+layout is free to change, the barrel is not.
+
+```ts
+import { Button, Input, Table, type DsColumn } from './ui';
+```
+
+Components are standalone. Put them in a component's `imports`:
+
+```ts
+@Component({
+  imports: [Button, Input],
+  // …
+})
+```
+
+Multi-part components ship an array so you do not list the pieces one by one:
+
+```ts
+imports: [...DS_SHELL, ...DS_TABS, ...DS_RADIO_GROUP]
+```
+
+## Forms
+
+### The one rule
+
+**`invalid` is a plain input. The form decides when it turns on, not the
+control.** The rule for this codebase, which is Carbon's:
+
+- on blur
+- on submit, for fields nobody touched
+- and it clears the moment the value becomes valid — without waiting for another
+  blur
+
+All three fall out of one expression:
+
+```ts
+readonly email = signal('');
+readonly emailTouched = signal(false);
+readonly submitted = signal(false);
+
+private readonly emailValid = computed(() => /* … */);
+
+readonly emailInvalid = computed(
+  () => (this.emailTouched() || this.submitted()) && !this.emailValid(),
+);
+```
+
+```html
+<ds-input
+  label="Email"
+  [value]="email()"
+  (valueChange)="email.set($event)"
+  (blurred)="emailTouched.set(true)"
+  [invalid]="emailInvalid()"
+  invalidText="Enter a valid email address."
+/>
+```
+
+Note what is *not* there: nothing resets `emailTouched` when the value turns
+good. It is unnecessary — `!emailValid()` going false clears the error on its
+own, which is why correcting a bad value updates as you type.
+
+### Every control shares the same shape
+
+`label` (required), `helperText`, `invalid` + `invalidText`, `warn` + `warnText`,
+`disabled`, `readOnly`, `hideLabel`, `size` (`sm` | `md` | `lg`), and a
+`(blurred)` output. Learn one, you know all of them.
+
+Helper text and the error share one slot — the error *replaces* the helper
+rather than stacking under it, so nothing below shifts when a field goes
+invalid.
+
+### Binding
+
+Values are `model()` signals, so `[(value)]` works:
+
+```html
+<ds-input label="Cluster name" [(value)]="clusterName" />
+<ds-textarea label="Description" [(value)]="description" [rows]="4" />
+<ds-toggle label="Auto-scaling" [(checked)]="autoScaling" />
+```
+
+That signal *is* the Signal Forms contract (`FormValueControl<T>` /
+`FormCheckboxControl`) — no `ControlValueAccessor`, no adapter.
+
+### Select takes projected options, MultiSelect takes configured ones
+
+Not an inconsistency. A `<select>` keeps `<optgroup>` and disabled options for
+free; a multi-select's select-all has to know the whole set and its filter has
+to know each row's text, and projected elements expose neither.
+
+```html
+<ds-select label="Region" [(value)]="region">
+  <option value="">Choose a region</option>
+  <optgroup label="Europe">
+    <option value="eu-west">eu-west</option>
+  </optgroup>
+</ds-select>
+
+<ds-multi-select
+  label="Owners"
+  selectAll
+  filterable
+  [options]="ownerOptions"
+  [(selected)]="owners"
+/>
+```
+
+Select-all applies to the *filtered* rows only, and skips disabled ones.
+
+### Dates: format and parse are a pair
+
+`formatDate` and `parseDate` are both inputs and must be overridden **together**.
+Whatever the field shows has to be something it can read back. The default is ISO
+because `03/04` is two different days depending on who is reading it.
+
+```html
+<ds-date-picker label="Start date" [(value)]="startDate" />
+
+<ds-date-range-picker
+  label="Reporting period"
+  [(start)]="rangeStart"
+  [(end)]="rangeEnd"
+/>
+```
+
+The range picker holds both ends in one field (`2026-08-13 – 2026-08-15`) and
+reads a spaced en dash, em dash, hyphen or "to" back.
+
+## Table
+
+Columns are data, not templates — a text column is one line.
+
+```ts
+readonly columns: DsColumn<Service>[] = [
+  { key: 'name', header: 'Name', sortable: true },
+  { key: 'cpu', header: 'CPU', sortable: true,
+    value: (r) => r.cpu === null ? '' : `${r.cpu}%`,
+    sortBy: (r) => r.cpu },
+];
+```
+
+**`value` is display, `sortBy` is order.** A column rendering `"3 hours ago"` or
+`"42%"` must give a `sortBy`, or it sorts the formatted string.
+
+Pagination lives outside the table, so the caller slices the rows — which means
+sorting has to happen on the full list first:
+
+```ts
+readonly sorted = computed(() => sortRows(this.filtered(), this.columns(), this.sort()));
+readonly pageRows = computed(() => this.sorted().slice(start, start + size));
+```
+
+…and the table goes in `serverSide` mode so it does not re-sort the one page it
+can see. `demo/services-table.ts` is the worked example.
+
+Do not combine `zebra` with `selectable`: the stripe and the selected background
+are the same token in every Carbon theme.
+
+## Shell
+
+Composed, not configured. Every piece is optional — an app with no side nav
+simply does not write one.
+
+```html
+<ds-shell>
+  <ds-shell-header class="ds-theme-inverse">
+    <button dsShellMenuButton aria-label="Open navigation"></button>
+    <a dsShellName href="/" prefix="Acme">Console</a>
+
+    <nav dsShellNav aria-label="Sections">
+      <a dsShellLink routerLink="/overview" routerLinkActive
+         ariaCurrentWhenActive="page">Overview</a>
+
+      <ds-shell-nav-menu label="More">
+        <a dsShellLink routerLink="/changelog">Changelog</a>
+      </ds-shell-nav-menu>
+    </nav>
+
+    <div dsShellActions>
+      <button dsShellAction icon="search" label="Search"></button>
+      <button dsShellAction icon="switcher" activeIcon="close"
+              label="Switch sites" [active]="panelOpen()"
+              (click)="panelOpen.set(!panelOpen())"></button>
+    </div>
+  </ds-shell-header>
+
+  <ds-shell-side-nav>
+    <div dsShellSideNavItem>
+      <a dsShellLink routerLink="/overview" routerLinkActive
+         ariaCurrentWhenActive="page">Overview</a>
+    </div>
+
+    <ds-shell-side-nav-menu label="Settings">
+      <div dsShellSideNavItem><a dsShellLink routerLink="/settings/team">Team</a></div>
+    </ds-shell-side-nav-menu>
+  </ds-shell-side-nav>
+
+  <ds-shell-overlay />
+
+  <ds-shell-panel class="ds-theme-inverse" [(expanded)]="panelOpen">
+    <ds-shell-panel-section label="Foundations">
+      <a dsShellLink href="#">Brand</a>
+    </ds-shell-panel-section>
+  </ds-shell-panel>
+
+  <ds-shell-content withSideNav>
+    <router-outlet />
+  </ds-shell-content>
+</ds-shell>
+```
+
+Three things to know:
+
+**Active route needs no binding.** `routerLinkActive` with
+`ariaCurrentWhenActive="page"` writes the attribute the shell styles against.
+Nested links inside a group get the same highlight.
+
+**`ds-theme-inverse` is what makes the shell dark.** Carbon's header is
+`$background` like everything else; it looks black in their screenshots because
+the shell sits in a g100 theme zone. Drop the class for a light shell.
+
+**`withSideNav` on the content** is what offsets it. Leave it off and the
+content runs full width.
+
+## Grid
+
+Carbon's 2x grid: 16 columns from `lg`, 8 on `md`, 4 on `sm`. The count changing
+is the point — one class, three sensible layouts.
+
+```html
+<div class="ds-grid ds-grid--row-gap">
+  <div class="ds-col-span-8">Half on a laptop, all of a tablet</div>
+  <div class="ds-col-span-8">…</div>
+</div>
+```
+
+Breakpoint-scoped spans read "from here up":
+
+```html
+<div class="ds-col-span-4 ds-col-md-2 ds-col-lg-8">…</div>
+```
+
+Modifiers: `--full-width` (ignore the max width), `--condensed` (1px gutters),
+`--narrow` (no gutters), `--row-gap`. Nest with `ds-grid__subgrid` so a column's
+children line up with the page rather than re-dividing their own space.
+
+Aspect ratios size a box from its column width: `ds-aspect-16x9`, `2x1`, `4x3`,
+`3x2`, `1x1` and their portrait flips.
+
+## Icons
+
+`ds-icon` takes a name from an inlined set, and is always `aria-hidden` — the
+thing around it supplies the name.
+
+```html
+<button dsButton iconOnly aria-label="Settings">
+  <ds-icon name="settings" />
+</button>
+```
+
+`iconOnly` is not cosmetic: the default button padding reserves an icon slot
+beside a label, and without it a lone icon renders in a 100px box against the
+left edge.
+
+To add an icon, see the header comment in `ui/icon/icons.ts` — there are two
+traps in there and both have bitten already.
+
+## Theming
+
+Four themes, switched at runtime by an attribute on `<html>`; nothing
+recompiles.
+
+```ts
+private readonly theme = inject(ThemeService);
+this.theme.set('g100');
+```
+
+Any region can run a different theme with `ds-theme-inverse`, because Carbon
+emits its custom properties on any selector rather than only on `:root`.
+
+## Two things that will bite
+
+**Never `@use '@carbon/*'` from a component.** Component styles start with
+`@use 'ds' as *;`. One facade means swapping the token source touches one file.
+
+And specifically never `@use '@carbon/styles/scss/grid'` — it ends with a bare
+`@include`, so merely using it emits Carbon's entire grid. Reaching it through
+the facade once took the bundle from 786 kB to 1.3 MB.
+
+**Class names are the public API.** `ViewEncapsulation.None` everywhere with a
+`ds-` prefix, so consumers can override. Do not add an unprefixed class.

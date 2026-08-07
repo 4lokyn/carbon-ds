@@ -18,6 +18,9 @@ There is no `carbon-components-angular` dependency. If IBM's Angular library
 stalls or changes its API, nothing here breaks — the only Carbon artifact in the
 build is compiled CSS plus some inlined icon paths.
 
+New here? **`USAGE.md`** is the developer guide — how to import, the one rule for
+form validation, and a worked example of each area. This file is the *why*.
+
 ## Running it
 
 ```bash
@@ -53,6 +56,7 @@ npm test           # vitest, via @angular/build:unit-test
 | `TableToolbar` | switches to a batch action bar while rows are selected |
 | `Pagination` | page size, range, page select, prev/next |
 | **UI Shell** | header, nav + dropdown, side nav with groups, right panel, content |
+| **Grid** | Carbon's 2x grid, 16/8/4 columns, 3 modes, aspect ratios |
 | `ThemeService` | signal-based, persisted to localStorage |
 
 The demo page at `/` exercises all of it. Read `src/app/ui/README.md` before adding
@@ -123,6 +127,10 @@ Checked in the browser and locked into tests, not inferred:
   and the styles key off that attribute, which is also what Carbon keys off. The
   demo has three real routes to prove it. A hand-set `current` on a fourth link
   was making two links claim to be current at once; that is gone.
+- The grid's arithmetic, measured at 1915px: 16 tracks, `span 4` renders 220px,
+  `span 8` 440px, `span 16` 880px, and each column carries 16px of padding —
+  half the 32px gutter, applied as padding rather than `gap` so a column's
+  background can run edge to edge.
 - 130 unit tests, including regressions for the two bugs found while building the
   table — a `NaN` comparator scrambling the whole array, and emptiness being
   judged from the formatted value rather than the sort value — plus one guarding
@@ -334,6 +342,14 @@ reads as a separate control. The standalone search keeps the fill.
 `border-inline-start`, which under `box-sizing: border-box` eats 1px out of the
 40px button and pushes the chevron off-centre. A pseudo-element does not.
 
+**The grid is generated, not included.** `@include grid.css-grid()` would emit
+the whole thing in one line, but it brings `.cds--css-grid` and
+`.cds--col-span-4` with it, and app templates are the one place this repo has
+been strict: markup and class names are ours. Every number comes from Carbon's
+`$grid-breakpoints` and `$grid-gutter`, so the geometry is theirs even though
+the selectors are not. Aspect ratios use the native `aspect-ratio` property
+rather than Carbon's padding-top trick, which predates browser support.
+
 **The shell focuses on `:focus`, not `:focus-visible`.** The single exception to
 the rule everywhere else in this system, and Carbon makes the same one. Shell
 items are navigation: clicking one usually changes the page under it, and the
@@ -393,9 +409,8 @@ up when the boxes were measured:
 - ~~**UI Shell.**~~ Built, and composed rather than configured — every piece is
   a separate element, so an app with no side nav simply does not write one. See
   ui/README.md for the two things that had to differ from Carbon's own markup.
-- **The grid system**, next. Prioritised above the controls below: it is
-  infrastructure everything else sits inside, where the remaining controls are
-  specialised one-offs.
+- ~~**The grid system.**~~ Built on our own class names rather than by including
+  Carbon's — see the deviations below.
 - **The rest of Carbon's form controls**, in no particular order and none of
   them urgent: `NumberInput` (the one with steppers — our `type="number"` is a
   passthrough and says so), `Slider`, `FileUploader`, `TimePicker`,

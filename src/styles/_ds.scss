@@ -56,3 +56,7 @@
 // and the 32-40-48 height scale. Sass rather than a wrapper component — see the
 // file header for why.
 @forward './field';
+
+// The grid is deliberately NOT forwarded here. It is page layout, not component
+// chrome — no component should be reaching for it — and routing it through the
+// facade is what let its stylesheet reach all forty of them at once.

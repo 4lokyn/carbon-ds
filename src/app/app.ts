@@ -78,6 +78,8 @@ export class App {
     'green',
   ];
 
+  protected readonly gridCells = [1, 2, 3, 4];
+
   protected readonly routedNav = [
     { path: '/tokens', label: 'Tokens' },
     { path: '/patterns', label: 'Patterns' },
