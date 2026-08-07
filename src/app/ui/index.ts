@@ -28,6 +28,20 @@ export {
   type RadioOrientation,
 } from './radio/radio';
 export { Search } from './search/search';
+export {
+  DS_SHELL,
+  Shell,
+  ShellActions,
+  ShellContent,
+  ShellHeader,
+  ShellLink,
+  ShellMenuButton,
+  ShellName,
+  ShellNav,
+  ShellOverlay,
+  ShellSideNav,
+  ShellSideNavItem,
+} from './shell/shell';
 export { Select } from './select/select';
 export { DS_TABS, DsTab, DsTabList, DsTabPanel, DsTabs } from './tabs/tabs';
 export { Table } from './table/table';

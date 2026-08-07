@@ -12,6 +12,7 @@ import {
   DatePicker,
   DateRangePicker,
   DS_RADIO_GROUP,
+  DS_SHELL,
   Search,
   Select,
   Tag,
@@ -20,6 +21,7 @@ import {
   ThemeService,
   Toggle,
 } from './ui';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ConfirmModal, type ConfirmResult } from './demo/confirm-modal';
 import { ServicesTable } from './demo/services-table';
 
@@ -39,7 +41,11 @@ const INITIAL_TAGS: readonly TagColor[] = ['blue', 'green', 'red', 'purple'];
     Textarea,
     Toggle,
     ServicesTable,
+    RouterLink,
+    RouterLinkActive,
+    RouterOutlet,
     ...DS_RADIO_GROUP,
+    ...DS_SHELL,
     ...DS_TABS,
   ],
   templateUrl: './app.html',
@@ -71,6 +77,24 @@ export class App {
     'teal',
     'green',
   ];
+
+  protected readonly routedNav = [
+    { path: '/tokens', label: 'Tokens' },
+    { path: '/patterns', label: 'Patterns' },
+    { path: '/guidelines', label: 'Guidelines' },
+  ];
+
+  protected readonly formControls = [
+    'Input',
+    'Select',
+    'Textarea',
+    'Date picker',
+    'Multi-select',
+  ];
+
+  protected readonly formsOpen = signal(true);
+  protected readonly shellPanel = signal<string | null>(null);
+  protected readonly panelOpen = signal(false);
 
   protected readonly fieldSizes: readonly FieldSize[] = ['sm', 'md', 'lg'];
 

@@ -1,0 +1,173 @@
+@use 'ds' as *;
+
+$shell-header-height: rem(48px);
+$shell-side-nav-width: rem(256px);
+$shell-rail-width: rem(48px);
+
+.ds-shell-side-nav {
+  position: fixed;
+  z-index: 7000;
+  overflow: hidden;
+  background-color: $background;
+  color: $text-secondary;
+
+  // Below the header, not behind it — the header is fixed at the top and this
+  // starts where it ends.
+  inset-block: $shell-header-height 0;
+  inset-inline-start: 0;
+  transition: width 110ms cubic-bezier(0.2, 0, 1, 0.9);
+}
+
+.ds-shell-side-nav__items {
+  @include unstyled-list;
+
+  overflow-y: auto;
+  height: 100%;
+  padding-block-start: rem(16px);
+}
+
+// ── The default nav ─────────────────────────────────────────────────────────
+//
+// 256px and permanent from `lg` up. Below that it collapses to nothing rather
+// than to a rail, and the hamburger swings it back out over the content.
+
+.ds-shell-side-nav--ux {
+  width: 0;
+
+  @include breakpoint(lg) {
+    width: $shell-side-nav-width;
+  }
+}
+
+// Only meaningful below `lg`. Above it the nav is already open and the class
+// changes nothing, which is why the hamburger is hidden up there.
+.ds-shell-side-nav--ux.ds-shell-side-nav--expanded {
+  width: $shell-side-nav-width;
+}
+
+// ── The rail ────────────────────────────────────────────────────────────────
+//
+// A different idea, not a smaller version of the same one: 48px of icons at
+// every width, widening on hover. It never hides, so it never needs the
+// hamburger.
+
+.ds-shell-side-nav--rail {
+  width: $shell-rail-width;
+
+  &:hover,
+  &:focus-within {
+    width: $shell-side-nav-width;
+  }
+}
+
+// ── Links ───────────────────────────────────────────────────────────────────
+
+.ds-shell-side-nav__item {
+  display: block;
+  width: 100%;
+}
+
+.ds-shell-side-nav .ds-shell-link {
+  @include type-style('heading-compact-01');
+
+  position: relative;
+  display: flex;
+  min-height: rem(32px);
+  align-items: center;
+  padding-inline: rem(16px);
+  color: $text-secondary;
+  font-weight: 400;
+  text-decoration: none;
+  transition: background-color $duration-fast-02 motion(standard, productive);
+
+  // The label is held on one line: the nav animates its width, and text that
+  // rewraps mid-transition makes the whole panel jitter.
+  white-space: nowrap;
+
+  &:hover {
+    background-color: $background-hover;
+    color: $text-primary;
+  }
+
+  &:focus {
+    @include focus-ring;
+  }
+}
+
+// ── Nested groups ───────────────────────────────────────────────────────────
+
+.ds-shell-side-nav__submenu {
+  @include unstyled-button;
+  @include type-style('heading-compact-01');
+
+  display: flex;
+  width: 100%;
+  min-height: rem(32px);
+  align-items: center;
+  padding-inline: rem(16px);
+  color: $text-secondary;
+  font-weight: 400;
+  white-space: nowrap;
+  transition:
+    background-color $duration-fast-02 motion(standard, productive),
+    color $duration-fast-02 motion(standard, productive);
+
+  &:hover {
+    background-color: $background-hover;
+    color: $text-primary;
+  }
+
+  &:focus {
+    @include focus-ring;
+  }
+}
+
+// Pushed to the far end by taking the leftover space, rather than by a margin
+// that would have to know the label's width.
+.ds-shell-side-nav__submenu-chevron {
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+
+  ds-icon {
+    transition: transform $duration-fast-02 motion(standard, productive);
+  }
+}
+
+.ds-shell-side-nav__submenu[aria-expanded='true'] .ds-shell-side-nav__submenu-chevron ds-icon {
+  transform: rotate(180deg);
+}
+
+// Collapsed, not removed. `max-height` is what animates; `visibility: hidden`
+// is what takes the links out of the tab order while they are still rendered.
+.ds-shell-side-nav__menu {
+  @include unstyled-list;
+
+  display: block;
+  max-height: 0;
+  visibility: hidden;
+  transition: max-height $duration-fast-02 motion(standard, productive);
+}
+
+// 1500px, which is Carbon's number and is a ceiling rather than a height: a
+// transition needs a length to run to, and `auto` is not one.
+.ds-shell-side-nav__submenu[aria-expanded='true'] + .ds-shell-side-nav__menu {
+  max-height: rem(1500px);
+  visibility: inherit;
+}
+
+// Indented, and lighter than the group heading above it.
+.ds-shell-side-nav__menu .ds-shell-link {
+  font-weight: 400;
+  padding-inline-start: rem(32px);
+}
+
+// A fill plus weight, where the header nav uses a rule. The side nav is a
+// column, so an underline would be read as a divider between rows.
+// See the note in shell.scss: the attribute is what the router sets.
+.ds-shell-side-nav .ds-shell-link--current,
+.ds-shell-side-nav .ds-shell-link[aria-current='page'] {
+  background-color: $background-selected;
+  color: $text-primary;
+  font-weight: 600;
+}

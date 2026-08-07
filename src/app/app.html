@@ -1,22 +1,111 @@
-<header class="demo-bar">
-  <span class="demo-bar__brand">carbon&#8209;ds</span>
+<ds-shell>
+  <ds-shell-header class="ds-theme-inverse">
+    <button dsShellMenuButton aria-label="Open navigation"></button>
 
-  <nav class="demo-bar__themes" aria-label="Theme">
-    @for (name of theme.available; track name) {
+    <a dsShellName href="#" prefix="Carbon">ds</a>
+
+    <nav dsShellNav aria-label="Sections">
+      <a dsShellLink href="#" current>Components</a>
+      <a dsShellLink href="#">Tokens</a>
+      <a dsShellLink href="#">Patterns</a>
+
+      <ds-shell-nav-menu label="Sub-menu">
+        <a dsShellLink href="#">Overview</a>
+        <a dsShellLink href="#">Changelog</a>
+        <a dsShellLink href="#">Roadmap</a>
+      </ds-shell-nav-menu>
+    </nav>
+
+    <div dsShellActions>
+      <button dsShellAction icon="search" label="Search"></button>
       <button
-        dsButton
-        size="sm"
-        [kind]="theme.theme() === name ? 'primary' : 'ghost'"
-        [attr.aria-pressed]="theme.theme() === name"
-        (click)="theme.set(name)"
-      >
-        {{ name }}
-      </button>
-    }
-  </nav>
-</header>
+        dsShellAction
+        icon="switcher"
+        activeIcon="close"
+        label="Switch sites"
+        [active]="panelOpen()"
+        (click)="panelOpen.set(!panelOpen())"
+      ></button>
+      <button
+        dsShellAction
+        icon="settings"
+        label="Settings"
+        [active]="shellPanel() === 'settings'"
+        (click)="shellPanel.set(shellPanel() === 'settings' ? null : 'settings')"
+      ></button>
 
-<main class="demo">
+      <span class="demo-bar__themes">
+        @for (name of theme.available; track name) {
+          <button
+            dsButton
+            size="sm"
+            [kind]="theme.theme() === name ? 'primary' : 'ghost'"
+            [attr.aria-pressed]="theme.theme() === name"
+            (click)="theme.set(name)"
+          >
+            {{ name }}
+          </button>
+        }
+      </span>
+    </div>
+  </ds-shell-header>
+
+  <ds-shell-side-nav>
+    <div dsShellSideNavItem>
+      <a dsShellLink href="#">Components</a>
+    </div>
+
+    <ds-shell-side-nav-menu label="Form controls" [(expanded)]="formsOpen">
+      @for (item of formControls; track item) {
+        <div dsShellSideNavItem><a dsShellLink href="#">{{ item }}</a></div>
+      }
+    </ds-shell-side-nav-menu>
+
+    <ds-shell-side-nav-menu label="Data">
+      <div dsShellSideNavItem><a dsShellLink href="#">Table</a></div>
+      <div dsShellSideNavItem><a dsShellLink href="#">Pagination</a></div>
+    </ds-shell-side-nav-menu>
+
+    <!-- Router-driven. `routerLinkActive` with `ariaCurrentWhenActive` writes
+         aria-current="page", which is the hook the shell styles against — so
+         the highlight follows the URL with no binding of our own. -->
+    @for (item of routedNav; track item.path) {
+      <div dsShellSideNavItem>
+        <a
+          dsShellLink
+          [routerLink]="item.path"
+          routerLinkActive
+          ariaCurrentWhenActive="page"
+        >
+          {{ item.label }}
+        </a>
+      </div>
+    }
+  </ds-shell-side-nav>
+
+  <ds-shell-overlay />
+
+  <ds-shell-panel class="ds-theme-inverse" [(expanded)]="panelOpen">
+    <ds-shell-panel-section label="Foundations">
+      <a dsShellLink href="#">IBM Brand Center</a>
+      <a dsShellLink href="#">IBM Design Language</a>
+    </ds-shell-panel-section>
+
+    <ds-shell-panel-section label="Implementation">
+      <a dsShellLink href="#">Carbon Design System</a>
+      <a dsShellLink href="#">Carbon for IBM Products</a>
+      <a dsShellLink href="#">Carbon for Cloud</a>
+    </ds-shell-panel-section>
+
+    <ds-shell-panel-section label="Practices">
+      <a dsShellLink href="#">IBM Accessibility</a>
+      <a dsShellLink href="#">IBM Design Research</a>
+    </ds-shell-panel-section>
+  </ds-shell-panel>
+
+  <ds-shell-content withSideNav>
+    <div class="demo">
+
   <section class="demo__intro">
     <h1>Carbon tokens, our components</h1>
     <p>
@@ -27,6 +116,19 @@
       only the <code>data-theme</code> attribute on <code>&lt;html&gt;</code>
       changes.
     </p>
+  </section>
+
+  <!-- ── Active route ─────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Active route</h2>
+    <p class="demo__note">
+      The last three side nav links are real routes. Click one and watch the
+      highlight follow the URL — nothing here binds it. `routerLinkActive` with
+      `ariaCurrentWhenActive` writes <code>aria-current="page"</code>, and the
+      shell styles against that attribute, which is what Carbon keys off too.
+    </p>
+
+    <router-outlet />
   </section>
 
   <!-- ── Button ──────────────────────────────────────────────────────────── -->
@@ -835,4 +937,6 @@
       </div>
     </div>
   </section>
-</main>
+    </div>
+  </ds-shell-content>
+</ds-shell>

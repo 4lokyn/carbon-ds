@@ -26,6 +26,35 @@ export const ICON_PATHS = {
     'M26,4h-4V2h-2v2h-8V2h-2v2H6C4.9,4,4,4.9,4,6v20c0,1.1,0.9,2,2,2h20c1.1,0,2-0.9,2-2V6C28,4.9,27.1,4,26,4z M26,26H6V12h20V26z M26,10H6V6h4v2h2V6h8v2h2V6h4V10z',
   ],
   'chevron-right': ['M22 16 12 26 10.6 24.6 19.2 16 10.6 7.4 12 6z'],
+  /** The 3x3 app switcher, which is what Carbon's shell puts in the last slot. */
+  switcher: [
+    'M14 4H18V8H14z',
+    'M4 4H8V8H4z',
+    'M24 4H28V8H24z',
+    'M14 14H18V18H14z',
+    'M4 14H8V18H4z',
+    'M24 14H28V18H24z',
+    'M14 24H18V28H14z',
+    'M4 24H8V28H4z',
+    'M24 24H28V28H24z',
+  ],
+
+  /**
+   * Converted, not copied. `overflow-menu--vertical.svg` draws three
+   * `<circle>` elements and our Icon renders `<path>` only — so each dot is the
+   * same circle written as two arcs. Geometry is identical: r=2 at x=16, y=8/16/24.
+   */
+  'overflow-menu': [
+    'M14,8a2,2 0 1,0 4,0a2,2 0 1,0 -4,0',
+    'M14,16a2,2 0 1,0 4,0a2,2 0 1,0 -4,0',
+    'M14,24a2,2 0 1,0 4,0a2,2 0 1,0 -4,0',
+  ],
+  menu: [
+    'M4 6H28V8H4z',
+    'M4 24H28V26H4z',
+    'M4 12H28V14H4z',
+    'M4 18H28V20H4z',
+  ],
   'chevron-left': ['M10 16 20 6 21.4 7.4 12.8 16 21.4 24.6 20 26z'],
   'chevron-down': ['M16 22 6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z'],
   close: [

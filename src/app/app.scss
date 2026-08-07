@@ -3,29 +3,11 @@
 // Demo page layout only. Prefixed `demo-` so it never gets mistaken for part of
 // the design system — everything in ui/ is prefixed `ds-`.
 
-.demo-bar {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  display: flex;
-  height: rem(48px);
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 $spacing-05;
-  border-bottom: rem(1px) solid $border-subtle-01;
-  background-color: $layer-01;
-  gap: $spacing-05;
-}
-
-.demo-bar__brand {
-  color: $text-primary;
-
-  @include type-style('heading-compact-01');
-}
-
+// The page header is ds-shell now. All that is left is spacing for the theme
+// switcher inside the shell's action area.
 .demo-bar__themes {
-  display: flex;
   gap: $spacing-02;
+  padding-inline-end: $spacing-03;
 }
 
 .demo {
@@ -135,4 +117,23 @@ code {
   color: $text-primary;
 
   @include type-style('heading-compact-02');
+}
+
+// Contents of the shell's right-hand panel. Demo-local.
+.demo-panel {
+  padding: $spacing-05;
+}
+
+.demo-panel__title {
+  margin-bottom: $spacing-03;
+  color: $text-primary;
+
+  @include type-style('heading-compact-02');
+}
+
+.demo-panel__text {
+  margin-bottom: $spacing-05;
+  color: $text-secondary;
+
+  @include type-style('body-01');
 }

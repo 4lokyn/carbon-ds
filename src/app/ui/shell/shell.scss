@@ -1,0 +1,386 @@
+@use 'ds' as *;
+
+// Carbon sizes the shell in "mini units" of 8px rather than the spacing scale.
+// The two that matter: the header is 6 of them and the side nav is 32.
+$shell-header-height: rem(48px);
+$shell-side-nav-width: rem(256px);
+$shell-rail-width: rem(48px);
+
+.ds-shell {
+  display: block;
+}
+
+// ── Header ──────────────────────────────────────────────────────────────────
+
+.ds-shell-header {
+  position: fixed;
+  z-index: 8000;
+  display: flex;
+  height: $shell-header-height;
+  align-items: center;
+  border-block-end: rem(1px) solid $border-subtle-01;
+  background-color: $background;
+  inset-block-start: 0;
+  inset-inline: 0;
+}
+
+// `:focus`, not `:focus-visible` — the one place in this system that departs
+// from the rule.
+//
+// Everywhere else a mouse click deliberately leaves no ring. The shell is
+// different because its items are navigation: clicking one usually changes the
+// page under it, and the border is what tells you which item you are on while
+// that happens. Carbon uses plain `:focus` here for the same reason.
+//
+// A square the height of the bar. The transparent 1px border is what lets that
+// focus border appear without the button changing size.
+.ds-shell-header__action {
+  @include unstyled-button;
+
+  display: inline-flex;
+  width: $shell-header-height;
+  height: $shell-header-height;
+  align-items: center;
+  justify-content: center;
+  border: rem(1px) solid transparent;
+  color: $icon-primary;
+  transition:
+    background-color $duration-fast-02 motion(standard, productive),
+    border-color $duration-fast-02 motion(standard, productive);
+
+  &:hover {
+    background-color: $background-hover;
+  }
+
+  &:active {
+    background-color: $background-active;
+  }
+
+  // A border rather than an outline, which is Carbon's choice here and the
+  // right one: the bar's items sit edge to edge, and an outline would overlap
+  // its neighbours.
+  &:focus {
+    border-color: $focus;
+    outline: none;
+  }
+}
+
+// The hamburger only exists while the side nav is not permanent.
+.ds-shell-header__menu {
+  @include breakpoint(lg) {
+    display: none;
+  }
+}
+
+.ds-shell-header__name {
+  @include type-style('body-compact-01');
+
+  display: flex;
+  height: 100%;
+  align-items: center;
+
+  // 32px on the right, 16px on the left: the gap after the name has to read as
+  // a separation from the nav, and an even one does not.
+  padding: 0 rem(32px) 0 rem(16px);
+  border: rem(2px) solid transparent;
+  color: $text-primary;
+  font-weight: 600;
+  letter-spacing: rem(0.1px);
+  text-decoration: none;
+
+  &:focus {
+    border-color: $focus;
+    outline: none;
+  }
+}
+
+.ds-shell-header__name-prefix {
+  margin-inline-end: rem(4px);
+  font-weight: 400;
+}
+
+// Header nav is the large-screen half of the pair — below `lg` the side nav
+// carries the same links instead.
+.ds-shell-header__nav {
+  position: relative;
+  display: none;
+  height: 100%;
+  padding-inline-start: rem(16px);
+
+  @include breakpoint(lg) {
+    display: block;
+  }
+
+  // A short rule between the product name and the first link. 24px, not full
+  // height: a full-height divider reads as a column edge.
+  &::before {
+    position: absolute;
+    display: block;
+    width: rem(1px);
+    height: rem(24px);
+    background-color: $border-subtle-01;
+    content: '';
+    inset-block-start: rem(12px);
+    inset-inline-start: 0;
+  }
+}
+
+.ds-shell-header__nav .ds-shell-link {
+  @include type-style('body-compact-01');
+
+  display: inline-flex;
+  height: 100%;
+  align-items: center;
+  padding: 0 rem(16px);
+  border: rem(2px) solid transparent;
+  color: $text-secondary;
+  text-decoration: none;
+  transition: background-color $duration-fast-02 motion(standard, productive);
+
+  &:hover {
+    background-color: $background-hover;
+    color: $text-primary;
+  }
+
+  &:focus {
+    border-color: $focus;
+    outline: none;
+  }
+}
+
+// Both hooks, on purpose. `current` covers a hand-marked link; the attribute is
+// what Angular's router writes when you give `routerLinkActive` an
+// `ariaCurrentWhenActive="page"`, so a routed app needs no extra binding. Carbon
+// keys off the same attribute.
+.ds-shell-header__nav .ds-shell-link--current,
+.ds-shell-header__nav .ds-shell-link[aria-current='page'] {
+  color: $text-primary;
+
+  // The selected link is marked with a rule under it rather than a fill, so it
+  // reads at a glance across a row of otherwise identical items.
+  &::after {
+    position: absolute;
+    display: block;
+    background-color: $border-interactive;
+    block-size: rem(3px);
+    content: '';
+    inset-block-end: 0;
+    inset-inline: rem(16px);
+  }
+}
+
+.ds-shell-header__nav .ds-shell-link {
+  position: relative;
+}
+
+// ── Header sub-menu ─────────────────────────────────────────────────────────
+
+.ds-shell-header__submenu {
+  position: relative;
+  display: inline-flex;
+  height: 100%;
+}
+
+.ds-shell-header__submenu-title {
+  @include unstyled-button;
+  @include type-style('body-compact-01');
+
+  display: inline-flex;
+  height: 100%;
+  align-items: center;
+  padding: 0 rem(16px);
+  border: rem(2px) solid transparent;
+  color: $text-secondary;
+  gap: $spacing-02;
+  transition: background-color $duration-fast-02 motion(standard, productive);
+
+  &:hover {
+    background-color: $background-hover;
+    color: $text-primary;
+  }
+
+  &:focus {
+    border-color: $focus;
+    outline: none;
+  }
+}
+
+// Open, the trigger takes the panel's own surface so the two read as one shape
+// rather than as a button with a box under it.
+.ds-shell-header__submenu-title[aria-expanded='true'] {
+  background-color: $layer-01;
+}
+
+.ds-shell-header__submenu-arrow ds-icon {
+  display: flex;
+  transition: transform $duration-fast-02 motion(standard, productive);
+}
+
+.ds-shell-header__submenu-title[aria-expanded='true'] .ds-shell-header__submenu-arrow ds-icon {
+  transform: rotate(180deg);
+}
+
+.ds-shell-header__submenu-list {
+  display: none;
+}
+
+// Hung below the trigger with a full translate rather than `top: 100%`, which
+// is Carbon's approach and keeps the panel glued to the bar if the bar's height
+// ever changes.
+.ds-shell-header__submenu-title[aria-expanded='true'] + .ds-shell-header__submenu-list {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  width: rem(200px);
+  flex-direction: column;
+  background-color: $layer-01;
+  box-shadow: 0 rem(4px) rem(8px) 0 rgb(0 0 0 / 50%);
+  inset-block-end: 0;
+  inset-inline-start: 0;
+  transform: translateY(100%);
+}
+
+.ds-shell-header__submenu-list .ds-shell-link {
+  @include type-style('body-compact-01');
+
+  display: flex;
+  min-height: rem(48px);
+  align-items: center;
+  padding: 0 rem(16px);
+  color: $text-secondary;
+  text-decoration: none;
+
+  &:hover {
+    background-color: $background-hover;
+    color: $text-primary;
+  }
+
+  &:focus {
+    @include focus-ring;
+  }
+}
+
+// Pushed to the far end, whatever is in front of it.
+.ds-shell-header__global {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  margin-inline-start: auto;
+}
+
+// ── Right-hand panel ────────────────────────────────────────────────────────
+
+.ds-shell-panel {
+  position: fixed;
+  z-index: 8000;
+  overflow: hidden;
+  width: 0;
+  background-color: $layer-01;
+  color: $text-secondary;
+  inset-block: $shell-header-height 0;
+  inset-inline-end: 0;
+  transition: width $duration-fast-02 motion(exit, productive);
+}
+
+.ds-shell-panel--expanded {
+  overflow-y: auto;
+  width: $shell-side-nav-width;
+  border-inline: rem(1px) solid $border-subtle-01;
+}
+
+// Panel contents. Carbon calls this the switcher, and it is the shape the app
+// switcher uses: titled groups of links, each title followed by an inset rule.
+
+.ds-shell-panel__section {
+  display: block;
+  padding-block: $spacing-05 0;
+}
+
+.ds-shell-panel__section-title {
+  @include type-style('label-01');
+
+  padding-inline: $spacing-05;
+  color: $text-secondary;
+}
+
+.ds-shell-panel__divider {
+  display: block;
+  height: rem(1px);
+  border: none;
+  margin: $spacing-03 $spacing-05;
+  background: $border-subtle-01;
+}
+
+.ds-shell-panel .ds-shell-link {
+  @include type-style('heading-compact-01');
+
+  display: block;
+  padding: rem(6px) $spacing-05;
+  color: $text-secondary;
+  text-decoration: none;
+
+  &:hover {
+    background: $layer-hover-01;
+    color: $text-primary;
+  }
+
+  &:focus {
+    @include focus-ring;
+  }
+
+  &:active {
+    background: $layer-active-01;
+    color: $text-primary;
+  }
+}
+
+// Inverted while its panel is open, so the pair reads as one open thing rather
+// than as a button next to a panel.
+.ds-shell-header__action--active {
+  background-color: $layer-01;
+  border-block-end-color: transparent;
+  border-inline-color: $border-subtle-01;
+}
+
+// ── Content ─────────────────────────────────────────────────────────────────
+
+.ds-shell-content {
+  display: block;
+
+  // Clears the fixed header, which is out of flow and would otherwise sit on
+  // top of the first thing on the page.
+  margin-block-start: $shell-header-height;
+}
+
+// Only from `lg`, because that is the only width where the side nav holds
+// space. Below it the nav is an overlay and the content runs full width.
+.ds-shell-content--with-side-nav {
+  @include breakpoint(lg) {
+    margin-inline-start: $shell-side-nav-width;
+  }
+}
+
+// ── Overlay ─────────────────────────────────────────────────────────────────
+
+.ds-shell-overlay {
+  position: fixed;
+  width: 0;
+  height: 0;
+  background-color: transparent;
+  inset-block-start: $shell-header-height;
+  inset-inline-start: 0;
+  opacity: 0;
+  transition:
+    opacity $duration-fast-02 motion(standard, productive),
+    background-color $duration-fast-02 motion(standard, productive);
+}
+
+.ds-shell-overlay--visible {
+  @include breakpoint-down(lg) {
+    z-index: 6000;
+    width: 100vw;
+    height: 100vh;
+    background-color: $overlay;
+    opacity: 1;
+  }
+}

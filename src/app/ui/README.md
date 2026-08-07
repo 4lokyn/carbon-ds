@@ -73,6 +73,32 @@ anything else. Carbon factors the same pieces into `components/form/_form.scss`;
 this mirrors it. A `ds-form-field` was considered and rejected — see the root
 README.
 
+## The shell
+
+Composed, not configured. `ds-shell` holds the one piece of state its parts have
+to agree on — whether the side nav is open — and every other piece is a separate
+element the caller writes or omits. `dsShellAction` takes any icon and any
+handler, so the right-hand cluster is whatever the app needs.
+
+Two things could not follow Carbon's own markup, and both are worth knowing
+before editing them.
+
+**The nav is `role="list"` on divs, not `<ul>`/`<li>`.** HTML closes an `<li>`
+as soon as another one opens, so a group containing items — which is exactly
+what a nested side nav is — cannot be written as nested `<li>` in an Angular
+template. Carbon gets away with it in JSX, where no HTML parser is involved; the
+Angular template parser reparents them. Explicit roles give the same semantics
+with no implied end tags. A test pins this.
+
+**`ds-shell-content` is an element, not an attribute.** It was
+`main[dsShellContent]` first and that was wrong: the offsets are margins, the
+app puts its own layout class on the same element, and a `margin: 0 auto` there
+silently wiped both — the content slid under the header and ignored the side
+nav. Owning the element means nothing else can write to it.
+
+The shell is also the one place using `:focus` rather than `:focus-visible`.
+See the root README for why.
+
 ## The toolbar above a table
 
 Three pieces, and two of them are not table code at all.

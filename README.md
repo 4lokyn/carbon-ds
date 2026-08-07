@@ -52,6 +52,7 @@ npm test           # vitest, via @angular/build:unit-test
 | `TableHeader` | title + description above the toolbar |
 | `TableToolbar` | switches to a batch action bar while rows are selected |
 | `Pagination` | page size, range, page select, prev/next |
+| **UI Shell** | header, nav + dropdown, side nav with groups, right panel, content |
 | `ThemeService` | signal-based, persisted to localStorage |
 
 The demo page at `/` exercises all of it. Read `src/app/ui/README.md` before adding
@@ -117,7 +118,12 @@ Checked in the browser and locked into tests, not inferred:
   and a partial selection reports `indeterminate` with `checked` false — which
   matters, because `checked` wins in the DOM and leaving both on renders a dash
   where a tick belongs.
-- 119 unit tests, including regressions for the two bugs found while building the
+- The shell's active-route highlight is driven by the URL and nothing else:
+  `routerLinkActive` with `ariaCurrentWhenActive` writes `aria-current="page"`
+  and the styles key off that attribute, which is also what Carbon keys off. The
+  demo has three real routes to prove it. A hand-set `current` on a fourth link
+  was making two links claim to be current at once; that is gone.
+- 130 unit tests, including regressions for the two bugs found while building the
   table — a `NaN` comparator scrambling the whole array, and emptiness being
   judged from the formatted value rather than the sort value — plus one guarding
   the invalid icon against being "completed" back into a blank disc, and two
@@ -125,7 +131,7 @@ Checked in the browser and locked into tests, not inferred:
 
 ### Bundle
 
-Production: **752 kB raw / 145 kB transfer**. CSS is 139 kB raw but **5.8 kB
+Production: **786 kB raw / 150 kB transfer**. CSS is 139 kB raw but **5.8 kB
 transferred** — it is almost entirely `--cds-*` custom property declarations across
 four themes, which gzip extremely well. Some of the raw JS is the demo's 23-row
 fixture, which a real app would fetch.
@@ -328,6 +334,18 @@ reads as a separate control. The standalone search keeps the fill.
 `border-inline-start`, which under `box-sizing: border-box` eats 1px out of the
 40px button and pushes the chevron off-centre. A pseudo-element does not.
 
+**The shell focuses on `:focus`, not `:focus-visible`.** The single exception to
+the rule everywhere else in this system, and Carbon makes the same one. Shell
+items are navigation: clicking one usually changes the page under it, and the
+border is what says which item you are on while that happens. A ring that only
+appears for the keyboard leaves a mouse user with no feedback at the moment they
+most need it.
+
+**The shell's colour is a theme zone, not a token.** Carbon's header is
+`$background` like everything else — it looks black in every Carbon screenshot
+because the shell is wrapped in a g100 zone. Ours uses the `ds-theme-inverse`
+class that already existed, so a light shell is one class away.
+
 **The week starts on Monday.** Carbon inherits Sunday from flatpickr's US
 locale. That is a locale default rather than a design decision, so ours is ISO
 8601 and `firstDayOfWeek` is one input away either way.
@@ -372,9 +390,12 @@ up when the boxes were measured:
   select-all row and an optional filter (which is Carbon's combo box shape).
   Select-all applies to the *filtered* rows and nothing else — the part
   implementations usually get wrong.
-- **UI Shell**, then the **grid system**. Prioritised above the controls below:
-  both are infrastructure everything else sits inside, where the remaining
-  controls are specialised one-offs.
+- ~~**UI Shell.**~~ Built, and composed rather than configured — every piece is
+  a separate element, so an app with no side nav simply does not write one. See
+  ui/README.md for the two things that had to differ from Carbon's own markup.
+- **The grid system**, next. Prioritised above the controls below: it is
+  infrastructure everything else sits inside, where the remaining controls are
+  specialised one-offs.
 - **The rest of Carbon's form controls**, in no particular order and none of
   them urgent: `NumberInput` (the one with steppers — our `type="number"` is a
   passthrough and says so), `Slider`, `FileUploader`, `TimePicker`,
