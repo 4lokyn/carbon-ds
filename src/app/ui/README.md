@@ -157,17 +157,15 @@ people are picking rows out of.
 
 ## Known gaps
 
-Deliberately not built yet, in rough order of cost:
+The full list, with a build order, is in the root `README.md`. The short version:
+18 of Carbon's ~48 components exist, the forms are nearly complete, and the next
+thing worth building is not a form control — it is `Notification`, `Loading`,
+`Link`, `Tooltip`, `Breadcrumb` and `Tile`, which is what a real screen reaches
+for first.
 
-- **Combobox**, including multi-select with a "select all" row. Everything else
-  planned is built. Both open design decisions (when the invalid state appears;
-  label on the control vs. in a wrapper) are settled, and the places we deviate
-  from Carbon on purpose are written up in the root `README.md` — start there.
-  `Checkbox` already does indeterminate, which is what a partial select-all
-  needs.
-- **Notifications / toasts.** CDK Overlay gets most of the way there.
-- **Table extras:** column resize/reorder, row actions overflow menu, CSV export,
-  and virtual scroll for very large pages (`@angular/cdk/scrolling`).
+One note belongs here rather than there, because it is about the act of adding
+a component rather than about which one to add next:
+
 - **More icons.** Added to `icon/icons.ts` by hand as needed — see the header
   comment there for how to extract one. Two traps, both already hit: Carbon ships
   some icons with an `inner-path` that must be *dropped* (copying it in fills a

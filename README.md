@@ -411,12 +411,36 @@ up when the boxes were measured:
   ui/README.md for the two things that had to differ from Carbon's own markup.
 - ~~**The grid system.**~~ Built on our own class names rather than by including
   Carbon's — see the deviations below.
-- **The rest of Carbon's form controls**, in no particular order and none of
-  them urgent: `NumberInput` (the one with steppers — our `type="number"` is a
-  passthrough and says so), `Slider`, `FileUploader`, `TimePicker`,
-  `ContentSwitcher`, and Carbon's non-filterable `Dropdown` (a styled listbox,
-  where `ds-select` is the native one).
-- **Notifications / toasts.** CDK Overlay gets most of the way there.
+
+### What is left, in the order worth building it
+
+18 of Carbon's ~48 components exist. The forms are nearly complete; the system
+around them is not, and the gap that bites first is not a form control.
+
+**Build these before any remaining input.** Five of the six turn up on the first
+real screen anyone writes:
+
+| | why it comes first |
+|---|---|
+| `Notification` | toasts and inline errors — practically every app |
+| `Loading` / `InlineLoading` | a spinner beside every async call |
+| `Link` | a styled `<a>`; small, and used everywhere |
+| `Tooltip` | `Toggletip` and `Popover` share its mechanics, so one job opens three |
+| `Breadcrumb` | sits above the page title in Carbon's own shell reference |
+| `Tile` | Carbon's card |
+| `OverflowMenu` | row actions in the table, already listed as a table gap below |
+
+**The remaining form controls**, none of them urgent: `NumberInput` (the one
+with steppers — our `type="number"` is a passthrough and says so), `Slider`,
+`FileUploader`, `TimePicker`, `ContentSwitcher`, and Carbon's non-filterable
+`Dropdown` (a styled listbox, where `ds-select` is the native one). `TimePicker`
+and `Slider` may never be needed.
+
+**Everything else**, roughly by how often it comes up: `Accordion`,
+`ProgressIndicator`, `ProgressBar`, `PageHeader`, `Menu` / `MenuButton` /
+`ComboButton`, `CopyButton`, `CodeSnippet`, `StructuredList`, `ContainedList`,
+`List`, `TreeView`, `PaginationNav`.
+
 - **Table extras:** column resize/reorder, row overflow menu, CSV export, and
   virtual scroll for very large pages (`@angular/cdk/scrolling`).
 
