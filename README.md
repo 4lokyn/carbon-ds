@@ -446,9 +446,41 @@ and `Slider` may never be needed.
 
 ## Picking this up cold
 
-Read `src/app/ui/README.md` first — conventions, plus the four non-obvious things
-about the table that were each a bug before they were a rule. Then `npm start` and
-open the demo page; it exercises every component in all four themes.
+Read `USAGE.md` if you are going to build with it, and `src/app/ui/README.md` if
+you are going to add to it — the latter has the conventions plus the four
+non-obvious things about the table that were each a bug before they were a rule.
+Then `npm start` and open the demo page; it exercises every component in all four
+themes.
+
+### On a different machine
+
+```bash
+git clone git@github.com:4lokyn/carbon-ds.git
+cd carbon-ds && npm install && npm start
+```
+
+The remote is **SSH, not HTTPS**, and that is deliberate: GitHub stopped taking
+account passwords, so an HTTPS remote needs a personal access token that nothing
+on a fresh machine has. SSH needs the machine's public key added under
+*Settings → SSH and GPG keys*:
+
+```bash
+cat ~/.ssh/id_ed25519.pub    # create one with ssh-keygen -t ed25519 if absent
+ssh -T git@github.com        # should greet you by username
+```
+
+The branch is `main`. It started as `master` and was renamed, so a clone made
+before that will be on the wrong branch.
+
+### Not verified
+
+Worth knowing before trusting it in an application: **the shell's responsive
+behaviour has not been checked in a browser.** The hamburger appearing below
+`lg`, the header nav appearing from `lg` up, and the side nav collapsing to an
+overlay are all media queries, and jsdom does not evaluate those — a unit test
+covering them would assert nothing while looking like it asserted something, so
+none was written. Everything else in the shell is measured, in both light and
+dark. Narrow a window and check that first.
 
 ## Version notes
 
