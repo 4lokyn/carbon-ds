@@ -1,0 +1,36 @@
+// IBM Plex, served locally. No CDN.
+//
+// The fonts arrive as transitive dependencies of @carbon/styles (@ibm/plex-sans,
+// @ibm/plex-mono) and get copied into /fonts/ by the `assets` entries in
+// angular.json.
+//
+// We deliberately avoid @carbon/styles/scss/fonts: that module emits dozens of
+// @font-face rules with unicode-range splits for every script and weight, and its
+// paths are webpack-style ('~@ibm/plex') so they don't resolve under the esbuild
+// builder. Here we take only what the Carbon type tokens actually use.
+
+// Light 300, Regular 400, SemiBold 600 — the three weights in the Carbon type scale.
+$-sans-weights: (
+  300: 'Light',
+  400: 'Regular',
+  600: 'SemiBold',
+);
+
+@each $weight, $name in $-sans-weights {
+  @font-face {
+    font-family: 'IBM Plex Sans';
+    font-style: normal;
+    font-weight: $weight;
+    src: url('/fonts/plex-sans/IBMPlexSans-#{$name}.woff2') format('woff2');
+    font-display: swap;
+  }
+}
+
+// Mono is only used for code and numeric tables.
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts/plex-mono/IBMPlexMono-Regular.woff2') format('woff2');
+  font-display: swap;
+}

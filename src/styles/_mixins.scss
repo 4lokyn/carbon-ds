@@ -1,0 +1,72 @@
+// Our own mixins. Anything that is our behavior rather than Carbon's lives here.
+//
+// We deliberately skip @carbon/styles/scss/utilities/_focus-outline.scss — that
+// implementation is tied to Carbon's own components and their edge cases. What we
+// want is one predictable focus ring that behaves the same everywhere.
+
+@use '@carbon/styles/scss/theme';
+@use '@carbon/styles/scss/utilities/convert';
+
+/// Carbon focus indicator: a 2px outline drawn inside the element.
+/// The inset matters — the Carbon design expects the ring not to shift layout.
+@mixin focus-ring($color: theme.$focus, $inset-color: null) {
+  outline: convert.rem(2px) solid $color;
+  outline-offset: convert.rem(-2px);
+
+  // On filled surfaces (a primary button) a second layer is needed for the ring
+  // to stay visible against the fill.
+  @if $inset-color {
+    box-shadow: inset 0 0 0 convert.rem(1px) $inset-color;
+  }
+}
+
+/// Keyboard-only focus ring. Mouse users shouldn't see it.
+@mixin focus-visible-ring($args...) {
+  &:focus-visible {
+    @include focus-ring($args...);
+  }
+
+  // Only drop the browser outline where we know we're supplying our own.
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+/// Visually hidden, still available to screen readers.
+@mixin visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  width: convert.rem(1px);
+  height: convert.rem(1px);
+  padding: 0;
+  border: 0;
+  margin: convert.rem(-1px);
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+/// One line, then an ellipsis.
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/// Reset for elements we style from scratch (button, ul, fieldset).
+@mixin unstyled-button {
+  padding: 0;
+  border: 0;
+  margin: 0;
+  appearance: none;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: inherit;
+}
+
+@mixin unstyled-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}

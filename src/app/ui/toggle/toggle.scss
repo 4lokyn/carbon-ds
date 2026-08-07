@@ -1,0 +1,185 @@
+@use 'ds' as *;
+
+.ds-toggle {
+  display: inline-block;
+  user-select: none;
+}
+
+.ds-toggle__button {
+  @include visually-hidden;
+
+  // The ring is drawn on the switch instead, so the hidden button must not draw
+  // its own — it is 1px square and the outline would be a dot.
+  &:focus {
+    outline: none;
+  }
+}
+
+.ds-toggle__label-text {
+  @include field-label;
+
+  // Carbon spaces the toggle's label further from its control than a field does:
+  // 16px, not 8px. The switch is a graphic rather than a box with a border, so
+  // the tighter gap reads as the label belonging to the track.
+  display: block;
+  margin-block-end: $spacing-05;
+}
+
+.ds-toggle__appearance {
+  display: inline-grid;
+  align-items: center;
+  column-gap: $spacing-03;
+  cursor: pointer;
+  grid-template-columns: max-content max-content;
+}
+
+.ds-toggle__switch {
+  position: relative;
+  width: rem(48px);
+  height: rem(24px);
+  border-radius: rem(12px);
+  background-color: $toggle-off;
+  transition: background-color $duration-fast-01 motion(exit, productive);
+
+  // The knob.
+  &::before {
+    position: absolute;
+    width: rem(18px);
+    height: rem(18px);
+    border-radius: 50%;
+    background-color: $icon-on-color;
+    content: '';
+    inset-block-start: rem(3px);
+    inset-inline-start: rem(3px);
+    transition: transform $duration-fast-01 motion(exit, productive);
+
+    @media screen and (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+}
+
+// Green, not $focus-blue or a brand color: the switch is reporting a state, and
+// Carbon uses the support palette for states.
+.ds-toggle--checked .ds-toggle__switch {
+  background-color: $support-success;
+
+  &::before {
+    transform: translateX(rem(24px));
+  }
+}
+
+// The ring goes on the track. Drawn as a pseudo-element rather than an outline on
+// the switch itself so it can follow the 12px radius instead of boxing it.
+//
+// Two triggers, both Carbon's. Keyboard focus is the obvious one — though we use
+// :focus-visible where Carbon uses :focus, so a mouse press does not leave a ring
+// behind, same as every other control here. That is exactly why the second
+// trigger matters: :active puts the ring back for the duration of a press, so
+// mouse users still get the feedback that :focus-visible withholds.
+.ds-toggle__button:focus-visible + .ds-toggle__label .ds-toggle__switch::after,
+.ds-toggle:not(.ds-toggle--disabled):active .ds-toggle__switch::after {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: rem(16px);
+  content: '';
+  inset: 0;
+  outline: rem(2px) solid $focus;
+  outline-offset: rem(1px);
+}
+
+.ds-toggle__text {
+  @include type-style('body-01');
+
+  color: $text-primary;
+}
+
+// The check only exists on the small size — see the note in toggle.ts.
+.ds-toggle__check {
+  position: absolute;
+  color: $support-success;
+  inset-block-start: rem(6px);
+  inset-inline-end: rem(5px);
+  visibility: hidden;
+}
+
+.ds-toggle--checked .ds-toggle__check {
+  visibility: visible;
+}
+
+// ── Small ───────────────────────────────────────────────────────────────────
+
+.ds-toggle--sm .ds-toggle__switch {
+  width: rem(32px);
+  height: rem(16px);
+
+  &::before {
+    width: rem(10px);
+    height: rem(10px);
+  }
+}
+
+.ds-toggle--sm.ds-toggle--checked .ds-toggle__switch::before {
+  transform: translateX(rem(16px));
+}
+
+// ── Disabled ────────────────────────────────────────────────────────────────
+
+.ds-toggle--disabled {
+  .ds-toggle__appearance {
+    cursor: not-allowed;
+  }
+
+  .ds-toggle__label-text,
+  .ds-toggle__text {
+    color: $text-disabled;
+  }
+
+  .ds-toggle__switch {
+    background-color: $button-disabled;
+
+    &::before {
+      background-color: $icon-on-color-disabled;
+    }
+  }
+
+  // Still visible, but flat — a disabled switch should not look successful.
+  .ds-toggle__check {
+    color: $button-disabled;
+  }
+}
+
+// ── Read-only ───────────────────────────────────────────────────────────────
+//
+// Outlined rather than filled: the state is still legible, but the control does
+// not look like something you can push.
+
+.ds-toggle--readonly {
+  .ds-toggle__appearance {
+    cursor: default;
+  }
+
+  .ds-toggle__switch {
+    border: rem(1px) solid $icon-disabled;
+    background-color: transparent;
+
+    &::before {
+      background-color: $icon-primary;
+      inset-block-start: rem(2px);
+      inset-inline-start: rem(2px);
+    }
+  }
+
+  .ds-toggle__check {
+    color: $background;
+    inset-block-start: rem(5px);
+    inset-inline-end: rem(4px);
+  }
+
+  .ds-toggle__text {
+    cursor: text;
+    user-select: text;
+  }
+}

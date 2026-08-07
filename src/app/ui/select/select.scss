@@ -1,0 +1,261 @@
+@use 'ds' as *;
+
+.ds-select {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.ds-select__label {
+  @include field-label;
+}
+
+.ds-select__field-wrapper {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.ds-select__field {
+  @include field-surface;
+
+  // 48px on the right for the chevron, which is drawn over the field rather
+  // than inside it — a native select arrow cannot be styled.
+  padding-inline: $field-padding-inline $spacing-09;
+  cursor: pointer;
+  text-overflow: ellipsis;
+
+  // A disabled <select> is rendered semi-transparent by the UA. We state the
+  // disabled colors ourselves, so the opacity has to go or they come out muddy.
+  opacity: 1;
+
+  // Carbon deliberately omits background-color from the transition here.
+  // Animating it makes the native option list flash on open in Chrome —
+  // carbon-design-system/carbon#4464.
+  transition: outline $field-transition;
+
+  &:hover {
+    background-color: $field-hover-01;
+  }
+
+  &:focus {
+    @include field-focus;
+  }
+
+  // Hide the native arrow in legacy Edge.
+  &::-ms-expand {
+    display: none;
+  }
+}
+
+// Not fluid: there the host owns the ring, because the box includes the message.
+// See the note in input.scss.
+.ds-select:not(.ds-select--fluid).ds-select--invalid
+  .ds-select__field:not(:focus) {
+  @include field-invalid;
+}
+
+@each $name, $height in $field-heights {
+  .ds-select--#{$name} .ds-select__field {
+    height: $height;
+  }
+}
+
+// The open list is drawn by the OS, not by us — that is what a native <select>
+// is, and it is the reason Carbon ships a separate Dropdown for a themed one.
+// macOS ignores these entirely; Windows and Linux honour them, and without them
+// a dark theme opens a white list there.
+//
+// Carbon sets $layer-hover here, with a comment saying it is so options show in
+// IE11. That makes every resting row look hovered, so we use the plain surface
+// token instead.
+.ds-select__field option,
+.ds-select__field optgroup {
+  background-color: $layer-01;
+  color: $text-primary;
+}
+
+.ds-select__field option:disabled {
+  color: $text-disabled;
+}
+
+// Chevron and status icon share the right-hand gutter, so a field showing both
+// needs 64px rather than 48px.
+.ds-select--invalid .ds-select__field,
+.ds-select--warn .ds-select__field {
+  padding-inline-end: $spacing-10;
+}
+
+.ds-select__arrow {
+  position: absolute;
+  color: $icon-primary;
+
+  // The select underneath owns the click.
+  pointer-events: none;
+  inset-inline-end: $field-padding-inline;
+}
+
+.ds-select__status {
+  @include field-status-icon;
+
+  // Sits to the left of the chevron rather than replacing it.
+  inset-inline-end: $field-icon-gutter;
+}
+
+.ds-select--invalid .ds-select__status {
+  @include field-status-icon-invalid;
+}
+
+.ds-select--warn .ds-select__status {
+  @include field-status-icon-warn;
+}
+
+// ── Messages ────────────────────────────────────────────────────────────────
+
+.ds-select__helper {
+  @include field-helper-text;
+}
+
+.ds-select__requirement {
+  @include field-requirement;
+}
+
+.ds-select--invalid .ds-select__requirement {
+  @include field-requirement-invalid;
+}
+
+// ── Disabled / read-only ────────────────────────────────────────────────────
+
+.ds-select--disabled {
+  .ds-select__field,
+  .ds-select__field:hover {
+    @include field-disabled;
+  }
+
+  .ds-select__arrow {
+    color: $icon-disabled;
+  }
+
+  .ds-select__label,
+  .ds-select__helper {
+    color: $text-disabled;
+  }
+}
+
+// Read-only is disabled underneath (a native select has no readonly), so this
+// has to undo the disabled treatment rather than sit alongside it. Declared
+// after the disabled block so it wins.
+.ds-select--readonly:not(.ds-select--disabled) {
+  .ds-select__field,
+  .ds-select__field:hover {
+    @include field-read-only;
+
+    color: $text-primary;
+    cursor: default;
+    -webkit-text-fill-color: $text-primary;
+  }
+
+  .ds-select__arrow {
+    color: $icon-disabled;
+  }
+
+  .ds-select__label {
+    color: $text-secondary;
+  }
+}
+
+// ── Fluid ───────────────────────────────────────────────────────────────────
+
+.ds-select--fluid {
+  position: relative;
+  background-color: $field-01;
+
+  .ds-select__label {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    height: rem(16px);
+    align-items: center;
+    margin: 0;
+    inset-block-start: rem(13px);
+    inset-inline-start: $field-padding-inline;
+    overflow-x: auto;
+    scrollbar-width: none;
+    white-space: nowrap;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .ds-select__helper {
+    display: none;
+  }
+
+  .ds-select__field {
+    height: auto;
+    min-height: $field-fluid-height;
+    padding: rem(32px) rem(32px) rem(13px) $field-padding-inline;
+    outline: none;
+
+    // The host paints the fill in fluid. A second opaque layer here clips the
+    // ring — see the note in input.scss.
+    background-color: transparent;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+
+  &:hover {
+    background-color: $field-hover-01;
+  }
+
+  // Carbon drops the chevron to 16px here and tucks it in to 8px, because the
+  // taller box would otherwise leave it floating in the middle of nothing.
+  .ds-select__arrow {
+    inset-block-start: rem(34px);
+    inset-inline-end: $spacing-04;
+  }
+
+  .ds-select__status {
+    inset-block-start: rem(24px);
+  }
+
+  // Divider and message stack under the value inside the box.
+  .ds-select__field-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ds-select__requirement {
+    margin: 0;
+    padding: $spacing-03 rem(40px) $spacing-03 $field-padding-inline;
+  }
+}
+
+// On the host, not the wrapper — see the note in input.scss. The wrapper holds
+// only the value, so a ring drawn there leaves the message outside the box.
+.ds-select--fluid:focus-within {
+  @include field-focus;
+}
+
+.ds-select--fluid.ds-select--invalid:not(:focus-within) {
+  @include field-invalid;
+}
+
+.ds-select--fluid.ds-select--warn {
+  border-block-end: rem(1px) solid $border-strong-01;
+}
+
+.ds-select--fluid.ds-select--invalid .ds-select__field,
+.ds-select--fluid.ds-select--warn .ds-select__field {
+  border-block-end: 0;
+}
+
+.ds-select__divider {
+  border-block-start: rem(1px) solid $border-subtle-01;
+  margin: 0 $field-padding-inline;
+}

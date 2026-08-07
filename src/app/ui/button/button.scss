@@ -1,0 +1,170 @@
+@use 'ds' as *;
+
+// Carbon field heights. Buttons share this scale with inputs and selects, which
+// is what makes a form row line up without per-component nudging.
+$-heights: (
+  'sm': rem(32px),
+  'md': rem(40px),
+  'lg': rem(48px),
+  'xl': rem(64px),
+);
+
+// Carbon's productive easing. 70ms is short on purpose — buttons should feel
+// immediate; anything slower reads as lag.
+$-transition: 70ms cubic-bezier(0, 0, 0.38, 0.9);
+
+.ds-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  max-width: rem(320px);
+
+  // 15px rather than 16px: the 1px border makes up the difference, so text sits
+  // on the same optical grid whether or not a kind draws a visible border.
+  // The wide right padding is deliberate — it is the Carbon button silhouette,
+  // and it reserves the icon slot.
+  padding: 0 rem(63px) 0 rem(15px);
+  border: rem(1px) solid transparent;
+  border-radius: 0;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  vertical-align: top;
+
+  @include type-style('body-compact-01');
+
+  transition:
+    background-color $-transition,
+    border-color $-transition,
+    color $-transition;
+}
+
+@each $name, $height in $-heights {
+  .ds-btn--#{$name} {
+    min-height: $height;
+  }
+}
+
+.ds-btn--full {
+  max-width: none;
+  width: 100%;
+}
+
+// ── Kinds ───────────────────────────────────────────────────────────────────
+// Every kind reads from the $button-* component tokens rather than raw colors,
+// so all four themes come for free.
+
+.ds-btn--primary {
+  background-color: $button-primary;
+  color: $text-on-color;
+
+  &:hover {
+    background-color: $button-primary-hover;
+  }
+
+  &:active {
+    background-color: $button-primary-active;
+  }
+}
+
+.ds-btn--secondary {
+  background-color: $button-secondary;
+  color: $text-on-color;
+
+  &:hover {
+    background-color: $button-secondary-hover;
+  }
+
+  &:active {
+    background-color: $button-secondary-active;
+  }
+}
+
+.ds-btn--tertiary {
+  border-color: $button-tertiary;
+  background-color: transparent;
+  color: $button-tertiary;
+
+  &:hover {
+    background-color: $button-tertiary-hover;
+    color: $text-inverse;
+  }
+
+  &:active {
+    background-color: $button-tertiary-active;
+    color: $text-inverse;
+  }
+}
+
+// Ghost is the one kind with symmetric padding — it has no fill, so the wide
+// right gutter would read as broken alignment next to body text.
+.ds-btn--ghost {
+  padding-right: rem(15px);
+  background-color: transparent;
+  color: $link-primary;
+
+  &:hover {
+    background-color: $background-hover;
+    color: $link-primary-hover;
+  }
+
+  &:active {
+    background-color: $background-active;
+  }
+}
+
+.ds-btn--danger {
+  background-color: $button-danger-primary;
+  color: $text-on-color;
+
+  &:hover {
+    background-color: $button-danger-hover;
+  }
+
+  &:active {
+    background-color: $button-danger-active;
+  }
+}
+
+// ── Icon only ───────────────────────────────────────────────────────────────
+//
+// After the kinds, not before them, and that ordering is the whole fix: `ghost`
+// sets its own `padding-right: 15px` at the same specificity, so an icon-only
+// ghost declared earlier loses and the glyph sits hard against the left edge.
+// Measured before the move: 0.5px on the left, 15.5px on the right.
+
+.ds-btn--icon-only {
+  padding: 0;
+  justify-content: center;
+}
+
+// Square, from the same height scale — otherwise it stops being square the
+// moment someone changes `size`.
+@each $name, $height in $-heights {
+  .ds-btn--icon-only.ds-btn--#{$name} {
+    width: $height;
+  }
+}
+
+// ── States ──────────────────────────────────────────────────────────────────
+
+// Declared after the kinds so it wins the cascade. The inset layer is what keeps
+// the ring visible against a filled background.
+.ds-btn:focus-visible {
+  @include focus-ring($inset-color: $focus-inset);
+}
+
+.ds-btn:focus:not(:focus-visible) {
+  outline: none;
+}
+
+// One disabled treatment for every kind — Carbon does not distinguish, and a
+// disabled danger button that still looks dangerous is a usability trap.
+.ds-btn:disabled {
+  border-color: transparent;
+  background-color: $button-disabled;
+  box-shadow: none;
+  color: $text-disabled;
+  cursor: not-allowed;
+  outline: none;
+}

@@ -1,0 +1,183 @@
+@use 'ds' as *;
+
+.ds-radio-group {
+  display: block;
+  width: 100%;
+}
+
+// A fieldset carries a default border, padding and min-width that nothing here
+// wants; `min-width: 0` is the one that matters, because the browser default of
+// min-content stops a fieldset from ever shrinking inside a grid.
+.ds-radio-group__fieldset {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  margin: 0;
+}
+
+.ds-radio-group__legend {
+  @include field-label;
+
+  padding: 0;
+}
+
+.ds-radio-group__items {
+  display: flex;
+  align-items: center;
+  gap: $spacing-05;
+}
+
+.ds-radio-group--vertical .ds-radio-group__items {
+  align-items: flex-start;
+  flex-direction: column;
+  gap: rem(6px);
+}
+
+// ── One option ──────────────────────────────────────────────────────────────
+
+.ds-radio {
+  display: flex;
+  align-items: flex-start;
+}
+
+// The real input keeps the semantics, the tab order and the :checked state we
+// style against. Not display:none, which would take it out of both.
+.ds-radio__input {
+  @include visually-hidden;
+}
+
+.ds-radio__label {
+  display: flex;
+  align-items: center;
+  color: $text-primary;
+  cursor: pointer;
+}
+
+// The ring. 18px rather than the checkbox's 16px — Carbon draws radios slightly
+// larger, because a circle reads smaller than a square of the same box.
+.ds-radio__appearance {
+  flex-shrink: 0;
+  width: rem(18px);
+  height: rem(18px);
+  border: rem(1px) solid $icon-primary;
+  border-radius: 50%;
+  margin-inline: rem(2px) rem(10px);
+  background-color: transparent;
+}
+
+.ds-radio__label-text {
+  @include type-style('body-compact-01');
+}
+
+// The dot: the same circle scaled to half, not a second sized element. Scaling
+// means it stays centred and proportional if the 18px ever changes.
+.ds-radio__input:checked + .ds-radio__label .ds-radio__appearance {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &::before {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: $icon-primary;
+    content: '';
+    transform: scale(0.5);
+  }
+}
+
+// On the ring, not the label — a ring around the whole label would be enormous
+// next to long option text. Offset outwards here, unlike every other control in
+// the system, because an inset ring on an 18px circle lands on the border.
+.ds-radio__input:focus-visible + .ds-radio__label .ds-radio__appearance {
+  outline: rem(2px) solid $focus;
+  outline-offset: rem(1.5px);
+}
+
+.ds-radio__input:focus:not(:focus-visible) + .ds-radio__label {
+  outline: none;
+}
+
+// ── Disabled ────────────────────────────────────────────────────────────────
+//
+// Both the per-option `disabled` and the group's, which the browser cascades
+// from `<fieldset disabled>` down to every input inside — hence one selector.
+
+.ds-radio__input:disabled + .ds-radio__label {
+  color: $text-disabled;
+  cursor: not-allowed;
+}
+
+.ds-radio__input:disabled + .ds-radio__label .ds-radio__appearance {
+  border-color: $icon-disabled;
+
+  &::before {
+    background-color: $text-disabled;
+  }
+}
+
+.ds-radio-group--disabled .ds-radio-group__legend,
+.ds-radio-group--disabled .ds-radio-group__helper {
+  color: $text-disabled;
+}
+
+// ── Read-only ───────────────────────────────────────────────────────────────
+//
+// The inputs stay enabled, so this is purely a look. The click handler is what
+// makes it read-only; see the note in radio.ts for why it cannot be `disabled`.
+
+.ds-radio-group--readonly {
+  .ds-radio__appearance {
+    border-color: $icon-disabled;
+  }
+
+  .ds-radio__label {
+    cursor: default;
+  }
+
+  // Read-only content is still content — let people select it.
+  .ds-radio__label-text {
+    cursor: text;
+    user-select: text;
+  }
+}
+
+// ── Invalid / warn ──────────────────────────────────────────────────────────
+
+.ds-radio-group--invalid .ds-radio__appearance {
+  border-color: $support-error;
+}
+
+.ds-radio-group__helper {
+  @include field-helper-text;
+}
+
+// Unlike the single-value fields, the message sits next to an icon rather than
+// under one — a group has no field box to hang a trailing icon inside.
+.ds-radio-group__requirement {
+  @include field-requirement;
+
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-02;
+}
+
+.ds-radio-group--invalid .ds-radio-group__requirement {
+  @include field-requirement-invalid;
+}
+
+.ds-radio-group__status {
+  flex-shrink: 0;
+
+  // Nudged down onto the text's baseline: the message is helper-text-01, whose
+  // line box is shorter than the 16px glyph.
+  margin-block-start: rem(1px);
+}
+
+.ds-radio-group--invalid .ds-radio-group__status {
+  @include field-status-icon-invalid;
+}
+
+.ds-radio-group--warn .ds-radio-group__status {
+  @include field-status-icon-warn;
+}

@@ -1,0 +1,53 @@
+@use 'ds' as *;
+
+// Demo-local. Nothing here belongs in the design system.
+
+.services {
+  border: rem(1px) solid $border-subtle-01;
+}
+
+.services__tools {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: $spacing-03;
+
+  // The buttons do not shrink — take width off one and a two-word label breaks
+  // across two lines inside a 32px box. The search is pointedly NOT included:
+  // it has to shrink, because that is how it resolves its `width: 100%` down to
+  // "whatever the buttons are not using". A blanket `> *` here froze it at 32px.
+  > .ds-btn {
+    flex-shrink: 0;
+  }
+}
+
+// Parks the collapsed magnifier against the actions on the right. The margin has
+// to go once it opens, or the auto margin keeps eating the free space that
+// flex-grow needs to claim.
+.services__filter {
+  margin-left: auto;
+}
+
+.services__filter.ds-search--expanded {
+  margin-left: 0;
+}
+
+.services__detail {
+  display: grid;
+  align-items: baseline;
+  column-gap: $spacing-05;
+  grid-template-columns: auto 1fr;
+  row-gap: $spacing-03;
+
+  dt {
+    color: $text-secondary;
+
+    @include type-style('label-01');
+  }
+
+  dd {
+    color: $text-primary;
+
+    @include type-style('body-compact-01');
+  }
+}

@@ -1,0 +1,30 @@
+@use 'ds' as *;
+
+.ds-table-header {
+  display: block;
+  padding: $spacing-05 0 $spacing-06 $spacing-05;
+  background-color: $layer-01;
+}
+
+.ds-table-header__title {
+  @include type-style('heading-03');
+
+  color: $text-primary;
+}
+
+.ds-table-header__description {
+  @include type-style('body-compact-01');
+
+  color: $text-secondary;
+
+  // Carbon caps the measure rather than the box: description text runs the full
+  // width of a wide table otherwise, and a 200-character line is unreadable no
+  // matter how much room there is for it.
+  @include breakpoint(md) {
+    max-width: 50ch;
+  }
+
+  @include breakpoint(lg) {
+    max-width: 80ch;
+  }
+}

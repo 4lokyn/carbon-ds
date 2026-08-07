@@ -1,344 +1,838 @@
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * Delete the template below * * * * * * * * * -->
-<!-- * * * * * * * to get started with your project! * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<header class="demo-bar">
+  <span class="demo-bar__brand">carbon&#8209;ds</span>
 
-<style>
-  :host {
-    --bright-blue: oklch(51.01% 0.274 263.83);
-    --electric-violet: oklch(53.18% 0.28 296.97);
-    --french-violet: oklch(47.66% 0.246 305.88);
-    --vivid-pink: oklch(69.02% 0.277 332.77);
-    --hot-red: oklch(61.42% 0.238 15.34);
-    --orange-red: oklch(63.32% 0.24 31.68);
-
-    --gray-900: oklch(19.37% 0.006 300.98);
-    --gray-700: oklch(36.98% 0.014 302.71);
-    --gray-400: oklch(70.9% 0.015 304.04);
-
-    --red-to-pink-to-purple-vertical-gradient: linear-gradient(
-      180deg,
-      var(--orange-red) 0%,
-      var(--vivid-pink) 50%,
-      var(--electric-violet) 100%
-    );
-
-    --red-to-pink-to-purple-horizontal-gradient: linear-gradient(
-      90deg,
-      var(--orange-red) 0%,
-      var(--vivid-pink) 50%,
-      var(--electric-violet) 100%
-    );
-
-    --pill-accent: var(--bright-blue);
-
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-      Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-      "Segoe UI Symbol";
-    box-sizing: border-box;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    display: block;
-    height: 100dvh;
-  }
-
-  h1 {
-    font-size: 3.125rem;
-    color: var(--gray-900);
-    font-weight: 500;
-    line-height: 100%;
-    letter-spacing: -0.125rem;
-    margin: 0;
-    font-family: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-      Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-      "Segoe UI Symbol";
-  }
-
-  p {
-    margin: 0;
-    color: var(--gray-700);
-  }
-
-  main {
-    width: 100%;
-    min-height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
-    box-sizing: inherit;
-    position: relative;
-  }
-
-  .angular-logo {
-    max-width: 9.2rem;
-  }
-
-  .content {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-    max-width: 700px;
-    margin-bottom: 3rem;
-  }
-
-  .content h1 {
-    margin-top: 1.75rem;
-  }
-
-  .content p {
-    margin-top: 1.5rem;
-  }
-
-  .divider {
-    width: 1px;
-    background: var(--red-to-pink-to-purple-vertical-gradient);
-    margin-inline: 0.5rem;
-  }
-
-  .pill-group {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    flex-wrap: wrap;
-    gap: 1.25rem;
-  }
-
-  .pill {
-    display: flex;
-    align-items: center;
-    --pill-accent: var(--bright-blue);
-    background: color-mix(in srgb, var(--pill-accent) 5%, transparent);
-    color: var(--pill-accent);
-    padding-inline: 0.75rem;
-    padding-block: 0.375rem;
-    border-radius: 2.75rem;
-    border: 0;
-    transition: background 0.3s ease;
-    font-family: var(--inter-font);
-    font-size: 0.875rem;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 1.4rem;
-    letter-spacing: -0.00875rem;
-    text-decoration: none;
-    white-space: nowrap;
-  }
-
-  .pill:hover {
-    background: color-mix(in srgb, var(--pill-accent) 15%, transparent);
-  }
-
-  .pill-group .pill:nth-child(6n + 1) {
-    --pill-accent: var(--bright-blue);
-  }
-  .pill-group .pill:nth-child(6n + 2) {
-    --pill-accent: var(--electric-violet);
-  }
-  .pill-group .pill:nth-child(6n + 3) {
-    --pill-accent: var(--french-violet);
-  }
-
-  .pill-group .pill:nth-child(6n + 4),
-  .pill-group .pill:nth-child(6n + 5),
-  .pill-group .pill:nth-child(6n + 6) {
-    --pill-accent: var(--hot-red);
-  }
-
-  .pill-group svg {
-    margin-inline-start: 0.25rem;
-  }
-
-  .social-links {
-    display: flex;
-    align-items: center;
-    gap: 0.73rem;
-    margin-top: 1.5rem;
-  }
-
-  .social-links path {
-    transition: fill 0.3s ease;
-    fill: var(--gray-400);
-  }
-
-  .social-links a:hover svg path {
-    fill: var(--gray-900);
-  }
-
-  @media screen and (max-width: 650px) {
-    .content {
-      flex-direction: column;
-      width: max-content;
-    }
-
-    .divider {
-      height: 1px;
-      width: 100%;
-      background: var(--red-to-pink-to-purple-horizontal-gradient);
-      margin-block: 1.5rem;
-    }
-  }
-</style>
-
-<main class="main">
-  <div class="content">
-    <div class="left-side">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 982 239"
-        fill="none"
-        class="angular-logo"
+  <nav class="demo-bar__themes" aria-label="Theme">
+    @for (name of theme.available; track name) {
+      <button
+        dsButton
+        size="sm"
+        [kind]="theme.theme() === name ? 'primary' : 'ghost'"
+        [attr.aria-pressed]="theme.theme() === name"
+        (click)="theme.set(name)"
       >
-        <g clip-path="url(#a)">
-          <path
-            fill="url(#b)"
-            d="M388.676 191.625h30.849L363.31 31.828h-35.758l-56.215 159.797h30.848l13.174-39.356h60.061l13.256 39.356Zm-65.461-62.675 21.602-64.311h1.227l21.602 64.311h-44.431Zm126.831-7.527v70.202h-28.23V71.839h27.002v20.374h1.392c2.782-6.71 7.2-12.028 13.255-15.956 6.056-3.927 13.584-5.89 22.503-5.89 8.264 0 15.465 1.8 21.684 5.318 6.137 3.518 10.964 8.673 14.319 15.382 3.437 6.71 5.074 14.81 4.992 24.383v76.175h-28.23v-71.92c0-8.019-2.046-14.237-6.219-18.819-4.173-4.5-9.819-6.791-17.102-6.791-4.91 0-9.328 1.063-13.174 3.272-3.846 2.128-6.792 5.237-9.001 9.328-2.046 4.009-3.191 8.918-3.191 14.728ZM589.233 239c-10.147 0-18.82-1.391-26.103-4.091-7.282-2.7-13.092-6.382-17.511-10.964-4.418-4.582-7.528-9.655-9.164-15.219l25.448-6.136c1.145 2.372 2.782 4.663 4.991 6.954 2.209 2.291 5.155 4.255 8.837 5.81 3.683 1.554 8.428 2.291 14.074 2.291 8.019 0 14.647-1.964 19.884-5.81 5.237-3.845 7.856-10.227 7.856-19.064v-22.665h-1.391c-1.473 2.946-3.601 5.892-6.383 9.001-2.782 3.109-6.464 5.645-10.965 7.691-4.582 2.046-10.228 3.109-17.101 3.109-9.165 0-17.511-2.209-25.039-6.545-7.446-4.337-13.42-10.883-17.757-19.474-4.418-8.673-6.628-19.473-6.628-32.565 0-13.091 2.21-24.301 6.628-33.383 4.419-9.082 10.311-15.955 17.839-20.7 7.528-4.746 15.874-7.037 25.039-7.037 7.037 0 12.846 1.145 17.347 3.518 4.582 2.373 8.182 5.236 10.883 8.51 2.7 3.272 4.746 6.382 6.137 9.327h1.554v-19.8h27.821v121.749c0 10.228-2.454 18.737-7.364 25.447-4.91 6.709-11.538 11.7-20.048 15.055-8.509 3.355-18.165 4.991-28.884 4.991Zm.245-71.266c5.974 0 11.047-1.473 15.302-4.337 4.173-2.945 7.446-7.118 9.573-12.519 2.21-5.482 3.274-12.027 3.274-19.637 0-7.609-1.064-14.155-3.274-19.8-2.127-5.646-5.318-10.064-9.491-13.255-4.174-3.11-9.329-4.746-15.384-4.746s-11.537 1.636-15.792 4.91c-4.173 3.272-7.365 7.772-9.492 13.418-2.128 5.727-3.191 12.191-3.191 19.392 0 7.2 1.063 13.745 3.273 19.228 2.127 5.482 5.318 9.736 9.573 12.764 4.174 3.027 9.41 4.582 15.629 4.582Zm141.56-26.51V71.839h28.23v119.786h-27.412v-21.273h-1.227c-2.7 6.709-7.119 12.191-13.338 16.446-6.137 4.255-13.747 6.382-22.748 6.382-7.855 0-14.81-1.718-20.783-5.237-5.974-3.518-10.72-8.591-14.075-15.382-3.355-6.709-5.073-14.891-5.073-24.464V71.839h28.312v71.921c0 7.609 2.046 13.664 6.219 18.083 4.173 4.5 9.655 6.709 16.365 6.709 4.173 0 8.183-.982 12.111-3.028 3.927-2.045 7.118-5.072 9.655-9.082 2.537-4.091 3.764-9.164 3.764-15.218Zm65.707-109.395v159.796h-28.23V31.828h28.23Zm44.841 162.169c-7.61 0-14.402-1.391-20.457-4.091-6.055-2.7-10.883-6.791-14.32-12.109-3.518-5.319-5.237-11.946-5.237-19.801 0-6.791 1.228-12.355 3.765-16.773 2.536-4.419 5.891-7.937 10.228-10.637 4.337-2.618 9.164-4.664 14.647-6.055 5.4-1.391 11.046-2.373 16.856-3.027 7.037-.737 12.683-1.391 17.102-1.964 4.337-.573 7.528-1.555 9.574-2.782 1.963-1.309 3.027-3.273 3.027-5.973v-.491c0-5.891-1.718-10.391-5.237-13.664-3.518-3.191-8.51-4.828-15.056-4.828-6.955 0-12.356 1.473-16.447 4.5-4.009 3.028-6.71 6.546-8.183 10.719l-26.348-3.764c2.046-7.282 5.483-13.336 10.31-18.328 4.746-4.909 10.638-8.59 17.511-11.045 6.955-2.455 14.565-3.682 22.912-3.682 5.809 0 11.537.654 17.265 2.045s10.965 3.6 15.711 6.71c4.746 3.109 8.51 7.282 11.455 12.6 2.864 5.318 4.337 11.946 4.337 19.883v80.184h-27.166v-16.446h-.9c-1.719 3.355-4.092 6.464-7.201 9.328-3.109 2.864-6.955 5.237-11.619 6.955-4.828 1.718-10.229 2.536-16.529 2.536Zm7.364-20.701c5.646 0 10.556-1.145 14.729-3.354 4.173-2.291 7.364-5.237 9.655-9.001 2.292-3.763 3.355-7.854 3.355-12.273v-14.155c-.9.737-2.373 1.391-4.5 2.046-2.128.654-4.419 1.145-7.037 1.636-2.619.491-5.155.9-7.692 1.227-2.537.328-4.746.655-6.628.901-4.173.572-8.019 1.472-11.292 2.781-3.355 1.31-5.973 3.11-7.855 5.401-1.964 2.291-2.864 5.318-2.864 8.918 0 5.237 1.882 9.164 5.728 11.782 3.682 2.782 8.51 4.091 14.401 4.091Zm64.643 18.328V71.839h27.412v19.965h1.227c2.21-6.955 5.974-12.274 11.292-16.038 5.319-3.763 11.456-5.645 18.329-5.645 1.555 0 3.355.082 5.237.163 1.964.164 3.601.328 4.91.573v25.938c-1.227-.41-3.109-.819-5.646-1.146a58.814 58.814 0 0 0-7.446-.49c-5.155 0-9.738 1.145-13.829 3.354-4.091 2.209-7.282 5.236-9.655 9.164-2.373 3.927-3.519 8.427-3.519 13.5v70.448h-28.312ZM222.077 39.192l-8.019 125.923L137.387 0l84.69 39.192Zm-53.105 162.825-57.933 33.056-57.934-33.056 11.783-28.556h92.301l11.783 28.556ZM111.039 62.675l30.357 73.803H80.681l30.358-73.803ZM7.937 165.115 0 39.192 84.69 0 7.937 165.115Z"
-          />
-          <path
-            fill="url(#c)"
-            d="M388.676 191.625h30.849L363.31 31.828h-35.758l-56.215 159.797h30.848l13.174-39.356h60.061l13.256 39.356Zm-65.461-62.675 21.602-64.311h1.227l21.602 64.311h-44.431Zm126.831-7.527v70.202h-28.23V71.839h27.002v20.374h1.392c2.782-6.71 7.2-12.028 13.255-15.956 6.056-3.927 13.584-5.89 22.503-5.89 8.264 0 15.465 1.8 21.684 5.318 6.137 3.518 10.964 8.673 14.319 15.382 3.437 6.71 5.074 14.81 4.992 24.383v76.175h-28.23v-71.92c0-8.019-2.046-14.237-6.219-18.819-4.173-4.5-9.819-6.791-17.102-6.791-4.91 0-9.328 1.063-13.174 3.272-3.846 2.128-6.792 5.237-9.001 9.328-2.046 4.009-3.191 8.918-3.191 14.728ZM589.233 239c-10.147 0-18.82-1.391-26.103-4.091-7.282-2.7-13.092-6.382-17.511-10.964-4.418-4.582-7.528-9.655-9.164-15.219l25.448-6.136c1.145 2.372 2.782 4.663 4.991 6.954 2.209 2.291 5.155 4.255 8.837 5.81 3.683 1.554 8.428 2.291 14.074 2.291 8.019 0 14.647-1.964 19.884-5.81 5.237-3.845 7.856-10.227 7.856-19.064v-22.665h-1.391c-1.473 2.946-3.601 5.892-6.383 9.001-2.782 3.109-6.464 5.645-10.965 7.691-4.582 2.046-10.228 3.109-17.101 3.109-9.165 0-17.511-2.209-25.039-6.545-7.446-4.337-13.42-10.883-17.757-19.474-4.418-8.673-6.628-19.473-6.628-32.565 0-13.091 2.21-24.301 6.628-33.383 4.419-9.082 10.311-15.955 17.839-20.7 7.528-4.746 15.874-7.037 25.039-7.037 7.037 0 12.846 1.145 17.347 3.518 4.582 2.373 8.182 5.236 10.883 8.51 2.7 3.272 4.746 6.382 6.137 9.327h1.554v-19.8h27.821v121.749c0 10.228-2.454 18.737-7.364 25.447-4.91 6.709-11.538 11.7-20.048 15.055-8.509 3.355-18.165 4.991-28.884 4.991Zm.245-71.266c5.974 0 11.047-1.473 15.302-4.337 4.173-2.945 7.446-7.118 9.573-12.519 2.21-5.482 3.274-12.027 3.274-19.637 0-7.609-1.064-14.155-3.274-19.8-2.127-5.646-5.318-10.064-9.491-13.255-4.174-3.11-9.329-4.746-15.384-4.746s-11.537 1.636-15.792 4.91c-4.173 3.272-7.365 7.772-9.492 13.418-2.128 5.727-3.191 12.191-3.191 19.392 0 7.2 1.063 13.745 3.273 19.228 2.127 5.482 5.318 9.736 9.573 12.764 4.174 3.027 9.41 4.582 15.629 4.582Zm141.56-26.51V71.839h28.23v119.786h-27.412v-21.273h-1.227c-2.7 6.709-7.119 12.191-13.338 16.446-6.137 4.255-13.747 6.382-22.748 6.382-7.855 0-14.81-1.718-20.783-5.237-5.974-3.518-10.72-8.591-14.075-15.382-3.355-6.709-5.073-14.891-5.073-24.464V71.839h28.312v71.921c0 7.609 2.046 13.664 6.219 18.083 4.173 4.5 9.655 6.709 16.365 6.709 4.173 0 8.183-.982 12.111-3.028 3.927-2.045 7.118-5.072 9.655-9.082 2.537-4.091 3.764-9.164 3.764-15.218Zm65.707-109.395v159.796h-28.23V31.828h28.23Zm44.841 162.169c-7.61 0-14.402-1.391-20.457-4.091-6.055-2.7-10.883-6.791-14.32-12.109-3.518-5.319-5.237-11.946-5.237-19.801 0-6.791 1.228-12.355 3.765-16.773 2.536-4.419 5.891-7.937 10.228-10.637 4.337-2.618 9.164-4.664 14.647-6.055 5.4-1.391 11.046-2.373 16.856-3.027 7.037-.737 12.683-1.391 17.102-1.964 4.337-.573 7.528-1.555 9.574-2.782 1.963-1.309 3.027-3.273 3.027-5.973v-.491c0-5.891-1.718-10.391-5.237-13.664-3.518-3.191-8.51-4.828-15.056-4.828-6.955 0-12.356 1.473-16.447 4.5-4.009 3.028-6.71 6.546-8.183 10.719l-26.348-3.764c2.046-7.282 5.483-13.336 10.31-18.328 4.746-4.909 10.638-8.59 17.511-11.045 6.955-2.455 14.565-3.682 22.912-3.682 5.809 0 11.537.654 17.265 2.045s10.965 3.6 15.711 6.71c4.746 3.109 8.51 7.282 11.455 12.6 2.864 5.318 4.337 11.946 4.337 19.883v80.184h-27.166v-16.446h-.9c-1.719 3.355-4.092 6.464-7.201 9.328-3.109 2.864-6.955 5.237-11.619 6.955-4.828 1.718-10.229 2.536-16.529 2.536Zm7.364-20.701c5.646 0 10.556-1.145 14.729-3.354 4.173-2.291 7.364-5.237 9.655-9.001 2.292-3.763 3.355-7.854 3.355-12.273v-14.155c-.9.737-2.373 1.391-4.5 2.046-2.128.654-4.419 1.145-7.037 1.636-2.619.491-5.155.9-7.692 1.227-2.537.328-4.746.655-6.628.901-4.173.572-8.019 1.472-11.292 2.781-3.355 1.31-5.973 3.11-7.855 5.401-1.964 2.291-2.864 5.318-2.864 8.918 0 5.237 1.882 9.164 5.728 11.782 3.682 2.782 8.51 4.091 14.401 4.091Zm64.643 18.328V71.839h27.412v19.965h1.227c2.21-6.955 5.974-12.274 11.292-16.038 5.319-3.763 11.456-5.645 18.329-5.645 1.555 0 3.355.082 5.237.163 1.964.164 3.601.328 4.91.573v25.938c-1.227-.41-3.109-.819-5.646-1.146a58.814 58.814 0 0 0-7.446-.49c-5.155 0-9.738 1.145-13.829 3.354-4.091 2.209-7.282 5.236-9.655 9.164-2.373 3.927-3.519 8.427-3.519 13.5v70.448h-28.312ZM222.077 39.192l-8.019 125.923L137.387 0l84.69 39.192Zm-53.105 162.825-57.933 33.056-57.934-33.056 11.783-28.556h92.301l11.783 28.556ZM111.039 62.675l30.357 73.803H80.681l30.358-73.803ZM7.937 165.115 0 39.192 84.69 0 7.937 165.115Z"
-          />
-        </g>
-        <defs>
-          <radialGradient
-            id="c"
-            cx="0"
-            cy="0"
-            r="1"
-            gradientTransform="rotate(118.122 171.182 60.81) scale(205.794)"
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop stop-color="#FF41F8" />
-            <stop offset=".707" stop-color="#FF41F8" stop-opacity=".5" />
-            <stop offset="1" stop-color="#FF41F8" stop-opacity="0" />
-          </radialGradient>
-          <linearGradient
-            id="b"
-            x1="0"
-            x2="982"
-            y1="192"
-            y2="192"
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop stop-color="#F0060B" />
-            <stop offset="0" stop-color="#F0070C" />
-            <stop offset=".526" stop-color="#CC26D5" />
-            <stop offset="1" stop-color="#7702FF" />
-          </linearGradient>
-          <clipPath id="a"><path fill="#fff" d="M0 0h982v239H0z" /></clipPath>
-        </defs>
-      </svg>
-      <h1>Hello, {{ title() }}</h1>
-      <p>Congratulations! Your app is running. 🎉</p>
+        {{ name }}
+      </button>
+    }
+  </nav>
+</header>
+
+<main class="demo">
+  <section class="demo__intro">
+    <h1>Carbon tokens, our components</h1>
+    <p>
+      No <code>carbon-components-angular</code> anywhere. The design language
+      comes from <code>&#64;carbon/styles</code> as Sass; behavior comes from
+      <code>&#64;angular/aria</code> and <code>&#64;angular/cdk</code>; the markup
+      and the class names are ours. Switch themes above — nothing recompiles,
+      only the <code>data-theme</code> attribute on <code>&lt;html&gt;</code>
+      changes.
+    </p>
+  </section>
+
+  <!-- ── Button ──────────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Button</h2>
+    <p class="demo__note">
+      An attribute on a native <code>&lt;button&gt;</code>. Every color reads from
+      a <code>$button-*</code> component token, which is why all four themes work
+      without a single per-theme override.
+    </p>
+
+    <div class="demo__row">
+      @for (kind of kinds; track kind) {
+        <button dsButton [kind]="kind">{{ kind }}</button>
+      }
     </div>
-    <div class="divider" role="separator" aria-label="Divider"></div>
-    <div class="right-side">
-      <div class="pill-group">
-        @for (item of [
-          { title: 'Explore the Docs', link: 'https://angular.dev' },
-          { title: 'Learn with Tutorials', link: 'https://angular.dev/tutorials' },
-          { title: 'Prompt and best practices for AI', link: 'https://angular.dev/ai/develop-with-ai'},
-          { title: 'CLI Docs', link: 'https://angular.dev/tools/cli' },
-          { title: 'Angular Language Service', link: 'https://angular.dev/tools/language-service' },
-          { title: 'Angular DevTools', link: 'https://angular.dev/tools/devtools' },
-        ]; track item.title) {
-          <a
-            class="pill"
-            [href]="item.link"
-            target="_blank"
-            rel="noopener"
-          >
-            <span>{{ item.title }}</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="14"
-              viewBox="0 -960 960 960"
-              width="14"
-              fill="currentColor"
-            >
-              <path
-                d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm188-212-56-56 372-372H560v-80h280v280h-80v-144L388-332Z"
-              />
-            </svg>
-          </a>
-        }
+
+    <div class="demo__row">
+      @for (size of sizes; track size) {
+        <button dsButton kind="secondary" [size]="size">size {{ size }}</button>
+      }
+    </div>
+
+    <div class="demo__row">
+      <button dsButton disabled>disabled</button>
+      <button dsButton kind="danger" disabled>danger, disabled</button>
+      <button dsButton kind="ghost">ghost</button>
+    </div>
+
+    <p class="demo__note">
+      Tab to a button to see the focus ring — it is inset by 2px so it never
+      shifts layout. Clicking does not show it: that is
+      <code>:focus-visible</code> doing its job.
+    </p>
+  </section>
+
+  <!-- ── Tag ─────────────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Tag</h2>
+    <p class="demo__note">
+      Carbon ships background, text, border and hover as a contrast-checked set
+      per hue. The component takes the hue name and picks up all four.
+    </p>
+
+    <div class="demo__row">
+      @for (color of colors; track color) {
+        <ds-tag [color]="color">{{ color }}</ds-tag>
+      }
+    </div>
+
+    <div class="demo__row">
+      @for (color of removable(); track color) {
+        <ds-tag
+          [color]="color"
+          size="lg"
+          dismissible
+          [dismissLabel]="'Remove ' + color"
+          (dismissed)="remove(color)"
+        >
+          {{ color }}
+        </ds-tag>
+      } @empty {
+        <span class="demo__empty">All dismissed.</span>
+      }
+
+      @if (removable().length < 4) {
+        <button dsButton kind="ghost" size="sm" (click)="resetTags()">Reset</button>
+      }
+    </div>
+  </section>
+
+  <!-- ── Search ──────────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Search</h2>
+    <p class="demo__note">
+      Both gutters are one field-height wide — the left holds the magnifier, the
+      right is exactly the clear button's box — so the text never slides under
+      either. The label is always visually hidden, which is Carbon's rule and not
+      an option here: a placeholder stops being a label the moment you type.
+      Clear the field with the &times; and watch where focus lands.
+    </p>
+
+    <div class="demo__fields demo__fields--single">
+      <ds-search
+        label="Search components"
+        placeholder="Try typing something"
+        [(value)]="searchValue"
+      />
+    </div>
+
+    <div class="demo__row">
+      @for (size of fieldSizes; track size) {
+        <ds-search
+          [size]="size"
+          [label]="'Search, ' + size"
+          [placeholder]="'size ' + size"
+        />
+      }
+    </div>
+
+    <div class="demo__fields demo__fields--single">
+      <ds-search label="Disabled search" placeholder="Disabled" disabled />
+    </div>
+
+    <p class="demo__note">
+      The table's filter above is this same component — the demo no longer styles
+      an input of its own.
+    </p>
+  </section>
+
+  <!-- ── Input ───────────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Input</h2>
+    <p class="demo__note">
+      The label belongs to the control, not to a wrapper — that is Carbon's own
+      API shape and it keeps every field one element deep. Helper text and the
+      error line share one slot: the error <em>replaces</em> the helper rather
+      than stacking under it, so nothing below shifts when a field goes invalid.
+    </p>
+
+    <div class="demo__fields">
+      <ds-input
+        label="Cluster name"
+        placeholder="my-cluster"
+        helperText="Lowercase letters, digits and dashes."
+        [(value)]="clusterName"
+      />
+
+      <ds-input
+        label="Replicas"
+        type="number"
+        placeholder="3"
+        helperText="Value stays a string — the caller parses."
+        [(value)]="replicas"
+      />
+    </div>
+
+    <div class="demo__row">
+      @for (size of fieldSizes; track size) {
+        <ds-input [size]="size" [label]="'Size ' + size" [placeholder]="size" />
+      }
+    </div>
+
+    <p class="demo__note">
+      Invalid and warn. Only invalid draws a border — Carbon carries warn on the
+      icon and the message alone, because <code>$support-warning</code> is the
+      same yellow in all four themes and yellow text fails contrast on the light
+      ones. Focus an invalid field: the blue ring wins while you are in it, and
+      the red comes back on blur, which is also when validation runs.
+    </p>
+
+    <div class="demo__fields">
+      <ds-input
+        label="Namespace"
+        value="Production"
+        invalid
+        invalidText="That namespace already exists."
+      />
+
+      <ds-input
+        label="Memory limit"
+        value="512Mi"
+        warn
+        warnText="Below the recommended 1Gi for this image."
+      />
+    </div>
+
+    <p class="demo__note">
+      Password, disabled and read-only. The reveal toggle is an icon-only control,
+      so its name is an input rather than a hardcoded string.
+    </p>
+
+    <div class="demo__fields">
+      <ds-input
+        label="API token"
+        type="password"
+        value="hunter2-but-longer"
+        helperText="Click the eye to reveal."
+      />
+
+      <ds-input
+        label="Expired token"
+        type="password"
+        value="cannot-touch-this"
+        invalid
+        invalidText="This token expired 3 days ago."
+      />
+
+      <ds-input label="Disabled" value="Not editable" disabled />
+
+      <ds-input
+        label="Cluster ID"
+        value="clu_8f2a41"
+        readOnly
+        helperText="Read-only drops the fill entirely."
+      />
+    </div>
+
+    <p class="demo__note">
+      The fluid variant. Not a fourth size — the label moves inside a fixed 64px
+      box, so it is a different layout rather than a taller one. Helper text has
+      nowhere to go and is dropped; the error message moves inside the box, below
+      a divider.
+    </p>
+
+    <div class="demo__fields">
+      <ds-input fluid label="Cluster name" placeholder="my-cluster" />
+
+      <ds-input
+        fluid
+        label="Namespace"
+        value="Production"
+        invalid
+        invalidText="That namespace already exists."
+      />
+    </div>
+  </section>
+
+  <!-- ── Select ──────────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Select</h2>
+    <p class="demo__note">
+      A native <code>&lt;select&gt;</code> with the arrow drawn over it, because a
+      native arrow cannot be styled. Options are projected rather than configured
+      — <code>&lt;ds-select&gt;&lt;option&gt;</code> — which keeps
+      <code>&lt;optgroup&gt;</code>, disabled options and an empty placeholder row
+      working without re-exposing any of them.
+    </p>
+
+    <div class="demo__fields">
+      <ds-select
+        label="Region"
+        helperText="Where the cluster runs."
+        [(value)]="region"
+      >
+        <option value="">Choose a region</option>
+        <optgroup label="Europe">
+          <option value="eu-central">eu-central</option>
+          <option value="eu-west">eu-west</option>
+        </optgroup>
+        <optgroup label="North America">
+          <option value="us-east">us-east</option>
+          <option value="us-west" disabled>us-west (at capacity)</option>
+        </optgroup>
+      </ds-select>
+
+      <ds-select label="Tier" helperText="Selected: {{ tier() }}" [(value)]="tier">
+        <option value="dev">Development</option>
+        <option value="staging">Staging</option>
+        <option value="prod">Production</option>
+      </ds-select>
+    </div>
+
+    <div class="demo__row">
+      @for (size of fieldSizes; track size) {
+        <ds-select [size]="size" [label]="'Size ' + size">
+          <option>size {{ size }}</option>
+        </ds-select>
+      }
+    </div>
+
+    <div class="demo__fields">
+      <ds-select label="Instance type" invalid invalidText="No longer offered.">
+        <option>m4.large</option>
+      </ds-select>
+
+      <ds-select label="Storage class" warn warnText="Slower than the default.">
+        <option>cold-hdd</option>
+      </ds-select>
+
+      <ds-select label="Disabled" disabled>
+        <option>Not editable</option>
+      </ds-select>
+
+      <ds-select label="Provider" readOnly helperText="Read-only, set at creation.">
+        <option>aws</option>
+      </ds-select>
+    </div>
+
+    <div class="demo__fields">
+      <ds-select fluid label="Region">
+        <option value="">Choose a region</option>
+        <option>eu-central</option>
+      </ds-select>
+
+      <ds-select fluid label="Instance type" invalid invalidText="No longer offered.">
+        <option>m4.large</option>
+      </ds-select>
+    </div>
+
+    <p class="demo__note">
+      Read-only deserves a footnote: a native <code>&lt;select&gt;</code> has no
+      <code>readonly</code>, so <code>readOnly</code> sets <code>disabled</code>
+      underneath and puts the look back. The consequence is that a read-only
+      select is not submitted with its form — send the value yourself.
+    </p>
+  </section>
+
+  <!-- ── Textarea ────────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Textarea</h2>
+    <p class="demo__note">
+      No size scale — Carbon sizes a textarea with <code>rows</code>, not with the
+      32/40/48 field heights. The type style is <code>body-01</code> rather than
+      the compact one every single-line field uses: compact line height reads fine
+      on one line and cramped the moment text wraps. Drag the bottom-right corner
+      — vertical resize only.
+    </p>
+
+    <div class="demo__fields">
+      <ds-textarea
+        label="Description"
+        placeholder="What does this service do?"
+        helperText="Shown on the service detail page."
+        [(value)]="description"
+      />
+
+      <ds-textarea
+        label="Release notes"
+        [rows]="4"
+        [maxLength]="120"
+        showCounter
+        helperText="Up to 120 characters."
+        [(value)]="notes"
+      />
+    </div>
+
+    <div class="demo__fields">
+      <ds-textarea
+        label="Rollback reason"
+        value="Because"
+        invalid
+        invalidText="Give at least 20 characters of context."
+      />
+
+      <ds-textarea
+        label="Runbook"
+        value="See the wiki."
+        warn
+        warnText="Linking out means this is empty during an incident."
+      />
+
+      <ds-textarea label="Disabled" value="Not editable" disabled />
+
+      <ds-textarea
+        label="Audit note"
+        value="Created by the platform team."
+        readOnly
+        helperText="Read-only drops the fill and the resize handle."
+      />
+    </div>
+
+    <div class="demo__fields">
+      <ds-textarea fluid label="Description" placeholder="What does this do?" />
+
+      <ds-textarea
+        fluid
+        label="Rollback reason"
+        value="Because"
+        invalid
+        invalidText="Give at least 20 characters of context."
+      />
+    </div>
+
+    <p class="demo__note">
+      One deliberate deviation from Carbon here: Carbon reserves no right-hand
+      gutter for the status icon, so the first line of text runs underneath it. We
+      reserve it. An icon that hides the value it is complaining about is worse
+      than a field 40px narrower.
+    </p>
+  </section>
+
+  <!-- ── Radio group ─────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Radio group</h2>
+    <p class="demo__note">
+      Almost none of this is ours. Give native radios a shared <code>name</code>
+      and the browser supplies single selection, arrow-key navigation, and a tab
+      order where the whole group is <em>one</em> stop rather than one per option
+      — try it: Tab in, then arrow between them, then Tab out. The
+      <code>&lt;fieldset&gt;</code> is doing work too: its <code>disabled</code>
+      cascades to every input inside, and the <code>&lt;legend&gt;</code> is what
+      names the group to a screen reader.
+    </p>
+
+    <div class="demo__fields">
+      <ds-radio-group
+        legend="Deployment strategy"
+        helperText="Selected: {{ strategy() }}"
+        [(value)]="strategy"
+      >
+        <ds-radio label="Rolling" value="rolling" />
+        <ds-radio label="Blue-green" value="blue-green" />
+        <ds-radio label="Canary" value="canary" />
+      </ds-radio-group>
+    </div>
+
+    <div class="demo__fields">
+      <ds-radio-group
+        legend="Log level"
+        orientation="vertical"
+        helperText="Vertical, and one option disabled on its own."
+        [(value)]="logLevel"
+      >
+        <ds-radio label="Error" value="error" />
+        <ds-radio label="Warn" value="warn" />
+        <ds-radio label="Info" value="info" />
+        <ds-radio label="Debug (not on production)" value="debug" disabled />
+      </ds-radio-group>
+
+      <ds-radio-group
+        legend="Retention"
+        orientation="vertical"
+        value="30"
+        invalid
+        invalidText="Your plan caps retention at 7 days."
+      >
+        <ds-radio label="7 days" value="7" />
+        <ds-radio label="30 days" value="30" />
+        <ds-radio label="1 year" value="365" />
+      </ds-radio-group>
+    </div>
+
+    <div class="demo__fields">
+      <ds-radio-group legend="Disabled group" value="a" disabled>
+        <ds-radio label="Option A" value="a" />
+        <ds-radio label="Option B" value="b" />
+      </ds-radio-group>
+
+      <ds-radio-group
+        legend="Read-only group"
+        value="b"
+        readOnly
+        helperText="Focusable and readable, but it will not change."
+      >
+        <ds-radio label="Option A" value="a" />
+        <ds-radio label="Option B" value="b" />
+      </ds-radio-group>
+    </div>
+
+    <p class="demo__note">
+      Read-only is the one place the browser fights us. A radio has no native
+      <code>readonly</code>, and by the time <code>change</code> fires the browser
+      has already checked one option <em>and</em> unchecked another — which a
+      single input cannot undo. So it is cancelled on the click instead, before
+      any of it happens. Tab into the read-only group and press an arrow: focus
+      moves, the selection does not.
+    </p>
+  </section>
+
+  <!-- ── Toggle ──────────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Toggle</h2>
+    <p class="demo__note">
+      A <code>&lt;button role="switch"&gt;</code>, not a checkbox — Carbon's
+      choice and the right one. A switch takes effect immediately; a checkbox is a
+      value you submit later, and screen readers announce the two differently.
+      <code>checked</code> is a <code>model()</code>, so this already satisfies
+      <code>FormCheckboxControl</code> with no adapter.
+    </p>
+
+    <div class="demo__fields">
+      <ds-toggle label="Auto-scaling" [(checked)]="autoScaling" />
+      <ds-toggle label="Public endpoint" [(checked)]="publicEndpoint" />
+    </div>
+
+    <div class="demo__fields">
+      <ds-toggle label="Small" size="sm" [(checked)]="smallToggle" />
+      <ds-toggle label="No state text" hideStateText [(checked)]="terseToggle" />
+    </div>
+
+    <div class="demo__fields">
+      <ds-toggle label="Disabled, off" disabled />
+      <ds-toggle label="Disabled, on" disabled [checked]="true" />
+      <ds-toggle label="Read-only" readOnly [checked]="true" />
+      <ds-toggle
+        label="Custom state text"
+        onLabel="Enabled"
+        offLabel="Disabled"
+        [(checked)]="customToggle"
+      />
+    </div>
+
+    <p class="demo__note">
+      The check inside the switch appears on the small size only. It is positioned
+      for a 16px track, and at 24px the knob is large enough to read on its own —
+      which is why Carbon draws it in exactly one of the two.
+    </p>
+  </section>
+
+  <!-- ── Date picker ─────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Date picker</h2>
+    <p class="demo__note">
+      The one component here built on a third-party primitive.
+      <code>&#64;angular/aria</code> has no calendar, so the month grid, the
+      roving focus and the arrow / Home / End / PageUp / PageDown keys come from
+      <code>ng-primitives</code>; the markup, the class names and every pixel are
+      ours. Same split as Tabs, different vendor. The popover is CDK Overlay, not
+      the primitive's own — we already use the CDK for Modal, and taking theirs
+      would have meant a second positioning engine in the bundle.
+    </p>
+
+    <div class="demo__fields">
+      <ds-date-picker
+        label="Start date"
+        helperText="Selected: {{ startDate() ? startDate()!.toDateString() : 'nothing' }}"
+        [(value)]="startDate"
+      />
+
+      <ds-date-picker
+        label="Cutoff"
+        helperText="Only this month, and no weekends."
+        [min]="monthStart"
+        [max]="monthEnd"
+        [dateDisabled]="noWeekends"
+        [(value)]="cutoff"
+      />
+    </div>
+
+    <p class="demo__note">
+      Open one and use the keyboard: arrows move a day, PageUp / PageDown move a
+      month, Home / End jump to the ends of the week, Enter picks, Escape closes
+      and puts focus back in the field. None of that is our code.
+    </p>
+
+    <div class="demo__fields">
+      <ds-date-picker
+        label="Expiry"
+        invalid
+        invalidText="That date is in the past."
+      />
+
+      <ds-date-picker
+        label="Renewal"
+        warn
+        warnText="Falls on a public holiday."
+      />
+
+      <ds-date-picker label="Disabled" disabled />
+
+      <ds-date-picker
+        label="Created"
+        readOnly
+        helperText="Read-only closes the calendar button too."
+      />
+    </div>
+
+    <p class="demo__note">
+      The field is typeable, and the default format is ISO
+      <code>yyyy-mm-dd</code> — deliberately not a locale format. Whatever the
+      field shows has to be something the field can read back, and
+      <code>03/04</code> is two different days depending on who is reading it.
+      <code>formatDate</code> and <code>parseDate</code> are both inputs;
+      override them together, never one alone.
+    </p>
+
+    <div class="demo__fields demo__fields--single">
+      <ds-date-picker
+        label="Locale formatted"
+        placeholder="dd.mm.yyyy."
+        helperText="Same picker, both functions replaced."
+        [formatDate]="formatLocale"
+        [parseDate]="parseLocale"
+        [(value)]="localeDate"
+      />
+    </div>
+
+    <h3 class="demo__subtitle">Range</h3>
+    <p class="demo__note">
+      One field holding both ends, one calendar. Click a start day, then an end
+      day: the calendar closes on the second, because the primitive reports the
+      two as separate events and closing on the first would make the second
+      impossible. Carbon renders a range as two fields — this is deliberately
+      one.
+    </p>
+    <p class="demo__note">
+      A single field has to read its own separator back, so the parser accepts an
+      en dash, an em dash, a spaced hyphen or the word <em>to</em>. All of them
+      require surrounding whitespace, which is what stops them colliding with the
+      hyphens inside an ISO date — <code>2026-08-13-2026-08-15</code> has no
+      unambiguous split point, <code>2026-08-13 – 2026-08-15</code> does.
+    </p>
+    <p class="demo__note">
+      The panel here is the <em>same component</em> the single picker uses.
+      ng-primitives' grid directives resolve their state through a fallback, so
+      the markup does not care which of the two picker directives sits above it.
+    </p>
+
+    <div class="demo__fields demo__fields--single">
+      <ds-date-range-picker
+        label="Reporting period"
+        placeholder="yyyy-mm-dd – yyyy-mm-dd"
+        [(start)]="rangeStart"
+        [(end)]="rangeEnd"
+        helperText="Selected: {{ rangeSummary() }}"
+      />
+    </div>
+  </section>
+
+  <!-- ── Multi-select ────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Multi-select</h2>
+    <p class="demo__note">
+      Carbon's MultiSelect: a count in the field, a listbox of checkboxes below
+      it. <code>ng-primitives</code> owns selection, roving focus and the
+      keyboard; the field, the popover and the class names are ours. The rows
+      reuse <code>ds-checkbox</code>, which already does indeterminate — which is
+      exactly what a partial select-all needs.
+    </p>
+    <p class="demo__note">
+      Options are configured here rather than projected, the opposite of
+      <code>ds-select</code>, and for a concrete reason: select-all has to know
+      the whole set and the filter has to know each row's text. Projected
+      <code>&lt;option&gt;</code> elements expose neither.
+    </p>
+
+    <div class="demo__fields">
+      <ds-multi-select
+        label="Namespaces"
+        selectAll
+        helperText="Selected: {{ namespaces().length ? namespaces().join(', ') : 'nothing' }}"
+        [options]="namespaceOptions"
+        [(selected)]="namespaces"
+      />
+
+      <ds-multi-select
+        label="Owners"
+        selectAll
+        filterable
+        placeholder="Choose owners"
+        helperText="Filterable — this is Carbon's combo box shape."
+        [options]="ownerOptions"
+        [(selected)]="owners"
+      />
+    </div>
+
+    <p class="demo__note">
+      Type in the filterable one, then press <em>Select all</em>. It applies to
+      the rows the filter left, not to the hundred it is hiding — and clearing it
+      does not drop them either. That is the part implementations usually get
+      wrong.
+    </p>
+
+    <div class="demo__fields">
+      <ds-multi-select
+        label="Regions"
+        invalid
+        invalidText="Pick at least one region."
+        [options]="regionOptions"
+      />
+
+      <ds-multi-select label="Disabled" disabled [options]="regionOptions" />
+    </div>
+  </section>
+
+  <!-- ── Validation timing ───────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">When invalid appears</h2>
+    <p class="demo__note">
+      Carbon specifies the timing, not just the look, and this is it — one rule
+      for the whole app. Type a bad address: nothing happens. Tab away: it turns
+      red. Fix it: the error clears as you type, without waiting for another blur.
+      Press <em>Create</em> with the field untouched and it validates anyway.
+    </p>
+    <p class="demo__note">
+      The control has no part in this. <code>invalid</code> is a plain input and
+      the policy lives here, in the form — a control cannot see a submit it is not
+      part of.
+    </p>
+
+    <div class="demo__fields demo__fields--single">
+      <ds-input
+        label="Email"
+        type="email"
+        placeholder="you@example.com"
+        helperText="We only use this for cluster alerts."
+        [value]="email()"
+        (valueChange)="email.set($event)"
+        (blurred)="emailTouched.set(true)"
+        [invalid]="emailInvalid()"
+        invalidText="Enter a valid email address."
+      />
+    </div>
+
+    <div class="demo__row">
+      <button dsButton (click)="submitForm()">Create</button>
+
+      <button dsButton kind="ghost" (click)="resetForm()">Reset</button>
+
+      @if (submitted() && !emailInvalid()) {
+        <span class="demo__result">submitted with: <code>{{ email() }}</code></span>
+      }
+    </div>
+  </section>
+
+  <!-- ── Data table ──────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Data table</h2>
+    <p class="demo__note">
+      Columns are described as data, not as templates — a text column is one line.
+      Sorting is tri-state (click a header three times to get back to unsorted),
+      empty cells stay last in both directions, and <code>CPU</code> /
+      <code>Updated</code> show one thing while sorting on another. Selection is
+      keyed by row id, so it survives sorting, filtering and paging.
+    </p>
+
+    <app-services-table />
+
+    <p class="demo__note" style="margin-top: 1rem">
+      Try: sort by <code>Updated</code> — the order follows the real timestamp, not
+      the string. Sort by <code>CPU</code> — the stopped services with no reading
+      sink to the bottom either way. Select rows, then page or sort, and the
+      selection count holds.
+    </p>
+  </section>
+
+  <!-- ── Tabs ────────────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Tabs</h2>
+    <p class="demo__note">
+      Behavior is <code>&#64;angular/aria</code>. Focus the tab strip and use
+      &larr; &rarr; Home End — roving tabindex, <code>aria-selected</code> and
+      <code>inert</code> on hidden panels all come from the primitive. We wrote
+      none of it.
+    </p>
+
+    <div dsTabs>
+      <div dsTabList [(selectedTab)]="selectedTab" aria-label="Implementation notes">
+        <button dsTab value="behavior">What Aria gives us</button>
+        <button dsTab value="tokens">What Carbon gives us</button>
+        <button dsTab value="ours">What is ours</button>
+        <button dsTab value="blocked" disabled>Disabled</button>
       </div>
-      <div class="social-links">
-        <a
-          href="https://github.com/angular/angular"
-          aria-label="Github"
-          target="_blank"
-          rel="noopener"
-        >
-          <svg
-            width="25"
-            height="24"
-            viewBox="0 0 25 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            alt="Github"
-          >
-            <path
-              d="M12.3047 0C5.50634 0 0 5.50942 0 12.3047C0 17.7423 3.52529 22.3535 8.41332 23.9787C9.02856 24.0946 9.25414 23.7142 9.25414 23.3871C9.25414 23.0949 9.24389 22.3207 9.23876 21.2953C5.81601 22.0377 5.09414 19.6444 5.09414 19.6444C4.53427 18.2243 3.72524 17.8449 3.72524 17.8449C2.61064 17.082 3.81137 17.0973 3.81137 17.0973C5.04697 17.1835 5.69604 18.3647 5.69604 18.3647C6.79321 20.2463 8.57636 19.7029 9.27978 19.3881C9.39052 18.5924 9.70736 18.0499 10.0591 17.7423C7.32641 17.4347 4.45429 16.3765 4.45429 11.6618C4.45429 10.3185 4.9311 9.22133 5.72065 8.36C5.58222 8.04931 5.16694 6.79833 5.82831 5.10337C5.82831 5.10337 6.85883 4.77319 9.2121 6.36459C10.1965 6.09082 11.2424 5.95546 12.2883 5.94931C13.3342 5.95546 14.3801 6.09082 15.3644 6.36459C17.7023 4.77319 18.7328 5.10337 18.7328 5.10337C19.3942 6.79833 18.9789 8.04931 18.8559 8.36C19.6403 9.22133 20.1171 10.3185 20.1171 11.6618C20.1171 16.3888 17.2409 17.4296 14.5031 17.7321C14.9338 18.1012 15.3337 18.8559 15.3337 20.0084C15.3337 21.6552 15.3183 22.978 15.3183 23.3779C15.3183 23.7009 15.5336 24.0854 16.1642 23.9623C21.0871 22.3484 24.6094 17.7341 24.6094 12.3047C24.6094 5.50942 19.0999 0 12.3047 0Z"
-            />
-          </svg>
-        </a>
-        <a
-          href="https://x.com/angular"
-          aria-label="X"
-          target="_blank"
-          rel="noopener"
-        >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            alt="X"
-          >
-            <path
-              d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
-            />
-          </svg>
-        </a>
-        <a
-          href="https://www.youtube.com/channel/UCbn1OgGei-DV7aSRo_HaAiw"
-          aria-label="Youtube"
-          target="_blank"
-          rel="noopener"
-        >
-          <svg
-            width="29"
-            height="20"
-            viewBox="0 0 29 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            alt="Youtube"
-          >
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M27.4896 1.52422C27.9301 1.96749 28.2463 2.51866 28.4068 3.12258C29.0004 5.35161 29.0004 10 29.0004 10C29.0004 10 29.0004 14.6484 28.4068 16.8774C28.2463 17.4813 27.9301 18.0325 27.4896 18.4758C27.0492 18.9191 26.5 19.2389 25.8972 19.4032C23.6778 20 14.8068 20 14.8068 20C14.8068 20 5.93586 20 3.71651 19.4032C3.11363 19.2389 2.56449 18.9191 2.12405 18.4758C1.68361 18.0325 1.36732 17.4813 1.20683 16.8774C0.613281 14.6484 0.613281 10 0.613281 10C0.613281 10 0.613281 5.35161 1.20683 3.12258C1.36732 2.51866 1.68361 1.96749 2.12405 1.52422C2.56449 1.08095 3.11363 0.76113 3.71651 0.596774C5.93586 0 14.8068 0 14.8068 0C14.8068 0 23.6778 0 25.8972 0.596774C26.5 0.76113 27.0492 1.08095 27.4896 1.52422ZM19.3229 10L11.9036 5.77905V14.221L19.3229 10Z"
-            />
-          </svg>
-        </a>
+
+      <div dsTabPanel value="behavior">
+        <ul class="demo__list">
+          <li>Roving tabindex — only the active tab is in the tab order</li>
+          <li>Arrow keys, Home and End move between tabs</li>
+          <li><code>role</code>, <code>aria-selected</code>, <code>aria-controls</code></li>
+          <li><code>inert</code> on hidden panels, so they leave the a11y tree</li>
+        </ul>
+      </div>
+
+      <div dsTabPanel value="tokens">
+        <ul class="demo__list">
+          <li><code>$border-interactive</code> — the 2px selected underline</li>
+          <li><code>$text-secondary</code> / <code>$text-primary</code> — unselected vs selected</li>
+          <li><code>$background-hover</code>, <code>$text-disabled</code></li>
+          <li><code>type-style('heading-compact-01')</code> for the selected weight</li>
+        </ul>
+      </div>
+
+      <div dsTabPanel value="ours">
+        <ul class="demo__list">
+          <li>The markup — which element carries which class</li>
+          <li>
+            The public API: <code>dsTab</code>, <code>dsTabPanel</code>, and only
+            the inputs we chose to re-expose
+          </li>
+          <li>
+            Selected state read straight off Aria's <code>selected()</code> signal,
+            so there is no second copy of that state to drift
+          </li>
+        </ul>
+      </div>
+
+      <div dsTabPanel value="blocked">Unreachable while disabled.</div>
+    </div>
+  </section>
+
+  <!-- ── Modal ───────────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Modal</h2>
+    <p class="demo__note">
+      <code>&#64;angular/cdk/dialog</code> handles the focus trap, Escape,
+      scroll blocking and returning focus to the trigger. Open it, press Escape,
+      and note where focus lands.
+    </p>
+
+    <div class="demo__row">
+      <button dsButton kind="danger" (click)="openConfirm()">Delete cluster…</button>
+
+      @if (modalResult(); as result) {
+        <span class="demo__result">
+          closed with: <code>{{ result }}</code>
+        </span>
+      }
+    </div>
+  </section>
+
+  <!-- ── Nested theme ────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Nested theme</h2>
+    <p class="demo__note">
+      Carbon calls these theme zones. <code>theme()</code> emits custom properties
+      on any selector, not just <code>:root</code>, so a region can run dark on a
+      light page and every component inside adapts with no extra props.
+    </p>
+
+    <div class="ds-theme-inverse demo__zone">
+      <div class="demo__row">
+        <button dsButton>primary</button>
+        <button dsButton kind="tertiary">tertiary</button>
+        <ds-tag color="teal">inverted</ds-tag>
       </div>
     </div>
-  </div>
+  </section>
 </main>
-
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
-
-<router-outlet />

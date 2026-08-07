@@ -1,0 +1,320 @@
+@use 'ds' as *;
+
+// ── The field ───────────────────────────────────────────────────────────────
+
+.ds-date-picker {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.ds-date-picker__label {
+  @include field-label;
+}
+
+.ds-date-picker__field-wrapper {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+
+.ds-date-picker__field {
+  @include field-surface;
+
+  // Room for the calendar button, which is a square the height of the field.
+  padding-inline-end: $field-icon-gutter;
+
+  &:focus {
+    @include field-focus;
+  }
+}
+
+// A status icon and the calendar button share the gutter, so it doubles.
+.ds-date-picker--invalid .ds-date-picker__field,
+.ds-date-picker--warn .ds-date-picker__field {
+  padding-inline-end: $spacing-10;
+}
+
+@each $name, $height in $field-heights {
+  .ds-date-picker--#{$name} {
+    .ds-date-picker__field {
+      height: $height;
+    }
+
+    .ds-date-picker__trigger {
+      width: $height;
+    }
+  }
+}
+
+.ds-date-picker:not(.ds-date-picker--fluid).ds-date-picker--invalid
+  .ds-date-picker__field:not(:focus) {
+  @include field-invalid;
+}
+
+.ds-date-picker__trigger {
+  @include unstyled-button;
+
+  position: absolute;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  color: $icon-primary;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+
+  &:focus-visible {
+    @include field-focus;
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:disabled {
+    color: $icon-disabled;
+    cursor: not-allowed;
+  }
+}
+
+.ds-date-picker__status {
+  @include field-status-icon;
+
+  transform: translateY(-50%);
+  inset-block-start: 50%;
+
+  // Left of the calendar button rather than on top of it.
+  inset-inline-end: $field-icon-gutter;
+}
+
+.ds-date-picker--invalid .ds-date-picker__status {
+  @include field-status-icon-invalid;
+}
+
+.ds-date-picker--warn .ds-date-picker__status {
+  @include field-status-icon-warn;
+}
+
+.ds-date-picker__helper {
+  @include field-helper-text;
+}
+
+.ds-date-picker__requirement {
+  @include field-requirement;
+}
+
+.ds-date-picker--invalid .ds-date-picker__requirement {
+  @include field-requirement-invalid;
+}
+
+.ds-date-picker--disabled {
+  .ds-date-picker__field {
+    @include field-disabled;
+  }
+
+  .ds-date-picker__label,
+  .ds-date-picker__helper {
+    color: $text-disabled;
+  }
+}
+
+.ds-date-picker--readonly .ds-date-picker__field {
+  @include field-read-only;
+}
+
+// ── The calendar ────────────────────────────────────────────────────────────
+//
+// Ported from Carbon's spec rather than lifted from it. Carbon styles flatpickr's
+// DOM — `_flatpickr.scss`, 556 lines against 14 `.flatpickr-*` classes — because
+// Carbon does not build its own date picker either. None of that CSS applies to
+// our markup, so these are Carbon's values on our class names.
+
+.ds-date-picker__calendar {
+  display: flex;
+  overflow: hidden;
+  width: rem(288px);
+  flex-direction: column;
+  align-items: center;
+
+  // 4px around, 8px under, and the 288px above is not arbitrary:
+  // 7 columns x 40px + 2 x 4px = 288. Widen the padding and the grid no longer
+  // fits, which is why this is a fixed width rather than one that follows the
+  // field. Measured: day cells land 4px from each edge, nothing clipped.
+  padding: $spacing-02 $spacing-02 $spacing-03;
+  background-color: $layer-01;
+  box-shadow: 0 rem(2px) rem(6px) $shadow;
+}
+
+.ds-date-picker__header {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ds-date-picker__month {
+  @include type-style('heading-compact-01');
+
+  display: flex;
+  height: rem(40px);
+  align-items: center;
+  color: $text-primary;
+  line-height: 1;
+}
+
+.ds-date-picker__nav {
+  @include unstyled-button;
+
+  display: flex;
+  width: rem(40px);
+  height: rem(40px);
+  align-items: center;
+  justify-content: center;
+  color: $icon-primary;
+  transition: background-color $field-transition;
+
+  &:hover:not(:disabled) {
+    background-color: $layer-hover-01;
+  }
+
+  &:focus-visible {
+    @include field-focus;
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:disabled {
+    color: $icon-disabled;
+    cursor: not-allowed;
+  }
+}
+
+.ds-date-picker__grid {
+  border-collapse: collapse;
+}
+
+.ds-date-picker__weekday {
+  @include type-style('body-compact-01');
+
+  width: rem(40px);
+  height: rem(40px);
+  color: $text-primary;
+  cursor: default;
+  font-weight: 400;
+}
+
+.ds-date-picker__day {
+  @include unstyled-button;
+  @include type-style('body-compact-01');
+
+  position: relative;
+  display: flex;
+  width: rem(40px);
+  height: rem(40px);
+  align-items: center;
+  justify-content: center;
+  color: $text-primary;
+  transition: background-color $field-transition;
+
+  &:hover {
+    background-color: $layer-hover-01;
+  }
+
+  &:focus-visible {
+    @include field-focus;
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+// The state hooks are ng-primitives' data attributes, not classes of ours — that
+// is the primitive's public surface, the same way Aria's signals are for tabs.
+
+.ds-date-picker__day[data-outside-month] {
+  color: $text-helper;
+}
+
+// Today is a dot under the number, not a ring. A ring would collide with both
+// the focus outline and the selected fill, which are the two states that
+// actually need a box.
+.ds-date-picker__day[data-today] {
+  color: $link-primary;
+  font-weight: 600;
+
+  &::after {
+    position: absolute;
+    display: block;
+    width: rem(4px);
+    height: rem(4px);
+    background-color: $link-primary;
+    content: '';
+    inset-block-end: rem(7px);
+    inset-inline-start: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+.ds-date-picker__day[data-selected] {
+  background-color: $button-primary;
+  color: $text-on-color;
+
+  &:hover {
+    background-color: $button-primary;
+  }
+
+  // Inside the fill rather than around it — a $focus ring on a $button-primary
+  // square is blue on blue.
+  &:focus-visible {
+    outline: rem(1px) solid $layer-02;
+    outline-offset: rem(-3px);
+  }
+}
+
+// Selected wins the colour, so the dot would be invisible against the fill.
+.ds-date-picker__day[data-today][data-selected]::after {
+  display: none;
+}
+
+.ds-date-picker__day[data-disabled] {
+  color: $text-disabled;
+  cursor: not-allowed;
+
+  &:hover {
+    background-color: transparent;
+  }
+}
+
+// ── Range ───────────────────────────────────────────────────────────────────
+
+.ds-date-range-picker {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+// $highlight rather than a tint of $button-primary: Carbon has a token for
+// exactly this, and it is the one colour guaranteed to stay legible under
+// $text-primary in all four themes.
+.ds-date-picker__day[data-range-between] {
+  background-color: $highlight;
+  color: $text-primary;
+}
+
+// The two ends are selected days, so they already carry the primary fill from
+// the rule above. These only exist to beat the plain hover.
+.ds-date-picker__day[data-range-start],
+.ds-date-picker__day[data-range-end] {
+  background-color: $button-primary;
+  color: $text-on-color;
+
+  &:hover {
+    background-color: $button-primary;
+  }
+}

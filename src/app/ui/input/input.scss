@@ -1,0 +1,268 @@
+@use 'ds' as *;
+
+.ds-input {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.ds-input__label {
+  @include field-label;
+}
+
+.ds-input__field-wrapper {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+
+.ds-input__field {
+  @include field-surface;
+
+  &:focus {
+    @include field-focus;
+  }
+}
+
+// Only when unfocused: while the field has focus the blue ring wins, so the user
+// is never told "you are here" and "this is wrong" in two colors at once. The red
+// comes back on blur, which is also when validation runs.
+//
+// And only when not fluid. In fluid the ring belongs to the host, because the box
+// includes the message; without the :not() this rule outranks the fluid reset and
+// draws a second rectangle around the value alone.
+.ds-input:not(.ds-input--fluid).ds-input--invalid .ds-input__field:not(:focus) {
+  @include field-invalid;
+}
+
+// Warn deliberately has no border treatment. Carbon carries that state on the
+// icon and the message alone: `$support-warning` is the same yellow in all four
+// themes and a yellow 2px rule reads as decoration on the light ones.
+
+@each $name, $height in $field-heights {
+  .ds-input--#{$name} {
+    .ds-input__field {
+      height: $height;
+    }
+
+    // The toggle is a square the full height of the field, so the gutter it
+    // needs is exactly that height.
+    &.ds-input--password .ds-input__field {
+      padding-inline-end: $height;
+    }
+
+    // Both a status icon and a reveal button: they sit side by side, so the
+    // gutter is the sum. 1.5rem is Carbon's allowance for the 16px glyph plus
+    // its breathing room.
+    &.ds-input--password.ds-input--invalid .ds-input__field,
+    &.ds-input--password.ds-input--warn .ds-input__field {
+      padding-inline-end: calc(#{$height} + #{rem(24px)});
+    }
+
+    &.ds-input--password .ds-input__status {
+      inset-inline-end: $height;
+    }
+
+    .ds-input__reveal {
+      width: $height;
+    }
+  }
+}
+
+// ── Status icon ─────────────────────────────────────────────────────────────
+
+.ds-input--invalid .ds-input__field,
+.ds-input--warn .ds-input__field {
+  padding-inline-end: $field-icon-gutter;
+}
+
+.ds-input__status {
+  @include field-status-icon;
+
+  // Centred: a single-line field is short enough that the middle is where the
+  // eye already is.
+  transform: translateY(-50%);
+  inset-block-start: 50%;
+}
+
+.ds-input--invalid .ds-input__status {
+  @include field-status-icon-invalid;
+}
+
+.ds-input--warn .ds-input__status {
+  @include field-status-icon-warn;
+}
+
+// ── Password reveal ─────────────────────────────────────────────────────────
+
+.ds-input__reveal {
+  @include unstyled-button;
+
+  position: absolute;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  color: $icon-primary;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+
+  &:focus-visible {
+    @include field-focus;
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:disabled {
+    color: $icon-disabled;
+    cursor: not-allowed;
+  }
+}
+
+// ── Messages ────────────────────────────────────────────────────────────────
+
+.ds-input__helper {
+  @include field-helper-text;
+}
+
+.ds-input__requirement {
+  @include field-requirement;
+}
+
+.ds-input--invalid .ds-input__requirement {
+  @include field-requirement-invalid;
+}
+
+// ── Disabled / read-only ────────────────────────────────────────────────────
+
+.ds-input--disabled {
+  .ds-input__field {
+    @include field-disabled;
+  }
+
+  .ds-input__label,
+  .ds-input__helper {
+    color: $text-disabled;
+  }
+}
+
+.ds-input--readonly .ds-input__field {
+  @include field-read-only;
+}
+
+// ── Fluid ───────────────────────────────────────────────────────────────────
+//
+// Not a fourth size: the label moves inside the field box, which makes it a
+// different layout. The box is a fixed 64px — 13px, a 16px label, then the value
+// — so it does not combine with the height scale above.
+
+.ds-input--fluid {
+  position: relative;
+  background-color: $field-01;
+  transition: background-color $field-transition;
+
+  .ds-input__label {
+    position: absolute;
+
+    // Over the field's own background, which is painted by the input.
+    z-index: 1;
+    display: flex;
+    height: rem(16px);
+    align-items: center;
+    margin: 0;
+    inset-block-start: rem(13px);
+    inset-inline-start: $field-padding-inline;
+
+    // A long label in a narrow field scrolls rather than wrapping — wrapping
+    // would push it into the value.
+    overflow-x: auto;
+    scrollbar-width: none;
+    white-space: nowrap;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  // Fluid has no room for it. The invalid / warn message still shows, inside the
+  // box; helper text is the thing that gets dropped.
+  .ds-input__helper {
+    display: none;
+  }
+
+  .ds-input__field {
+    height: auto;
+    min-height: $field-fluid-height;
+    padding: rem(32px) $field-padding-inline rem(13px);
+
+    // The host paints the fill in fluid, so a second opaque layer here is not
+    // just redundant — it clips the ring. The host's outline is inset by 2px,
+    // which puts it under a full-width child, and a form control's background
+    // paints over an ancestor's outline in Chrome. The result is a border that
+    // is visible top and bottom and missing down both sides.
+    background-color: transparent;
+  }
+
+  // The divider and the message stack under the value inside the box, so the
+  // wrapper stops being a row. Column rather than `display: block` on purpose:
+  // block would let the field's top margin collapse out of the wrapper.
+  .ds-input__field-wrapper {
+    flex-direction: column;
+  }
+
+  .ds-input__field:focus {
+    outline: none;
+  }
+
+  .ds-input__status {
+    // Centred on the 64px field rather than on the wrapper, which grows when the
+    // message appears inside it.
+    transform: none;
+    inset-block-start: rem(24px);
+  }
+
+  .ds-input__requirement {
+    margin: 0;
+    padding: $spacing-03 rem(40px) $spacing-03 $field-padding-inline;
+  }
+}
+
+// The ring goes on the host, not on the field wrapper.
+//
+// In fluid, the label, the value and the message are one bordered box, and the
+// host is the only element that contains all three — putting the ring on the
+// wrapper draws it around the value alone and leaves the message hanging outside
+// the red rectangle. Carbon reaches the same box from the other direction, by
+// nesting the message inside the wrapper; its fluid selectors are descendant
+// selectors (`__wrapper[data-invalid] .cds--form-requirement`) rather than the
+// sibling ones the non-fluid variants use. Same rectangle, one less wrapper.
+.ds-input--fluid:focus-within {
+  @include field-focus;
+}
+
+.ds-input--fluid.ds-input--invalid:not(:focus-within) {
+  @include field-invalid;
+}
+
+.ds-input--fluid.ds-input--warn {
+  border-block-end: rem(1px) solid $border-strong-01;
+}
+
+// The field's own bottom rule would land between the value and the message
+// rather than under the box; the divider takes its place.
+.ds-input--fluid.ds-input--invalid .ds-input__field,
+.ds-input--fluid.ds-input--warn .ds-input__field {
+  border-block-end: 0;
+}
+
+.ds-input__divider {
+  border-block-start: rem(1px) solid $border-subtle-01;
+  margin: 0 $field-padding-inline;
+}
+
+.ds-input--fluid.ds-input--readonly .ds-input__field {
+  color: $text-secondary;
+}

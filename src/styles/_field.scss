@@ -1,0 +1,191 @@
+// Shared chrome for form controls: the label, the helper line, the error /
+// warning line, the field surface, and the size scale they all key off.
+//
+// Carbon factors the same pieces into `components/form/_form.scss` and reuses
+// them verbatim across text-input, text-area and select. We mirror that. The
+// alternative — a <ds-form-field> component owning the shared markup — was
+// rejected deliberately: the label belongs to the control (see the root README),
+// so the sharing has to happen in Sass rather than in the component tree.
+//
+// Like _mixins.scss, this reaches for @carbon/* directly. It cannot go through
+// the 'ds' facade, because the facade is what forwards this file. The
+// no-@carbon-in-components rule binds components, not the two files the facade
+// is assembled from.
+
+@use '@carbon/styles/scss/theme' as *;
+@use '@carbon/styles/scss/spacing' as *;
+@use '@carbon/styles/scss/motion' as *;
+@use '@carbon/styles/scss/type' as *;
+@use '@carbon/styles/scss/utilities/convert' as *;
+
+// Namespaced, and the only place the raw palette is touched. See
+// `field-status-icon-warn` for the one color that has to come from here rather
+// than from a token, and why.
+@use '@carbon/styles/scss/colors' as colors;
+
+/// Carbon field heights. The same scale the button uses — that is what lets a
+/// button and an input share a row without per-component nudging. Carbon caps
+/// fields at `lg`; there is no 64px field the way there is a 64px button.
+$field-heights: (
+  'sm': rem(32px),
+  'md': rem(40px),
+  'lg': rem(48px),
+);
+
+/// Horizontal padding inside a field, at Carbon's `normal` density.
+$field-padding-inline: $spacing-05;
+
+/// Right-hand gutter that a trailing status icon needs: a 16px glyph centered in
+/// 40px. Carbon reserves it by widening `padding-inline-end`, so the text never
+/// slides under the icon.
+$field-icon-gutter: $spacing-08;
+
+/// A fluid field is a fixed 64px: 32px of top padding under the inset label,
+/// then the value, then 13px.
+$field-fluid-height: rem(64px);
+
+/// Carbon's productive motion. Fields use fast-01 for the surface.
+$field-transition: $duration-fast-01 motion(standard, productive);
+
+/// The label above a field.
+@mixin field-label {
+  display: inline-block;
+  margin-block-end: $spacing-03;
+  color: $text-secondary;
+  font-weight: 400;
+  line-height: rem(16px);
+  vertical-align: baseline;
+
+  @include type-style('label-01');
+}
+
+/// Helper text under a field. Carbon shows either this or the requirement line,
+/// never both — they occupy the same slot, and stacking them pushes every
+/// following field down the moment one goes invalid.
+@mixin field-helper-text {
+  width: 100%;
+  margin-block-start: $spacing-02;
+  color: $text-helper;
+
+  @include type-style('helper-text-01');
+}
+
+/// The invalid / warning line that replaces the helper text.
+///
+/// Only the invalid variant is colored. A warning keeps the ordinary text color
+/// because Carbon's `$support-warning` is the same yellow in all four themes and
+/// yellow text fails contrast on the two light ones — the yellow belongs on the
+/// icon, which is a shape, not a glyph anyone has to read.
+@mixin field-requirement {
+  overflow: visible;
+  width: 100%;
+  margin-block-start: $spacing-02;
+  color: $text-primary;
+  font-weight: 400;
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+  @include type-style('helper-text-01');
+}
+
+@mixin field-requirement-invalid {
+  color: $text-error;
+}
+
+/// The input surface itself — what text-input, text-area and select share.
+///
+/// The transparent resting outline is Carbon's, and it is load-bearing: the focus
+/// ring is drawn in space the box already reserves, so focusing a field cannot
+/// shift the layout around it.
+@mixin field-surface {
+  width: 100%;
+  padding: 0 $field-padding-inline;
+  border: 0;
+  border-block-end: rem(1px) solid $border-strong-01;
+  appearance: none;
+  background-color: $field-01;
+  color: $text-primary;
+  font-family: inherit;
+  outline: rem(2px) solid transparent;
+  outline-offset: rem(-2px);
+  transition:
+    background-color $field-transition,
+    outline $field-transition;
+
+  @include type-style('body-compact-01');
+
+  &::placeholder {
+    color: $text-placeholder;
+    opacity: 1;
+  }
+}
+
+/// Focus. Carbon draws 2px of `$focus` inset, same as every other control.
+@mixin field-focus {
+  outline: rem(2px) solid $focus;
+  outline-offset: rem(-2px);
+}
+
+/// Invalid. Identical geometry to focus, in `$support-error`, so a field that is
+/// both invalid and focused does not change size when focus moves away.
+@mixin field-invalid {
+  outline: rem(2px) solid $support-error;
+  outline-offset: rem(-2px);
+}
+
+/// Disabled. Note the border goes transparent rather than away: the field keeps
+/// its height, so a form with one disabled row does not jump.
+@mixin field-disabled {
+  border-block-end-color: transparent;
+  background-color: $field-01;
+  color: $text-disabled;
+  cursor: not-allowed;
+  outline: none;
+
+  // Safari ignores `color` on a disabled input without this.
+  -webkit-text-fill-color: $text-disabled;
+
+  &::placeholder {
+    color: $text-disabled;
+    opacity: 1;
+  }
+}
+
+/// Read-only. Carbon drops the fill entirely — a read-only field is text that
+/// happens to be selectable, not a control you failed to earn access to.
+@mixin field-read-only {
+  border-block-end-color: $border-subtle-01;
+  background-color: transparent;
+}
+
+/// The trailing status icon. Invalid and warn share the geometry; only the color
+/// differs. Callers position it vertically — a text input centres it, a textarea
+/// pins it to the first line — so only the horizontal inset is set here.
+@mixin field-status-icon {
+  position: absolute;
+  inset-inline-end: $field-padding-inline;
+
+  // Decoration. The requirement line carries the meaning, and that is what
+  // aria-describedby points at.
+  pointer-events: none;
+}
+
+@mixin field-status-icon-invalid {
+  color: $support-error;
+}
+
+/// Carbon's warning glyph is the one two-tone icon in the system: a
+/// `$support-warning` triangle with a black exclamation. Black rather than a
+/// token precisely because `$support-warning` is the same yellow in all four
+/// themes, so the exclamation needs no theme of its own — and `currentColor`
+/// would fill the shape solid and make it vanish.
+///
+/// The recolored path is the first one. That is positional, so the order in
+/// `icons.ts` is load-bearing; it is flagged there and pinned by a test.
+@mixin field-status-icon-warn {
+  color: $support-warning;
+
+  path:first-of-type {
+    fill: colors.$black-100;
+  }
+}

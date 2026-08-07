@@ -1,0 +1,281 @@
+@use 'ds' as *;
+
+// Carbon row heights. The header row uses the same height as the body rows.
+$-heights: (
+  'xs': rem(24px),
+  'sm': rem(32px),
+  'md': rem(40px),
+  'lg': rem(48px),
+  'xl': rem(64px),
+);
+
+$-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
+
+.ds-table__container {
+  // Wide tables scroll sideways rather than squashing columns.
+  overflow-x: auto;
+}
+
+// Sticky headers need a scroll container, and setting overflow on one axis forces
+// the other from `visible` to `auto`. So the container above already prevents
+// page-level sticky — the header can only stick inside a bounded box. The
+// max-height is a default; override it on the container for a taller table.
+.ds-table__container--sticky {
+  overflow-y: auto;
+  max-height: 60vh;
+}
+
+.ds-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  background-color: $layer-01;
+}
+
+// ── Head ────────────────────────────────────────────────────────────────────
+
+.ds-table__head {
+  background-color: $layer-accent-01;
+}
+
+.ds-table__cell--header {
+  color: $text-primary;
+  text-align: left;
+  vertical-align: middle;
+
+  @include type-style('heading-compact-01');
+}
+
+.ds-table__container--sticky .ds-table__cell--header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  // The head's own background is on <thead>, which sticky positioning takes the
+  // cell out of. Repeat it here or rows show through underneath.
+  background-color: $layer-accent-01;
+}
+
+.ds-table__cell--end {
+  text-align: right;
+}
+
+// ── Cells ───────────────────────────────────────────────────────────────────
+
+.ds-table__cell {
+  padding: 0 $spacing-05;
+  border-top: 0;
+  border-bottom: rem(1px) solid $border-subtle-01;
+  color: $text-secondary;
+  text-align: left;
+  vertical-align: middle;
+
+  @include type-style('body-compact-01');
+  @include truncate;
+}
+
+// Control columns hold a checkbox or a chevron and nothing else, so they get
+// only enough width for the target and no text padding.
+.ds-table__cell--control {
+  width: rem(40px);
+  padding: 0 0 0 $spacing-04;
+}
+
+@each $name, $height in $-heights {
+  .ds-table--#{$name} .ds-table__cell {
+    height: $height;
+  }
+}
+
+// ── Rows ────────────────────────────────────────────────────────────────────
+
+.ds-table__row {
+  transition: background-color $-transition;
+}
+
+.ds-table__body .ds-table__row:hover .ds-table__cell {
+  background-color: $layer-hover-01;
+  color: $text-primary;
+}
+
+// Zebra striping. Declared before the selected/hover rules so those still win.
+.ds-table--zebra .ds-table__body .ds-table__row:nth-child(even) .ds-table__cell {
+  background-color: $layer-accent-01;
+}
+
+.ds-table__row--selected .ds-table__cell {
+  background-color: $layer-selected-01;
+  color: $text-primary;
+
+  // A selected row and the one under it share a colored block, so the divider
+  // between them would cut it in half.
+  border-bottom-color: $layer-selected-01;
+}
+
+.ds-table__body .ds-table__row--selected:hover .ds-table__cell {
+  background-color: $layer-selected-hover-01;
+}
+
+// Carbon marks selection with background alone, but in all four themes
+// $layer-selected-01 and $layer-accent-01 resolve to the SAME color — so with
+// zebra striping on, a selected row is pixel-identical to an unselected even row.
+// A leading accent bar makes selection unambiguous regardless of striping.
+// Drawn as an inset shadow rather than a border so it never shifts the layout.
+.ds-table__row--selected .ds-table__cell:first-child {
+  box-shadow: inset rem(3px) 0 0 0 $border-interactive;
+}
+
+// ── Sort ────────────────────────────────────────────────────────────────────
+
+// The sort button fills its cell so the whole header is the hit target. The cell
+// gives up its own padding rather than the button using negative margins to
+// escape it — a button wider than the cell gets clipped by the cell's
+// overflow: hidden, which eats the start of right-aligned headers.
+.ds-table__cell--sortable {
+  padding: 0;
+}
+
+.ds-table__sort {
+  @include unstyled-button;
+
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  padding: 0 $spacing-05;
+  color: $text-primary;
+  gap: $spacing-03;
+  transition: background-color $-transition;
+
+  &:hover {
+    background-color: $layer-selected-hover;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+.ds-table__cell--end .ds-table__sort {
+  justify-content: flex-end;
+}
+
+.ds-table__sort-icon {
+  color: $icon-primary;
+
+  // Carbon only reveals the double-arrow hint on hover or focus — showing it in
+  // every sortable header at rest turns the head row into noise.
+  opacity: 0;
+  transition: opacity $-transition;
+}
+
+.ds-table__sort:hover .ds-table__sort-icon,
+.ds-table__sort:focus-visible .ds-table__sort-icon,
+[aria-sort='ascending'] .ds-table__sort-icon,
+[aria-sort='descending'] .ds-table__sort-icon {
+  opacity: 1;
+}
+
+// ── Expansion ───────────────────────────────────────────────────────────────
+
+.ds-table__expand {
+  @include unstyled-button;
+
+  display: flex;
+  width: rem(32px);
+  height: rem(32px);
+  align-items: center;
+  justify-content: center;
+  color: $icon-primary;
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  ds-icon {
+    transition: transform 150ms cubic-bezier(0.2, 0, 0.38, 0.9);
+  }
+}
+
+.ds-table__row--expanded .ds-table__expand ds-icon {
+  transform: rotate(90deg);
+}
+
+.ds-table__row--expanded .ds-table__cell {
+  border-bottom-color: transparent;
+}
+
+.ds-table__cell--expansion {
+  height: auto;
+  padding: $spacing-05;
+  background-color: $layer-01;
+  color: $text-primary;
+  white-space: normal;
+
+  @include type-style('body-01');
+}
+
+// ── Empty and loading ───────────────────────────────────────────────────────
+
+.ds-table__cell--empty {
+  height: auto;
+  padding: $spacing-07 $spacing-05;
+  color: $text-secondary;
+  text-align: center;
+  white-space: normal;
+}
+
+.ds-table__body .ds-table__row--empty:hover .ds-table__cell,
+.ds-table__body .ds-table__row--skeleton:hover .ds-table__cell {
+  background-color: transparent;
+}
+
+.ds-table__skeleton {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  max-width: rem(160px);
+  height: rem(12px);
+  background-color: $skeleton-background;
+
+  &::after {
+    position: absolute;
+    inset: 0;
+    animation: ds-table-shimmer 1200ms linear infinite;
+    background-color: $skeleton-element;
+    content: '';
+    transform: translateX(-100%);
+  }
+}
+
+// Rows stagger so the table doesn't pulse as one block.
+@for $i from 1 through 10 {
+  .ds-table__row--skeleton:nth-child(#{$i}) .ds-table__skeleton::after {
+    animation-delay: #{$i * 80}ms;
+  }
+}
+
+@keyframes ds-table-shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-table__skeleton::after {
+    animation: none;
+  }
+}

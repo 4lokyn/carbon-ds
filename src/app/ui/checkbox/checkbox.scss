@@ -1,0 +1,134 @@
+@use 'ds' as *;
+
+.ds-checkbox {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+}
+
+// The real input stays in the DOM — it owns the semantics, the tab order and the
+// :checked / :indeterminate state we style against. It must not be display:none,
+// which would drop it from the a11y tree and out of tab order; opacity 0 keeps
+// both while letting the label draw the visible control.
+.ds-checkbox__input {
+  position: absolute;
+  width: rem(16px);
+  height: rem(16px);
+  margin: 0;
+  opacity: 0;
+}
+
+.ds-checkbox__label {
+  position: relative;
+  display: flex;
+  min-height: rem(24px);
+
+  // 16px box + 8px gap
+  padding-left: rem(24px);
+  align-items: center;
+  color: $text-primary;
+  cursor: pointer;
+
+  @include type-style('body-compact-01');
+}
+
+// The box.
+.ds-checkbox__label::before {
+  position: absolute;
+  top: rem(3px);
+  left: 0;
+  width: rem(16px);
+  height: rem(16px);
+  border: rem(1px) solid $icon-primary;
+  background-color: transparent;
+  content: '';
+}
+
+// The checkmark: two borders on a rotated box. Drawn this way rather than with an
+// SVG so it scales with the box and inherits color.
+//
+// The offsets are not the visual centre of the unrotated element, and they can't
+// be. Rotating -45deg about the bottom-right corner moves the shape, so the
+// rendered mark ends up centred on:
+//
+//     (left + 4.05, top + 8.18)     for a 9x5 box at -45deg
+//
+// The 16px box spans y 3..19 here, so its centre is (8, 11) and the offsets below
+// solve for that. Change the box position or the mark size and these have to be
+// re-solved — the intuitive values put the tick low and left of centre.
+.ds-checkbox__label::after {
+  position: absolute;
+  top: rem(3px);
+  left: rem(4px);
+  width: rem(9px);
+  height: rem(5px);
+  border-bottom: rem(2px) solid $icon-inverse;
+  border-left: rem(2px) solid $icon-inverse;
+  content: '';
+  transform: scale(0) rotate(-45deg);
+  transform-origin: bottom right;
+}
+
+.ds-checkbox__input:checked + .ds-checkbox__label::before,
+.ds-checkbox__input:indeterminate + .ds-checkbox__label::before {
+  border-color: $icon-primary;
+  background-color: $icon-primary;
+}
+
+.ds-checkbox__input:checked + .ds-checkbox__label::after {
+  transform: scale(1) rotate(-45deg);
+}
+
+// Indeterminate: a filled box with a horizontal bar rather than a check. Reuses
+// the same pseudo-element, reset to a single flat border.
+.ds-checkbox__input:indeterminate + .ds-checkbox__label::after {
+  top: rem(10px);
+  left: rem(3px);
+  width: rem(10px);
+  height: 0;
+  border-bottom: rem(2px) solid $icon-inverse;
+  border-left: 0;
+  transform: none;
+}
+
+// The ring goes on the box, not the label — a ring around the whole label would
+// be enormous next to long text.
+.ds-checkbox__input:focus-visible + .ds-checkbox__label::before {
+  outline: rem(2px) solid $focus;
+  outline-offset: rem(1px);
+}
+
+.ds-checkbox__input:disabled + .ds-checkbox__label {
+  color: $text-disabled;
+  cursor: not-allowed;
+}
+
+.ds-checkbox__input:disabled + .ds-checkbox__label::before {
+  border-color: $icon-disabled;
+}
+
+.ds-checkbox__input:disabled:checked + .ds-checkbox__label::before,
+.ds-checkbox__input:disabled:indeterminate + .ds-checkbox__label::before {
+  border-color: $icon-disabled;
+  background-color: $icon-disabled;
+}
+
+// Label-less variant, for table cells. Shrinks the hit area to the box and drops
+// the 8px text gap, so a column of these stays narrow.
+.ds-checkbox--hide-label .ds-checkbox__label {
+  min-height: rem(16px);
+  padding-left: rem(16px);
+}
+
+.ds-checkbox--hide-label .ds-checkbox__label::before {
+  top: 0;
+}
+
+// Box centre moves from (8, 11) to (8, 8), so top solves to 8 - 8.18 ≈ 0.
+.ds-checkbox--hide-label .ds-checkbox__label::after {
+  top: 0;
+}
+
+.ds-checkbox--hide-label .ds-checkbox__input:indeterminate + .ds-checkbox__label::after {
+  top: rem(7px);
+}

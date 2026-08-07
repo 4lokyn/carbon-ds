@@ -1,0 +1,146 @@
+@let expandTemplate = expandedContent();
+
+<div class="ds-table__container" [class.ds-table__container--sticky]="stickyHeader()">
+  <table [class]="tableClass()">
+    <!-- Visually hidden: the visible heading belongs in the toolbar above. Present
+         so the table is announced by name rather than as an anonymous "table". -->
+    <caption class="ds-visually-hidden">{{ caption() }}</caption>
+
+    <thead class="ds-table__head">
+      <tr class="ds-table__head-row">
+        @if (expandable()) {
+          <th class="ds-table__cell ds-table__cell--control" scope="col">
+            <span class="ds-visually-hidden">Expand</span>
+          </th>
+        }
+
+        @if (selectable()) {
+          <th class="ds-table__cell ds-table__cell--control" scope="col">
+            <ds-checkbox
+              hideLabel
+              [label]="selectAllLabel()"
+              [checked]="allSelected()"
+              [indeterminate]="partiallySelected()"
+              (toggled)="toggleAll()"
+            />
+          </th>
+        }
+
+        @for (column of columns(); track column.key) {
+          <th
+            class="ds-table__cell ds-table__cell--header"
+            scope="col"
+            [class.ds-table__cell--end]="column.align === 'end'"
+            [class.ds-table__cell--sortable]="column.sortable"
+            [style.width]="column.width"
+            [attr.aria-sort]="ariaSort(column)"
+          >
+            @if (column.sortable) {
+              <button class="ds-table__sort" type="button" (click)="toggleSort(column)">
+                <span class="ds-table__sort-label">{{ column.header }}</span>
+                <ds-icon class="ds-table__sort-icon" [name]="sortIcon(column)" />
+              </button>
+            } @else {
+              <span class="ds-table__header-label">{{ column.header }}</span>
+            }
+          </th>
+        }
+      </tr>
+    </thead>
+
+    <tbody class="ds-table__body">
+      @if (loading()) {
+        <!-- aria-hidden, and the live region below is what actually gets announced.
+             Otherwise a screen reader reads out a screenful of placeholder cells. -->
+        @for (skeletonRow of skeletonRange(); track skeletonRow) {
+          <tr class="ds-table__row ds-table__row--skeleton" aria-hidden="true">
+            @for (skeletonCell of columnRange(); track skeletonCell) {
+              <td class="ds-table__cell">
+                <span class="ds-table__skeleton"></span>
+              </td>
+            }
+          </tr>
+        }
+      } @else {
+        @for (row of displayRows(); track rowKey()(row); let rowIndex = $index) {
+          <tr
+            class="ds-table__row"
+            [class.ds-table__row--selected]="isSelected(row)"
+            [class.ds-table__row--expanded]="isExpanded(row)"
+          >
+            @if (expandable()) {
+              <td class="ds-table__cell ds-table__cell--control">
+                <button
+                  class="ds-table__expand"
+                  type="button"
+                  [attr.aria-expanded]="isExpanded(row)"
+                  [attr.aria-controls]="expansionId(rowIndex)"
+                  [attr.aria-label]="expandRowLabel()(row)"
+                  (click)="toggleExpand(row)"
+                >
+                  <ds-icon name="chevron-right" />
+                </button>
+              </td>
+            }
+
+            @if (selectable()) {
+              <td class="ds-table__cell ds-table__cell--control">
+                <ds-checkbox
+                  hideLabel
+                  [label]="selectRowLabel()(row)"
+                  [checked]="isSelected(row)"
+                  (toggled)="toggleRow(row)"
+                />
+              </td>
+            }
+
+            @for (column of columns(); track column.key) {
+              <td
+                class="ds-table__cell"
+                [class.ds-table__cell--end]="column.align === 'end'"
+              >
+                @if (column.cell) {
+                  <ng-container
+                    [ngTemplateOutlet]="column.cell"
+                    [ngTemplateOutletContext]="{ $implicit: row }"
+                  />
+                } @else {
+                  {{ cellText(column, row) }}
+                }
+              </td>
+            }
+          </tr>
+
+          @if (expandTemplate && isExpanded(row)) {
+            <tr class="ds-table__row ds-table__row--expansion" [id]="expansionId(rowIndex)">
+              <td
+                class="ds-table__cell ds-table__cell--expansion"
+                [attr.colspan]="columnCount()"
+              >
+                <ng-container
+                  [ngTemplateOutlet]="expandTemplate"
+                  [ngTemplateOutletContext]="{ $implicit: row }"
+                />
+              </td>
+            </tr>
+          }
+        } @empty {
+          <tr class="ds-table__row ds-table__row--empty">
+            <td class="ds-table__cell ds-table__cell--empty" [attr.colspan]="columnCount()">
+              <!-- Consumers override by projecting content into <ds-table>. -->
+              <ng-content>No data to display</ng-content>
+            </td>
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+</div>
+
+<!-- Loading is a state change with no visual text, so it needs announcing.
+     polite rather than assertive: a table refresh should not interrupt. -->
+<div class="ds-visually-hidden" role="status" aria-live="polite">
+  @if (loading()) {
+    Loading {{ caption() }}
+  }
+</div>

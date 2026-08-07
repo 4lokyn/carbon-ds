@@ -27,24 +27,42 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "IBMPlexSans-{Light,Regular,SemiBold}.woff2",
+                "input": "node_modules/@ibm/plex-sans/fonts/complete/woff2",
+                "output": "fonts/plex-sans"
+              },
+              {
+                "glob": "IBMPlexMono-Regular.woff2",
+                "input": "node_modules/@ibm/plex-mono/fonts/complete/woff2",
+                "output": "fonts/plex-mono"
               }
             ],
             "styles": [
+              "node_modules/@angular/cdk/overlay-prebuilt.css",
+              "node_modules/@angular/cdk/a11y-prebuilt.css",
               "src/styles.scss"
-            ]
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "node_modules",
+                "src/styles"
+              ]
+            }
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "900kB",
+                  "maximumError": "1.2MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "12kB",
+                  "maximumError": "24kB"
                 }
               ],
               "outputHashing": "all"

@@ -1,0 +1,212 @@
+@use 'ds' as *;
+
+.ds-search {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+// Both gutters are one field-height wide, not an arbitrary padding: the left one
+// holds the magnifier, the right one is exactly the clear button's box. That is
+// what keeps the text from sliding under either, and why the padding is stated
+// in terms of the height rather than a spacing token.
+@each $name, $height in $field-heights {
+  .ds-search--#{$name} {
+    .ds-search__input {
+      height: $height;
+      padding: 0 $height;
+    }
+
+    .ds-search__magnifier {
+      left: calc((#{$height} - #{rem(16px)}) / 2);
+    }
+
+    .ds-search__clear {
+      width: $height;
+      height: $height;
+    }
+  }
+}
+
+.ds-search__input {
+  @include field-surface;
+
+  text-overflow: ellipsis;
+
+  &:focus {
+    @include field-focus;
+  }
+
+  // Two native affordances we replace: the WebKit clear button (we draw our own,
+  // and theirs ignores the theme) and the IE/Edge legacy one.
+  &::-ms-clear {
+    display: none;
+  }
+
+  &::-webkit-search-decoration,
+  &::-webkit-search-cancel-button,
+  &::-webkit-search-results-button,
+  &::-webkit-search-results-decoration {
+    display: none;
+    appearance: none;
+  }
+}
+
+.ds-search__magnifier {
+  position: absolute;
+
+  // Above the input, or the input's own background paints over it.
+  z-index: 1;
+  color: $icon-secondary;
+
+  // The input beneath owns the click — clicking the magnifier should focus the
+  // field, which is what happens when the icon is not there to intercept it.
+  pointer-events: none;
+  transform: translateY(-50%);
+  inset-block-start: 50%;
+}
+
+.ds-search__clear {
+  @include unstyled-button;
+
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // Transparent rather than absent, so hover can fill it in without the button
+  // growing 1px and nudging the icon.
+  border-block-end: rem(1px) solid transparent;
+  color: $icon-primary;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+
+  &:hover {
+    border-block-end-color: $border-strong-01;
+    background-color: $field-hover-01;
+  }
+
+  &:focus-visible {
+    @include field-focus;
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:active {
+    background-color: $background-selected;
+  }
+}
+
+// ── Expandable ──────────────────────────────────────────────────────────────
+//
+// Collapsed, the whole control is the magnifier square. The input is still in
+// the DOM at zero width — not removed — so expanding is a width transition
+// rather than a mount, and focus can move into it in the same tick.
+
+.ds-search--expandable {
+  // Collapsed it is a fixed square; expanded it takes the row's leftover space
+  // through flex-grow. Growing by `width` instead does not work here: with
+  // `flex-basis: auto` and no grow, the row's free space goes to the auto
+  // margin rather than to the item, and the field stays 32px however wide you
+  // declare it. Measured — `width: 600px !important` rendered 32px; adding
+  // `flex-grow` rendered 686px.
+  //
+  // The cost is that the opening is instant. `flex` does not animate, and the
+  // width-based version that would animate is the one that does not size. Doing
+  // both needs the field right-anchored inside a full-width host so its own
+  // width can be transitioned; that is a markup change, not a CSS one.
+  flex: 0 0 auto;
+
+  .ds-search__input {
+    width: 0;
+    padding: 0;
+  }
+
+  // The magnifier is a button here, so it needs the button's own reset and a
+  // hit area rather than pointer-events: none.
+  .ds-search__magnifier--button {
+    @include unstyled-button;
+
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    transform: none;
+
+    &:hover:not(:disabled) {
+      background-color: $field-hover-01;
+    }
+
+    &:focus-visible {
+      @include field-focus;
+    }
+
+    &:focus:not(:focus-visible) {
+      outline: none;
+    }
+  }
+}
+
+@each $name, $height in $field-heights {
+  .ds-search--expandable.ds-search--#{$name} {
+    width: $height;
+
+    .ds-search__magnifier--button {
+      width: $height;
+      height: $height;
+    }
+  }
+
+  .ds-search--expandable.ds-search--expanded.ds-search--#{$name} {
+    width: auto;
+    flex: 1 1 auto;
+
+    .ds-search__input {
+      width: 100%;
+      padding: 0 $height;
+    }
+  }
+}
+
+// Expanded, the magnifier goes back to being decoration — the field itself is
+// the target now, and a button sitting on top of it would swallow the click.
+.ds-search--expanded .ds-search__magnifier--button {
+  pointer-events: none;
+
+  &:hover {
+    background-color: transparent;
+  }
+}
+
+// No fill on the clear button here, hover included. Carbon strips it in the
+// toolbar too (`--toolbar-search-container-active .cds--search-close:hover`):
+// the expanded field already spans a row of its own, and a grey square
+// appearing inside it reads as a separate control rather than part of the
+// field. The standalone search keeps its fill, where the contrast is useful.
+.ds-search--expandable .ds-search__clear {
+  border-block-end-color: transparent;
+
+  &:hover {
+    border-block-end-color: transparent;
+    background-color: transparent;
+  }
+}
+
+// Disabled. The magnifier dims with the text; there is no clear button to dim,
+// because the template does not render one while disabled — a disabled field
+// whose contents can still be wiped is a bug, not a state.
+.ds-search--disabled {
+  .ds-search__input {
+    @include field-disabled;
+  }
+
+  .ds-search__magnifier {
+    color: $icon-disabled;
+  }
+}

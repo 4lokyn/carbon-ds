@@ -1,0 +1,285 @@
+@use 'ds' as *;
+
+.ds-multi-select {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.ds-multi-select__label {
+  @include field-label;
+}
+
+// The bordered box. Carbon puts the fill and the bottom rule here rather than on
+// the button inside, so the focus ring can sit on the button without doubling up
+// with the border.
+.ds-multi-select__box {
+  position: relative;
+  width: 100%;
+  border-block-end: rem(1px) solid $border-strong-01;
+  background-color: $field-01;
+  transition: background-color $field-transition;
+
+  &:hover {
+    background-color: $field-hover-01;
+  }
+}
+
+// Open, the rule under the field softens — the menu below now supplies the
+// visual edge, and two hard lines stacked read as a seam.
+.ds-multi-select--open .ds-multi-select__box {
+  border-block-end-color: $border-subtle-01;
+}
+
+.ds-multi-select__field {
+  @include unstyled-button;
+  @include type-style('body-compact-01');
+
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  align-items: center;
+  padding-inline: $field-padding-inline $spacing-09;
+  color: $text-primary;
+  text-align: start;
+  white-space: nowrap;
+
+  &:focus-visible {
+    @include field-focus;
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:disabled {
+    color: $text-disabled;
+    cursor: not-allowed;
+  }
+}
+
+@each $name, $height in $field-heights {
+  .ds-multi-select--#{$name} {
+    .ds-multi-select__field {
+      height: $height;
+    }
+
+  }
+
+  // Off the menu's own modifier, not the host's — see the note in the template.
+  .ds-multi-select__menu--#{$name} {
+    // The filter is a field and takes the field height. `field-surface` supplies
+    // the fill, the rule and the padding but deliberately not a height — every
+    // other control sets that from the size scale, and this one has to as well
+    // or the placeholder sits in a collapsed box.
+    .ds-multi-select__filter {
+      height: $height;
+    }
+
+    // 5.5 rows, not 5 or 6. The half row is the point: a list cut mid-item is
+    // the only affordance saying there is more below it.
+    .ds-multi-select__list {
+      max-height: calc(#{$height} * 5.5);
+    }
+
+    .ds-multi-select__item {
+      min-height: $height;
+    }
+  }
+}
+
+// The count. A pill, not the values themselves — a field is one line and five
+// labels are not.
+.ds-multi-select__count {
+  @include type-style('label-01');
+
+  display: flex;
+  height: rem(24px);
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 0 $spacing-03;
+  border-radius: rem(12px);
+  margin-inline-end: rem(10px);
+  background-color: $background-inverse;
+  color: $text-inverse;
+}
+
+.ds-multi-select__value {
+  @include truncate;
+
+  flex: 1 1 auto;
+}
+
+.ds-multi-select__chevron {
+  position: absolute;
+  color: $icon-primary;
+  inset-inline-end: $spacing-04;
+  pointer-events: none;
+  transition: transform $field-transition;
+}
+
+.ds-multi-select--open .ds-multi-select__chevron {
+  transform: rotate(180deg);
+}
+
+.ds-multi-select__status {
+  @include field-status-icon;
+
+  // Left of the chevron rather than under it.
+  inset-inline-end: $spacing-09;
+  transform: translateY(-50%);
+  inset-block-start: 50%;
+}
+
+.ds-multi-select--invalid .ds-multi-select__status {
+  @include field-status-icon-invalid;
+}
+
+.ds-multi-select--warn .ds-multi-select__status {
+  @include field-status-icon-warn;
+}
+
+.ds-multi-select--invalid .ds-multi-select__box {
+  @include field-invalid;
+}
+
+// ── The menu ────────────────────────────────────────────────────────────────
+
+.ds-multi-select__menu {
+  background-color: $layer-01;
+  box-shadow: 0 rem(2px) rem(6px) $shadow;
+}
+
+.ds-multi-select__filter {
+  @include field-surface;
+
+  border-block-end: rem(1px) solid $border-subtle-01;
+
+  &:focus {
+    @include field-focus;
+  }
+}
+
+.ds-multi-select__list {
+  overflow-y: auto;
+}
+
+.ds-multi-select__item {
+  @include type-style('body-compact-01');
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-inline: $field-padding-inline;
+  color: $text-secondary;
+  cursor: pointer;
+  gap: $spacing-03;
+  transition: background-color $field-transition;
+
+  &:hover {
+    background-color: $layer-hover-01;
+    color: $text-primary;
+  }
+}
+
+// `data-active` is the roving focus, `data-selected` the value — the primitive's
+// own attributes, the same contract the date picker styles against.
+.ds-multi-select__item[data-active] {
+  @include field-focus;
+
+  color: $text-primary;
+}
+
+.ds-multi-select__item[data-selected] {
+  background-color: $layer-selected-01;
+  color: $text-primary;
+}
+
+.ds-multi-select__item[data-disabled] {
+  color: $text-disabled;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+// A divider between rows, drawn on the row itself rather than as a gap, so the
+// hover fill runs edge to edge.
+.ds-multi-select__item + .ds-multi-select__item {
+  border-block-start: rem(1px) solid $border-subtle-01;
+}
+
+.ds-multi-select__item--select-all {
+  border-block-end: rem(1px) solid $border-subtle-01;
+  font-weight: 600;
+}
+
+// The checkbox is decoration here: the row owns the click, and a checkbox that
+// also handled it would toggle twice.
+.ds-multi-select__check {
+  pointer-events: none;
+}
+
+.ds-multi-select__item-text {
+  @include truncate;
+}
+
+.ds-multi-select__empty {
+  @include type-style('body-compact-01');
+
+  padding: $spacing-05;
+  color: $text-secondary;
+}
+
+// ── Messages / states ───────────────────────────────────────────────────────
+
+.ds-multi-select__helper {
+  @include field-helper-text;
+}
+
+.ds-multi-select__requirement {
+  @include field-requirement;
+}
+
+.ds-multi-select--invalid .ds-multi-select__requirement {
+  @include field-requirement-invalid;
+}
+
+.ds-multi-select--disabled {
+  .ds-multi-select__box,
+  .ds-multi-select__box:hover {
+    border-block-end-color: transparent;
+    background-color: $field-01;
+  }
+
+  .ds-multi-select__label,
+  .ds-multi-select__helper {
+    color: $text-disabled;
+  }
+
+  .ds-multi-select__chevron {
+    color: $icon-disabled;
+  }
+
+  .ds-multi-select__count {
+    background-color: $layer-01;
+    color: $text-disabled;
+  }
+}
+
+.ds-multi-select--readonly:not(.ds-multi-select--disabled) {
+  .ds-multi-select__box,
+  .ds-multi-select__box:hover {
+    border-block-end-color: $border-subtle-01;
+    background-color: transparent;
+  }
+
+  .ds-multi-select__field {
+    color: $text-primary;
+    cursor: default;
+  }
+
+  .ds-multi-select__chevron {
+    color: $icon-disabled;
+  }
+}

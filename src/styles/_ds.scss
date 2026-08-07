@@ -1,0 +1,58 @@
+// ═════════════════════════════════════════════════════════════════════════════
+//  DS facade — the ONLY point of contact with @carbon/*.
+//
+//  Rule: components write `@use 'ds' as *;` and never import @carbon/* directly.
+//  When the token source changes — or we drop Carbon entirely — this file
+//  changes, not 40 components.
+//
+//  Tokens are CSS custom properties with fallbacks:
+//    $background  ->  var(--cds-background, #ffffff)
+//  That's why theme switching works at runtime, with no recompile. See _themes.scss.
+// ═════════════════════════════════════════════════════════════════════════════
+
+// Colors and semantic tokens: $background, $text-primary, $layer-01, $field-01,
+// $border-subtle-01, $focus, $support-error, $button-primary, $tag-background-blue…
+@forward '@carbon/styles/scss/theme';
+
+// $spacing-01 (2px) … $spacing-13 (160px)
+@forward '@carbon/styles/scss/spacing';
+
+// motion() function + $duration-* constants
+@forward '@carbon/styles/scss/motion';
+
+// breakpoint() mixin + $grid-breakpoints
+@forward '@carbon/styles/scss/breakpoint';
+
+// Deliberately narrowed to the mixins. We don't expose the type *variables*
+// ($body-01, $heading-03…) — components should call type-style('body-01') so
+// the set of typographic style names stays in one place.
+@forward '@carbon/styles/scss/type' show type-style, font-family, font-weight;
+
+// rem() / em() — Carbon assumes a 16px root
+@forward '@carbon/styles/scss/utilities/convert' show rem, em, to-rem;
+
+// The raw palette is deliberately NOT forwarded. Exactly one color in the system
+// is specified by name rather than by token — the black exclamation inside
+// Carbon's warning triangle — and it is sealed inside `field-status-icon-warn`
+// in _field.scss. Components get the mixin, never the palette, so there is no
+// second, token-free way to pick a color.
+
+// Component tokens ship per component and are NOT part of the main theme module:
+// $button-primary, $button-danger-hover, $tag-background-blue, $tag-color-blue…
+// We forward only the `tokens` entry point, never the component's `index` — that
+// one also emits Carbon's own CSS for the component, which is precisely what
+// we're replacing.
+//
+// These have to be registered with the theme as well, or the --cds-button-*
+// custom properties never get emitted and the values stop following the theme.
+// That registration lives in _themes.scss.
+@forward '@carbon/styles/scss/components/button/tokens';
+@forward '@carbon/styles/scss/components/tag/tokens';
+
+// Ours
+@forward './mixins';
+
+// Shared form-control chrome: label / helper / requirement, the field surface,
+// and the 32-40-48 height scale. Sass rather than a wrapper component — see the
+// file header for why.
+@forward './field';

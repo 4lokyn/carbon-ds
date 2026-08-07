@@ -1,0 +1,99 @@
+@use 'sass:list';
+@use 'ds' as *;
+
+// Carbon exposes tag colors as four separate token variables per hue rather than
+// as a map, so the pairing has to be written out. The upside is that background,
+// text, border and hover are guaranteed to be a contrast-checked set — never mix
+// a background from one hue with text from another.
+$-palette: (
+  'gray': ($tag-background-gray, $tag-color-gray, $tag-hover-gray),
+  'cool-gray': ($tag-background-cool-gray, $tag-color-cool-gray, $tag-hover-cool-gray),
+  'warm-gray': ($tag-background-warm-gray, $tag-color-warm-gray, $tag-hover-warm-gray),
+  'red': ($tag-background-red, $tag-color-red, $tag-hover-red),
+  'magenta': ($tag-background-magenta, $tag-color-magenta, $tag-hover-magenta),
+  'purple': ($tag-background-purple, $tag-color-purple, $tag-hover-purple),
+  'blue': ($tag-background-blue, $tag-color-blue, $tag-hover-blue),
+  'cyan': ($tag-background-cyan, $tag-color-cyan, $tag-hover-cyan),
+  'teal': ($tag-background-teal, $tag-color-teal, $tag-hover-teal),
+  'green': ($tag-background-green, $tag-color-green, $tag-hover-green),
+);
+
+$-heights: (
+  'sm': rem(18px),
+  'md': rem(24px),
+  'lg': rem(32px),
+);
+
+.ds-tag {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+
+  // Fully rounded. Tags are the one Carbon element that is not square — it is
+  // how they read as data rather than as a control.
+  border-radius: rem(16px);
+  margin: 0 rem(2px);
+  vertical-align: middle;
+
+  @include type-style('label-01');
+}
+
+@each $name, $height in $-heights {
+  .ds-tag--#{$name} {
+    min-height: $height;
+    padding: 0 rem(8px);
+  }
+}
+
+// lg gets more horizontal room so the label doesn't crowd the pill.
+.ds-tag--lg {
+  padding: 0 rem(12px);
+}
+
+@each $name, $set in $-palette {
+  .ds-tag--#{$name} {
+    background-color: list.nth($set, 1);
+    color: list.nth($set, 2);
+
+    .ds-tag__close:hover {
+      background-color: list.nth($set, 3);
+    }
+  }
+}
+
+.ds-tag__label {
+  @include truncate;
+}
+
+.ds-tag__close {
+  @include unstyled-button;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: rem(16px);
+  height: rem(16px);
+  border-radius: 50%;
+  margin-left: rem(4px);
+  color: currentcolor;
+  flex: 0 0 auto;
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  svg {
+    width: rem(10px);
+    height: rem(10px);
+  }
+}
+
+.ds-tag--lg .ds-tag__close {
+  width: rem(24px);
+  height: rem(24px);
+
+  svg {
+    width: rem(16px);
+    height: rem(16px);
+  }
+}

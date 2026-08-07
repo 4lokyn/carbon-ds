@@ -1,0 +1,138 @@
+@use 'ds' as *;
+
+// Demo page layout only. Prefixed `demo-` so it never gets mistaken for part of
+// the design system — everything in ui/ is prefixed `ds-`.
+
+.demo-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  height: rem(48px);
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 $spacing-05;
+  border-bottom: rem(1px) solid $border-subtle-01;
+  background-color: $layer-01;
+  gap: $spacing-05;
+}
+
+.demo-bar__brand {
+  color: $text-primary;
+
+  @include type-style('heading-compact-01');
+}
+
+.demo-bar__themes {
+  display: flex;
+  gap: $spacing-02;
+}
+
+.demo {
+  max-width: rem(960px);
+  padding: $spacing-07 $spacing-05 $spacing-10;
+  margin: 0 auto;
+}
+
+.demo__intro {
+  padding-bottom: $spacing-07;
+  border-bottom: rem(1px) solid $border-subtle-01;
+
+  h1 {
+    margin-bottom: $spacing-05;
+    color: $text-primary;
+
+    @include type-style('heading-05');
+  }
+
+  p {
+    max-width: rem(640px);
+    color: $text-secondary;
+
+    @include type-style('body-01');
+  }
+}
+
+.demo__section {
+  padding-top: $spacing-07;
+}
+
+.demo__title {
+  margin-bottom: $spacing-03;
+  color: $text-primary;
+
+  @include type-style('heading-03');
+}
+
+.demo__note {
+  max-width: rem(640px);
+  margin-bottom: $spacing-05;
+  color: $text-secondary;
+
+  @include type-style('body-01');
+}
+
+.demo__row {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-05;
+  flex-wrap: wrap;
+  gap: $spacing-03;
+}
+
+// Form controls need their own layout rather than .demo__row: a field grows
+// taller the moment a message appears under it, and centering makes every label
+// in the row jump when one field goes invalid.
+.demo__fields {
+  display: grid;
+  max-width: rem(640px);
+  margin-bottom: $spacing-05;
+  align-items: start;
+  gap: $spacing-06;
+  grid-template-columns: repeat(auto-fit, minmax(rem(240px), 1fr));
+}
+
+.demo__fields--single {
+  grid-template-columns: minmax(0, rem(320px));
+}
+
+.demo__list {
+  padding-left: $spacing-05;
+  color: $text-secondary;
+
+  @include type-style('body-01');
+
+  li {
+    margin-bottom: $spacing-02;
+    list-style: disc;
+  }
+}
+
+.demo__result,
+.demo__empty {
+  color: $text-secondary;
+
+  @include type-style('body-compact-01');
+}
+
+// The zone needs its own padding and surface so the inverted background is
+// visible as a region rather than just recoloring the text.
+.demo__zone {
+  padding: $spacing-05;
+}
+
+code {
+  padding: 0 rem(4px);
+  background-color: $layer-02;
+  color: $text-primary;
+
+  @include type-style('code-01');
+}
+
+// A heading inside a section, for components that ship in more than one shape.
+.demo__subtitle {
+  margin-bottom: $spacing-03;
+  color: $text-primary;
+
+  @include type-style('heading-compact-02');
+}

@@ -1,0 +1,135 @@
+@use 'ds' as *;
+
+.ds-pagination {
+  display: flex;
+  min-height: rem(40px);
+  align-items: center;
+  justify-content: space-between;
+  border-top: rem(1px) solid $border-subtle-01;
+  background-color: $layer-01;
+  flex-wrap: wrap;
+  gap: $spacing-03;
+}
+
+.ds-pagination__group {
+  display: flex;
+  align-items: center;
+
+  // No gap, deliberately. Each nav button draws its own 1px divider at its
+  // leading edge, and a flex gap pushes that line away from the thing it
+  // divides — the two buttons stop touching, and the chevron reads as
+  // off-centre even though it is exactly centred in its own 40px box. Carbon
+  // spaces the text instead, which is what the margins below do.
+  gap: 0;
+}
+
+// Carbon puts a divider between the size select and the range text, and between
+// the page select and the nav buttons.
+.ds-pagination__group:first-child {
+  padding-left: $spacing-05;
+}
+
+.ds-pagination__label,
+.ds-pagination__range {
+  color: $text-secondary;
+  white-space: nowrap;
+
+  @include type-style('label-01');
+}
+
+.ds-pagination__label {
+  margin-inline-end: $spacing-05;
+}
+
+// 16px in front, one pixel behind. The single trailing pixel is Carbon's, and
+// it is what lets the next divider sit flush against the text.
+.ds-pagination__range {
+  margin-inline: $spacing-05 rem(1px);
+}
+
+.ds-pagination__select-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ds-pagination__select {
+  height: rem(40px);
+
+  // Room on the right for the chevron sitting on top.
+  padding: 0 rem(36px) 0 $spacing-04;
+  border: 0;
+  appearance: none;
+  background-color: transparent;
+  color: $text-primary;
+  cursor: pointer;
+
+  @include type-style('body-compact-01');
+
+  &:hover {
+    background-color: $layer-hover-01;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+.ds-pagination__select-icon {
+  position: absolute;
+  right: $spacing-03;
+  color: $icon-primary;
+
+  // The select above owns the click; the icon must not swallow it.
+  pointer-events: none;
+}
+
+.ds-pagination__nav {
+  @include unstyled-button;
+
+  position: relative;
+  display: flex;
+  width: rem(40px);
+  height: rem(40px);
+  align-items: center;
+  justify-content: center;
+  color: $icon-primary;
+  transition: background-color 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
+
+  // The divider is drawn, not bordered.
+  //
+  // Carbon puts a real `border-inline-start` here, and with `box-sizing:
+  // border-box` that 1px comes out of the 40px content box — so a 16px chevron
+  // centres in 39px and lands half a pixel right of centre, rounding to 13px on
+  // one side and 12px on the other. Visible, and measurable. A pseudo-element
+  // is outside the box model, so the icon centres in the full 40px.
+  &::before {
+    position: absolute;
+    width: rem(1px);
+    background-color: $border-subtle-01;
+    content: '';
+    inset-block: 0;
+    inset-inline-start: 0;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: $layer-hover-01;
+  }
+
+  &:disabled {
+    color: $icon-disabled;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
