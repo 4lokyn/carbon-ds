@@ -78,6 +78,16 @@
   grid-template-columns: minmax(0, rem(320px));
 }
 
+// Inline notifications are blocks, not controls: they stack, they start at the
+// left edge, and Carbon spaces a run of them by $spacing-03.
+.demo__stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: $spacing-05;
+  gap: $spacing-03;
+}
+
 .demo__list {
   padding-left: $spacing-05;
   color: $text-secondary;

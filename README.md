@@ -48,6 +48,8 @@ npm test           # vitest, via @angular/build:unit-test
 | `DatePicker` | calendar popover, typeable field, min/max, disabled days |
 | `DateRangePicker` | one field, both ends, shared calendar |
 | `MultiSelect` | count in the field, checkbox listbox, select-all, optional filter |
+| `InlineNotification` | 4 statuses × high / low contrast, optional close |
+| `ToastNotification` + `NotificationService` | top-right stack, newest first, optional 5s timeout |
 | `Icon` | Carbon paths inlined; no `@carbon/icons-angular` |
 | `Tabs` | `@angular/aria` for behavior, ours for looks |
 | `Modal` | `@angular/cdk/dialog` for focus trap / Escape / restore focus |
@@ -127,6 +129,12 @@ Checked in the browser and locked into tests, not inferred:
   and the styles key off that attribute, which is also what Carbon keys off. The
   demo has three real routes to prove it. A hand-set `current` on a fourth link
   was making two links claim to be current at once; that is gone.
+- Notifications in all four themes, both contrasts: the high-contrast surface
+  really does invert (light box on g100, dark box on white), the low-contrast
+  one carries its 40%-opacity outline, and the warning circle keeps a black
+  exclamation rather than a hole in every one of them. Toasts stack newest-first
+  and sit below the shell header, which they did not until the offset became a
+  custom property — the overlay is outside the shell and cannot see it.
 - The grid's arithmetic, measured at 1915px: 16 tracks, `span 4` renders 220px,
   `span 8` 440px, `span 16` 880px, and each column carries 16px of padding —
   half the 32px gutter, applied as padding rather than `gap` so a column's
@@ -399,6 +407,15 @@ up when the boxes were measured:
   select-all row and an optional filter (which is Carbon's combo box shape).
   Select-all applies to the *filtered* rows and nothing else — the part
   implementations usually get wrong.
+- ~~**Notification.**~~ Built, in two of Carbon's four variants: `InlineNotification`
+  waits in the flow, `ToastNotification` arrives over it, and `NotificationService`
+  owns the stack, the placement and the optional timeout. Carbon's other two are
+  deliberately not in it. **Actionable** is not "a notification with a button" —
+  it grabs and traps focus until the user acts, which makes it an `alertdialog`
+  and a different component; building the button without the trap would look
+  right and behave wrong. **Callout** is the inverse case: it loads with the page,
+  never dismisses, and has no `aria-live` at all, so it shares the styling and
+  none of the behavior.
 - ~~**UI Shell.**~~ Built, and composed rather than configured — every piece is
   a separate element, so an app with no side nav simply does not write one. See
   ui/README.md for the two things that had to differ from Carbon's own markup.
@@ -407,15 +424,14 @@ up when the boxes were measured:
 
 ### What is left, in the order worth building it
 
-18 of Carbon's ~48 components exist. The forms are nearly complete; the system
+19 of Carbon's ~48 components exist. The forms are nearly complete; the system
 around them is not, and the gap that bites first is not a form control.
 
-**Build these before any remaining input.** Five of the six turn up on the first
+**Build these before any remaining input.** Four of the five turn up on the first
 real screen anyone writes:
 
 | | why it comes first |
 |---|---|
-| `Notification` | toasts and inline errors — practically every app |
 | `Loading` / `InlineLoading` | a spinner beside every async call |
 | `Link` | a styled `<a>`; small, and used everywhere |
 | `Tooltip` | `Toggletip` and `Popover` share its mechanics, so one job opens three |
@@ -428,6 +444,10 @@ with steppers — our `type="number"` is a passthrough and says so), `Slider`,
 `FileUploader`, `TimePicker`, `ContentSwitcher`, and Carbon's non-filterable
 `Dropdown` (a styled listbox, where `ds-select` is the native one). `TimePicker`
 and `Slider` may never be needed.
+
+**The two notification variants left**, both behavioral rather than visual:
+`ActionableNotification` (focus trap, `role="alertdialog"`) and `Callout` (loads
+with the page, never dismisses, no live region). See the note above.
 
 **Everything else**, roughly by how often it comes up: `Accordion`,
 `ProgressIndicator`, `ProgressBar`, `PageHeader`, `Menu` / `MenuButton` /

@@ -70,6 +70,24 @@ export const ICON_PATHS = {
     'M29,27.5859l-7.5521-7.5521a11.0177,11.0177,0,1,0-1.4141,1.4141L27.5859,29ZM4,13a9,9,0,1,1,9,9A9.01,9.01,0,0,1,4,13Z',
   ],
   /**
+   * The three remaining notification statuses. Each ships two paths and each
+   * keeps only the second, for the same reason `warning-filled` below does: the
+   * first is Carbon's `inner-path`, shipped `fill="none"`, and our `Icon` fills
+   * every path with `currentColor`. The glyph is already knocked out of the
+   * outer path by winding — the X in `error`, the tick in `checkmark`, the `i`
+   * in `information` are all subpaths of the circle they sit in.
+   */
+  'error-filled': [
+    'M16,2A13.914,13.914,0,0,0,2,16,13.914,13.914,0,0,0,16,30,13.914,13.914,0,0,0,30,16,13.914,13.914,0,0,0,16,2Zm5.4449,21L9,10.5557,10.5557,9,23,21.4448Z',
+  ],
+  'checkmark-filled': [
+    'M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2ZM14,21.5908l-5-5L10.5906,15,14,18.4092,21.41,11l1.5957,1.5859Z',
+  ],
+  'information-filled': [
+    'M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2Zm0,6a1.5,1.5,0,1,1-1.5,1.5A1.5,1.5,0,0,1,16,8Zm4,16.125H12v-2.25h2.875v-5.75H13v-2.25h4.125v8H20Z',
+  ],
+
+  /**
    * The invalid state. One path, not the two `warning--filled.svg` ships: the
    * second is Carbon's `inner-path`, a duplicate of the bar and the dot that
    * renders at `opacity: 0` unless you want a solid exclamation instead of a
@@ -97,6 +115,22 @@ export const ICON_PATHS = {
     'M16,26a1.5,1.5,0,1,1,1.5-1.5A1.5,1.5,0,0,1,16,26Zm-1.125-5h2.25V12h-2.25Z',
     'M16.002,6.1714h-.004L4.6487,27.9966,4.6506,28H27.3494l.0019-.0034ZM14.875,12h2.25v9h-2.25ZM16,26a1.5,1.5,0,1,1,1.5-1.5A1.5,1.5,0,0,1,16,26Z',
     'M29,30H3a1,1,0,0,1-.8872-1.4614l13-25a1,1,0,0,1,1.7744,0l13,25A1,1,0,0,1,29,30ZM4.6507,28H27.3493l.002-.0033L16.002,6.1714h-.004L4.6487,27.9967Z',
+  ],
+
+  /**
+   * The same glyph as `warning-filled`, with the inner path kept rather than
+   * dropped — so the exclamation is a shape that can be painted instead of a
+   * hole. Carbon's own icon ships that path at `opacity: 0` and turns it on in
+   * exactly one place: the notification, where the circle is yellow and the
+   * exclamation has to be black rather than showing the surface behind it.
+   *
+   * The exclamation is first, matching `warning-alt-filled`, because the rule
+   * that recolors it is positional — `path:first-of-type`. Two icons now depend
+   * on that order and a test pins it.
+   */
+  'warning-filled-solid': [
+    'M17.5,23.5c0,0.8-0.7,1.5-1.5,1.5c-0.8,0-1.5-0.7-1.5-1.5S15.2,22,16,22 C16.8,22,17.5,22.7,17.5,23.5z M17.1,8h-2.2v11h2.2V8z',
+    'M16,2C8.3,2,2,8.3,2,16s6.3,14,14,14s14-6.3,14-14C30,8.3,23.7,2,16,2z M14.9,8h2.2v11h-2.2V8z M16,25c-0.8,0-1.5-0.7-1.5-1.5S15.2,22,16,22c0.8,0,1.5,0.7,1.5,1.5S16.8,25,16,25z',
   ],
 
   view: [

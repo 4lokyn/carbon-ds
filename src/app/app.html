@@ -962,6 +962,56 @@
     </div>
   </section>
 
+  <!-- ── Notification ────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Notification</h2>
+    <p class="demo__note">
+      Two variants of the same four statuses. Inline notifications wait in the
+      flow; toasts arrive over it, top right, newest first. High contrast is the
+      default here because it is Carbon React's — Carbon's usage guidance says to
+      prefer low contrast and to never mix the two.
+    </p>
+
+    <div class="demo__row">
+      <ds-toggle
+        label="Low contrast"
+        onLabel="Low"
+        offLabel="High"
+        [(checked)]="notificationLowContrast"
+      />
+    </div>
+
+    <div class="demo__stack">
+      @for (status of notificationStatuses; track status) {
+        <ds-inline-notification
+          [status]="status"
+          [lowContrast]="notificationLowContrast()"
+          [heading]="notificationCopy[status].heading"
+          [subtitle]="notificationCopy[status].subtitle"
+        />
+      }
+    </div>
+
+    <p class="demo__note">
+      The toasts below are opened through <code>NotificationService</code>, which
+      owns the stack and the placement. The timed one uses Carbon's five seconds;
+      the rest wait, which is Carbon's default and the right one for anything the
+      user has to act on.
+    </p>
+
+    <div class="demo__row">
+      @for (status of notificationStatuses; track status) {
+        <button dsButton kind="tertiary" size="sm" (click)="openToast(status)">
+          {{ status }}
+        </button>
+      }
+
+      <button dsButton kind="ghost" size="sm" (click)="openTimedToast()">
+        with a 5s timeout
+      </button>
+    </div>
+  </section>
+
   <!-- ── Nested theme ────────────────────────────────────────────────────── -->
   <section class="demo__section">
     <h2 class="demo__title">Nested theme</h2>

@@ -1,0 +1,286 @@
+@use 'sass:list';
+@use 'ds' as *;
+
+// Carbon pairs each status with two colors, not one: the support color as it is
+// (used on the tinted low-contrast surface) and its `-inverse` twin (used on the
+// dark inverse surface). Written out as a set per status so a background can
+// never end up with the accent from another row.
+//
+//   1. accent on the low-contrast surface
+//   2. accent on the high-contrast (inverse) surface
+//   3. the low-contrast surface itself
+$-statuses: (
+  'error': (
+    $support-error,
+    $support-error-inverse,
+    $notification-background-error,
+  ),
+  'success': (
+    $support-success,
+    $support-success-inverse,
+    $notification-background-success,
+  ),
+  'warning': (
+    $support-warning,
+    $support-warning-inverse,
+    $notification-background-warning,
+  ),
+  'info': (
+    $support-info,
+    $support-info-inverse,
+    $notification-background-info,
+  ),
+);
+
+// ─── Shared ──────────────────────────────────────────────────────────────────
+
+.ds-notification {
+  display: flex;
+  height: auto;
+
+  // The high-contrast style is the default, and it is the inverse surface: dark
+  // text container on a light theme, light on a dark one. `--low-contrast`
+  // below swaps in the tinted surface.
+  background-color: $background-inverse;
+  color: $text-inverse;
+}
+
+.ds-notification__icon {
+  flex-shrink: 0;
+}
+
+.ds-notification__heading {
+  @include type-style('heading-compact-01');
+}
+
+.ds-notification__subtitle {
+  @include type-style('body-compact-01');
+
+  word-break: break-word;
+}
+
+.ds-notification__close {
+  @include unstyled-button;
+  @include focus-ring-state($focus-inverse);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: rem(48px);
+  min-width: rem(48px);
+  height: rem(48px);
+  color: $icon-inverse;
+  transition: background-color $duration-fast-02 motion(standard, productive);
+}
+
+// Links in the body. Carbon inverts them on the high-contrast surface, and the
+// underline appears on hover rather than at rest — the opposite of a link in
+// running text, because the notification is already a highlighted block.
+.ds-notification a {
+  color: $link-inverse;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// ─── Status colors ───────────────────────────────────────────────────────────
+
+@each $name, $set in $-statuses {
+  .ds-notification--#{$name} {
+    // 3px, not the 6px of Carbon's older notification: the accent bar is an
+    // indicator, and at 6px it reads as part of the text block.
+    border-inline-start: rem(3px) solid list.nth($set, 2);
+
+    .ds-notification__icon {
+      color: list.nth($set, 2);
+    }
+  }
+
+  .ds-notification--low-contrast.ds-notification--#{$name} {
+    border-inline-start-color: list.nth($set, 1);
+    background-color: list.nth($set, 3);
+
+    .ds-notification__icon {
+      color: list.nth($set, 1);
+    }
+
+    &::before {
+      border-color: list.nth($set, 1);
+    }
+  }
+}
+
+.ds-notification--low-contrast {
+  color: $text-primary;
+
+  .ds-notification__close {
+    color: $icon-primary;
+
+    @include focus-ring-state;
+  }
+
+  a {
+    color: $link-primary;
+  }
+}
+
+// The one two-tone glyph in the system. Carbon paints this exclamation black
+// rather than knocking it out, and black is right in every theme because the
+// circle behind it is the same yellow in every theme.
+.ds-notification--warning .ds-notification__icon {
+  @include warning-icon-exclamation;
+}
+
+// ─── Inline ──────────────────────────────────────────────────────────────────
+
+.ds-notification--inline {
+  position: relative;
+  flex-wrap: wrap;
+  width: 100%;
+
+  // Carbon caps the width by breakpoint rather than letting it run to the
+  // container edge: past ~830px a single line of status text stops scanning as
+  // one message. The min is the same 288px a toast is fixed at.
+  min-width: rem(288px);
+  max-width: rem(288px);
+  min-height: rem(48px);
+
+  @include breakpoint(md) {
+    flex-wrap: nowrap;
+    max-width: rem(608px);
+  }
+
+  @include breakpoint(lg) {
+    max-width: rem(736px);
+  }
+
+  @include breakpoint(max) {
+    max-width: rem(832px);
+  }
+}
+
+// A 1px border at 40% opacity over the whole box. It is drawn as an overlay
+// rather than as a border on the element because the inline-start edge already
+// has the 3px accent, and a border there would double it.
+.ds-notification--inline.ds-notification--low-contrast::before {
+  position: absolute;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border-width: 1px 1px 1px 0;
+  border-style: solid;
+  content: '';
+  filter: opacity(0.4);
+  inset-block-start: 0;
+  inset-inline-start: 0;
+
+  // Decoration only — it must not swallow a click meant for the close button.
+  pointer-events: none;
+}
+
+.ds-notification--inline {
+  .ds-notification__details {
+    display: flex;
+    flex-grow: 1;
+
+    // Below md the close button is absolutely positioned in the corner, so the
+    // text needs a right gutter wide enough to clear it.
+    margin-inline: rem(13px) $spacing-09;
+
+    @include breakpoint(md) {
+      margin: 0 rem(13px);
+    }
+  }
+
+  .ds-notification__icon {
+    // 14px rather than a spacing token: it centers the 20px glyph against the
+    // first line of text, which sits under 15px of padding.
+    margin-block-start: rem(14px);
+    margin-inline-end: $spacing-05;
+  }
+
+  .ds-notification__text {
+    display: flex;
+    flex-wrap: wrap;
+    padding: rem(15px) 0;
+  }
+
+  .ds-notification__heading {
+    margin-inline-end: $spacing-02;
+  }
+
+  .ds-notification__close {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 0;
+
+    // From md the row has space for it, so it joins the flow and the
+    // notification grows with its content instead of under the button.
+    @include breakpoint(md) {
+      position: static;
+    }
+  }
+}
+
+// ─── Toast ───────────────────────────────────────────────────────────────────
+
+// The stack NotificationService opens. Pointer events are off on the column and
+// back on for each toast, so the empty space beside a 288px toast does not
+// swallow clicks meant for the page underneath it.
+.ds-toast-stack {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-03;
+  pointer-events: none;
+
+  > * {
+    pointer-events: auto;
+  }
+}
+
+.ds-notification--toast {
+  // Fixed, not fluid. A toast sits over the layout rather than in it, so there
+  // is no container width for it to answer to.
+  width: rem(288px);
+  box-shadow: 0 rem(2px) rem(6px) 0 rgb(0 0 0 / 20%);
+  padding-inline-start: rem(13px);
+
+  @include breakpoint(max) {
+    width: rem(352px);
+  }
+
+  .ds-notification__icon {
+    margin-block-start: $spacing-05;
+    margin-inline-end: $spacing-05;
+  }
+
+  .ds-notification__details {
+    margin-block-end: $spacing-05;
+    margin-inline-end: $spacing-05;
+  }
+
+  .ds-notification__heading {
+    margin-block-start: $spacing-05;
+    word-break: break-word;
+  }
+
+  .ds-notification__subtitle {
+    margin-block: 0 $spacing-05;
+  }
+
+  .ds-notification__caption {
+    @include type-style('body-compact-01');
+
+    padding-block-start: $spacing-03;
+  }
+
+  .ds-notification__close {
+    min-height: rem(48px);
+
+    // Pinned to the far edge whatever the text does.
+    margin-inline-start: auto;
+  }
+}

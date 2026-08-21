@@ -165,6 +165,67 @@ can see. `demo/services-table.ts` is the worked example.
 Do not combine `zebra` with `selectable`: the stripe and the selected background
 are the same token in every Carbon theme.
 
+## Notification
+
+Two variants of the same four statuses (`error`, `success`, `warning`, `info`).
+Pick by whether the message waits or arrives: an inline notification sits in the
+flow it concerns and stays until dismissed; a toast comes in over the page.
+
+```html
+<ds-inline-notification
+  status="error"
+  lowContrast
+  heading="Deployment failed"
+  subtitle="The cluster rejected the manifest. Check the image tag and retry."
+  (closed)="dismissed.set(true)"
+/>
+```
+
+**`(closed)` does not remove anything.** It is your element — hide it, animate it
+out, or mark it read. The one exception is a toast opened through the service,
+which owns its own.
+
+Toasts go through `NotificationService` rather than into a template. It owns the
+stack (top right, newest first) and the announcing:
+
+```ts
+private readonly notifications = inject(NotificationService);
+
+this.notifications.show({
+  status: 'success',
+  heading: 'Cluster created',
+  subtitle: 'carbon-prod-01 is ready and accepting traffic.',
+  timeout: TOAST_TIMEOUT,          // omit to make it wait
+});
+```
+
+**If your app has a shell, move the stack below the header.** The overlay is
+appended to `<body>`, outside the shell, so the service cannot tell there is a
+header to avoid — left alone it puts toasts over the header's own controls. One
+line in your global stylesheet, not per call:
+
+```scss
+:root {
+  --ds-toast-inset-block-start: 4rem;   // 48px header + $spacing-05
+}
+```
+
+**Toasts persist unless you pass a `timeout`**, which is Carbon's default and
+almost always the right one: `TOAST_TIMEOUT` is five seconds, and five seconds is
+not long enough to read two lines and decide what to do about them. Never put one
+on something the user has to act on.
+
+**`heading`, not `title`.** A static `title="…"` would set the input *and* leave a
+native browser tooltip on the element.
+
+Two Carbon rules that are not enforced in code and should be:
+
+- **Pick one contrast and keep it.** `lowContrast` is off by default because that
+  is Carbon React's default, but Carbon's guidance is to prefer it and reserve the
+  high-contrast style for critical messaging. Never mix the two.
+- **Two lines, no more.** Longer than that and the message belongs somewhere you
+  can link to.
+
 ## Shell
 
 Composed, not configured. Every piece is optional — an app with no side nav

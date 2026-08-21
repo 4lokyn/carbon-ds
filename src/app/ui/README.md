@@ -197,10 +197,9 @@ people are picking rows out of.
 ## Known gaps
 
 The full list, with a build order, is in the root `README.md`. The short version:
-18 of Carbon's ~48 components exist, the forms are nearly complete, and the next
-thing worth building is not a form control — it is `Notification`, `Loading`,
-`Link`, `Tooltip`, `Breadcrumb` and `Tile`, which is what a real screen reaches
-for first.
+19 of Carbon's ~48 components exist, the forms are nearly complete, and the next
+thing worth building is not a form control — it is `Loading`, `Link`, `Tooltip`,
+`Breadcrumb` and `Tile`, which is what a real screen reaches for first.
 
 One note belongs here rather than there, because it is about the act of adding
 a component rather than about which one to add next:
@@ -212,6 +211,12 @@ a component rather than about which one to add next:
   genuinely two-tone and need the caller to recolor `path:first-of-type`
   (`warning-alt-filled`). Both are flagged in place, and `input.spec.ts` pins the
   path counts so neither can be "fixed" back.
+
+  One glyph is in there twice, on purpose. `warning-filled` drops its inner path
+  and `warning-filled-solid` keeps it, because Carbon knocks that exclamation out
+  everywhere except inside a notification, where it is painted black. Same
+  drawing, opposite treatment — so it is two entries rather than one entry with a
+  flag, and `notification.spec.ts` pins the second one the same way.
 
 ## Third-party primitives are contained to one folder each
 

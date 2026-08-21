@@ -55,6 +55,15 @@ pre {
   outline-offset: rem(-2px);
 }
 
+// This application has a shell, so its toasts start below the header instead of
+// on top of it — 48px of header plus the same $spacing-05 they keep from every
+// other edge. NotificationService reads this because its overlay lives in
+// <body>, outside the shell, and cannot see that there is a header at all.
+// An app with no header leaves it alone and gets the 1rem default.
+:root {
+  --ds-toast-inset-block-start: #{rem(64px)};
+}
+
 // The one global utility class. Components reach for the visually-hidden mixin
 // directly; this exists for the cases where visibility is toggled by a binding
 // (an icon-only checkbox label, a table's select-all) and a mixin can't be

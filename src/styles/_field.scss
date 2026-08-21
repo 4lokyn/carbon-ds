@@ -174,18 +174,29 @@ $field-transition: $duration-fast-01 motion(standard, productive);
   color: $support-error;
 }
 
-/// Carbon's warning glyph is the one two-tone icon in the system: a
-/// `$support-warning` triangle with a black exclamation. Black rather than a
-/// token precisely because `$support-warning` is the same yellow in all four
-/// themes, so the exclamation needs no theme of its own — and `currentColor`
-/// would fill the shape solid and make it vanish.
+/// The black exclamation inside Carbon's warning glyph. Black rather than a
+/// token precisely because the yellow it sits on — `$support-warning` — is the
+/// same in all four themes, so the exclamation needs no theme of its own; and
+/// `currentColor` would fill the shape solid and make it vanish.
 ///
 /// The recolored path is the first one. That is positional, so the order in
 /// `icons.ts` is load-bearing; it is flagged there and pinned by a test.
-@mixin field-status-icon-warn {
-  color: $support-warning;
-
+///
+/// Not named `field-` because it is not only a field's: the notification paints
+/// the same exclamation on `warning-filled-solid`, at a size and on a surface
+/// that has nothing to do with a form control. What the two share is the black,
+/// which is why this stays here — the sealed home of the one color in the
+/// system that is named rather than tokenized.
+@mixin warning-icon-exclamation {
   path:first-of-type {
     fill: colors.$black-100;
   }
+}
+
+/// The warn state of a field: Carbon's two-tone triangle, yellow with a black
+/// exclamation.
+@mixin field-status-icon-warn {
+  color: $support-warning;
+
+  @include warning-icon-exclamation;
 }

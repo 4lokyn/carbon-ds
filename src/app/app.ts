@@ -5,10 +5,14 @@ import {
   type ButtonSize,
   DS_TABS,
   type FieldSize,
+  InlineNotification,
   Input,
   ModalService,
   MultiSelect,
   type MultiSelectOption,
+  NotificationService,
+  type NotificationStatus,
+  TOAST_TIMEOUT,
   DatePicker,
   DateRangePicker,
   DS_RADIO_GROUP,
@@ -33,6 +37,7 @@ const INITIAL_TAGS: readonly TagColor[] = ['blue', 'green', 'red', 'purple'];
     Button,
     DatePicker,
     DateRangePicker,
+    InlineNotification,
     Input,
     MultiSelect,
     Search,
@@ -54,6 +59,7 @@ const INITIAL_TAGS: readonly TagColor[] = ['blue', 'green', 'red', 'purple'];
 export class App {
   protected readonly theme = inject(ThemeService);
   private readonly modal = inject(ModalService);
+  private readonly notifications = inject(NotificationService);
 
   protected readonly kinds: readonly ButtonKind[] = [
     'primary',
@@ -216,6 +222,57 @@ export class App {
   protected readonly emailInvalid = computed(
     () => (this.emailTouched() || this.submitted()) && !this.emailValid(),
   );
+
+  protected readonly notificationStatuses: readonly NotificationStatus[] = [
+    'error',
+    'success',
+    'warning',
+    'info',
+  ];
+
+  protected readonly notificationLowContrast = signal(false);
+
+  // Written the way Carbon asks for: the title says what happened with no full
+  // stop, the body says what to do about it and does not repeat the title.
+  protected readonly notificationCopy: Record<
+    NotificationStatus,
+    { heading: string; subtitle: string }
+  > = {
+    error: {
+      heading: 'Deployment failed',
+      subtitle: 'The cluster rejected the manifest. Check the image tag and retry.',
+    },
+    success: {
+      heading: 'Cluster created',
+      subtitle: 'carbon-prod-01 is ready and accepting traffic.',
+    },
+    warning: {
+      heading: 'Quota almost reached',
+      subtitle: 'You have used 92% of this account’s vCPU allowance.',
+    },
+    info: {
+      heading: 'Maintenance scheduled',
+      subtitle: 'This region is read-only on Sunday between 02:00 and 04:00 UTC.',
+    },
+  };
+
+  protected openToast(status: NotificationStatus): void {
+    this.notifications.show({
+      status,
+      lowContrast: this.notificationLowContrast(),
+      ...this.notificationCopy[status],
+    });
+  }
+
+  protected openTimedToast(): void {
+    this.notifications.show({
+      status: 'success',
+      lowContrast: this.notificationLowContrast(),
+      heading: 'Saved',
+      subtitle: 'Gone in five seconds, which is Carbon’s number for a timed toast.',
+      timeout: TOAST_TIMEOUT,
+    });
+  }
 
   protected openConfirm(): void {
     this.modal

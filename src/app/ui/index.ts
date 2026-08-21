@@ -20,6 +20,18 @@ export {
   MultiSelect,
   type MultiSelectOption,
 } from './multi-select/multi-select';
+export { InlineNotification } from './notification/inline-notification';
+export {
+  type NotificationRole,
+  type NotificationStatus,
+} from './notification/notification-base';
+export {
+  NotificationService,
+  TOAST_TIMEOUT,
+  type ToastOptions,
+  type ToastRef,
+} from './notification/notification.service';
+export { ToastNotification } from './notification/toast-notification';
 export { Pagination } from './pagination/pagination';
 export {
   DS_RADIO_GROUP,
