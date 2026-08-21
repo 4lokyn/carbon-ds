@@ -41,69 +41,9 @@ export type InputType =
   selector: 'ds-input',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
+  templateUrl: './input.html',
   styleUrl: './input.scss',
   host: { '[class]': 'hostClass()' },
-  template: `
-    <!-- In the fluid variant this same element is absolutely positioned inside
-         the field box. Same DOM, different CSS — a second template would be two
-         places to fix every label bug. -->
-    <label
-      class="ds-input__label"
-      [class.ds-visually-hidden]="hideLabel()"
-      [for]="inputId"
-    >
-      {{ label() }}
-    </label>
-
-    <div class="ds-input__field-wrapper">
-      <input
-        class="ds-input__field"
-        [id]="inputId"
-        [type]="effectiveType()"
-        [value]="value()"
-        [placeholder]="placeholder()"
-        [disabled]="disabled()"
-        [readOnly]="readOnly()"
-        [attr.aria-invalid]="invalid() ? 'true' : null"
-        [attr.aria-describedby]="describedBy()"
-        (input)="onInput($event)"
-        (blur)="blurred.emit()"
-      />
-
-      @if (statusIcon(); as icon) {
-        <ds-icon class="ds-input__status" [name]="icon" />
-      }
-
-      @if (isPassword()) {
-        <button
-          type="button"
-          class="ds-input__reveal"
-          [disabled]="disabled()"
-          [attr.aria-label]="revealed() ? hidePasswordLabel() : showPasswordLabel()"
-          [attr.aria-pressed]="revealed()"
-          (click)="toggleReveal()"
-        >
-          <ds-icon [name]="revealed() ? 'view-off' : 'view'" />
-        </button>
-      }
-
-      <!-- Fluid only. The field has no bottom border in that variant, so without
-           this the message would sit flush against the value with nothing
-           separating them. -->
-      @if (fluid() && message()) {
-        <div class="ds-input__divider"></div>
-      }
-    </div>
-
-    <!-- One slot, not two. Carbon replaces the helper text with the requirement
-         rather than stacking them: stacking moves every field below this one the
-         instant it goes invalid. -->
-    @if (message(); as text) {
-      <div class="ds-input__requirement" [id]="messageId">{{ text }}</div>
-    } @else if (helperText()) {
-      <div class="ds-input__helper" [id]="helperId">{{ helperText() }}</div>
-    }
-  `,
 })
 export class Input {
   /** Required. Hide it with `hideLabel` if the layout supplies the name instead. */

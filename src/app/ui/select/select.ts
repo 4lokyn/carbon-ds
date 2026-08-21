@@ -33,50 +33,9 @@ let nextId = 0;
   selector: 'ds-select',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
+  templateUrl: './select.html',
   styleUrl: './select.scss',
   host: { '[class]': 'hostClass()' },
-  template: `
-    <label
-      class="ds-select__label"
-      [class.ds-visually-hidden]="hideLabel()"
-      [for]="selectId"
-    >
-      {{ label() }}
-    </label>
-
-    <div class="ds-select__field-wrapper">
-      <select
-        #select
-        class="ds-select__field"
-        [id]="selectId"
-        [disabled]="disabled() || readOnly()"
-        [attr.aria-invalid]="invalid() ? 'true' : null"
-        [attr.aria-describedby]="describedBy()"
-        (change)="onChange($event)"
-        (blur)="blurred.emit()"
-      >
-        <ng-content />
-      </select>
-
-      <!-- After the select in the DOM so the chevron cannot intercept the click
-           that opens it; it is pointer-events:none as well, belt and braces. -->
-      <ds-icon class="ds-select__arrow" name="chevron-down" />
-
-      @if (statusIcon(); as icon) {
-        <ds-icon class="ds-select__status" [name]="icon" />
-      }
-
-      @if (fluid() && message()) {
-        <div class="ds-select__divider"></div>
-      }
-    </div>
-
-    @if (message(); as text) {
-      <div class="ds-select__requirement" [id]="messageId">{{ text }}</div>
-    } @else if (helperText()) {
-      <div class="ds-select__helper" [id]="helperId">{{ helperText() }}</div>
-    }
-  `,
 })
 export class Select {
   readonly label = input.required<string>();

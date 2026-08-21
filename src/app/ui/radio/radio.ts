@@ -33,36 +33,9 @@ export type RadioOrientation = 'horizontal' | 'vertical';
   selector: 'ds-radio-group',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
+  templateUrl: './radio-group.html',
   styleUrl: './radio.scss',
   host: { '[class]': 'hostClass()' },
-  template: `
-    <fieldset class="ds-radio-group__fieldset" [disabled]="disabled()">
-      <!-- Must be the fieldset's first child to name the group. -->
-      <legend
-        class="ds-radio-group__legend"
-        [class.ds-visually-hidden]="hideLegend()"
-      >
-        {{ legend() }}
-      </legend>
-
-      <div class="ds-radio-group__items">
-        <ng-content />
-      </div>
-    </fieldset>
-
-    @if (message(); as text) {
-      <div class="ds-radio-group__requirement" [id]="messageId">
-        @if (statusIcon(); as icon) {
-          <ds-icon class="ds-radio-group__status" [name]="icon" />
-        }
-        <span>{{ text }}</span>
-      </div>
-    } @else if (helperText()) {
-      <div class="ds-radio-group__helper" [id]="helperId">
-        {{ helperText() }}
-      </div>
-    }
-  `,
 })
 export class RadioGroup {
   /** Names the group. Rendered as the `<legend>`, hidden with `hideLegend`. */
@@ -162,25 +135,7 @@ export class RadioGroup {
   selector: 'ds-radio',
   encapsulation: ViewEncapsulation.None,
   host: { class: 'ds-radio' },
-  template: `
-    <input
-      class="ds-radio__input"
-      type="radio"
-      [id]="inputId"
-      [name]="group.name"
-      [value]="value()"
-      [checked]="group.value() === value()"
-      [disabled]="disabled()"
-      [attr.aria-describedby]="group.describedBy()"
-      (click)="onClick($event)"
-      (change)="onChange()"
-    />
-
-    <label class="ds-radio__label" [for]="inputId">
-      <span class="ds-radio__appearance"></span>
-      <span class="ds-radio__label-text">{{ label() }}</span>
-    </label>
-  `,
+  templateUrl: './radio.html',
 })
 export class Radio {
   readonly label = input.required<string>();

@@ -1,0 +1,52 @@
+<div class="ds-pagination__group">
+  <label class="ds-pagination__label" [for]="sizeId">{{ itemsPerPageLabel() }}</label>
+
+  <div class="ds-pagination__select-wrap">
+    <select
+      class="ds-pagination__select"
+      [id]="sizeId"
+      (change)="onPageSizeChange($event)"
+    >
+      @for (size of pageSizes(); track size) {
+        <option [value]="size" [selected]="size === pageSize()">{{ size }}</option>
+      }
+    </select>
+    <ds-icon class="ds-pagination__select-icon" name="chevron-down" />
+  </div>
+
+  <span class="ds-pagination__range">{{ rangeLabel()(firstItem(), lastItem(), total()) }}</span>
+</div>
+
+<div class="ds-pagination__group">
+  <div class="ds-pagination__select-wrap">
+    <label class="ds-visually-hidden" [for]="pageId">{{ pageSelectLabel() }}</label>
+    <select class="ds-pagination__select" [id]="pageId" (change)="onPageChange($event)">
+      @for (candidate of pageNumbers(); track candidate) {
+        <option [value]="candidate" [selected]="candidate === page()">{{ candidate }}</option>
+      }
+    </select>
+    <ds-icon class="ds-pagination__select-icon" name="chevron-down" />
+  </div>
+
+  <span class="ds-pagination__range">{{ pageCountLabel()(pageCount()) }}</span>
+
+  <button
+    class="ds-pagination__nav"
+    type="button"
+    [attr.aria-label]="previousLabel()"
+    [disabled]="page() <= 1"
+    (click)="goTo(page() - 1)"
+  >
+    <ds-icon name="chevron-left" />
+  </button>
+
+  <button
+    class="ds-pagination__nav"
+    type="button"
+    [attr.aria-label]="nextLabel()"
+    [disabled]="page() >= pageCount()"
+    (click)="goTo(page() + 1)"
+  >
+    <ds-icon name="chevron-right" />
+  </button>
+</div>

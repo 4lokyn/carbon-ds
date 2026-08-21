@@ -1,0 +1,123 @@
+<label class="ds-multi-select__label" [class.ds-visually-hidden]="hideLabel()">
+  {{ label() }}
+</label>
+
+<div class="ds-multi-select__box" cdkOverlayOrigin #origin="cdkOverlayOrigin">
+  <button
+    #trigger
+    type="button"
+    class="ds-multi-select__field"
+    [id]="fieldId"
+    [disabled]="disabled() || readOnly()"
+    [attr.aria-expanded]="open()"
+    [attr.aria-haspopup]="'listbox'"
+    [attr.aria-invalid]="invalid() ? 'true' : null"
+    [attr.aria-describedby]="describedBy()"
+    (click)="toggle()"
+  >
+    @if (selected().length) {
+      <!-- The count, not the values. Carbon shows a single tag because a
+           field is one line and five labels are not. -->
+      <span class="ds-multi-select__count">{{ selected().length }}</span>
+    }
+
+    <span class="ds-multi-select__value">
+      {{ selected().length ? selectionLabel()(selected().length) : placeholder() }}
+    </span>
+
+    @if (statusIcon(); as icon) {
+      <ds-icon class="ds-multi-select__status" [name]="icon" />
+    }
+
+    <ds-icon class="ds-multi-select__chevron" name="chevron-down" />
+  </button>
+</div>
+
+@if (message(); as text) {
+  <div class="ds-multi-select__requirement" [id]="messageId">{{ text }}</div>
+} @else if (helperText()) {
+  <div class="ds-multi-select__helper" [id]="helperId">{{ helperText() }}</div>
+}
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="origin"
+  [cdkConnectedOverlayOpen]="open()"
+  [cdkConnectedOverlayPositions]="positions"
+  [cdkConnectedOverlayScrollStrategy]="scrollStrategy"
+  [cdkConnectedOverlayDisableClose]="true"
+  (overlayOutsideClick)="onOutsideClick($event)"
+  (overlayKeydown)="onOverlayKeydown($event)"
+  (detach)="open.set(false)"
+>
+  <!-- The size modifier is repeated here, not inherited. The overlay is
+       portaled to the CDK container at body level, so the host's own size
+       class is not an ancestor of any of this and cannot reach it. -->
+  <div [class]="menuClass()" [style.width.px]="menuWidth()">
+    @if (filterable()) {
+      <input
+        #filterField
+        class="ds-multi-select__filter"
+        type="text"
+        autocomplete="off"
+        [placeholder]="filterPlaceholder()"
+        [value]="filter()"
+        [attr.aria-label]="filterPlaceholder()"
+        (input)="filter.set($any($event.target).value)"
+      />
+    }
+
+    <div
+      class="ds-multi-select__list"
+      ngpListbox
+      ngpListboxMode="multiple"
+      [ngpListboxValue]="selected()"
+      [ngpListboxCompareWith]="compareWith()"
+      (ngpListboxValueChange)="selected.set($event)"
+      [attr.aria-label]="label()"
+    >
+      <!-- Not a listbox option: it selects the other options rather than
+           being one, so giving it a value would put it in the model. -->
+      @if (selectAll() && visible().length) {
+        <div
+          class="ds-multi-select__item ds-multi-select__item--select-all"
+          role="button"
+          tabindex="0"
+          [attr.aria-pressed]="allVisibleSelected()"
+          (click)="toggleAll()"
+          (keydown.enter)="toggleAll()"
+          (keydown.space)="$event.preventDefault(); toggleAll()"
+        >
+          <ds-checkbox
+            class="ds-multi-select__check"
+            [label]="selectAllLabel()"
+            hideLabel
+            [checked]="allVisibleSelected()"
+            [indeterminate]="someVisibleSelected()"
+          />
+          <span class="ds-multi-select__item-text">{{ selectAllLabel() }}</span>
+        </div>
+      }
+
+      @for (option of visible(); track option.value) {
+        <div
+          class="ds-multi-select__item"
+          ngpListboxOption
+          [ngpListboxOptionValue]="option.value"
+          [ngpListboxOptionDisabled]="option.disabled ?? false"
+        >
+          <ds-checkbox
+            class="ds-multi-select__check"
+            [label]="option.label"
+            hideLabel
+            [checked]="isSelected(option.value)"
+            [disabled]="option.disabled ?? false"
+          />
+          <span class="ds-multi-select__item-text">{{ option.label }}</span>
+        </div>
+      } @empty {
+        <p class="ds-multi-select__empty">{{ emptyLabel() }}</p>
+      }
+    </div>
+  </div>
+</ng-template>

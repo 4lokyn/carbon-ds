@@ -62,91 +62,10 @@ const RANGE_SPLIT = /\s+(?:[–—-]|to)\s+/i;
     NgpDateRangePicker,
     DatePickerPanel,
   ],
+  templateUrl: './date-range-picker.html',
   styleUrl: './date-picker.scss',
   providers: [provideDateAdapter(NgpNativeDateAdapter)],
   host: { '[class]': 'hostClass()' },
-  template: `
-    <label
-      class="ds-date-picker__label"
-      [class.ds-visually-hidden]="hideLabel()"
-      [for]="inputId"
-    >
-      {{ label() }}
-    </label>
-
-    <div
-      class="ds-date-picker__field-wrapper"
-      cdkOverlayOrigin
-      #origin="cdkOverlayOrigin"
-    >
-      <input
-        #field
-        class="ds-date-picker__field"
-        type="text"
-        autocomplete="off"
-        [id]="inputId"
-        [value]="text()"
-        [placeholder]="placeholder()"
-        [disabled]="disabled()"
-        [readOnly]="readOnly()"
-        [attr.aria-invalid]="invalid() ? 'true' : null"
-        [attr.aria-describedby]="describedBy()"
-        (input)="onInput($event)"
-        (blur)="onBlur()"
-      />
-
-      @if (statusIcon(); as icon) {
-        <ds-icon class="ds-date-picker__status" [name]="icon" />
-      }
-
-      <button
-        type="button"
-        class="ds-date-picker__trigger"
-        [disabled]="disabled() || readOnly()"
-        [attr.aria-label]="openCalendarLabel()"
-        [attr.aria-expanded]="open()"
-        (click)="toggle()"
-      >
-        <ds-icon name="calendar" />
-      </button>
-    </div>
-
-    @if (message(); as text) {
-      <div class="ds-date-picker__requirement" [id]="messageId">{{ text }}</div>
-    } @else if (helperText()) {
-      <div class="ds-date-picker__helper" [id]="helperId">{{ helperText() }}</div>
-    }
-
-    <ng-template
-      cdkConnectedOverlay
-      [cdkConnectedOverlayOrigin]="origin"
-      [cdkConnectedOverlayOpen]="open()"
-      [cdkConnectedOverlayPositions]="positions"
-      [cdkConnectedOverlayScrollStrategy]="scrollStrategy"
-      [cdkConnectedOverlayDisableClose]="true"
-      (overlayOutsideClick)="onOutsideClick($event)"
-      (overlayKeydown)="onOverlayKeydown($event)"
-      (detach)="open.set(false)"
-    >
-      <div
-        class="ds-date-picker__calendar"
-        ngpDateRangePicker
-        [ngpDateRangePickerStartDate]="start() ?? undefined"
-        [ngpDateRangePickerEndDate]="end() ?? undefined"
-        [ngpDateRangePickerMin]="min() ?? undefined"
-        [ngpDateRangePickerMax]="max() ?? undefined"
-        [ngpDateRangePickerDateDisabled]="dateDisabled()"
-        [ngpDateRangePickerFirstDayOfWeek]="firstDayOfWeek()"
-        (ngpDateRangePickerStartDateChange)="start.set($event ?? null)"
-        (ngpDateRangePickerEndDateChange)="onEndPicked($event)"
-      >
-        <ds-date-picker-panel
-          [previousMonthLabel]="previousMonthLabel()"
-          [nextMonthLabel]="nextMonthLabel()"
-        />
-      </div>
-    </ng-template>
-  `,
 })
 export class DateRangePicker {
   readonly label = input.required<string>();

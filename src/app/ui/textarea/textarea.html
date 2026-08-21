@@ -1,0 +1,47 @@
+<div class="ds-textarea__label-wrapper">
+  <label
+    class="ds-textarea__label"
+    [class.ds-visually-hidden]="hideLabel()"
+    [for]="textareaId"
+  >
+    {{ label() }}
+  </label>
+
+  @if (counter(); as text) {
+    <!-- aria-hidden: the native maxlength already stops input, and a live
+         count read out on every keystroke is unusable. The limit belongs in
+         the helper text, where it is announced once. -->
+    <span class="ds-textarea__counter" aria-hidden="true">{{ text }}</span>
+  }
+</div>
+
+<div class="ds-textarea__field-wrapper">
+  <textarea
+    class="ds-textarea__field"
+    [id]="textareaId"
+    [value]="value()"
+    [rows]="rows()"
+    [placeholder]="placeholder()"
+    [disabled]="disabled()"
+    [readOnly]="readOnly()"
+    [attr.maxlength]="maxLength() ?? null"
+    [attr.aria-invalid]="invalid() ? 'true' : null"
+    [attr.aria-describedby]="describedBy()"
+    (input)="onInput($event)"
+    (blur)="blurred.emit()"
+  ></textarea>
+
+  @if (statusIcon(); as icon) {
+    <ds-icon class="ds-textarea__status" [name]="icon" />
+  }
+
+  @if (fluid() && message()) {
+    <div class="ds-textarea__divider"></div>
+  }
+</div>
+
+@if (message(); as text) {
+  <div class="ds-textarea__requirement" [id]="messageId">{{ text }}</div>
+} @else if (helperText()) {
+  <div class="ds-textarea__helper" [id]="helperId">{{ helperText() }}</div>
+}

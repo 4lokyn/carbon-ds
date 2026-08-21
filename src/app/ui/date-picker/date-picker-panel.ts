@@ -50,57 +50,7 @@ export type DateFormatter = (date: Date) => string;
     NgpDatePickerDateButton,
   ],
   host: { class: 'ds-date-picker__panel' },
-  template: `
-    <div class="ds-date-picker__header">
-      <button
-        type="button"
-        class="ds-date-picker__nav"
-        ngpDatePickerPreviousMonth
-        [attr.aria-label]="previousMonthLabel()"
-      >
-        <ds-icon name="chevron-left" />
-      </button>
-
-      <!-- The primitive supplies only the id and aria-live here; the text is
-           ours, which is the whole reason this component needs the state. -->
-      <span class="ds-date-picker__month" ngpDatePickerLabel>
-        {{ monthLabel() }}
-      </span>
-
-      <button
-        type="button"
-        class="ds-date-picker__nav"
-        ngpDatePickerNextMonth
-        [attr.aria-label]="nextMonthLabel()"
-      >
-        <ds-icon name="chevron-right" />
-      </button>
-    </div>
-
-    <table class="ds-date-picker__grid" ngpDatePickerGrid>
-      <thead>
-        <tr>
-          @for (day of weekdays(); track day.long) {
-            <!-- One letter to fit the 40px column, the full name in the abbr
-                 attribute so a screen reader still says "Wednesday". -->
-            <th class="ds-date-picker__weekday" scope="col" [attr.abbr]="day.long">
-              {{ day.narrow }}
-            </th>
-          }
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr *ngpDatePickerRowRender>
-          <td *ngpDatePickerCellRender="let date" ngpDatePickerCell>
-            <button type="button" class="ds-date-picker__day" ngpDatePickerDateButton>
-              {{ date.getDate() }}
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  `,
+  templateUrl: './date-picker-panel.html',
 })
 export class DatePickerPanel {
   readonly previousMonthLabel = input('Previous month');

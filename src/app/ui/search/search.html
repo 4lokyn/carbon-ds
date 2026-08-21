@@ -1,0 +1,47 @@
+<!-- Carbon hides the search label in every case, so there is no hideLabel
+     input here: a magnifier plus placeholder text is the recognised idiom,
+     and a visible "Search" above it is noise. It stays in the a11y tree. -->
+<label class="ds-search__label ds-visually-hidden" [for]="inputId">
+  {{ label() }}
+</label>
+
+<!-- A decoration normally, a real button when expandable: collapsed, it is
+     the only thing on screen, so it has to be reachable and named. -->
+@if (expandable()) {
+  <button
+    type="button"
+    class="ds-search__magnifier ds-search__magnifier--button"
+    [disabled]="disabled()"
+    [attr.aria-label]="expandLabel()"
+    [attr.aria-expanded]="isExpanded()"
+    (click)="expand()"
+  >
+    <ds-icon name="search" />
+  </button>
+} @else {
+  <ds-icon class="ds-search__magnifier" name="search" />
+}
+
+<input
+  #input
+  class="ds-search__input"
+  type="search"
+  [id]="inputId"
+  [value]="value()"
+  [placeholder]="placeholder()"
+  [disabled]="disabled()"
+  [attr.tabindex]="expandable() && !isExpanded() ? -1 : null"
+  (input)="onInput($event)"
+  (blur)="onBlur()"
+/>
+
+@if (value() && !disabled()) {
+  <button
+    type="button"
+    class="ds-search__clear"
+    [attr.aria-label]="clearLabel()"
+    (click)="clear()"
+  >
+    <ds-icon name="close" />
+  </button>
+}

@@ -1,0 +1,17 @@
+<input
+  class="ds-radio__input"
+  type="radio"
+  [id]="inputId"
+  [name]="group.name"
+  [value]="value()"
+  [checked]="group.value() === value()"
+  [disabled]="disabled()"
+  [attr.aria-describedby]="group.describedBy()"
+  (click)="onClick($event)"
+  (change)="onChange()"
+/>
+
+<label class="ds-radio__label" [for]="inputId">
+  <span class="ds-radio__appearance"></span>
+  <span class="ds-radio__label-text">{{ label() }}</span>
+</label>

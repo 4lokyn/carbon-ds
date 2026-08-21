@@ -39,6 +39,32 @@ prompted the rule was an *unscoped* `.cdk-dialog-container`, which a blanket
 The demo (`app.scss`, `demo/`) is deliberately outside the lint globs. It is
 application code and its classes are `demo-` / `services-`.
 
+**A component that owns real markup keeps its template in a `.html` file.** Every
+form control, plus `pagination` and `table`, is `templateUrl`. `shell`, `tabs`,
+`button`, `icon`, `tag`, `checkbox`, `modal` and the two table headers stay
+inline. The test is not a line count, it is whether the file holds one component
+with a template or a family of small pieces: `shell.ts` is sixteen components and
+eight of their templates are `<ng-content />`, so extracting there would be
+sixteen files carrying one line each.
+
+The form controls go as a group rather than by size, because they are meant to
+read as variations of one thing — `input` at 60 lines does not need its own file
+on merit, but `input` having one while `textarea` does not is the kind of seam
+that makes people wonder what the difference is.
+
+Two things that are *not* the reason, both checked rather than assumed: Prettier
+formats an inline Angular template exactly as it formats a file, and the language
+service works in both. The build inlines every template regardless — the bundle
+is byte-identical before and after. What the split actually buys is a diff that
+shows markup changes as markup, and a control whose three files line up with
+every other control's.
+
+The extracted files are a verbatim move — dedented, never reformatted. Prettier's
+`angular` parser at `printWidth: 100` would reflow markup that was written to fit
+inside a decorator's indentation, which is also why `table.html` does not pass
+`prettier --check` today. Leave that alone unless you are reformatting every
+template deliberately, in one commit.
+
 **Wrap headless primitives with `hostDirectives`, don't reimplement them.** See
 `tabs/tabs.ts`. The primitive owns behavior and exposes signals; we bind classes
 off those signals and never keep a second copy of the state.
