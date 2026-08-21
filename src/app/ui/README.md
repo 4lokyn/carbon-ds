@@ -28,6 +28,17 @@ them, and multi-element components (tabs, table, modal) would otherwise duplicat
 the same CSS once per child component in the bundle. The prefix is what keeps this
 safe; do not add an unprefixed class.
 
+`npm run lint:styles` enforces that rather than leaving it to whoever remembers
+this file. The one legitimate exception is a class the CDK owns — we style
+`.cdk-dialog-container` and `.cdk-overlay-backdrop`, and neither is ours to
+rename — so each of those three sites carries its own
+`stylelint-disable-next-line` with a reason. Keep them per-site: the bug that
+prompted the rule was an *unscoped* `.cdk-dialog-container`, which a blanket
+`cdk-` allowance would have waved straight through.
+
+The demo (`app.scss`, `demo/`) is deliberately outside the lint globs. It is
+application code and its classes are `demo-` / `services-`.
+
 **Wrap headless primitives with `hostDirectives`, don't reimplement them.** See
 `tabs/tabs.ts`. The primitive owns behavior and exposes signals; we bind classes
 off those signals and never keep a second copy of the state.

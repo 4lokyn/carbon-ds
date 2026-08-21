@@ -13,6 +13,7 @@
   margin: $spacing-05;
 }
 
+// stylelint-disable-next-line selector-class-pattern -- CDK's own container
 .ds-modal-panel .cdk-dialog-container {
   display: flex;
   max-height: inherit;
@@ -24,7 +25,13 @@
 // The component opened via ModalService sits between the CDK container and
 // <ds-modal>. display:contents drops it out of the box tree so the flex column
 // stays intact — otherwise the body region can't scroll and the footer floats.
-.cdk-dialog-container > *:not(.ds-modal) {
+//
+// Scoped to our own panel class, which ModalService sets on every dialog it
+// opens. Unscoped this reaches every CDK dialog in the application, including
+// ones another library opened — and display:contents on a wrapper it did not
+// expect takes its layout apart.
+// stylelint-disable-next-line selector-class-pattern -- CDK's own container
+.ds-modal-panel .cdk-dialog-container > *:not(.ds-modal) {
   display: contents;
 }
 

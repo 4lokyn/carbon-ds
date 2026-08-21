@@ -65,6 +65,9 @@ pre {
 
 // CDK overlay backdrop, in Carbon colors.
 // The .cdk-overlay-* classes come from overlay-prebuilt.css (see angular.json).
+// Global on purpose, and it has to be: the backdrop is appended to <body>,
+// outside every component's tree, so there is nothing of ours to scope it to.
+// stylelint-disable-next-line selector-class-pattern -- CDK's own backdrop
 .cdk-overlay-backdrop {
   background-color: $overlay;
   transition: opacity 240ms cubic-bezier(0.2, 0, 0.38, 0.9);
