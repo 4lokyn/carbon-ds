@@ -20,15 +20,17 @@
   }
 }
 
-/// Keyboard-only focus ring. Mouse users shouldn't see it.
-@mixin focus-visible-ring($args...) {
-  &:focus-visible {
+/// The ring, attached to `:focus`.
+///
+/// `:focus`, not `:focus-visible`, and that is Carbon's call rather than ours:
+/// every focus style in `@carbon/styles` is written against `:focus`, so a
+/// clicked button keeps its ring until focus moves on. An earlier version of
+/// this file used `:focus-visible` to hide the ring from mouse users, which is
+/// the more fashionable behavior and is not what Carbon looks like — the ring
+/// is a statement about where focus *is*, not about how it got there.
+@mixin focus-ring-state($args...) {
+  &:focus {
     @include focus-ring($args...);
-  }
-
-  // Only drop the browser outline where we know we're supplying our own.
-  &:focus:not(:focus-visible) {
-    outline: none;
   }
 }
 

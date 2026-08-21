@@ -24,15 +24,7 @@ $shell-rail-width: rem(48px);
   inset-inline: 0;
 }
 
-// `:focus`, not `:focus-visible` — the one place in this system that departs
-// from the rule.
-//
-// Everywhere else a mouse click deliberately leaves no ring. The shell is
-// different because its items are navigation: clicking one usually changes the
-// page under it, and the border is what tells you which item you are on while
-// that happens. Carbon uses plain `:focus` here for the same reason.
-//
-// A square the height of the bar. The transparent 1px border is what lets that
+// A square the height of the bar. The transparent 1px border is what lets the
 // focus border appear without the button changing size.
 .ds-shell-header__action {
   @include unstyled-button;

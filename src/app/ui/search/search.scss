@@ -87,12 +87,8 @@
     background-color: $field-hover-01;
   }
 
-  &:focus-visible {
+  &:focus {
     @include field-focus;
-  }
-
-  &:focus:not(:focus-visible) {
-    outline: none;
   }
 
   &:active {
@@ -143,12 +139,8 @@
       background-color: $field-hover-01;
     }
 
-    &:focus-visible {
+    &:focus {
       @include field-focus;
-    }
-
-    &:focus:not(:focus-visible) {
-      outline: none;
     }
   }
 }

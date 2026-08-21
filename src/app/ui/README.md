@@ -133,8 +133,10 @@ app puts its own layout class on the same element, and a `margin: 0 auto` there
 silently wiped both — the content slid under the header and ignored the side
 nav. Owning the element means nothing else can write to it.
 
-The shell is also the one place using `:focus` rather than `:focus-visible`.
-See the root README for why.
+The shell no longer needs a note here about focus. It used to be the one place
+using `:focus` while everything else used `:focus-visible`; the whole system now
+uses `:focus`, which is what Carbon does. See `focus-ring-state` in
+`styles/_mixins.scss`.
 
 ## The toolbar above a table
 

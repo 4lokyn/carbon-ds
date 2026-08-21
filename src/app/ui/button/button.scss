@@ -150,12 +150,8 @@ $-transition: 70ms cubic-bezier(0, 0, 0.38, 0.9);
 
 // Declared after the kinds so it wins the cascade. The inset layer is what keeps
 // the ring visible against a filled background.
-.ds-btn:focus-visible {
+.ds-btn:focus {
   @include focus-ring($inset-color: $focus-inset);
-}
-
-.ds-btn:focus:not(:focus-visible) {
-  outline: none;
 }
 
 // One disabled treatment for every kind — Carbon does not distinguish, and a

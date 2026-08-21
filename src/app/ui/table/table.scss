@@ -151,12 +151,8 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
     background-color: $layer-selected-hover;
   }
 
-  &:focus-visible {
+  &:focus {
     @include focus-ring;
-  }
-
-  &:focus:not(:focus-visible) {
-    outline: none;
   }
 }
 
@@ -174,7 +170,7 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
 }
 
 .ds-table__sort:hover .ds-table__sort-icon,
-.ds-table__sort:focus-visible .ds-table__sort-icon,
+.ds-table__sort:focus .ds-table__sort-icon,
 [aria-sort='ascending'] .ds-table__sort-icon,
 [aria-sort='descending'] .ds-table__sort-icon {
   opacity: 1;
@@ -192,12 +188,8 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
   justify-content: center;
   color: $icon-primary;
 
-  &:focus-visible {
+  &:focus {
     @include focus-ring;
-  }
-
-  &:focus:not(:focus-visible) {
-    outline: none;
   }
 
   ds-icon {

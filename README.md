@@ -350,13 +350,6 @@ been strict: markup and class names are ours. Every number comes from Carbon's
 the selectors are not. Aspect ratios use the native `aspect-ratio` property
 rather than Carbon's padding-top trick, which predates browser support.
 
-**The shell focuses on `:focus`, not `:focus-visible`.** The single exception to
-the rule everywhere else in this system, and Carbon makes the same one. Shell
-items are navigation: clicking one usually changes the page under it, and the
-border is what says which item you are on while that happens. A ring that only
-appears for the keyboard leaves a mouse user with no feedback at the moment they
-most need it.
-
 **The shell's colour is a theme zone, not a token.** Carbon's header is
 `$background` like everything else — it looks black in every Carbon screenshot
 because the shell is wrapped in a g100 zone. Ours uses the `ds-theme-inverse`

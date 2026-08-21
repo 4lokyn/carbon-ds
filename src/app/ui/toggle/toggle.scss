@@ -72,12 +72,10 @@
 // The ring goes on the track. Drawn as a pseudo-element rather than an outline on
 // the switch itself so it can follow the 12px radius instead of boxing it.
 //
-// Two triggers, both Carbon's. Keyboard focus is the obvious one — though we use
-// :focus-visible where Carbon uses :focus, so a mouse press does not leave a ring
-// behind, same as every other control here. That is exactly why the second
-// trigger matters: :active puts the ring back for the duration of a press, so
-// mouse users still get the feedback that :focus-visible withholds.
-.ds-toggle__button:focus-visible + .ds-toggle__label .ds-toggle__switch::after,
+// Two triggers, both Carbon's: focus, and :active for the duration of a press.
+// The second is not redundant now that the ring is on :focus — a press on an
+// already-focused switch would otherwise show no acknowledgement at all.
+.ds-toggle__button:focus + .ds-toggle__label .ds-toggle__switch::after,
 .ds-toggle:not(.ds-toggle--disabled):active .ds-toggle__switch::after {
   position: absolute;
   display: block;

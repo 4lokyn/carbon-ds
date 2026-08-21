@@ -50,12 +50,8 @@
 
   // Aria sets tabindex so only the active tab is reachable by Tab key; arrows
   // move between them. We only draw the ring.
-  &:focus-visible {
+  &:focus {
     @include focus-ring;
-  }
-
-  &:focus:not(:focus-visible) {
-    outline: none;
   }
 }
 
@@ -82,7 +78,7 @@
 
   // Aria also puts `inert` on hidden panels, which removes them from the a11y
   // tree and from tab order. This only handles the visual side — both are needed.
-  &:focus-visible {
+  &:focus {
     @include focus-ring;
   }
 }

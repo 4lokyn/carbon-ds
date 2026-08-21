@@ -93,7 +93,7 @@
 
 // The ring goes on the box, not the label — a ring around the whole label would
 // be enormous next to long text.
-.ds-checkbox__input:focus-visible + .ds-checkbox__label::before {
+.ds-checkbox__input:focus + .ds-checkbox__label::before {
   outline: rem(2px) solid $focus;
   outline-offset: rem(1px);
 }

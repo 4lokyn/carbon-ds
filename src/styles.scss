@@ -47,10 +47,10 @@ pre {
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
 }
 
-// We don't touch :focus globally — each component supplies its own ring via the
-// focus-visible-ring() mixin. This is only a safety net for elements we haven't
-// covered yet, so nothing ends up without a focus indicator.
-:focus-visible {
+// Each component supplies its own ring via the focus-ring-state() mixin. This is
+// only a safety net for elements we haven't covered yet, so nothing ends up
+// without a focus indicator.
+:focus {
   outline: rem(2px) solid $focus;
   outline-offset: rem(-2px);
 }

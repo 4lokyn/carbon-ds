@@ -45,12 +45,8 @@
   text-align: start;
   white-space: nowrap;
 
-  &:focus-visible {
+  &:focus {
     @include field-focus;
-  }
-
-  &:focus:not(:focus-visible) {
-    outline: none;
   }
 
   &:disabled {

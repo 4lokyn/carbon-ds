@@ -200,9 +200,10 @@
     </div>
 
     <p class="demo__note">
-      Tab to a button to see the focus ring — it is inset by 2px so it never
-      shifts layout. Clicking does not show it: that is
-      <code>:focus-visible</code> doing its job.
+      Tab to a button, or click one, to see the focus ring — it is inset by 2px
+      so it never shifts layout. It stays until focus moves on, because Carbon
+      writes every focus style against <code>:focus</code>: the ring says where
+      focus is, not how it got there.
     </p>
   </section>
 

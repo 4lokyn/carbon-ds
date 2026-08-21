@@ -65,12 +65,8 @@
   inset-block-start: 0;
   inset-inline-end: 0;
 
-  &:focus-visible {
+  &:focus {
     @include field-focus;
-  }
-
-  &:focus:not(:focus-visible) {
-    outline: none;
   }
 
   &:disabled {
@@ -179,12 +175,8 @@
     background-color: $layer-hover-01;
   }
 
-  &:focus-visible {
+  &:focus {
     @include field-focus;
-  }
-
-  &:focus:not(:focus-visible) {
-    outline: none;
   }
 
   &:disabled {
@@ -224,12 +216,8 @@
     background-color: $layer-hover-01;
   }
 
-  &:focus-visible {
+  &:focus {
     @include field-focus;
-  }
-
-  &:focus:not(:focus-visible) {
-    outline: none;
   }
 }
 
@@ -270,7 +258,7 @@
 
   // Inside the fill rather than around it — a $focus ring on a $button-primary
   // square is blue on blue.
-  &:focus-visible {
+  &:focus {
     outline: rem(1px) solid $layer-02;
     outline-offset: rem(-3px);
   }

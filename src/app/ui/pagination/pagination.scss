@@ -70,12 +70,8 @@
     background-color: $layer-hover-01;
   }
 
-  &:focus-visible {
+  &:focus {
     @include focus-ring;
-  }
-
-  &:focus:not(:focus-visible) {
-    outline: none;
   }
 }
 
@@ -125,11 +121,7 @@
     cursor: not-allowed;
   }
 
-  &:focus-visible {
+  &:focus {
     @include focus-ring;
-  }
-
-  &:focus:not(:focus-visible) {
-    outline: none;
   }
 }

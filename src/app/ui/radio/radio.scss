@@ -89,13 +89,9 @@
 // On the ring, not the label — a ring around the whole label would be enormous
 // next to long option text. Offset outwards here, unlike every other control in
 // the system, because an inset ring on an 18px circle lands on the border.
-.ds-radio__input:focus-visible + .ds-radio__label .ds-radio__appearance {
+.ds-radio__input:focus + .ds-radio__label .ds-radio__appearance {
   outline: rem(2px) solid $focus;
   outline-offset: rem(1.5px);
-}
-
-.ds-radio__input:focus:not(:focus-visible) + .ds-radio__label {
-  outline: none;
 }
 
 // ── Disabled ────────────────────────────────────────────────────────────────
