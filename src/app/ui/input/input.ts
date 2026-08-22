@@ -60,6 +60,17 @@ export class Input {
   readonly hideLabel = input(false, { transform: booleanAttribute });
 
   /**
+   * Carbon's inline variant: the label to the left of the field instead of above
+   * it, capped at 142px.
+   *
+   * For a settings list, where a column of short labels against a column of
+   * values scans faster than a stack of label-over-field pairs. Ignored when
+   * `fluid` is set — fluid puts the label *inside* the field box, so the two are
+   * different answers to the same question and cannot both apply.
+   */
+  readonly inline = input(false, { transform: booleanAttribute });
+
+  /**
    * Carbon specifies what invalid looks like; *when* it turns on is the caller's,
    * and the answer for this codebase is written down in the root README — on
    * blur, and on submit for fields nobody touched, and it clears the moment the
@@ -127,6 +138,8 @@ export class Input {
 
     if (this.fluid()) {
       classes.push('ds-input--fluid');
+    } else if (this.inline()) {
+      classes.push('ds-input--inline');
     }
 
     if (this.invalid()) {

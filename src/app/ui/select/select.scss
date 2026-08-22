@@ -7,6 +7,26 @@
   align-items: flex-start;
 }
 
+// Two grid columns rather than Carbon's nested flex wrappers — see the same
+// block in input.scss for why, and for where the 142px comes from.
+.ds-select--inline {
+  display: grid;
+  align-items: center;
+  column-gap: $spacing-03;
+  grid-template-columns: minmax(0, max-content) 1fr;
+
+  .ds-select__label {
+    max-width: rem(142px);
+    margin-bottom: 0;
+    overflow-wrap: break-word;
+  }
+
+  .ds-select__helper,
+  .ds-select__requirement {
+    grid-column: 2;
+  }
+}
+
 .ds-select__label {
   @include field-label;
 }

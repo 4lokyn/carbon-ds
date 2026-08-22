@@ -62,6 +62,9 @@ export class Select {
 
   readonly fluid = input(false, { transform: booleanAttribute });
 
+  /** Label beside the field rather than above it. See `Input.inline`. */
+  readonly inline = input(false, { transform: booleanAttribute });
+
   readonly blurred = output<void>();
 
   protected readonly selectId = `ds-select-${nextId++}`;
@@ -100,6 +103,8 @@ export class Select {
 
     if (this.fluid()) {
       classes.push('ds-select--fluid');
+    } else if (this.inline()) {
+      classes.push('ds-select--inline');
     }
 
     if (this.invalid()) {

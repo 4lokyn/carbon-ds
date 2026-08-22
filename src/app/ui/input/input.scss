@@ -7,6 +7,34 @@
   align-items: flex-start;
 }
 
+// Carbon's inline variant: the label beside the field rather than above it.
+//
+// Carbon builds this out of nested flex wrappers — the label at `flex: 0 1 auto`
+// and a `field-outer-wrapper` at `flex: 8` that also holds the message. Two
+// columns of a grid get the identical rectangle out of the markup we already
+// have: label in the first, field in the second, and the message dropped into
+// the second below it. Same result, one template instead of two.
+//
+// 142px is Carbon's cap on the label. Past that the label wins space the value
+// needs, and a form of inline fields stops sharing a left edge.
+.ds-input--inline {
+  display: grid;
+  align-items: center;
+  column-gap: $spacing-03;
+  grid-template-columns: minmax(0, max-content) 1fr;
+
+  .ds-input__label {
+    max-width: rem(142px);
+    margin-bottom: 0;
+    overflow-wrap: break-word;
+  }
+
+  .ds-input__helper,
+  .ds-input__requirement {
+    grid-column: 2;
+  }
+}
+
 .ds-input__label {
   @include field-label;
 }
