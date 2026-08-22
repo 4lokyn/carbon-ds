@@ -490,7 +490,7 @@ Names that differ from Carbon's, all for a stated reason, none of them silent:
 25 of Carbon's ~48 components exist. The forms are nearly complete; the system
 around them is not, and the gap that bites first is not a form control.
 
-**Build these before any remaining input.** Both turn up on the first real
+**Build these before any remaining input.** Each turns up on the first real
 screen anyone writes:
 
 | | why it comes first |
