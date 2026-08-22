@@ -118,6 +118,7 @@ export class App {
   protected readonly fieldSizes: readonly FieldSize[] = ['sm', 'md', 'lg'];
 
   protected readonly selectedTab = signal('behavior');
+  protected readonly containedTab = signal('stage');
   protected readonly modalResult = signal<string | null>(null);
   protected readonly removable = signal<readonly TagColor[]>(INITIAL_TAGS);
 

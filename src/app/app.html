@@ -1022,6 +1022,25 @@
 
       <div dsTabPanel value="blocked">Unreachable while disabled.</div>
     </div>
+
+    <p class="demo__note">
+      Carbon's other style, <code>contained</code>, and it is not just a repaint:
+      the accent moves to the <em>top</em> edge. In the line style the rule sits
+      under the label and separates it from the panel; a contained tab is joined
+      to the panel, so an underline would cut it off from the thing it opens.
+    </p>
+
+    <div dsTabs variant="contained" fullWidth>
+      <div dsTabList [(selectedTab)]="containedTab" aria-label="Environments">
+        <button dsTab value="dev">Development</button>
+        <button dsTab value="stage">Staging</button>
+        <button dsTab value="prod">Production</button>
+      </div>
+
+      <div dsTabPanel value="dev">Two replicas, no autoscaling.</div>
+      <div dsTabPanel value="stage">Four replicas, autoscaling to eight.</div>
+      <div dsTabPanel value="prod">Twelve replicas across three zones.</div>
+    </div>
   </section>
 
   <!-- ── Modal ───────────────────────────────────────────────────────────── -->

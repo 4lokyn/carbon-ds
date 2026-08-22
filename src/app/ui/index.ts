@@ -63,7 +63,15 @@ export {
   ShellSideNavItem,
 } from './shell/shell';
 export { Select } from './select/select';
-export { DS_TABS, DsTab, DsTabList, DsTabPanel, DsTabs } from './tabs/tabs';
+export {
+  DS_TABS,
+  DsTab,
+  DsTabList,
+  DsTabPanel,
+  DsTabs,
+  type TabsSize,
+  type TabsVariant,
+} from './tabs/tabs';
 export { Table } from './table/table';
 export { TableHeader } from './table/table-header';
 export { TableToolbar } from './table/table-toolbar';

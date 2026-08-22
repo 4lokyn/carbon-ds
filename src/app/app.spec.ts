@@ -26,10 +26,13 @@ describe('App', () => {
 
     // role=tablist / role=tab come from the Aria primitive, not from our markup.
     // If this fails, the hostDirectives wiring in ui/tabs/tabs.ts is broken.
+    //
+    // Scoped to the first tab list rather than counting every tab on the page:
+    // the demo grows, and a whole-page count fails every time it does without
+    // telling you anything about the wiring.
     const tablist = fixture.nativeElement.querySelector('[role="tablist"]');
-    const tabs = fixture.nativeElement.querySelectorAll('[role="tab"]');
 
     expect(tablist).toBeTruthy();
-    expect(tabs.length).toBe(4);
+    expect(tablist.querySelectorAll('[role="tab"]').length).toBe(4);
   });
 });
