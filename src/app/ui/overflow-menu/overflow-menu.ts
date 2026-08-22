@@ -3,8 +3,11 @@ import {
   Component,
   computed,
   Directive,
+  ElementRef,
+  inject,
   input,
   output,
+  viewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import { Menu, MenuItem, MenuTrigger } from '@angular/aria/menu';
@@ -48,7 +51,10 @@ export type OverflowMenuAlign = 'bottom' | 'top';
   encapsulation: ViewEncapsulation.None,
   imports: [Icon, Menu, MenuTrigger],
   styleUrl: './overflow-menu.scss',
-  host: { '[class]': 'hostClass()' },
+  host: {
+    '[class]': 'hostClass()',
+    '(document:click)': 'onDocumentClick($event)',
+  },
   template: `
     <button
       type="button"
@@ -66,7 +72,6 @@ export type OverflowMenuAlign = 'bottom' | 'top';
       #menu="ngMenu"
       [class.ds-overflow-menu__panel--open]="trigger.expanded()"
       class="ds-overflow-menu__panel"
-      (itemSelected)="actionSelected.emit($any($event))"
     >
       <ng-content />
     </div>
@@ -87,6 +92,36 @@ export class OverflowMenu {
   protected readonly hostClass = computed(
     () => `ds-overflow-menu ds-overflow-menu--${this.align()}`,
   );
+
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly trigger = viewChild.required(MenuTrigger);
+
+  /**
+   * Called by an item when it is chosen. Reporting and closing are both ours:
+   * Aria's own `itemSelected` does not fire for a pointer, and nothing in it
+   * dismisses the menu on a click either — which left the menu stuck open on
+   * the two things people try first.
+   *
+   * Choosing an action closes it, because every menu on every platform does,
+   * and one that stays open over the thing it just changed invites a second
+   * click on it.
+   */
+  select(value: string): void {
+    this.actionSelected.emit(value);
+    this.trigger().close();
+  }
+
+  protected onDocumentClick(event: MouseEvent): void {
+    if (!this.trigger().expanded()) {
+      return;
+    }
+
+    if (this.host.nativeElement.contains(event.target as Node)) {
+      return;
+    }
+
+    this.trigger().close();
+  }
 }
 
 /**
@@ -104,17 +139,29 @@ export class OverflowMenu {
   host: {
     '[class]': 'hostClass()',
     '[attr.type]': '"button"',
+    '(click)': 'onClick()',
   },
 })
 export class OverflowMenuItem {
   /** Carbon's destructive item: red, and last, under a divider. */
   readonly danger = input(false, { transform: booleanAttribute });
 
+  private readonly item = inject(MenuItem);
+  private readonly menu = inject(OverflowMenu);
+
   protected readonly hostClass = computed(() =>
     this.danger()
       ? 'ds-overflow-menu__item ds-overflow-menu__item--danger'
       : 'ds-overflow-menu__item',
   );
+
+  protected onClick(): void {
+    if (this.item.disabled()) {
+      return;
+    }
+
+    this.menu.select(String(this.item.value()));
+  }
 }
 
 /**
