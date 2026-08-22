@@ -481,12 +481,12 @@ Names that differ from Carbon's, all for a stated reason, none of them silent:
 22 of Carbon's ~48 components exist. The forms are nearly complete; the system
 around them is not, and the gap that bites first is not a form control.
 
-**Build these before any remaining input.** All three turn up on the first real
+**Build these before any remaining input.** All four turn up on the first real
 screen anyone writes:
 
 | | why it comes first |
 |---|---|
-| `Tooltip` | `Toggletip` and `Popover` share its mechanics, so one job opens three |
+| `Tooltip` | counts as one row and is really three: `Toggletip` and `Popover` share its positioning and dismissal, so one job opens all of them |
 | `Breadcrumb` | sits above the page title in Carbon's own shell reference |
 | `Tile` | Carbon's card |
 | `OverflowMenu` | row actions in the table, already listed as a table gap below |
