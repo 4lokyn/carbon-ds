@@ -2,13 +2,43 @@
 
 .ds-pagination {
   display: flex;
-  min-height: rem(40px);
   align-items: center;
   justify-content: space-between;
   border-top: rem(1px) solid $border-subtle-01;
   background-color: $layer-01;
   flex-wrap: wrap;
   gap: $spacing-03;
+}
+
+// The same 32 / 40 / 48 scale every field uses. Pagination sits directly under a
+// table, so its height has to be able to match the table's density — an `sm`
+// table above a 40px pagination bar reads as two components, not one.
+@each $name, $height in $field-heights {
+  .ds-pagination--#{$name} {
+    min-height: $height;
+
+    .ds-pagination__select {
+      height: $height;
+    }
+
+    // Square. The chevron is 16px whatever the box, so the gutter around it
+    // falls out of the height: 8px at sm, 12px at md, 16px at lg.
+    .ds-pagination__nav {
+      width: $height;
+      height: $height;
+    }
+  }
+}
+
+// Disabled is a whole-control state, for while a page is in flight. The
+// individual controls carry `disabled` too — this is only the look.
+.ds-pagination--disabled {
+  color: $text-disabled;
+
+  .ds-pagination__label,
+  .ds-pagination__range {
+    color: $text-disabled;
+  }
 }
 
 .ds-pagination__group {
@@ -54,8 +84,6 @@
 }
 
 .ds-pagination__select {
-  height: rem(40px);
-
   // Room on the right for the chevron sitting on top.
   padding: 0 rem(36px) 0 $spacing-04;
   border: 0;
@@ -84,13 +112,14 @@
   pointer-events: none;
 }
 
+// Square, and sized by the `--sm/md/lg` rules at the top of this file rather
+// than here — a nav button that keeps a 40px height inside a 32px bar is the
+// one thing that makes the whole row look misaligned.
 .ds-pagination__nav {
   @include unstyled-button;
 
   position: relative;
   display: flex;
-  width: rem(40px);
-  height: rem(40px);
   align-items: center;
   justify-content: center;
   color: $icon-primary;

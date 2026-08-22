@@ -5,6 +5,7 @@
     <select
       class="ds-pagination__select"
       [id]="sizeId"
+      [disabled]="disabled()"
       (change)="onPageSizeChange($event)"
     >
       @for (size of pageSizes(); track size) {
@@ -14,27 +15,48 @@
     <ds-icon class="ds-pagination__select-icon" name="chevron-down" />
   </div>
 
-  <span class="ds-pagination__range">{{ rangeLabel()(firstItem(), lastItem(), total()) }}</span>
+  <!-- countKnown(), not `total() as count`: a total of 0 is a known total, and
+       an empty table must read "0–0 of 0 items" rather than falling through to
+       the unknown-count wording. -->
+  <span class="ds-pagination__range">
+    @if (countKnown()) {
+      {{ rangeLabel()(firstItem(), lastItem(), total() ?? 0) }}
+    } @else {
+      {{ rangeLabelUnknown()(firstItem(), lastItem()) }}
+    }
+  </span>
 </div>
 
 <div class="ds-pagination__group">
-  <div class="ds-pagination__select-wrap">
-    <label class="ds-visually-hidden" [for]="pageId">{{ pageSelectLabel() }}</label>
-    <select class="ds-pagination__select" [id]="pageId" (change)="onPageChange($event)">
-      @for (candidate of pageNumbers(); track candidate) {
-        <option [value]="candidate" [selected]="candidate === page()">{{ candidate }}</option>
-      }
-    </select>
-    <ds-icon class="ds-pagination__select-icon" name="chevron-down" />
-  </div>
+  @if (countKnown()) {
+    <div class="ds-pagination__select-wrap">
+      <label class="ds-visually-hidden" [for]="pageId">{{ pageSelectLabel() }}</label>
+      <select
+        class="ds-pagination__select"
+        [id]="pageId"
+        [disabled]="disabled()"
+        (change)="onPageChange($event)"
+      >
+        @for (candidate of pageNumbers(); track candidate) {
+          <option [value]="candidate" [selected]="candidate === page()">{{ candidate }}</option>
+        }
+      </select>
+      <ds-icon class="ds-pagination__select-icon" name="chevron-down" />
+    </div>
 
-  <span class="ds-pagination__range">{{ pageCountLabel()(pageCount()) }}</span>
+    <span class="ds-pagination__range">{{ pageCountLabel()(pageCount()) }}</span>
+  } @else {
+    <!-- No count, no list of pages to offer: a select of pages we cannot
+         enumerate would be a control that lies. The number is text, and the
+         chevrons are the only way to move. -->
+    <span class="ds-pagination__range">{{ pageLabel()(page()) }}</span>
+  }
 
   <button
     class="ds-pagination__nav"
     type="button"
     [attr.aria-label]="previousLabel()"
-    [disabled]="page() <= 1"
+    [disabled]="disabled() || page() <= 1"
     (click)="goTo(page() - 1)"
   >
     <ds-icon name="chevron-left" />
@@ -44,7 +66,7 @@
     class="ds-pagination__nav"
     type="button"
     [attr.aria-label]="nextLabel()"
-    [disabled]="page() >= pageCount()"
+    [disabled]="disabled() || onLastPage()"
     (click)="goTo(page() + 1)"
   >
     <ds-icon name="chevron-right" />
