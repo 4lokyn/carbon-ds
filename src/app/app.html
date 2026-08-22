@@ -1099,6 +1099,64 @@
     </div>
   </section>
 
+  <!-- ── Loading ─────────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Loading</h2>
+    <p class="demo__note">
+      The ring is two circles: a faint track and the arc that travels around it.
+      An arc on its own reads as a broken circle rather than as progress. Both
+      sizes below — 88px and 16px.
+    </p>
+
+    <div class="demo__row">
+      <ds-loading [withOverlay]="false" description="Loading the page" />
+      <ds-loading small [withOverlay]="false" description="Loading" />
+      <ds-loading
+        small
+        [withOverlay]="false"
+        [active]="false"
+        description="Stopped"
+      />
+      <span class="demo__result">88px · 16px · 16px stopped</span>
+    </div>
+
+    <p class="demo__note">
+      Stopping is two turns rather than a freeze: the ring finishes its rotation
+      while the arc closes into a full circle. A spinner that stops mid-turn
+      reads as a crash.
+    </p>
+
+    <p class="demo__note">
+      <code>ds-inline-loading</code> is the one that belongs in a button row. It
+      reports the end of the job as well as the middle — which is the whole
+      reason it is not just a small spinner, because a spinner that disappears
+      says nothing about whether the thing worked.
+    </p>
+
+    <div class="demo__stack">
+      <ds-inline-loading status="active" description="Creating cluster…" />
+      <ds-inline-loading status="inactive" description="Queued behind two jobs" />
+      <ds-inline-loading status="finished" description="Cluster created" />
+      <ds-inline-loading status="error" description="Region rejected the request" />
+    </div>
+
+    <div class="demo__row">
+      <button dsButton kind="secondary" [disabled]="deploying()" (click)="deploy()">
+        {{ deployStatus() === 'active' ? 'Deploying…' : 'Deploy' }}
+      </button>
+
+      @if (deployStatus(); as status) {
+        <ds-inline-loading [status]="status" [description]="deployText()" />
+      }
+    </div>
+
+    <p class="demo__note">
+      Press <em>Deploy</em>: active for a second and a half, then finished. The
+      button stays disabled while it runs, which is Carbon's own rule for a
+      submitted form.
+    </p>
+  </section>
+
   <!-- ── Notification ────────────────────────────────────────────────────── -->
   <section class="demo__section">
     <h2 class="demo__title">Notification</h2>

@@ -1,0 +1,164 @@
+@use 'ds' as *;
+
+// Carbon's ring geometry, and the numbers are a set — change one and the arc
+// stops meeting the track.
+//
+//   r = 44 on a 100x100 viewBox, so the 10-wide stroke sits inside the box
+//   circumference = 2πr = 276.46
+//
+// The arc is drawn by dashing the circle at its own circumference and pushing
+// the gap around with `stroke-dashoffset`: at 81% of the way, 19% of the ring
+// shows. That is Carbon's arc length.
+$-circumference: 276.46;
+$-arc: 0.81;
+$-arc-small: 0.48;
+
+@function ring-offset($fraction) {
+  @return $-circumference - $fraction * $-circumference;
+}
+
+// ── The spinner ─────────────────────────────────────────────────────────────
+
+.ds-loading-host {
+  display: inline-flex;
+}
+
+// With the overlay it stops being an inline thing and becomes the page.
+.ds-loading-host--overlay {
+  position: fixed;
+  z-index: 6000;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: $overlay;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+}
+
+.ds-loading {
+  width: rem(88px);
+  height: rem(88px);
+  fill: transparent;
+  animation: ds-loading-rotate 690ms linear infinite;
+
+  circle {
+    stroke-dasharray: $-circumference $-circumference;
+    stroke-linecap: butt;
+    stroke-width: 10;
+  }
+}
+
+.ds-loading__background {
+  stroke: $layer-accent-01;
+
+  // A negative offset rotates the track's own gap out from under the arc's
+  // start. Safari refuses negative offsets, hence the override below.
+  stroke-dashoffset: -22;
+}
+
+.ds-loading__stroke {
+  stroke: $interactive;
+  stroke-dashoffset: ring-offset($-arc);
+}
+
+// Safari does not support a negative `stroke-dashoffset`; it clamps to 0 and the
+// track's gap lands under the arc. Closing the dash entirely is the fix — a full
+// track with no gap looks the same everywhere else.
+@supports (hanging-punctuation: first) and (font: -apple-system-body) and (-webkit-appearance: none) {
+  circle.ds-loading__background {
+    stroke-dasharray: $-circumference;
+    stroke-dashoffset: 0;
+  }
+}
+
+.ds-loading--small {
+  width: rem(16px);
+  height: rem(16px);
+
+  // A 16px ring needs a proportionally fatter stroke or it disappears, and a
+  // shorter arc or it reads as a nearly-closed circle.
+  circle {
+    stroke-width: 16;
+  }
+
+  .ds-loading__stroke,
+  &.ds-loading__svg .ds-loading__stroke {
+    stroke-dashoffset: ring-offset($-arc-small);
+  }
+}
+
+// Stopping is two turns, not a freeze: the ring finishes its rotation while the
+// arc grows to a full circle. A spinner that stops mid-turn reads as a crash.
+.ds-loading--stop {
+  animation:
+    ds-loading-rotate 700ms cubic-bezier(0, 0, 0.38, 0.9) forwards,
+    ds-loading-rotate-back 700ms cubic-bezier(0, 0, 0.38, 0.9) 700ms forwards;
+
+  .ds-loading__stroke {
+    animation: ds-loading-close 700ms cubic-bezier(0, 0, 0.38, 0.9) 700ms forwards;
+  }
+}
+
+@keyframes ds-loading-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ds-loading-rotate-back {
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes ds-loading-close {
+  100% {
+    stroke-dashoffset: ring-offset(1);
+  }
+}
+
+// Carbon animates this and so do we, but a spinner is the one thing that must
+// keep saying "still working" when motion is off. It stays put and stops moving.
+@media (prefers-reduced-motion: reduce) {
+  .ds-loading,
+  .ds-loading--stop,
+  .ds-loading--stop .ds-loading__stroke {
+    animation: none;
+  }
+}
+
+// ── Inline ──────────────────────────────────────────────────────────────────
+
+.ds-inline-loading {
+  display: flex;
+  min-height: rem(32px);
+  align-items: center;
+  color: $text-secondary;
+}
+
+.ds-inline-loading__animation {
+  display: flex;
+  width: rem(16px);
+  height: rem(16px);
+  align-items: center;
+  justify-content: center;
+  margin-inline-end: $spacing-03;
+
+  // Fixed at the spinner's size so the text does not shift by a pixel when the
+  // ring is swapped for the tick.
+  flex: 0 0 auto;
+}
+
+.ds-inline-loading__text {
+  @include type-style('label-02');
+}
+
+.ds-inline-loading--finished .ds-inline-loading__icon {
+  color: $support-success;
+}
+
+.ds-inline-loading--error .ds-inline-loading__icon {
+  color: $support-error;
+}

@@ -6,8 +6,11 @@ import {
   DS_CHECKBOX,
   DS_TABS,
   type FieldSize,
+  InlineLoading,
+  type InlineLoadingStatus,
   InlineNotification,
   Input,
+  Loading,
   ModalService,
   MultiSelect,
   type MultiSelectOption,
@@ -39,8 +42,10 @@ const INITIAL_TAGS: readonly TagColor[] = ['blue', 'green', 'red', 'purple'];
     Button,
     DatePicker,
     DateRangePicker,
+    InlineLoading,
     InlineNotification,
     Input,
+    Loading,
     MultiSelect,
     Search,
     Select,
@@ -252,6 +257,21 @@ export class App {
   protected readonly emailInvalid = computed(
     () => (this.emailTouched() || this.submitted()) && !this.emailValid(),
   );
+
+  protected readonly deployStatus = signal<InlineLoadingStatus | null>(null);
+  protected readonly deploying = computed(() => this.deployStatus() === 'active');
+
+  protected readonly deployText = computed(() =>
+    this.deployStatus() === 'finished' ? 'Deployed to eu-west' : 'Deploying…',
+  );
+
+  protected deploy(): void {
+    this.deployStatus.set('active');
+
+    // Stands in for the request. The point of the demo is the transition, which
+    // is the part a spinner alone cannot show.
+    setTimeout(() => this.deployStatus.set('finished'), 1500);
+  }
 
   protected readonly regions: readonly string[] = [
     'us-south',

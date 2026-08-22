@@ -50,6 +50,7 @@ npm test           # vitest, via @angular/build:unit-test
 | `MultiSelect` | count in the field, checkbox listbox, select-all, optional filter, Carbon's selection ordering |
 | `InlineNotification` | 4 statuses × high / low contrast, optional close |
 | `ToastNotification` + `NotificationService` | top-right stack, newest first, optional 5s timeout |
+| `Loading` + `InlineLoading` | 88/16px ring; inline reports finished and error, not just busy |
 | `Icon` | Carbon paths inlined; no `@carbon/icons-angular` |
 | `Tabs` | line and contained, 3 sizes, full width; `@angular/aria` for behavior |
 | `Modal` | 4 widths; `@angular/cdk/dialog` for focus trap / Escape / restore focus |
@@ -137,6 +138,13 @@ Checked in the browser and locked into tests, not inferred:
   exclamation rather than a hole in every one of them. Toasts stack newest-first
   and sit below the shell header, which they did not until the offset became a
   custom property — the overlay is outside the shell and cannot see it.
+- The loading ring, measured against Carbon's own numbers: 88px and 16px,
+  690ms linear rotation, arc `stroke-dashoffset` 52.53 — which is the 276.46
+  circumference of an r=44 circle less its 81% arc — on a `$layer-accent-01`
+  track offset by -22. Stopping runs two turns rather than freezing. The inline
+  variant swaps the ring for a tick in `$support-success` or a cross in
+  `$support-error`, goes assertive only on failure, and nests no second live
+  region inside its own.
 - The grid's arithmetic, measured at 1915px: 16 tracks, `span 4` renders 220px,
   `span 8` 440px, `span 16` 880px, and each column carries 16px of padding —
   half the 32px gutter, applied as padding rather than `gap` so a column's
@@ -465,15 +473,14 @@ Names that differ from Carbon's, all for a stated reason, none of them silent:
 
 ### What is left, in the order worth building it
 
-19 of Carbon's ~48 components exist. The forms are nearly complete; the system
+21 of Carbon's ~48 components exist. The forms are nearly complete; the system
 around them is not, and the gap that bites first is not a form control.
 
-**Build these before any remaining input.** Four of the five turn up on the first
+**Build these before any remaining input.** Three of the four turn up on the first
 real screen anyone writes:
 
 | | why it comes first |
 |---|---|
-| `Loading` / `InlineLoading` | a spinner beside every async call |
 | `Link` | a styled `<a>`; small, and used everywhere |
 | `Tooltip` | `Toggletip` and `Popover` share its mechanics, so one job opens three |
 | `Breadcrumb` | sits above the page title in Carbon's own shell reference |

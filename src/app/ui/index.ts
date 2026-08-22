@@ -20,6 +20,12 @@ export { type FieldSize } from './field/field-types';
 export { Icon } from './icon/icon';
 export { type IconName } from './icon/icons';
 export { Input, type InputType } from './input/input';
+export {
+  DS_LOADING,
+  InlineLoading,
+  type InlineLoadingStatus,
+  Loading,
+} from './loading/loading';
 export { DS_MODAL, Modal, ModalBody, ModalFooter } from './modal/modal';
 export { ModalService, type ModalSize } from './modal/modal.service';
 export {

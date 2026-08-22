@@ -1,0 +1,12 @@
+<div class="ds-inline-loading__animation">
+  @if (icon(); as name) {
+    <ds-icon class="ds-inline-loading__icon" [name]="name" />
+  } @else {
+    <!-- `inactive` keeps the ring and stops it, which is what a queued or paused
+         job looks like. Its own label is redundant here — the text beside it is
+         the accessible name, and this host is the live region. -->
+    <ds-loading small [active]="status() === 'active'" [withOverlay]="false" [announce]="false" />
+  }
+</div>
+
+<p class="ds-inline-loading__text" [id]="labelId">{{ description() }}</p>
