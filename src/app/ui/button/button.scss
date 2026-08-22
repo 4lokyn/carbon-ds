@@ -1,12 +1,20 @@
 @use 'ds' as *;
 
-// Carbon field heights. Buttons share this scale with inputs and selects, which
-// is what makes a form row line up without per-component nudging.
+// Carbon's size scale, read out of @carbon/layout's `$size-*`. Buttons share the
+// middle of it with inputs and selects, which is what makes a form row line up
+// without per-component nudging.
+//
+// The two ends are button-only, and neither has a field to match: `xs` (24px) is
+// for a button inside a dense row — a table cell, a tile header — where a 32px
+// control would set the row height on its own. `2xl` (80px) is the expressive
+// end, for the single call to action on a marketing page.
 $-heights: (
+  'xs': rem(24px),
   'sm': rem(32px),
   'md': rem(40px),
   'lg': rem(48px),
   'xl': rem(64px),
+  '2xl': rem(80px),
 );
 
 // Carbon's productive easing. 70ms is short on purpose — buttons should feel
@@ -123,6 +131,45 @@ $-transition: 70ms cubic-bezier(0, 0, 0.38, 0.9);
 
   &:active {
     background-color: $button-danger-active;
+  }
+}
+
+// The two quieter danger kinds. Both rest in `$button-danger-secondary` — the
+// red that is legible as text rather than as a fill — and both fill in on hover,
+// which is the moment the button stops being a label and starts being a threat.
+.ds-btn--danger-tertiary {
+  border-color: $button-danger-secondary;
+  background-color: transparent;
+  color: $button-danger-secondary;
+
+  &:hover {
+    background-color: $button-danger-hover;
+    border-color: $button-danger-hover;
+    color: $text-on-color;
+  }
+
+  &:active {
+    background-color: $button-danger-active;
+    border-color: $button-danger-active;
+    color: $text-on-color;
+  }
+}
+
+// Ghost drops the border and the right gutter, exactly as the non-danger ghost
+// does — see the note above it for why the gutter goes.
+.ds-btn--danger-ghost {
+  padding-right: rem(15px);
+  background-color: transparent;
+  color: $button-danger-secondary;
+
+  &:hover {
+    background-color: $button-danger-hover;
+    color: $text-on-color;
+  }
+
+  &:active {
+    background-color: $button-danger-active;
+    color: $text-on-color;
   }
 }
 

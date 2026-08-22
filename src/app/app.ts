@@ -69,9 +69,18 @@ export class App {
     'tertiary',
     'ghost',
     'danger',
+    'danger-tertiary',
+    'danger-ghost',
   ];
 
-  protected readonly sizes: readonly ButtonSize[] = ['sm', 'md', 'lg', 'xl'];
+  protected readonly sizes: readonly ButtonSize[] = [
+    'xs',
+    'sm',
+    'md',
+    'lg',
+    'xl',
+    '2xl',
+  ];
 
   protected readonly colors: readonly TagColor[] = [
     'gray',

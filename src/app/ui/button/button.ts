@@ -15,10 +15,18 @@ export type ButtonKind =
   | 'secondary'
   | 'tertiary'
   | 'ghost'
-  | 'danger';
+  | 'danger'
+  | 'danger-tertiary'
+  | 'danger-ghost';
 
-/** Carbon field heights: 32 / 40 / 48 / 64 px. `lg` is the Carbon default. */
-export type ButtonSize = 'sm' | 'md' | 'lg' | 'xl';
+/**
+ * Carbon's size scale: 24 / 32 / 40 / 48 / 64 / 80 px.
+ *
+ * `sm` through `xl` are the field heights, shared with inputs so a form row
+ * lines up. `xs` and `2xl` are button-only — a 24px button for a dense table
+ * row, an 80px one for the single call to action on a page.
+ */
+export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
 /**
  * Applied as an attribute on a native `<button>` rather than wrapping it in a
