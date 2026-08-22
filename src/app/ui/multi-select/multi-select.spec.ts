@@ -57,17 +57,11 @@ describe('MultiSelect', () => {
           ),
         ).map((e) => e.textContent?.trim()),
       selectAllRow: () =>
-        document.querySelector(
-          '.ds-multi-select__item--select-all',
-        ) as HTMLElement,
+        document.querySelector('.ds-multi-select__item--select-all') as HTMLElement,
       selectAllBox: () =>
-        document.querySelector(
-          '.ds-multi-select__item--select-all input',
-        ) as HTMLInputElement,
+        document.querySelector('.ds-multi-select__item--select-all input') as HTMLInputElement,
       type(text: string) {
-        const filter = document.querySelector(
-          '.ds-multi-select__filter',
-        ) as HTMLInputElement;
+        const filter = document.querySelector('.ds-multi-select__filter') as HTMLInputElement;
         filter.value = text;
         filter.dispatchEvent(new Event('input'));
         fixture.detectChanges();
@@ -83,9 +77,7 @@ describe('MultiSelect', () => {
     fixture.detectChanges();
 
     // A field is one line; five labels are not.
-    expect(el.querySelector('.ds-multi-select__count')?.textContent?.trim()).toBe(
-      '2',
-    );
+    expect(el.querySelector('.ds-multi-select__count')?.textContent?.trim()).toBe('2');
   });
 
   it('picks and unpicks a row', () => {
@@ -112,12 +104,7 @@ describe('MultiSelect', () => {
 
     // Four selectable, one disabled. Selecting "all" must not pick something
     // the user is not allowed to pick.
-    expect(host.selected()).toEqual([
-      'platform',
-      'payments',
-      'commerce',
-      'growth',
-    ]);
+    expect(host.selected()).toEqual(['platform', 'payments', 'commerce', 'growth']);
   });
 
   it('applies select-all to the filtered rows and nothing else', () => {
@@ -198,5 +185,77 @@ describe('MultiSelect', () => {
     // A menu that opens already filtered by something typed minutes ago hides
     // options for a reason nobody can see.
     expect(rowLabels()).toHaveLength(5);
+  });
+
+  it('does not reorder while the menu is open', () => {
+    const { open, rows, rowLabels, fixture } = setup();
+
+    open();
+    expect(rowLabels()[0]).toBe('platform');
+
+    // Pick the third row. Under Carbon's default the list must hold still —
+    // reordering here would slide a different option under the pointer, and the
+    // next click would land on something the user never chose.
+    (rows()[2] as HTMLElement).click();
+    fixture.detectChanges();
+
+    expect(rowLabels()).toEqual(['platform', 'payments', 'commerce', 'growth', 'legacy']);
+  });
+
+  it('lifts the selection to the top on reopen', () => {
+    const { open, rows, rowLabels, fixture } = setup();
+
+    open();
+    (rows()[2] as HTMLElement).click();
+    fixture.detectChanges();
+
+    (
+      (fixture.nativeElement as HTMLElement).querySelector(
+        '.ds-multi-select__field',
+      ) as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+
+    open();
+
+    expect(rowLabels()[0]).toBe('commerce');
+  });
+});
+
+describe('MultiSelect with fixed ordering', () => {
+  @Component({
+    imports: [MultiSelect],
+    template: `
+      <ds-multi-select
+        label="Owners"
+        selectionFeedback="fixed"
+        [options]="options"
+        [(selected)]="selected"
+      />
+    `,
+  })
+  class FixedHost {
+    readonly options = OWNERS;
+    readonly selected = signal<string[]>(['growth']);
+  }
+
+  it('keeps the given order when the order carries meaning', () => {
+    const fixture = TestBed.createComponent(FixedHost);
+    fixture.detectChanges();
+
+    (
+      (fixture.nativeElement as HTMLElement).querySelector(
+        '.ds-multi-select__field',
+      ) as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+
+    const labels = Array.from(
+      document.querySelectorAll(
+        '.ds-multi-select__item:not(.ds-multi-select__item--select-all) .ds-multi-select__item-text',
+      ),
+    ).map((e) => e.textContent?.trim());
+
+    expect(labels[0]).toBe('platform');
   });
 });

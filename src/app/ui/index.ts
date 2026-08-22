@@ -25,6 +25,7 @@ export { ModalService } from './modal/modal.service';
 export {
   MultiSelect,
   type MultiSelectOption,
+  type SelectionFeedback,
 } from './multi-select/multi-select';
 export { InlineNotification } from './notification/inline-notification';
 export {

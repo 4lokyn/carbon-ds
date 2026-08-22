@@ -1,8 +1,4 @@
-import {
-  CdkConnectedOverlay,
-  CdkOverlayOrigin,
-  ScrollStrategyOptions,
-} from '@angular/cdk/overlay';
+import { CdkConnectedOverlay, CdkOverlayOrigin, ScrollStrategyOptions } from '@angular/cdk/overlay';
 import {
   booleanAttribute,
   Component,
@@ -32,6 +28,21 @@ export interface MultiSelectOption<T> {
 }
 
 /**
+ * Where the selected rows sit in the list.
+ *
+ * - `top-after-reopen` — Carbon's default, and the only one that is not a
+ *   trade-off. Picked rows rise to the top, but only once the menu has been
+ *   closed and opened again, so nothing moves while the pointer is over it.
+ * - `top` — rows rise the instant they are picked. Honest about the state and
+ *   awful to use with a mouse: the row under the cursor is not the row you
+ *   clicked a moment ago.
+ * - `fixed` — never reorder. Right when the given order carries meaning of its
+ *   own (a sequence, a ranking, a size ladder) and losing it costs more than
+ *   finding a selection does.
+ */
+export type SelectionFeedback = 'top-after-reopen' | 'top' | 'fixed';
+
+/**
  * Carbon MultiSelect: a field showing a count, and a listbox of checkboxes.
  *
  * Options are configured rather than projected, which is the opposite of
@@ -47,14 +58,7 @@ export interface MultiSelectOption<T> {
 @Component({
   selector: 'ds-multi-select',
   encapsulation: ViewEncapsulation.None,
-  imports: [
-    Checkbox,
-    Icon,
-    CdkConnectedOverlay,
-    CdkOverlayOrigin,
-    NgpListbox,
-    NgpListboxOption,
-  ],
+  imports: [Checkbox, Icon, CdkConnectedOverlay, CdkOverlayOrigin, NgpListbox, NgpListboxOption],
   templateUrl: './multi-select.html',
   styleUrl: './multi-select.scss',
   host: { '[class]': 'hostClass()' },
@@ -68,6 +72,9 @@ export class MultiSelect<T> {
   readonly size = input<FieldSize>('md');
   readonly placeholder = input('Choose options');
   readonly helperText = input('');
+
+  /** See `SelectionFeedback`. Carbon's default, and ours. */
+  readonly selectionFeedback = input<SelectionFeedback>('top-after-reopen');
 
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly readOnly = input(false, { transform: booleanAttribute });
@@ -91,9 +98,7 @@ export class MultiSelect<T> {
    * Pluralization is a function, not a string — a design system cannot know
    * that Serbian needs three forms where English needs two.
    */
-  readonly selectionLabel = input<(count: number) => string>(
-    (count) => `${count} selected`,
-  );
+  readonly selectionLabel = input<(count: number) => string>((count) => `${count} selected`);
 
   /** Identity by default. Supply one when the values are fresh objects. */
   readonly compareWith = input<(a: T, b: T) => boolean>((a, b) => a === b);
@@ -109,8 +114,7 @@ export class MultiSelect<T> {
 
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
-  private readonly triggerRef =
-    viewChild.required<ElementRef<HTMLButtonElement>>('trigger');
+  private readonly triggerRef = viewChild.required<ElementRef<HTMLButtonElement>>('trigger');
 
   protected readonly scrollStrategy = inject(ScrollStrategyOptions).close();
 
@@ -144,17 +148,48 @@ export class MultiSelect<T> {
    */
   protected readonly menuWidth = signal(0);
 
+  /**
+   * The selection as of the last moment ordering was allowed to change.
+   *
+   * `top-after-reopen` is the whole reason this exists: the list must *not*
+   * reorder under the pointer while you are picking, so what counts as "selected"
+   * for ordering is frozen until the menu is reopened.
+   */
+  private readonly orderedBy = signal<readonly T[]>([]);
+
   /** Only what the filter leaves. Select-all acts on this, not on everything. */
-  protected readonly visible = computed(() => {
+  private readonly matching = computed(() => {
     const query = this.filter().trim().toLowerCase();
 
     if (!query) {
       return this.options();
     }
 
-    return this.options().filter((option) =>
-      option.label.toLowerCase().includes(query),
-    );
+    return this.options().filter((option) => option.label.toLowerCase().includes(query));
+  });
+
+  /** What the menu renders: filtered, then ordered per `selectionFeedback`. */
+  protected readonly visible = computed(() => {
+    const matching = this.matching();
+    const feedback = this.selectionFeedback();
+
+    if (feedback === 'fixed') {
+      return matching;
+    }
+
+    const same = this.compareWith();
+    const picked = feedback === 'top' ? this.selected() : this.orderedBy();
+
+    const isPicked = (option: MultiSelectOption<T>) =>
+      picked.some((value) => same(value, option.value));
+
+    // Two passes rather than a comparator: `Array.sort` is only stable within
+    // the spec's guarantees, and partitioning says what we mean — selected
+    // first, everything else in the order it was given, neither group reshuffled.
+    return [
+      ...matching.filter((option) => isPicked(option)),
+      ...matching.filter((option) => !isPicked(option)),
+    ];
   });
 
   private readonly selectableVisible = computed(() =>
@@ -164,10 +199,7 @@ export class MultiSelect<T> {
   protected readonly allVisibleSelected = computed(() => {
     const selectable = this.selectableVisible();
 
-    return (
-      selectable.length > 0 &&
-      selectable.every((option) => this.isSelected(option.value))
-    );
+    return selectable.length > 0 && selectable.every((option) => this.isSelected(option.value));
   });
 
   /**
@@ -207,10 +239,7 @@ export class MultiSelect<T> {
   });
 
   protected readonly hostClass = computed(() => {
-    const classes = [
-      'ds-multi-select',
-      `ds-multi-select--${this.size()}`,
-    ];
+    const classes = ['ds-multi-select', `ds-multi-select--${this.size()}`];
 
     if (this.open()) {
       classes.push('ds-multi-select--open');
@@ -247,6 +276,11 @@ export class MultiSelect<T> {
     }
 
     this.menuWidth.set(this.host.nativeElement.getBoundingClientRect().width);
+
+    // Reopening is what re-sorts, under the default. Taken before the menu is
+    // shown so the first paint is already in the new order.
+    this.orderedBy.set(this.selected());
+
     this.open.set(true);
     this.opened.emit();
   }
