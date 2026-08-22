@@ -1,16 +1,74 @@
+@use 'sass:list';
 @use 'ds' as *;
 
 // ── Overlay plumbing ────────────────────────────────────────────────────────
 // .ds-modal-panel is applied to the overlay pane by ModalService (panelClass).
 // .cdk-dialog-container is the CDK's own element — it carries role="dialog".
 
+// Carbon's modal widths are percentages that change at every breakpoint, not
+// fixed pixels — a modal is a share of the viewport, so the same dialog is
+// 60% of a laptop and 48% of a wide monitor rather than 576px of both.
+//
+// An earlier version of this file said "xs 384 / sm 512 / md 576 / lg 768" and
+// pinned one max-width. Those numbers appear nowhere in @carbon/styles; the real
+// table is below, read out of `components/modal/_modal.scss`.
+//
+//        below md    md     lg    xlg     max-height at lg
+//   xs      100%    48%    32%    24%          48%
+//   sm      100%    60%    42%    36%          72%
+//   md      100%    84%    60%    48%          84%
+//   lg      100%    96%    84%    72%          96%
+//
+// Full width below md is deliberate and shared by all four: on a phone a modal
+// is the screen.
+$-modal-widths: (
+  'xs': (
+    48%,
+    32%,
+    24%,
+    48%,
+  ),
+  'sm': (
+    60%,
+    42%,
+    36%,
+    72%,
+  ),
+  'md': (
+    84%,
+    60%,
+    48%,
+    84%,
+  ),
+  'lg': (
+    96%,
+    84%,
+    72%,
+    96%,
+  ),
+);
+
 .ds-modal-panel {
   width: 100%;
-
-  // Carbon modal widths: xs 384 / sm 512 / md 576 / lg 768. md is the default.
-  max-width: rem(576px);
   max-height: calc(100vh - #{rem(96px)});
   margin: $spacing-05;
+}
+
+@each $name, $set in $-modal-widths {
+  .ds-modal-panel--#{$name} {
+    @include breakpoint(md) {
+      width: list.nth($set, 1);
+    }
+
+    @include breakpoint(lg) {
+      width: list.nth($set, 2);
+      max-height: list.nth($set, 4);
+    }
+
+    @include breakpoint(xlg) {
+      width: list.nth($set, 3);
+    }
+  }
 }
 
 // stylelint-disable-next-line selector-class-pattern -- CDK's own container

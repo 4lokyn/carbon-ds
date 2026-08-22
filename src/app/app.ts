@@ -297,7 +297,8 @@ export class App {
 
   protected openConfirm(): void {
     this.modal
-      .open<ConfirmResult>(ConfirmModal)
+      // A one-line confirmation is what Carbon's smallest width is for.
+      .open<ConfirmResult>(ConfirmModal, { size: 'xs' })
       .closed.subscribe((result) => this.modalResult.set(result ?? 'dismissed'));
   }
 

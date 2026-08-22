@@ -18,7 +18,16 @@ let nextId = 0;
  * @angular/cdk/dialog. We supply the chrome.
  *
  * Open it through ModalService rather than placing it inline; that is what wires
- * up DialogRef.
+ * up DialogRef. Width lives there too, as `size` — it belongs to the overlay
+ * pane, which is above this component in the tree.
+ *
+ * Two of Carbon's props have no equivalent here, and deliberately so: both fall
+ * out of the footer being projected rather than configured. `passiveModal` is a
+ * modal with no footer, so it is one you did not write a `[dsModalFooter]` for.
+ * `danger` re-kinds the primary button, so it is
+ * `<button dsButton kind="danger">`. Neither has a line of CSS in
+ * `@carbon/styles` — they are React-side markup switches, and this API already
+ * exposes the markup.
  */
 @Component({
   selector: 'ds-modal',

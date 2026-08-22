@@ -3,6 +3,15 @@ import { Dialog, DialogConfig, DialogRef } from '@angular/cdk/dialog';
 import type { ComponentType } from '@angular/cdk/portal';
 
 /**
+ * Carbon's four modal widths. `md` is the default.
+ *
+ * Each is a share of the viewport rather than a pixel count, and the share
+ * changes at every breakpoint — see the table in modal.scss. Pick by how much
+ * room the content needs: `xs` for a one-line confirmation, `lg` for a table.
+ */
+export type ModalSize = 'xs' | 'sm' | 'md' | 'lg';
+
+/**
  * Thin wrapper over CDK's Dialog that pins our defaults in one place.
  *
  * The point of wrapping is not to hide the CDK — the returned DialogRef is the
@@ -13,12 +22,19 @@ import type { ComponentType } from '@angular/cdk/portal';
 export class ModalService {
   private readonly dialog = inject(Dialog);
 
+  /**
+   * `size` is here rather than on `ds-modal` because the width belongs to the
+   * overlay pane, which is the CDK's element and sits above the component in the
+   * tree. A `size` input on the modal could not reach it.
+   */
   open<R = unknown, D = unknown, C = unknown>(
     component: ComponentType<C>,
-    config?: DialogConfig<D, DialogRef<R, C>>,
+    config?: DialogConfig<D, DialogRef<R, C>> & { size?: ModalSize },
   ): DialogRef<R, C> {
+    const { size = 'md', ...dialogConfig } = config ?? {};
+
     return this.dialog.open<R, D, C>(component, {
-      panelClass: 'ds-modal-panel',
+      panelClass: ['ds-modal-panel', `ds-modal-panel--${size}`],
 
       // Carbon's spec: focus lands on the first interactive control, not on the
       // container. 'first-tabbable' is what does that.
@@ -32,7 +48,10 @@ export class ModalService {
       // (destructive confirmation, unsaved work) — pass disableClose per call.
       disableClose: false,
 
-      ...config,
+      // The rest of the caller's config, with `size` already taken out — it is
+      // ours, not the CDK's, and passing it through would leave an unknown key
+      // on DialogConfig.
+      ...dialogConfig,
     });
   }
 }
