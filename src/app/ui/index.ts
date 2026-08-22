@@ -27,6 +27,13 @@ export { Icon } from './icon/icon';
 export { type IconName } from './icon/icons';
 export { Input, type InputType } from './input/input';
 export { Link, type LinkSize } from './link/link';
+export {
+  DS_OVERFLOW_MENU,
+  OverflowMenu,
+  type OverflowMenuAlign,
+  OverflowMenuDivider,
+  OverflowMenuItem,
+} from './overflow-menu/overflow-menu';
 export { Popover } from './popover/popover';
 export {
   type PopoverAlign,

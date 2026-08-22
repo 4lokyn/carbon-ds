@@ -1099,6 +1099,46 @@
     </div>
   </section>
 
+  <!-- ── Overflow menu ───────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Overflow menu</h2>
+    <p class="demo__note">
+      Behaviour is <code>&#64;angular/aria/menu</code> — roving focus, arrow
+      keys, Home and End, type-ahead, Escape, and focus back to the trigger. We
+      wrote none of it. Open one and type "d": it jumps to Delete.
+    </p>
+
+    <div class="demo__row">
+      <ds-overflow-menu label="Row actions" (actionSelected)="lastAction.set($event)">
+        <button dsOverflowMenuItem value="stop">Stop app</button>
+        <button dsOverflowMenuItem value="restart">Restart app</button>
+        <button dsOverflowMenuItem value="rename">Rename app</button>
+        <button dsOverflowMenuItem value="clone" [disabled]="true">Clone and move</button>
+        <hr dsOverflowMenuDivider />
+        <button dsOverflowMenuItem value="delete" danger>Delete app</button>
+      </ds-overflow-menu>
+
+      <span class="demo__result">
+        last action: <code>{{ lastAction() || 'none' }}</code>
+      </span>
+    </div>
+
+    <p class="demo__note">
+      Every item is a real <code>&lt;button&gt;</code>, so Enter and Space work
+      with no help from us. The destructive one goes red on hover and focus
+      rather than at rest — a menu with a permanently red row pulls the eye
+      straight to the thing you least want clicked.
+    </p>
+
+    <p class="demo__note">
+      Like the toggletip, the panel is inline rather than in an overlay, because
+      that is how Aria drives it. So it does not flip at a viewport edge and an
+      ancestor with <code>overflow: hidden</code> will clip it — the same
+      limitation Carbon has, which they answer with a
+      <code>data-floating-menu-container</code> escape hatch.
+    </p>
+  </section>
+
   <!-- ── Breadcrumb ──────────────────────────────────────────────────────── -->
   <section class="demo__section">
     <h2 class="demo__title">Breadcrumb</h2>

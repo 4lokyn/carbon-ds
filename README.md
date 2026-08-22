@@ -52,6 +52,7 @@ npm test           # vitest, via @angular/build:unit-test
 | `MultiSelect` | count in the field, checkbox listbox, select-all, optional filter, Carbon's selection ordering |
 | `InlineNotification` | 4 statuses × high / low contrast, optional close |
 | `ToastNotification` + `NotificationService` | top-right stack, newest first, optional 5s timeout |
+| `OverflowMenu` | three-dot trigger, danger item, divider; `@angular/aria/menu` for the keyboard |
 | `Breadcrumb` | `nav` + `ol`, 2 sizes, current page, optional trailing slash |
 | `Popover` + `Tooltip` + `Toggletip` | one surface; tooltip flips in a CDK overlay, toggletip stays in the DOM for focus order |
 | `Link` | 3 sizes, standalone and inline, optional icon, disabled that stays an `<a>` |
@@ -488,7 +489,7 @@ Names that differ from Carbon's, all for a stated reason, none of them silent:
 
 ### What is left, in the order worth building it
 
-26 of Carbon's ~48 components exist. The forms are nearly complete; the system
+27 of Carbon's ~48 components exist. The forms are nearly complete; the system
 around them is not, and the gap that bites first is not a form control.
 
 **Build these before any remaining input.** Each turns up on the first real
@@ -497,7 +498,6 @@ screen anyone writes:
 | | why it comes first |
 |---|---|
 | `Tile` | Carbon's card |
-| `OverflowMenu` | row actions in the table, already listed as a table gap below |
 
 **The remaining form controls**, none of them urgent: `NumberInput` (the one
 with steppers — our `type="number"` is a passthrough and says so), `Slider`,
@@ -538,6 +538,17 @@ cd carbon-ds && npm install && npm start
 
 The branch is `main`. It started as `master` and was renamed, so a clone made
 before that will be on the wrong branch.
+
+### Not verified
+
+**The overflow menu moving focus into itself on open.** Everything else about it
+is measured — it opens and closes, `aria-expanded` follows, Escape closes and
+returns focus to the trigger, and Aria sets the roving tabindex (panel 0, items
+-1). But a synthetic keydown leaves focus on the trigger, and there is a
+plausible reason that is not a bug: the panel is hidden with `display: none`
+until Angular applies the open class, so Aria's focus call may land on an
+unfocusable element one tick early. A real keypress goes through a different
+ordering. Press ArrowDown on it in a browser before trusting it.
 
 ### Checking the responsive shell
 

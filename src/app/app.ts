@@ -4,6 +4,7 @@ import {
   type ButtonKind,
   type ButtonSize,
   DS_BREADCRUMB,
+  DS_OVERFLOW_MENU,
   DS_CHECKBOX,
   DS_TABS,
   type FieldSize,
@@ -64,6 +65,7 @@ const INITIAL_TAGS: readonly TagColor[] = ['blue', 'green', 'red', 'purple'];
     RouterLinkActive,
     RouterOutlet,
     ...DS_BREADCRUMB,
+    ...DS_OVERFLOW_MENU,
     ...DS_CHECKBOX,
     ...DS_RADIO_GROUP,
     ...DS_SHELL,
@@ -265,6 +267,8 @@ export class App {
   protected readonly emailInvalid = computed(
     () => (this.emailTouched() || this.submitted()) && !this.emailValid(),
   );
+
+  protected readonly lastAction = signal('');
 
   protected readonly filterFailing = signal(true);
   protected readonly filterRecent = signal(false);
