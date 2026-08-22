@@ -3,6 +3,7 @@ import {
   Button,
   type ButtonKind,
   type ButtonSize,
+  DS_CHECKBOX,
   DS_TABS,
   type FieldSize,
   InlineNotification,
@@ -49,6 +50,7 @@ const INITIAL_TAGS: readonly TagColor[] = ['blue', 'green', 'red', 'purple'];
     RouterLink,
     RouterLinkActive,
     RouterOutlet,
+    ...DS_CHECKBOX,
     ...DS_RADIO_GROUP,
     ...DS_SHELL,
     ...DS_TABS,
@@ -222,6 +224,25 @@ export class App {
   protected readonly emailInvalid = computed(
     () => (this.emailTouched() || this.submitted()) && !this.emailValid(),
   );
+
+  protected readonly notifyDeploys = signal(true);
+  protected readonly notifyIncidents = signal(false);
+  protected readonly notifyDigest = signal(false);
+
+  // The set is the control here, so the rule is about the set: none ticked is
+  // the invalid state, and no single box can know that on its own.
+  protected readonly notifyInvalid = computed(
+    () =>
+      !this.notifyDeploys() && !this.notifyIncidents() && !this.notifyDigest(),
+  );
+
+  protected readonly accepted = signal(false);
+  protected readonly termsSubmitted = signal(false);
+
+  protected resetTerms(): void {
+    this.accepted.set(false);
+    this.termsSubmitted.set(false);
+  }
 
   protected readonly notificationStatuses: readonly NotificationStatus[] = [
     'error',

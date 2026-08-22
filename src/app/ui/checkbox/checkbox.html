@@ -1,0 +1,33 @@
+<input
+  #input
+  class="ds-checkbox__input"
+  type="checkbox"
+  [id]="inputId"
+  [checked]="checked()"
+  [disabled]="disabled()"
+  [attr.aria-invalid]="invalid() && !group ? 'true' : null"
+  [attr.aria-readonly]="isReadOnly() ? 'true' : null"
+  [attr.aria-describedby]="describedBy()"
+  (change)="onChange($event)"
+/>
+
+<label class="ds-checkbox__label" [for]="inputId">
+  <!-- Hidden visually but still in the a11y tree, so it remains the
+       accessible name. No aria-label needed — that would only shadow it. -->
+  <span class="ds-checkbox__text" [class.ds-visually-hidden]="hideLabel()">
+    {{ label() }}
+  </span>
+</label>
+
+<!-- Standalone only. Inside a group these are empty, because the group prints
+     the one message the whole set shares. -->
+@if (message(); as text) {
+  <div class="ds-checkbox__requirement" [id]="messageId">
+    @if (statusIcon(); as icon) {
+      <ds-icon class="ds-checkbox__status" [name]="icon" />
+    }
+    <span>{{ text }}</span>
+  </div>
+} @else if (helperText() && !group) {
+  <div class="ds-checkbox__helper" [id]="helperId">{{ helperText() }}</div>
+}

@@ -2,7 +2,13 @@
 // from the component folders directly — that keeps the file layout free to change.
 
 export { Button, type ButtonKind, type ButtonSize } from './button/button';
-export { Checkbox } from './checkbox/checkbox';
+export {
+  Checkbox,
+  CheckboxGroup,
+  type CheckboxOrientation,
+  DS_CHECKBOX,
+  DS_CHECKBOX_GROUP,
+} from './checkbox/checkbox';
 export { type DateFormatter } from './date-picker/date-picker-panel';
 export {
   DatePicker,

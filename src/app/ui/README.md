@@ -41,8 +41,9 @@ application code and its classes are `demo-` / `services-`.
 
 **A component that owns real markup keeps its template in a `.html` file.** Every
 form control, plus `pagination` and `table`, is `templateUrl`. `shell`, `tabs`,
-`button`, `icon`, `tag`, `checkbox`, `modal` and the two table headers stay
-inline. The test is not a line count, it is whether the file holds one component
+`button`, `icon`, `tag`, `modal` and the two table headers stay inline. `checkbox`
+was on that list until it grew a group and a validation message; it is a form
+control with two templates now, exactly like `radio`. The test is not a line count, it is whether the file holds one component
 with a template or a family of small pieces: `shell.ts` is sixteen components and
 eight of their templates are `<ng-content />`, so extracting there would be
 sixteen files carrying one line each.

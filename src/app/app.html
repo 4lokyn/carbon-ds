@@ -621,6 +621,61 @@
     </p>
   </section>
 
+  <!-- ── Checkbox ────────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Checkbox group</h2>
+    <p class="demo__note">
+      A group, unlike a radio group, owns no value. Each box keeps its own
+      <code>checked</code>; what the group owns is the legend, the message,
+      <code>disabled</code> and <code>readOnly</code> — the things the set
+      genuinely shares.
+    </p>
+
+    <div class="demo__fields">
+      <ds-checkbox-group
+        legend="Notify me about"
+        helperText="You can change this later."
+        [invalid]="notifyInvalid()"
+        invalidText="Pick at least one."
+      >
+        <ds-checkbox label="Deploys" [(checked)]="notifyDeploys" />
+        <ds-checkbox label="Incidents" [(checked)]="notifyIncidents" />
+        <ds-checkbox label="Weekly digest" [(checked)]="notifyDigest" />
+      </ds-checkbox-group>
+
+      <ds-checkbox-group legend="Read-only set" readOnly>
+        <ds-checkbox label="Deploys" [checked]="true" />
+        <ds-checkbox label="Incidents" />
+      </ds-checkbox-group>
+    </div>
+
+    <p class="demo__note">
+      Untick all three and the group goes invalid. Note that the message appears
+      <em>once</em>, not once per box — the boxes point their
+      <code>aria-describedby</code> at the group's single message, so a screen
+      reader hears the requirement one time however long the list is.
+    </p>
+
+    <div class="demo__fields demo__fields--single">
+      <ds-checkbox
+        label="I accept the terms"
+        [(checked)]="accepted"
+        [invalid]="termsSubmitted() && !accepted()"
+        invalidText="You must accept to continue."
+      />
+    </div>
+
+    <div class="demo__row">
+      <button dsButton size="sm" (click)="termsSubmitted.set(true)">Submit</button>
+      <button dsButton kind="ghost" size="sm" (click)="resetTerms()">Reset</button>
+    </div>
+
+    <p class="demo__note">
+      A lone checkbox carries its own message instead — the standalone case
+      Carbon keeps <code>invalid</code> on the checkbox for.
+    </p>
+  </section>
+
   <!-- ── Toggle ──────────────────────────────────────────────────────────── -->
   <section class="demo__section">
     <h2 class="demo__title">Toggle</h2>

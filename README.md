@@ -38,7 +38,7 @@ npm test           # vitest, via @angular/build:unit-test
 | IBM Plex, self-hosted | 3 weights + mono, no CDN |
 | `Button` | 5 kinds × 4 sizes + icon-only, on a native `<button>` |
 | `Tag` | 10 hues, dismissible |
-| `Checkbox` | including the indeterminate state, which is why it's a component |
+| `CheckboxGroup` + `Checkbox` | legend, shared validation message, read-only; indeterminate is why it's a component |
 | `Search` | magnifier, clear button, 3 sizes, expandable variant |
 | `Input` | text / number / password, label + helper, invalid + warn, 3 sizes, fluid |
 | `Select` | native `<select>`, projected options, 3 sizes, fluid |

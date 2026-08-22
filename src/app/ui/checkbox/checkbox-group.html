@@ -1,0 +1,23 @@
+<fieldset class="ds-checkbox-group__fieldset" [disabled]="disabled()">
+  <!-- Must be the fieldset's first child to name the set. -->
+  <legend class="ds-checkbox-group__legend" [class.ds-visually-hidden]="hideLegend()">
+    {{ legend() }}
+  </legend>
+
+  <div class="ds-checkbox-group__items">
+    <ng-content />
+  </div>
+</fieldset>
+
+@if (message(); as text) {
+  <div class="ds-checkbox-group__requirement" [id]="messageId">
+    @if (statusIcon(); as icon) {
+      <ds-icon class="ds-checkbox-group__status" [name]="icon" />
+    }
+    <span>{{ text }}</span>
+  </div>
+} @else if (helperText()) {
+  <div class="ds-checkbox-group__helper" [id]="helperId">
+    {{ helperText() }}
+  </div>
+}

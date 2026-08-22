@@ -1,9 +1,95 @@
 @use 'ds' as *;
 
+// ── The group ───────────────────────────────────────────────────────────────
+//
+// Mirrors the radio group's chrome deliberately: the two sit next to each other
+// in real forms, and a legend that is 12px in one and 14px in the other is the
+// kind of difference nobody can name but everybody sees.
+
+.ds-checkbox-group {
+  display: block;
+  width: 100%;
+}
+
+// A fieldset carries a default border, padding and min-width that nothing here
+// wants; `min-width: 0` is the one that matters, because the browser default of
+// min-content stops a fieldset from ever shrinking inside a grid.
+.ds-checkbox-group__fieldset {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  margin: 0;
+}
+
+.ds-checkbox-group__legend {
+  @include field-label;
+
+  padding: 0;
+}
+
+// Carbon stacks checkboxes by default, unlike radios. A set of them is usually
+// "all that apply", which reads as a list rather than as a row of choices.
+.ds-checkbox-group__items {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: rem(6px);
+}
+
+.ds-checkbox-group--horizontal .ds-checkbox-group__items {
+  align-items: center;
+  flex-direction: row;
+  gap: $spacing-05;
+}
+
+.ds-checkbox-group__helper {
+  @include field-helper-text;
+}
+
+// Next to an icon rather than under one — a group has no field box to hang a
+// trailing icon inside.
+.ds-checkbox-group__requirement {
+  @include field-requirement;
+
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-02;
+}
+
+.ds-checkbox-group--invalid .ds-checkbox-group__requirement {
+  @include field-requirement-invalid;
+}
+
+.ds-checkbox-group__status {
+  flex-shrink: 0;
+
+  // Nudged down onto the text's baseline: the message is helper-text-01, whose
+  // line box is shorter than the 16px glyph.
+  margin-block-start: rem(1px);
+}
+
+.ds-checkbox-group--invalid .ds-checkbox-group__status {
+  @include field-status-icon-invalid;
+}
+
+.ds-checkbox-group--warn .ds-checkbox-group__status {
+  @include field-status-icon-warn;
+}
+
+.ds-checkbox-group--disabled .ds-checkbox-group__legend,
+.ds-checkbox-group--disabled .ds-checkbox-group__helper {
+  color: $text-disabled;
+}
+
+// ── One checkbox ────────────────────────────────────────────────────────────
+
 .ds-checkbox {
   position: relative;
   display: flex;
   align-items: flex-start;
+
+  // The message, when there is one, belongs on its own line under the label.
+  flex-wrap: wrap;
 }
 
 // The real input stays in the DOM — it owns the semantics, the tab order and the
@@ -111,6 +197,72 @@
 .ds-checkbox__input:disabled:indeterminate + .ds-checkbox__label::before {
   border-color: $icon-disabled;
   background-color: $icon-disabled;
+}
+
+// ── Invalid / warn / read-only, standalone ──────────────────────────────────
+//
+// A checkbox inside a group never carries these: the group draws one message for
+// the whole set, and the box borders follow it there.
+
+.ds-checkbox--invalid .ds-checkbox__label::before,
+.ds-checkbox-group--invalid .ds-checkbox__label::before {
+  border-color: $support-error;
+}
+
+// Both messages line up with the label text rather than the box, so a wrapped
+// message does not start under the tick.
+.ds-checkbox__helper,
+.ds-checkbox__requirement {
+  flex-basis: 100%;
+  padding-left: rem(24px);
+}
+
+.ds-checkbox__helper {
+  @include field-helper-text;
+}
+
+.ds-checkbox__requirement {
+  @include field-requirement;
+
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-02;
+}
+
+.ds-checkbox--invalid .ds-checkbox__requirement {
+  @include field-requirement-invalid;
+}
+
+.ds-checkbox__status {
+  flex-shrink: 0;
+  margin-block-start: rem(1px);
+}
+
+.ds-checkbox--invalid .ds-checkbox__status {
+  @include field-status-icon-invalid;
+}
+
+.ds-checkbox--warn .ds-checkbox__status {
+  @include field-status-icon-warn;
+}
+
+// Read-only. The input stays enabled — see checkbox.ts for why — so this is
+// only a look, and the change handler is what actually refuses the toggle.
+.ds-checkbox--readonly,
+.ds-checkbox-group--readonly {
+  .ds-checkbox__label {
+    cursor: default;
+  }
+
+  .ds-checkbox__label::before {
+    border-color: $icon-disabled;
+  }
+
+  // Read-only content is still content — let people select it.
+  .ds-checkbox__text {
+    cursor: text;
+    user-select: text;
+  }
 }
 
 // Label-less variant, for table cells. Shrinks the hit area to the box and drops
