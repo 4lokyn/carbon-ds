@@ -113,6 +113,12 @@ export class Loading {
  * `checkmark-filled` glyph the rest of the system uses, without the draw-on —
  * `Icon` fills paths with `currentColor` and has no concept of stroke, and a
  * second icon mechanism for one flourish is a bad trade.
+ *
+ * Carbon also has `successDelay` and `onSuccess`: it holds `finished` for 1.5s
+ * and then calls back, so the caller can tear the loader down. That is a timer
+ * the caller already owns — it is the same code that set `finished` in the first
+ * place — and putting it in here would mean a component that changes its own
+ * status behind the caller's back. Left out on purpose.
  */
 @Component({
   selector: 'ds-inline-loading',

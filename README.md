@@ -50,6 +50,7 @@ npm test           # vitest, via @angular/build:unit-test
 | `MultiSelect` | count in the field, checkbox listbox, select-all, optional filter, Carbon's selection ordering |
 | `InlineNotification` | 4 statuses × high / low contrast, optional close |
 | `ToastNotification` + `NotificationService` | top-right stack, newest first, optional 5s timeout |
+| `Link` | 3 sizes, standalone and inline, optional icon, disabled that stays an `<a>` |
 | `Loading` + `InlineLoading` | 88/16px ring; inline reports finished and error, not just busy |
 | `Icon` | Carbon paths inlined; no `@carbon/icons-angular` |
 | `Tabs` | line and contained, 3 sizes, full width; `@angular/aria` for behavior |
@@ -145,6 +146,10 @@ Checked in the browser and locked into tests, not inferred:
   variant swaps the ring for a tick in `$support-success` or a cross in
   `$support-error`, goes assertive only on failure, and nests no second live
   region inside its own.
+- The link's three sizes come out at Carbon's specified 16 / 18 / 22px heights
+  without anything setting a height — they fall out of the type tokens, measured
+  at 15.98 / 18 / 22. Its icon is 16px at sm and md, 20px at lg. Disabled stays
+  an `<a>` with `aria-disabled`, keeps its href, and cancels the click.
 - The grid's arithmetic, measured at 1915px: 16 tracks, `span 4` renders 220px,
   `span 8` 440px, `span 16` 880px, and each column carries 16px of padding —
   half the 32px gutter, applied as padding rather than `gap` so a column's
@@ -473,15 +478,14 @@ Names that differ from Carbon's, all for a stated reason, none of them silent:
 
 ### What is left, in the order worth building it
 
-21 of Carbon's ~48 components exist. The forms are nearly complete; the system
+22 of Carbon's ~48 components exist. The forms are nearly complete; the system
 around them is not, and the gap that bites first is not a form control.
 
-**Build these before any remaining input.** Three of the four turn up on the first
-real screen anyone writes:
+**Build these before any remaining input.** All three turn up on the first real
+screen anyone writes:
 
 | | why it comes first |
 |---|---|
-| `Link` | a styled `<a>`; small, and used everywhere |
 | `Tooltip` | `Toggletip` and `Popover` share its mechanics, so one job opens three |
 | `Breadcrumb` | sits above the page title in Carbon's own shell reference |
 | `Tile` | Carbon's card |

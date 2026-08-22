@@ -1099,6 +1099,42 @@
     </div>
   </section>
 
+  <!-- ── Link ────────────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Link</h2>
+    <p class="demo__note">
+      An attribute on a native <code>&lt;a&gt;</code>, the same trade the button
+      makes — real navigation, middle-click, the target in the status bar, and
+      announced as a link. None of that survives on a <code>&lt;span&gt;</code>.
+    </p>
+
+    <div class="demo__row">
+      <a dsLink href="#link" size="sm">Small</a>
+      <a dsLink href="#link">Default</a>
+      <a dsLink href="#link" size="lg">Large</a>
+      <a dsLink href="#link" icon="arrow-up">With an icon</a>
+      <a dsLink href="#link" visited>Visited style on</a>
+      <a dsLink href="#link" disabled>Disabled</a>
+    </div>
+
+    <p class="demo__note">
+      The decision worth making is standalone versus inline. Those above are
+      standalone — underlined only on hover, because nothing around them competes
+      for the eye. In a sentence it is the other way round:
+      <a dsLink inline href="#link">this link is underlined at rest</a>, because
+      colour alone is not a reliable signal that something is clickable, and for
+      a colour-blind reader it is no signal at all.
+    </p>
+
+    <p class="demo__note">
+      Disabled keeps the <code>&lt;a&gt;</code> and marks it
+      <code>aria-disabled</code> rather than swapping it for a
+      <code>&lt;p&gt;</code> the way Carbon React does — a paragraph is not in
+      the accessibility tree as a link at all, so a screen reader user is never
+      told the thing exists. Tab to it and it still announces, as unavailable.
+    </p>
+  </section>
+
   <!-- ── Loading ─────────────────────────────────────────────────────────── -->
   <section class="demo__section">
     <h2 class="demo__title">Loading</h2>
