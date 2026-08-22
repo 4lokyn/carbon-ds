@@ -5,17 +5,69 @@
 // as a map, so the pairing has to be written out. The upside is that background,
 // text, border and hover are guaranteed to be a contrast-checked set — never mix
 // a background from one hue with text from another.
+//
+//   1. background   2. text   3. hover   4. border (operational only)
 $-palette: (
-  'gray': ($tag-background-gray, $tag-color-gray, $tag-hover-gray),
-  'cool-gray': ($tag-background-cool-gray, $tag-color-cool-gray, $tag-hover-cool-gray),
-  'warm-gray': ($tag-background-warm-gray, $tag-color-warm-gray, $tag-hover-warm-gray),
-  'red': ($tag-background-red, $tag-color-red, $tag-hover-red),
-  'magenta': ($tag-background-magenta, $tag-color-magenta, $tag-hover-magenta),
-  'purple': ($tag-background-purple, $tag-color-purple, $tag-hover-purple),
-  'blue': ($tag-background-blue, $tag-color-blue, $tag-hover-blue),
-  'cyan': ($tag-background-cyan, $tag-color-cyan, $tag-hover-cyan),
-  'teal': ($tag-background-teal, $tag-color-teal, $tag-hover-teal),
-  'green': ($tag-background-green, $tag-color-green, $tag-hover-green),
+  'gray': (
+    $tag-background-gray,
+    $tag-color-gray,
+    $tag-hover-gray,
+    $tag-border-gray,
+  ),
+  'cool-gray': (
+    $tag-background-cool-gray,
+    $tag-color-cool-gray,
+    $tag-hover-cool-gray,
+    $tag-border-cool-gray,
+  ),
+  'warm-gray': (
+    $tag-background-warm-gray,
+    $tag-color-warm-gray,
+    $tag-hover-warm-gray,
+    $tag-border-warm-gray,
+  ),
+  'red': (
+    $tag-background-red,
+    $tag-color-red,
+    $tag-hover-red,
+    $tag-border-red,
+  ),
+  'magenta': (
+    $tag-background-magenta,
+    $tag-color-magenta,
+    $tag-hover-magenta,
+    $tag-border-magenta,
+  ),
+  'purple': (
+    $tag-background-purple,
+    $tag-color-purple,
+    $tag-hover-purple,
+    $tag-border-purple,
+  ),
+  'blue': (
+    $tag-background-blue,
+    $tag-color-blue,
+    $tag-hover-blue,
+    $tag-border-blue,
+  ),
+  'cyan': (
+    $tag-background-cyan,
+    $tag-color-cyan,
+    $tag-hover-cyan,
+    $tag-border-cyan,
+  ),
+  'teal': (
+    $tag-background-teal,
+    $tag-color-teal,
+    $tag-hover-teal,
+    $tag-border-teal,
+  ),
+  'green': (
+    $tag-background-green,
+    $tag-color-green,
+    $tag-hover-green,
+    $tag-border-green,
+  ),
 );
 
 $-heights: (
@@ -63,6 +115,82 @@ $-heights: (
 
 .ds-tag__label {
   @include truncate;
+}
+
+.ds-tag__icon {
+  margin-right: rem(4px);
+
+  svg {
+    width: rem(12px);
+    height: rem(12px);
+  }
+}
+
+.ds-tag--lg .ds-tag__icon svg {
+  width: rem(16px);
+  height: rem(16px);
+}
+
+// ── Interactive ─────────────────────────────────────────────────────────────
+//
+// A native <button>, so the reset is here rather than a role and a tabindex.
+
+.ds-tag--interactive {
+  @include unstyled-button;
+  @include truncate;
+
+  display: inline-flex;
+  align-items: center;
+
+  &:focus {
+    outline: rem(2px) solid $focus;
+
+    // Outside, not inset. A tag is 18–32px tall and fully rounded; an inset ring
+    // follows the pill inwards and eats the label.
+    outline-offset: rem(1px);
+  }
+}
+
+// Selectable: one look, no hue. A chip that is both blue and selected has two
+// things saying "picked" and neither wins.
+.ds-tag--selectable {
+  border: rem(1px) solid $border-inverse;
+  background-color: $layer-01;
+  color: $text-primary;
+
+  &:hover {
+    background-color: $layer-hover-01;
+  }
+}
+
+.ds-tag--selected {
+  border-color: transparent;
+  background-color: $layer-selected-inverse;
+  color: $text-inverse;
+
+  &:hover {
+    background-color: $layer-selected-inverse;
+  }
+}
+
+// Operational keeps the palette and gains a border — it is a tag you can press,
+// and the border is what says so before you hover it.
+@each $name, $set in $-palette {
+  .ds-tag--operational.ds-tag--#{$name} {
+    border: rem(1px) solid list.nth($set, 4);
+
+    &:hover {
+      background-color: list.nth($set, 3);
+    }
+  }
+}
+
+.ds-tag--disabled {
+  border-color: transparent;
+  background-color: $layer-01;
+  color: $text-disabled;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .ds-tag__close {

@@ -20,7 +20,7 @@ import {
   DS_SHELL,
   Search,
   Select,
-  Tag,
+  DS_TAG,
   type TagColor,
   Textarea,
   ThemeService,
@@ -43,8 +43,8 @@ const INITIAL_TAGS: readonly TagColor[] = ['blue', 'green', 'red', 'purple'];
     MultiSelect,
     Search,
     Select,
-    Tag,
     Textarea,
+    ...DS_TAG,
     Toggle,
     ServicesTable,
     RouterLink,
@@ -233,6 +233,26 @@ export class App {
   protected readonly emailInvalid = computed(
     () => (this.emailTouched() || this.submitted()) && !this.emailValid(),
   );
+
+  protected readonly regions: readonly string[] = [
+    'us-south',
+    'eu-de',
+    'jp-tok',
+  ];
+
+  protected readonly selectedRegions = signal<readonly string[]>([]);
+
+  protected isRegionOn(region: string): boolean {
+    return this.selectedRegions().includes(region);
+  }
+
+  protected toggleRegion(region: string): void {
+    this.selectedRegions.update((current) =>
+      current.includes(region)
+        ? current.filter((r) => r !== region)
+        : [...current, region],
+    );
+  }
 
   protected readonly notifyDeploys = signal(true);
   protected readonly notifyIncidents = signal(false);

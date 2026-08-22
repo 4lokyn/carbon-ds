@@ -240,6 +240,33 @@
         <button dsButton kind="ghost" size="sm" (click)="resetTags()">Reset</button>
       }
     </div>
+
+    <p class="demo__note">
+      A tag you can click is a <code>&lt;button&gt;</code>, not a span with a
+      role — the same split the button makes. Selectable takes no hue on purpose:
+      a chip that is both blue and selected has two things saying "picked".
+    </p>
+
+    <div class="demo__row">
+      @for (region of regions; track region) {
+        <button dsTag selectable [selected]="isRegionOn(region)" (toggled)="toggleRegion(region)">
+          {{ region }}
+        </button>
+      }
+
+      <span class="demo__result">
+        matching: <code>{{ selectedRegions().length || 'all' }}</code>
+      </span>
+    </div>
+
+    <div class="demo__row">
+      <button dsTag color="teal" icon="settings" (click)="openConfirm()">
+        operational, opens something
+      </button>
+
+      <ds-tag color="purple" icon="calendar">with an icon</ds-tag>
+      <ds-tag color="red" disabled>disabled</ds-tag>
+    </div>
   </section>
 
   <!-- ── Search ──────────────────────────────────────────────────────────── -->

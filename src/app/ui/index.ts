@@ -81,7 +81,13 @@ export {
   type SortDirection,
   type TableSize,
 } from './table/table-types';
-export { Tag, type TagColor, type TagSize } from './tag/tag';
+export {
+  DS_TAG,
+  InteractiveTag,
+  Tag,
+  type TagColor,
+  type TagSize,
+} from './tag/tag';
 export { Textarea } from './textarea/textarea';
 export { Toggle, type ToggleSize } from './toggle/toggle';
 export { type CarbonTheme, ThemeService } from './theme/theme.service';
