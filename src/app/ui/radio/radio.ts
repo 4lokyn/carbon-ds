@@ -17,6 +17,16 @@ let nextRadioId = 0;
 export type RadioOrientation = 'horizontal' | 'vertical';
 
 /**
+ * Which side of the control the option's text sits on.
+ *
+ * `right` reads as a list and is the default everywhere. `left` exists for the
+ * one layout it suits: a vertical group whose options are right-aligned against
+ * a column of values, where left-hand text would leave a ragged gutter between
+ * the label and the thing it labels.
+ */
+export type RadioLabelPosition = 'right' | 'left';
+
+/**
  * Carbon radio group, on native `<input type="radio">` inside a `<fieldset>`.
  *
  * Almost all of the behavior here is the browser's, and that is the point. Give
@@ -43,6 +53,10 @@ export class RadioGroup {
 
   readonly value = model('');
   readonly orientation = input<RadioOrientation>('horizontal');
+
+  /** See `RadioLabelPosition`. Set on the group, so a set cannot end up mixed. */
+  readonly labelPosition = input<RadioLabelPosition>('right');
+
   readonly helperText = input('');
 
   readonly disabled = input(false, { transform: booleanAttribute });
@@ -96,7 +110,11 @@ export class RadioGroup {
   });
 
   protected readonly hostClass = computed(() => {
-    const classes = ['ds-radio-group', `ds-radio-group--${this.orientation()}`];
+    const classes = [
+      'ds-radio-group',
+      `ds-radio-group--${this.orientation()}`,
+      `ds-radio-group--label-${this.labelPosition()}`,
+    ];
 
     if (this.invalid()) {
       classes.push('ds-radio-group--invalid');

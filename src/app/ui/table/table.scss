@@ -32,6 +32,13 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
   background-color: $layer-01;
 }
 
+// `auto` rather than `max-content`: the table still shrinks when the container
+// is narrower than its content, which max-content would refuse to do — and a
+// table that overflows its panel is worse than one that wraps.
+.ds-table--static-width {
+  width: auto;
+}
+
 // ── Head ────────────────────────────────────────────────────────────────────
 
 .ds-table__head {

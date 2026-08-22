@@ -73,6 +73,16 @@ export class Table<T> {
 
   readonly stickyHeader = input(false, { transform: booleanAttribute });
 
+  /**
+   * Sizes the table to its content instead of to its container.
+   *
+   * The default — full width — is right almost always: a table is usually a
+   * page's main content and should use the room it is given. This is for the
+   * case where it is not: two or three narrow columns inside a wide panel, where
+   * stretching leaves a metre of empty cell between the last value and the edge.
+   */
+  readonly staticWidth = input(false, { transform: booleanAttribute });
+
   readonly loading = input(false, { transform: booleanAttribute });
   readonly skeletonRows = input(5);
 
@@ -127,6 +137,10 @@ export class Table<T> {
 
     if (this.zebra()) {
       classes.push('ds-table--zebra');
+    }
+
+    if (this.staticWidth()) {
+      classes.push('ds-table--static-width');
     }
 
     return classes.join(' ');

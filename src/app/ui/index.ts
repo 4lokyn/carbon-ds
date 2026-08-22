@@ -44,6 +44,7 @@ export {
   DS_RADIO_GROUP,
   Radio,
   RadioGroup,
+  type RadioLabelPosition,
   type RadioOrientation,
 } from './radio/radio';
 export { Search } from './search/search';

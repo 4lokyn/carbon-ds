@@ -69,6 +69,19 @@
   @include type-style('body-compact-01');
 }
 
+// Label on the left. `row-reverse` moves the ring, but `margin-inline` is
+// logical and does not follow it — the 2/10 gutter has to be swapped by hand or
+// the text ends up 2px from the circle and 10px from nothing.
+.ds-radio-group--label-left {
+  .ds-radio__label {
+    flex-direction: row-reverse;
+  }
+
+  .ds-radio__appearance {
+    margin-inline: rem(10px) rem(2px);
+  }
+}
+
 // The dot: the same circle scaled to half, not a second sized element. Scaling
 // means it stays centred and proportional if the 18px ever changes.
 .ds-radio__input:checked + .ds-radio__label .ds-radio__appearance {
