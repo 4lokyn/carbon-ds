@@ -16,6 +16,10 @@
       </ds-shell-nav-menu>
     </nav>
 
+    <!-- Carbon's rule for this row: left-to-right is product-to-global, and the
+         utilities are "reserved for universal, system-level functions such as
+         profile, search, notifications, and similar". A preference belongs; four
+         raw theme buttons did not, and they used to live here. -->
     <div dsShellActions>
       <button dsShellAction icon="search" label="Search"></button>
       <button
@@ -23,30 +27,17 @@
         icon="switcher"
         activeIcon="close"
         label="Switch sites"
-        [active]="panelOpen()"
-        (click)="panelOpen.set(!panelOpen())"
+        [active]="shellPanel() === 'switcher'"
+        (click)="togglePanel('switcher')"
       ></button>
       <button
         dsShellAction
         icon="settings"
+        activeIcon="close"
         label="Settings"
         [active]="shellPanel() === 'settings'"
-        (click)="shellPanel.set(shellPanel() === 'settings' ? null : 'settings')"
+        (click)="togglePanel('settings')"
       ></button>
-
-      <span class="demo-bar__themes">
-        @for (name of theme.available; track name) {
-          <button
-            dsButton
-            size="sm"
-            [kind]="theme.theme() === name ? 'primary' : 'ghost'"
-            [attr.aria-pressed]="theme.theme() === name"
-            (click)="theme.set(name)"
-          >
-            {{ name }}
-          </button>
-        }
-      </span>
     </div>
   </ds-shell-header>
 
@@ -85,22 +76,45 @@
 
   <ds-shell-overlay />
 
-  <ds-shell-panel class="ds-theme-inverse" [(expanded)]="panelOpen">
-    <ds-shell-panel-section label="Foundations">
-      <a dsShellLink href="#">IBM Brand Center</a>
-      <a dsShellLink href="#">IBM Design Language</a>
-    </ds-shell-panel-section>
+  <!-- One panel, two contents. Two panels would both be fixed to the same right
+       edge and could open on top of each other. -->
+  <ds-shell-panel class="ds-theme-inverse" [expanded]="shellPanel() !== null">
+    @if (shellPanel() === 'switcher') {
+      <ds-shell-panel-section label="Foundations">
+        <a dsShellLink href="#">IBM Brand Center</a>
+        <a dsShellLink href="#">IBM Design Language</a>
+      </ds-shell-panel-section>
 
-    <ds-shell-panel-section label="Implementation">
-      <a dsShellLink href="#">Carbon Design System</a>
-      <a dsShellLink href="#">Carbon for IBM Products</a>
-      <a dsShellLink href="#">Carbon for Cloud</a>
-    </ds-shell-panel-section>
+      <ds-shell-panel-section label="Implementation">
+        <a dsShellLink href="#">Carbon Design System</a>
+        <a dsShellLink href="#">Carbon for IBM Products</a>
+        <a dsShellLink href="#">Carbon for Cloud</a>
+      </ds-shell-panel-section>
 
-    <ds-shell-panel-section label="Practices">
-      <a dsShellLink href="#">IBM Accessibility</a>
-      <a dsShellLink href="#">IBM Design Research</a>
-    </ds-shell-panel-section>
+      <ds-shell-panel-section label="Practices">
+        <a dsShellLink href="#">IBM Accessibility</a>
+        <a dsShellLink href="#">IBM Design Research</a>
+      </ds-shell-panel-section>
+    }
+
+    @if (shellPanel() === 'settings') {
+      <ds-shell-panel-section label="Appearance">
+        <!-- A radio group, because it is one choice out of four — and with names
+             a person can read. `g10` is a token, not a label. -->
+        <div class="demo-panel__field">
+          <ds-radio-group
+            legend="Theme"
+            orientation="vertical"
+            [value]="theme.theme()"
+            (selected)="theme.set($any($event))"
+          >
+            @for (option of themeOptions; track option.value) {
+              <ds-radio [label]="option.label" [value]="option.value" />
+            }
+          </ds-radio-group>
+        </div>
+      </ds-shell-panel-section>
+    }
   </ds-shell-panel>
 
   <ds-shell-content withSideNav>
@@ -112,9 +126,9 @@
       No <code>carbon-components-angular</code> anywhere. The design language
       comes from <code>&#64;carbon/styles</code> as Sass; behavior comes from
       <code>&#64;angular/aria</code> and <code>&#64;angular/cdk</code>; the markup
-      and the class names are ours. Switch themes above — nothing recompiles,
-      only the <code>data-theme</code> attribute on <code>&lt;html&gt;</code>
-      changes.
+      and the class names are ours. Change the theme under the gear in the
+      header — nothing recompiles, only the <code>data-theme</code> attribute on
+      <code>&lt;html&gt;</code> changes.
     </p>
   </section>
 

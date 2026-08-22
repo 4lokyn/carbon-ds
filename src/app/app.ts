@@ -23,6 +23,7 @@ import {
   DS_TAG,
   type TagColor,
   Textarea,
+  type CarbonTheme,
   ThemeService,
   Toggle,
 } from './ui';
@@ -112,8 +113,25 @@ export class App {
   ];
 
   protected readonly formsOpen = signal(true);
-  protected readonly shellPanel = signal<string | null>(null);
-  protected readonly panelOpen = signal(false);
+
+  /** Which content the one right-hand panel is showing, or `null` for closed. */
+  protected readonly shellPanel = signal<'switcher' | 'settings' | null>(null);
+
+  protected togglePanel(which: 'switcher' | 'settings'): void {
+    this.shellPanel.update((open) => (open === which ? null : which));
+  }
+
+  // Token names are not labels. `g10` says nothing to anyone who has not read
+  // Carbon's theme docs, which is everyone using the product.
+  protected readonly themeOptions: readonly {
+    value: CarbonTheme;
+    label: string;
+  }[] = [
+    { value: 'white', label: 'White' },
+    { value: 'g10', label: 'Gray 10' },
+    { value: 'g90', label: 'Gray 90' },
+    { value: 'g100', label: 'Gray 100' },
+  ];
 
   protected readonly fieldSizes: readonly FieldSize[] = ['sm', 'md', 'lg'];
 

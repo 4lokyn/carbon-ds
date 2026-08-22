@@ -3,20 +3,10 @@
 // Demo page layout only. Prefixed `demo-` so it never gets mistaken for part of
 // the design system — everything in ui/ is prefixed `ds-`.
 
-// The page header is ds-shell now. All that is left is spacing for the theme
-// switcher inside the shell's action area.
-//
-// `display: flex` is load-bearing, not tidiness. This is a <span>, so without it
-// the element is `inline`, `gap` does nothing, and the four theme buttons wrap
-// like words — which they did, breaking out of the 48px header onto a second
-// line as soon as the window got narrow enough. `flex-shrink: 0` keeps them from
-// being squeezed instead once the header runs out of room.
-.demo-bar__themes {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-  gap: $spacing-02;
-  padding-inline-end: $spacing-03;
+// The theme control lives in the shell's settings panel now, not loose in the
+// header. A form control inside a panel section needs the section's own inset.
+.demo-panel__field {
+  padding: $spacing-05;
 }
 
 .demo {
