@@ -8,6 +8,12 @@ import {
 } from '@angular/core';
 import { Tab, TabList, TabPanel, Tabs } from '@angular/aria/tabs';
 
+/** Carbon's two tab styles. See `variant` on `DsTabs`. */
+export type TabsVariant = 'line' | 'contained';
+
+/** 32 / 40 / 48px. `line` defaults to md, `contained` to lg. */
+export type TabsSize = 'sm' | 'md' | 'lg';
+
 /**
  * Carbon-styled tabs on top of @angular/aria.
  *
@@ -24,12 +30,6 @@ import { Tab, TabList, TabPanel, Tabs } from '@angular/aria/tabs';
  * NOTE: Aria is @developerPreview as of v21. The API can still shift between
  * minors. It is contained to these four classes on purpose.
  */
-/** Carbon's two tab styles. See `contained` on `DsTabs`. */
-export type TabsVariant = 'line' | 'contained';
-
-/** 32 / 40 / 48px. `line` defaults to md, `contained` to lg. */
-export type TabsSize = 'sm' | 'md' | 'lg';
-
 @Component({
   selector: '[dsTabs]',
   encapsulation: ViewEncapsulation.None,

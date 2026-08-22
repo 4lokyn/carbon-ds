@@ -135,12 +135,25 @@ $-heights: (
 //
 // A native <button>, so the reset is here rather than a role and a tabindex.
 
+// Written out rather than `@include unstyled-button`, and that is not style
+// preference. The mixin zeroes `padding` and `border`, and it lands *after* the
+// size loop and the variant blocks at identical specificity — so it won the
+// cascade and took both away: the label sat hard against the pill edge, and the
+// borders that say "this one is pressable" never drew. Reset only what a button
+// brings that a tag does not want.
 .ds-tag--interactive {
-  @include unstyled-button;
   @include truncate;
 
   display: inline-flex;
   align-items: center;
+  margin: 0 rem(2px);
+  appearance: none;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  text-align: inherit;
+
+  @include type-style('label-01');
 
   &:focus {
     outline: rem(2px) solid $focus;
