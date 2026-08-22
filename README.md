@@ -509,32 +509,34 @@ themes.
 ### On a different machine
 
 ```bash
-git clone git@github.com:4lokyn/carbon-ds.git
+git clone https://github.com/4lokyn/carbon-ds.git
 cd carbon-ds && npm install && npm start
-```
-
-The remote is **SSH, not HTTPS**, and that is deliberate: GitHub stopped taking
-account passwords, so an HTTPS remote needs a personal access token that nothing
-on a fresh machine has. SSH needs the machine's public key added under
-*Settings → SSH and GPG keys*:
-
-```bash
-cat ~/.ssh/id_ed25519.pub    # create one with ssh-keygen -t ed25519 if absent
-ssh -T git@github.com        # should greet you by username
 ```
 
 The branch is `main`. It started as `master` and was renamed, so a clone made
 before that will be on the wrong branch.
 
-### Not verified
+### Checking the responsive shell
 
-Worth knowing before trusting it in an application: **the shell's responsive
-behaviour has not been checked in a browser.** The hamburger appearing below
-`lg`, the header nav appearing from `lg` up, and the side nav collapsing to an
-overlay are all media queries, and jsdom does not evaluate those — a unit test
-covering them would assert nothing while looking like it asserted something, so
-none was written. Everything else in the shell is measured, in both light and
-dark. Narrow a window and check that first.
+There is still no test for it, and there should not be a fake one: the hamburger
+below `lg`, the header nav from `lg` up, and the side nav collapsing to an
+overlay are all media queries, and jsdom does not evaluate those. A unit test
+here would assert nothing while looking like it asserted something.
+
+It is checked by hand instead, and the way to do it is to **narrow a real window
+past 1056px** (`lg` is 66rem) and walk the four states:
+
+1. the hamburger appears and the header nav disappears,
+2. the side nav collapses to nothing and the content runs full width,
+3. the hamburger swings the nav out *over* the content, with a scrim behind it,
+4. clicking the scrim closes it again.
+
+Verified that way on 2026-08-22, all four. Above `lg`, measured: header nav
+shown, hamburger hidden, side nav 256px, content inset by the same 256px.
+
+**Do not try to fake the viewport.** Driving this from an injected iframe
+produced confident, wrong numbers — the nav reporting 0px wide while a
+screenshot of the same moment showed it open. Resize the window.
 
 ## Version notes
 
