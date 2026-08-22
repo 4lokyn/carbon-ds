@@ -19,7 +19,9 @@ stalls or changes its API, nothing here breaks — the only Carbon artifact in t
 build is compiled CSS plus some inlined icon paths.
 
 New here? **`USAGE.md`** is the developer guide — how to import, the one rule for
-form validation, and a worked example of each area. This file is the *why*.
+form validation, and a worked example of each area. This file is the *why*, and
+**`TODO.md`** is the platform backlog: renaming, packaging, the Angular 22 bump
+and the things that are decisions rather than tickets.
 
 ## Running it
 
@@ -508,6 +510,10 @@ with the page, never dismisses, no live region). See the note above.
 
 - **Table extras:** column resize/reorder, row overflow menu, CSV export, and
   virtual scroll for very large pages (`@angular/cdk/scrolling`).
+
+Everything that is not a component — the `ds-` rename, the library split, the
+Angular 22 bump, whether to vendor Carbon's tokens locally — is in `TODO.md`.
+Two of those are cheapest right now and get worse with every component added.
 
 ## Picking this up cold
 
