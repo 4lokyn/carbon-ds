@@ -1,0 +1,107 @@
+@use 'ds' as *;
+
+// Carbon's caret is 12 wide and 6 deep. Ours is a square rotated 45°, so the
+// side that produces a 12-wide diamond is 12 / √2 ≈ 8.49 — which also gives the
+// 6 of depth, because half of a rotated square's diagonal is its depth.
+$-caret: rem(8.49px);
+
+// ── The panel ───────────────────────────────────────────────────────────────
+//
+// The drop-shadow is a `filter` on this element rather than a `box-shadow` on
+// the content, and that is the one non-obvious thing in this file. A box-shadow
+// draws a rectangle, so the caret would either sit outside the shadow or cast a
+// second one along its own square edges. `filter: drop-shadow()` follows the
+// painted shape — content and caret together — so the two read as one piece of
+// paper. Carbon has an entire intermediate element for exactly this reason.
+.ds-popover {
+  position: relative;
+  display: block;
+  filter: drop-shadow(0 rem(2px) rem(2px) rgb(0 0 0 / 20%));
+}
+
+.ds-popover__content {
+  position: relative;
+  border: rem(1px) solid $border-subtle-01;
+  background-color: $layer-01;
+  color: $text-primary;
+
+  // 2px, not 0. Carbon's popover is the one surface that is not perfectly
+  // square — it reads as something laid on top of the page rather than cut out
+  // of it.
+  border-radius: rem(2px);
+
+  @include type-style('body-compact-01');
+}
+
+// ── The caret ───────────────────────────────────────────────────────────────
+//
+// A rotated square with the panel's own border and background, pushed half out
+// from under the content so only the outer half shows. The content's own
+// background covers the inner half, which is what hides the seam.
+
+.ds-popover__caret {
+  position: absolute;
+  z-index: 1;
+  width: $-caret;
+  height: $-caret;
+  border: rem(1px) solid $border-subtle-01;
+  background-color: $layer-01;
+  transform: rotate(45deg);
+
+  // Stops a hairline appearing between the caret and the panel when the two
+  // land on subpixel boundaries.
+  will-change: transform;
+}
+
+// The caret sits on the side of the panel facing the trigger, which is the
+// opposite of the side the panel was placed on: a panel below its trigger wears
+// its caret on top.
+.ds-popover--bottom .ds-popover__caret {
+  top: calc(#{$-caret} / -2);
+  left: 50%;
+  margin-left: calc(#{$-caret} / -2);
+}
+
+.ds-popover--top .ds-popover__caret {
+  bottom: calc(#{$-caret} / -2);
+  left: 50%;
+  margin-left: calc(#{$-caret} / -2);
+}
+
+.ds-popover--right .ds-popover__caret {
+  top: 50%;
+  left: calc(#{$-caret} / -2);
+  margin-top: calc(#{$-caret} / -2);
+}
+
+.ds-popover--left .ds-popover__caret {
+  top: 50%;
+  right: calc(#{$-caret} / -2);
+  margin-top: calc(#{$-caret} / -2);
+}
+
+// ── High contrast ───────────────────────────────────────────────────────────
+//
+// The inverse surface, which is what a tooltip uses: a tooltip is glanced at,
+// and inverting it separates it from the page without a heavier shadow.
+
+.ds-popover--high-contrast {
+  .ds-popover__content {
+    border-color: transparent;
+    background-color: $background-inverse;
+    color: $text-inverse;
+  }
+
+  .ds-popover__caret {
+    border-color: transparent;
+    background-color: $background-inverse;
+  }
+}
+// ── Tooltip ─────────────────────────────────────────────────────────────────
+
+.ds-tooltip__text {
+  max-width: rem(288px);
+  padding: $spacing-03 $spacing-04;
+
+  @include type-style('body-compact-01');
+}

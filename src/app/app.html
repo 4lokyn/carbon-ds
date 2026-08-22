@@ -1099,6 +1099,39 @@
     </div>
   </section>
 
+  <!-- ── Tooltip ─────────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Tooltip</h2>
+    <p class="demo__note">
+      An attribute, because a tooltip is something a control <em>has</em> rather
+      than something that wraps it. Hover or Tab to any of these. It is wired as
+      <code>aria-describedby</code>, never <code>aria-labelledby</code> — an
+      icon-only button still needs its own <code>aria-label</code>, because a
+      name that only exists on hover is not a name.
+    </p>
+
+    <div class="demo__row">
+      <button dsButton kind="tertiary" dsTooltip="Sits below by default">Bottom</button>
+      <button dsButton kind="tertiary" dsTooltip="Above the trigger" tooltipAlign="top">Top</button>
+      <button dsButton kind="tertiary" dsTooltip="Beside it" tooltipAlign="right">Right</button>
+      <button
+        dsButton
+        kind="tertiary"
+        dsTooltip="No wait before showing"
+        [tooltipEnterDelay]="0"
+      >
+        No delay
+      </button>
+    </div>
+
+    <p class="demo__note">
+      The caret follows the panel. Push the window narrow enough that the
+      <em>Right</em> one has no room and the CDK flips it — the caret moves to
+      the other side with it, because a caret that keeps pointing at where the
+      trigger used to be is worse than no caret.
+    </p>
+  </section>
+
   <!-- ── Link ────────────────────────────────────────────────────────────── -->
   <section class="demo__section">
     <h2 class="demo__title">Link</h2>

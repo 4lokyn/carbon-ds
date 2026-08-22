@@ -21,6 +21,13 @@ export { Icon } from './icon/icon';
 export { type IconName } from './icon/icons';
 export { Input, type InputType } from './input/input';
 export { Link, type LinkSize } from './link/link';
+export { Popover } from './popover/popover';
+export {
+  type PopoverAlign,
+  type PopoverAlignment,
+  type PopoverSide,
+} from './popover/popover-position';
+export { Tooltip } from './popover/tooltip';
 export {
   DS_LOADING,
   InlineLoading,
