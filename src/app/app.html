@@ -1132,6 +1132,52 @@
     </p>
   </section>
 
+  <!-- ── Toggletip ───────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Toggletip</h2>
+    <p class="demo__note">
+      Carbon draws the line clearly: a tooltip is hover or focus and never
+      interactive; a toggletip is click or Enter and exists <em>so that</em>
+      something inside it can be operated. Open one and press Tab — focus goes
+      into the panel, not past it.
+    </p>
+
+    <div class="demo__row">
+      <ds-toggletip align="bottom">
+        <button dsToggletipButton dsButton kind="tertiary" size="sm">Filter</button>
+
+        <p>Show only the rows that match:</p>
+
+        <ds-checkbox label="Failing" [(checked)]="filterFailing" />
+        <ds-checkbox label="Recently changed" [(checked)]="filterRecent" />
+
+        <!-- Carbon's action row: a quiet link at one end, the real action at
+             the other. `space-between`, not a gap. -->
+        <div class="ds-toggletip__actions">
+          <a dsLink href="#toggletip">Learn more</a>
+          <button dsButton size="sm">Apply</button>
+        </div>
+      </ds-toggletip>
+
+      <ds-toggletip align="right">
+        <button dsToggletipButton dsButton kind="ghost" size="sm">To the right</button>
+        <p>Placed beside the trigger instead of below it.</p>
+      </ds-toggletip>
+
+      <span class="demo__result">
+        filters on: <code>{{ (filterFailing() ? 1 : 0) + (filterRecent() ? 1 : 0) }}</code>
+      </span>
+    </div>
+
+    <p class="demo__note">
+      This one is <em>not</em> in an overlay, unlike the tooltip above — and that
+      is the trade. Carbon requires a toggletip to maintain focus order, and the
+      CDK's overlay moves its panel to the end of the document, so Tab would skip
+      the content it just opened. Keeping the panel in place costs the flip at a
+      viewport edge; Carbon's own toggletip pays the same price.
+    </p>
+  </section>
+
   <!-- ── Link ────────────────────────────────────────────────────────────── -->
   <section class="demo__section">
     <h2 class="demo__title">Link</h2>

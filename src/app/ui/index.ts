@@ -27,6 +27,12 @@ export {
   type PopoverAlignment,
   type PopoverSide,
 } from './popover/popover-position';
+export {
+  DS_TOGGLETIP,
+  DS_TOGGLETIP_PARTS,
+  Toggletip,
+  ToggletipButton,
+} from './popover/toggletip';
 export { Tooltip } from './popover/tooltip';
 export {
   DS_LOADING,

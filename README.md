@@ -52,6 +52,7 @@ npm test           # vitest, via @angular/build:unit-test
 | `MultiSelect` | count in the field, checkbox listbox, select-all, optional filter, Carbon's selection ordering |
 | `InlineNotification` | 4 statuses × high / low contrast, optional close |
 | `ToastNotification` + `NotificationService` | top-right stack, newest first, optional 5s timeout |
+| `Popover` + `Tooltip` + `Toggletip` | one surface; tooltip flips in a CDK overlay, toggletip stays in the DOM for focus order |
 | `Link` | 3 sizes, standalone and inline, optional icon, disabled that stays an `<a>` |
 | `Loading` + `InlineLoading` | 88/16px ring; inline reports finished and error, not just busy |
 | `Icon` | Carbon paths inlined; no `@carbon/icons-angular` |
@@ -152,6 +153,12 @@ Checked in the browser and locked into tests, not inferred:
   without anything setting a height — they fall out of the type tokens, measured
   at 15.98 / 18 / 22. Its icon is 16px at sm and md, 20px at lg. Disabled stays
   an `<a>` with `aria-disabled`, keeps its href, and cancels the click.
+- The tooltip sits 10px off its trigger and centres on it to the pixel, and its
+  caret follows whichever side the CDK settled on rather than the one asked for.
+  The toggletip's panel is the next focusable thing after its own trigger —
+  measured, because that is the property a CDK overlay would have silently
+  broken. Escape closes it and returns focus; an outside click closes it and
+  does not; a click inside leaves it open.
 - The grid's arithmetic, measured at 1915px: 16 tracks, `span 4` renders 220px,
   `span 8` 440px, `span 16` 880px, and each column carries 16px of padding —
   half the 32px gutter, applied as padding rather than `gap` so a column's
@@ -480,15 +487,14 @@ Names that differ from Carbon's, all for a stated reason, none of them silent:
 
 ### What is left, in the order worth building it
 
-22 of Carbon's ~48 components exist. The forms are nearly complete; the system
+25 of Carbon's ~48 components exist. The forms are nearly complete; the system
 around them is not, and the gap that bites first is not a form control.
 
-**Build these before any remaining input.** All four turn up on the first real
+**Build these before any remaining input.** Both turn up on the first real
 screen anyone writes:
 
 | | why it comes first |
 |---|---|
-| `Tooltip` | counts as one row and is really three: `Toggletip` and `Popover` share its positioning and dismissal, so one job opens all of them |
 | `Breadcrumb` | sits above the page title in Carbon's own shell reference |
 | `Tile` | Carbon's card |
 | `OverflowMenu` | row actions in the table, already listed as a table gap below |

@@ -27,6 +27,7 @@ import {
   DS_TAG,
   type TagColor,
   Textarea,
+  DS_TOGGLETIP_PARTS,
   Tooltip,
   type CarbonTheme,
   ThemeService,
@@ -53,6 +54,7 @@ const INITIAL_TAGS: readonly TagColor[] = ['blue', 'green', 'red', 'purple'];
     Search,
     Select,
     Textarea,
+    ...DS_TOGGLETIP_PARTS,
     Tooltip,
     ...DS_TAG,
     Toggle,
@@ -261,6 +263,9 @@ export class App {
   protected readonly emailInvalid = computed(
     () => (this.emailTouched() || this.submitted()) && !this.emailValid(),
   );
+
+  protected readonly filterFailing = signal(true);
+  protected readonly filterRecent = signal(false);
 
   protected readonly deployStatus = signal<InlineLoadingStatus | null>(null);
   protected readonly deploying = computed(() => this.deployStatus() === 'active');

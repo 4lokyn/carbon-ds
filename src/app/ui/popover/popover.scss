@@ -105,3 +105,117 @@ $-caret: rem(8.49px);
 
   @include type-style('body-compact-01');
 }
+
+// ── Toggletip ───────────────────────────────────────────────────────────────
+//
+// Positioned in CSS rather than by the CDK, because this panel stays in the DOM
+// next to its trigger so that Tab reaches it — see the note in toggletip.ts.
+
+.ds-toggletip {
+  position: relative;
+  display: inline-flex;
+}
+
+.ds-toggletip__panel {
+  position: absolute;
+  z-index: 10;
+}
+
+.ds-toggletip__content {
+  min-width: rem(240px);
+  max-width: rem(320px);
+  padding: $spacing-05;
+}
+
+// Placed off the trigger's edge. 13px is Carbon's own `popover-offset` for a
+// toggletip — three more than the tooltip's, because this panel is heavier.
+.ds-toggletip--bottom .ds-toggletip__panel {
+  top: calc(100% + #{rem(13px)});
+}
+
+.ds-toggletip--top .ds-toggletip__panel {
+  bottom: calc(100% + #{rem(13px)});
+}
+
+.ds-toggletip--right .ds-toggletip__panel {
+  top: 50%;
+  left: calc(100% + #{rem(13px)});
+  transform: translateY(-50%);
+}
+
+.ds-toggletip--left .ds-toggletip__panel {
+  top: 50%;
+  right: calc(100% + #{rem(13px)});
+  transform: translateY(-50%);
+}
+
+// Alignment along the edge, for the vertical sides only — `start` and `end`
+// slide the panel so its edge lines up with the trigger's rather than its
+// centre. The caret stays centred on the panel, which is Carbon's behaviour.
+.ds-toggletip--bottom.ds-toggletip--center .ds-toggletip__panel,
+.ds-toggletip--top.ds-toggletip--center .ds-toggletip__panel {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.ds-toggletip--bottom.ds-toggletip--start .ds-toggletip__panel,
+.ds-toggletip--top.ds-toggletip--start .ds-toggletip__panel {
+  left: 0;
+}
+
+.ds-toggletip--bottom.ds-toggletip--end .ds-toggletip__panel,
+.ds-toggletip--top.ds-toggletip--end .ds-toggletip__panel {
+  right: 0;
+}
+
+// The action row Carbon puts at the foot of a toggletip: `space-between`, so a
+// quiet link sits at one end and the real action at the other.
+.ds-toggletip__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: $spacing-05;
+  margin-block-start: $spacing-05;
+}
+
+// Everything inside takes the inverse palette, because the surface is inverted.
+// This is what gave the dark panel away in Carbon's Sass: it reaches for
+// `$link-inverse` and `$focus-inverse`, which only make sense on one ground.
+//
+// The controls need saying explicitly. A checkbox label is `$text-primary`,
+// which is near-black — correct on a layer, invisible on this. Caught by eye in
+// the browser, because every one of these components tests fine on its own.
+.ds-toggletip__panel {
+  .ds-checkbox__label,
+  .ds-radio__label,
+  .ds-checkbox__text,
+  p {
+    color: $text-inverse;
+  }
+
+  .ds-checkbox__label::before {
+    border-color: $icon-inverse;
+  }
+
+  .ds-checkbox__input:checked + .ds-checkbox__label::before {
+    border-color: $icon-inverse;
+    background-color: $icon-inverse;
+  }
+
+  .ds-checkbox__label::after {
+    border-color: $background-inverse;
+  }
+
+  .ds-link {
+    color: $link-inverse;
+  }
+
+  .ds-link:hover,
+  .ds-link:visited:hover {
+    color: $link-inverse-hover;
+  }
+
+  .ds-link:focus {
+    outline-color: $focus-inverse;
+  }
+}
