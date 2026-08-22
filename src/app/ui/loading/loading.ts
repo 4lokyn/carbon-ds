@@ -28,10 +28,20 @@ const STATUS_ICON: Record<'finished' | 'error', IconName> = {
  * reads as a broken circle rather than as progress.
  *
  * `withOverlay` is on by default, and that is Carbon's default rather than a
- * choice made here. It is worth knowing before reaching for this: a bare
- * `<ds-loading />` covers the entire viewport and blocks the page. That is right
- * for the thing it is for — a route that cannot be interacted with until it has
- * loaded — and wrong for everything smaller, where `ds-inline-loading` belongs.
+ * choice made here. Know what it does before reaching for it: a bare
+ * `<ds-loading />` covers the entire viewport and blocks the page.
+ *
+ * Carbon's own guidance is to reach for it rarely. Two rules from the usage
+ * page, neither obvious from the API:
+ *
+ * - **Only past three seconds.** Below that the indicator is more disruptive
+ *   than the wait.
+ * - **For a full-screen load, prefer a skeleton.** `ds-table` already has one,
+ *   and a skeleton shows the shape of what is coming where a spinner shows
+ *   nothing. The overlay is for a section that is genuinely blocked — a form
+ *   mid-submit — rather than for a page that is merely still arriving.
+ *
+ * And never more than one at a time on a screen.
  */
 @Component({
   selector: 'ds-loading',

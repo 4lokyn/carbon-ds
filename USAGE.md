@@ -190,6 +190,51 @@ the primary action until the requirements are met. Long forms should not — the
 error and the button may not be on screen together, and a button disabled for an
 invisible reason looks broken. Always disable it on submit, to stop a duplicate.
 
+## Loading
+
+```html
+<!-- blocks the page: overlay is on by default -->
+<ds-loading description="Loading the dashboard" />
+
+<!-- in a button row, and it reports the end as well as the middle -->
+<ds-inline-loading [status]="status()" [description]="text()" />
+```
+
+**Three rules, all Carbon's, none of them visible in the API:**
+
+- **Only past three seconds.** Below that the indicator is more disruptive than
+  the wait.
+- **For a full-screen load, prefer a skeleton.** `ds-table` has one. A skeleton
+  shows the shape of what is arriving; a spinner shows nothing. Keep the overlay
+  for a section that is genuinely blocked — a form mid-submit — not for a page
+  that is merely still coming.
+- **One at a time.** Several spinners on one screen read as a broken page.
+
+`ds-inline-loading` is the one you will reach for most, and it is not a small
+spinner: `finished` and `error` swap the ring for an icon and leave the text
+saying what happened. A spinner that just disappears says nothing about whether
+the thing worked.
+
+Carbon's `successDelay` / `onSuccess` are deliberately absent — that timer
+belongs to the code that set `finished` in the first place.
+
+## Link
+
+```html
+<a dsLink href="/docs">Carbon docs</a>
+<a dsLink inline href="/docs">inside a sentence</a>
+<a dsLink href="/docs" icon="arrow-up" size="lg">With an icon</a>
+```
+
+**Standalone or inline is the decision.** Standalone sits on its own and is
+underlined on hover. Inline sits in a sentence and is underlined always, because
+colour alone does not say "clickable" — and to a colour-blind reader it says
+nothing at all.
+
+`disabled` keeps the `<a>` and marks it `aria-disabled`, rather than swapping the
+element the way Carbon React does. `visited` is opt-in; leave it off unless
+"have I read this?" is a question worth answering on that screen.
+
 ## Notification
 
 Two variants of the same four statuses (`error`, `success`, `warning`, `info`).
