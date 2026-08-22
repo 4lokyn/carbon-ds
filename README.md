@@ -52,6 +52,7 @@ npm test           # vitest, via @angular/build:unit-test
 | `MultiSelect` | count in the field, checkbox listbox, select-all, optional filter, Carbon's selection ordering |
 | `InlineNotification` | 4 statuses × high / low contrast, optional close |
 | `ToastNotification` + `NotificationService` | top-right stack, newest first, optional 5s timeout |
+| `Breadcrumb` | `nav` + `ol`, 2 sizes, current page, optional trailing slash |
 | `Popover` + `Tooltip` + `Toggletip` | one surface; tooltip flips in a CDK overlay, toggletip stays in the DOM for focus order |
 | `Link` | 3 sizes, standalone and inline, optional icon, disabled that stays an `<a>` |
 | `Loading` + `InlineLoading` | 88/16px ring; inline reports finished and error, not just busy |
@@ -487,7 +488,7 @@ Names that differ from Carbon's, all for a stated reason, none of them silent:
 
 ### What is left, in the order worth building it
 
-25 of Carbon's ~48 components exist. The forms are nearly complete; the system
+26 of Carbon's ~48 components exist. The forms are nearly complete; the system
 around them is not, and the gap that bites first is not a form control.
 
 **Build these before any remaining input.** Each turns up on the first real
@@ -495,7 +496,6 @@ screen anyone writes:
 
 | | why it comes first |
 |---|---|
-| `Breadcrumb` | sits above the page title in Carbon's own shell reference |
 | `Tile` | Carbon's card |
 | `OverflowMenu` | row actions in the table, already listed as a table gap below |
 

@@ -3,6 +3,12 @@
 
 export { Button, type ButtonKind, type ButtonSize } from './button/button';
 export {
+  Breadcrumb,
+  BreadcrumbItem,
+  type BreadcrumbSize,
+  DS_BREADCRUMB,
+} from './breadcrumb/breadcrumb';
+export {
   Checkbox,
   CheckboxGroup,
   type CheckboxOrientation,

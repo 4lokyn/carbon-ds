@@ -1099,6 +1099,46 @@
     </div>
   </section>
 
+  <!-- ── Breadcrumb ──────────────────────────────────────────────────────── -->
+  <section class="demo__section">
+    <h2 class="demo__title">Breadcrumb</h2>
+    <p class="demo__note">
+      A <code>&lt;nav&gt;</code> around an <code>&lt;ol&gt;</code>, and the items
+      are real <code>&lt;li&gt;</code> elements projected into it. That is not
+      decoration: a screen reader announces "navigation, list, 3 items" and can
+      jump straight to it. The <code>/</code> is a CSS
+      <code>::after</code>, so it is never read aloud — the list carries the
+      structure instead.
+    </p>
+
+    <div class="demo__stack">
+      <ds-breadcrumb noTrailingSlash>
+        <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Home</a></li>
+        <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Clusters</a></li>
+        <li dsBreadcrumbItem current>carbon-prod-01</li>
+      </ds-breadcrumb>
+
+      <ds-breadcrumb size="sm" noTrailingSlash>
+        <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Home</a></li>
+        <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Clusters</a></li>
+        <li dsBreadcrumbItem current>carbon-prod-01</li>
+      </ds-breadcrumb>
+
+      <ds-breadcrumb>
+        <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Home</a></li>
+        <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Clusters</a></li>
+      </ds-breadcrumb>
+    </div>
+
+    <p class="demo__note">
+      The third leaves Carbon's default on, which keeps a slash after the last
+      crumb — pointing at a level that does not exist. Carbon's own examples all
+      switch it off. The default here matches Carbon rather than its examples, so
+      a port behaves the same, but set <code>noTrailingSlash</code> almost
+      everywhere.
+    </p>
+  </section>
+
   <!-- ── Tooltip ─────────────────────────────────────────────────────────── -->
   <section class="demo__section">
     <h2 class="demo__title">Tooltip</h2>

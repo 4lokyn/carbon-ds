@@ -1,0 +1,83 @@
+@use 'ds' as *;
+
+.ds-breadcrumb-host {
+  display: block;
+}
+
+.ds-breadcrumb {
+  @include unstyled-list;
+  @include type-style('body-compact-01');
+
+  // Inline below md so a long trail wraps as text rather than as a row that
+  // overflows. From md it is a flex row that can wrap on its own terms.
+  display: inline;
+
+  @include breakpoint(md) {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+.ds-breadcrumb--sm {
+  @include type-style('label-01');
+}
+
+.ds-breadcrumb-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-inline-end: $spacing-03;
+}
+
+// The separator. A CSS `content`, so it is decoration a screen reader never
+// reads — the `<ol>` is what conveys the structure.
+.ds-breadcrumb-item::after {
+  color: $text-primary;
+  content: '/';
+  margin-inline-start: $spacing-03;
+}
+
+.ds-breadcrumb--sm .ds-breadcrumb-item {
+  margin-inline-end: $spacing-02;
+}
+
+.ds-breadcrumb--sm .ds-breadcrumb-item::after {
+  margin-inline-start: $spacing-02;
+}
+
+.ds-breadcrumb--no-trailing-slash .ds-breadcrumb-item:last-child::after {
+  content: '';
+  margin-inline-start: 0;
+}
+
+.ds-breadcrumb-item:last-child,
+.ds-breadcrumb-item:last-child::after {
+  margin-inline-end: 0;
+}
+
+// Links take the breadcrumb's type rather than their own, so a `sm` trail is
+// small all the way through.
+.ds-breadcrumb .ds-link {
+  font: inherit;
+  white-space: nowrap;
+}
+
+// Pressed goes to text colour, which is Carbon's: for the instant you are on it,
+// the crumb reads as the place rather than as the way there.
+.ds-breadcrumb-item .ds-link:active,
+.ds-breadcrumb-item .ds-link:visited:active {
+  color: $text-primary;
+}
+
+// The current page. Not a link, and styled so it does not look like one even if
+// the caller wraps it in one anyway.
+.ds-breadcrumb-item--current,
+.ds-breadcrumb-item--current .ds-link,
+.ds-breadcrumb-item [aria-current='page'] {
+  color: $text-primary;
+  cursor: auto;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
