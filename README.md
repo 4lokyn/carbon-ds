@@ -36,27 +36,27 @@ npm test           # vitest, via @angular/build:unit-test
 | Sass facade over Carbon (`src/styles/_ds.scss`) | one import point, so the token source is swappable |
 | 4 themes: white / g10 / g90 / g100 | runtime switch via `data-theme`, no recompile |
 | IBM Plex, self-hosted | 3 weights + mono, no CDN |
-| `Button` | 5 kinds × 4 sizes + icon-only, on a native `<button>` |
-| `Tag` | 10 hues, dismissible |
+| `Button` | 7 kinds × 6 sizes + icon-only, on a native `<button>` |
+| `Tag` + `InteractiveTag` | 10 hues, dismissible, icon; selectable and operational on a real `<button>` |
 | `CheckboxGroup` + `Checkbox` | legend, shared validation message, read-only; indeterminate is why it's a component |
 | `Search` | magnifier, clear button, 3 sizes, expandable variant |
-| `Input` | text / number / password, label + helper, invalid + warn, 3 sizes, fluid |
-| `Select` | native `<select>`, projected options, 3 sizes, fluid |
+| `Input` | text / number / password, label + helper, invalid + warn, 3 sizes, fluid, inline |
+| `Select` | native `<select>`, projected options, 3 sizes, fluid, inline |
 | `Textarea` | `rows`, optional character counter, fluid |
 | `RadioGroup` + `Radio` | native radios in a `<fieldset>`, horizontal / vertical |
 | `Toggle` | `<button role="switch">`, 2 sizes, custom state text |
 | `DatePicker` | calendar popover, typeable field, min/max, disabled days |
 | `DateRangePicker` | one field, both ends, shared calendar |
-| `MultiSelect` | count in the field, checkbox listbox, select-all, optional filter |
+| `MultiSelect` | count in the field, checkbox listbox, select-all, optional filter, Carbon's selection ordering |
 | `InlineNotification` | 4 statuses × high / low contrast, optional close |
 | `ToastNotification` + `NotificationService` | top-right stack, newest first, optional 5s timeout |
 | `Icon` | Carbon paths inlined; no `@carbon/icons-angular` |
-| `Tabs` | `@angular/aria` for behavior, ours for looks |
-| `Modal` | `@angular/cdk/dialog` for focus trap / Escape / restore focus |
+| `Tabs` | line and contained, 3 sizes, full width; `@angular/aria` for behavior |
+| `Modal` | 4 widths; `@angular/cdk/dialog` for focus trap / Escape / restore focus |
 | **`Table`** | config-driven columns, tri-state sort, keyed selection, expansion, skeleton, empty state |
 | `TableHeader` | title + description above the toolbar |
 | `TableToolbar` | switches to a batch action bar while rows are selected |
-| `Pagination` | page size, range, page select, prev/next |
+| `Pagination` | page size, range, page select, prev/next, unknown totals, 3 sizes |
 | **UI Shell** | header, nav + dropdown, side nav with groups, right panel, content |
 | **Grid** | Carbon's 2x grid, 16/8/4 columns, 3 modes, aspect ratios |
 | `ThemeService` | signal-based, persisted to localStorage |
@@ -106,7 +106,9 @@ Checked in the browser and locked into tests, not inferred:
   wheel scroll closes it, and `min` + `dateDisabled` leave exactly the August
   2026 weekdays enabled. The range picker fills one field with
   `2026-08-13 – 2026-08-15` and stays open between the two picks.
-- The pagination chevrons really are centred: 12px on both sides. They were 13/12
+- The pagination chevrons really are centred: 12px on both sides at `md`, and the
+  gutter now follows the size — 8px at `sm`, 16px at `lg`, since the nav button is
+  square. They were 13/12
   before — a real `border-inline-start` comes out of the 40px content box under
   `box-sizing: border-box`, so a 16px icon centres in 39px. Carbon has the same
   border and the same 1px drift; ours draws the divider as a pseudo-element
@@ -287,6 +289,22 @@ The control has no part in this. `invalid` is a plain input on `ds-input`, the w
 it is a plain prop in Carbon React, and `(blurred)` is the hook the policy hangs
 off — a control cannot see a submit it is not part of.
 
+**Server-side errors get an inline notification as well.** Carbon is explicit:
+"use an inline notification as well as inline error messaging wherever possible".
+The two are not alternatives. The field says *which* input is wrong; the
+notification says the submission failed at all, which is the part a user who has
+scrolled past the field cannot otherwise see. Put it at the top of the form, and
+keep the per-field errors.
+
+**The submit button has its own rules, and they split by form length:**
+
+- **Short forms** that only find out on the server: disable the primary action
+  until the form's requirements are met.
+- **Long forms:** do *not*. The error and the button may not be on screen at the
+  same time, and a button that is disabled for a reason you cannot see is
+  indistinguishable from one that is broken.
+- **Always** disable on submit, to stop a second one going out.
+
 **Does the label belong to the control or to a wrapper?** To the control:
 `<ds-input label="…" helperText="…">`. This is Carbon's own API shape
 (`labelText` / `helperText` / `invalidText` all live on the component), and it
@@ -421,6 +439,29 @@ up when the boxes were measured:
   ui/README.md for the two things that had to differ from Carbon's own markup.
 - ~~**The grid system.**~~ Built on our own class names rather than by including
   Carbon's — see the deviations below.
+
+### Narrower than Carbon on purpose
+
+Audited against Carbon's own MCP server on 2026-08-22, component by component.
+Most of what it found has since been built; what follows is what was left out
+*deliberately*, written down for the reason the audit existed — so the next
+person can tell a decision from an oversight.
+
+| | why not |
+|---|---|
+| `Notification` — `info-square`, `warning-alt` | Alternate icon treatments, not statuses. Carbon documents four statuses and we have four. |
+| `Notification` — Actionable, Callout | Actionable traps focus and is an `alertdialog`; Callout loads with the page and has no live region. Both are different components wearing the same paint. On the queue below. |
+| `Tabs` — `dismissable` | Carbon puts a close button *inside* the tab. Aria owns the keyboard here, and a second focusable control inside a roving-focus item needs its own answer for how it is reached. Worth doing properly or not at all. |
+| `Modal` — `danger`, `passiveModal` | Neither has any CSS in `@carbon/styles`; both are React markup switches. Our footer is projected, so they are `kind="danger"` and "do not write a footer". |
+| `Search`, `MultiSelect` | Carbon splits each into two components (`ExpandableSearch`, `FilterableMultiSelect`). One component with a flag here — a composition choice, not a missing feature. |
+| `Button` — `isExpressive`, `badgeCount` | Not needed yet, and `badgeCount` wants the notification badge that does not exist. |
+| `Tabs`, `Table` — vertical tabs, column resize/reorder | Real gaps rather than decisions. Below. |
+
+Names that differ from Carbon's, all for a stated reason, none of them silent:
+`heading` for `title` (a static `title` leaves a native tooltip), `status` for
+`kind`, `showCounter`/`maxLength` for `enableCounter`/`maxCount`,
+`offLabel`/`onLabel` for `labelA`/`labelB`, and `total: number | null` for
+`totalItems` + `pagesUnknown`.
 
 ### What is left, in the order worth building it
 

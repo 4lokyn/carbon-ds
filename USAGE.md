@@ -165,6 +165,31 @@ can see. `demo/services-table.ts` is the worked example.
 Do not combine `zebra` with `selectable`: the stripe and the selected background
 are the same token in every Carbon theme.
 
+### The form's own errors
+
+Field-level messages cover *which* input is wrong. They do not cover the
+submission failing, which is why Carbon asks for both:
+
+```html
+@if (submitFailed()) {
+  <ds-inline-notification
+    status="error"
+    lowContrast
+    heading="Could not create the cluster"
+    subtitle="The region rejected the request. Check the quota and try again."
+  />
+}
+```
+
+At the top of the form, above the fields, and the per-field errors stay. A user
+who has scrolled past the offending field has nothing else to tell them the
+submit did not go through.
+
+**Submit buttons.** Short forms that only validate on the server should disable
+the primary action until the requirements are met. Long forms should not — the
+error and the button may not be on screen together, and a button disabled for an
+invisible reason looks broken. Always disable it on submit, to stop a duplicate.
+
 ## Notification
 
 Two variants of the same four statuses (`error`, `success`, `warning`, `info`).

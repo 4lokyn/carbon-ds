@@ -340,13 +340,28 @@ export class App {
     this.removable.set(INITIAL_TAGS);
   }
 
+  // Stands in for a server that rejects the second attempt, so the demo can show
+  // the pairing Carbon asks for: the field's own error, and an inline
+  // notification saying the submission itself failed.
+  protected readonly submitFailed = signal(false);
+  private attempts = 0;
+
   protected submitForm(): void {
     this.submitted.set(true);
+
+    if (this.emailInvalid()) {
+      return;
+    }
+
+    this.attempts += 1;
+    this.submitFailed.set(this.attempts > 1);
   }
 
   protected resetForm(): void {
     this.email.set('');
     this.emailTouched.set(false);
     this.submitted.set(false);
+    this.submitFailed.set(false);
+    this.attempts = 0;
   }
 }

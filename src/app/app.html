@@ -924,6 +924,22 @@
       part of.
     </p>
 
+    <!-- Carbon: "use an inline notification as well as inline error messaging
+         wherever possible". The field says which input is wrong; this says the
+         submission failed at all — the part a user who scrolled past the field
+         cannot otherwise see. -->
+    @if (submitFailed()) {
+      <div class="demo__stack">
+        <ds-inline-notification
+          status="error"
+          lowContrast
+          heading="Could not create the cluster"
+          subtitle="eu-west rejected the request: the vCPU quota is already spent."
+          (closed)="submitFailed.set(false)"
+        />
+      </div>
+    }
+
     <div class="demo__fields demo__fields--single">
       <ds-input
         label="Email"
@@ -943,10 +959,16 @@
 
       <button dsButton kind="ghost" (click)="resetForm()">Reset</button>
 
-      @if (submitted() && !emailInvalid()) {
+      @if (submitted() && !emailInvalid() && !submitFailed()) {
         <span class="demo__result">submitted with: <code>{{ email() }}</code></span>
       }
     </div>
+
+    <p class="demo__note">
+      Submit a valid address twice: the second one comes back as a server error.
+      Note that the field's own message is untouched — the two say different
+      things, and Carbon asks for both rather than one instead of the other.
+    </p>
   </section>
 
   <!-- ── Data table ──────────────────────────────────────────────────────── -->
