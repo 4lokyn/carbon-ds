@@ -561,6 +561,56 @@ the way the table's selection does.
 640px — `padding-inline-end: 25%` — because it is written for prose. A grid of
 fields wants that room back.
 
+## Menu buttons
+
+Three components, one behaviour. Carbon documents the menu button, the combo
+button and the overflow menu as a single component, and here they are one too:
+all three extend `MenuSurface`, which owns the roving focus, the arrows, Home and
+End, type-ahead, Escape and the focus return. Pick by the trigger.
+
+```html
+<!-- A word that names what the actions are about. -->
+<nine-am-menu-button label="Export" kind="tertiary" (actionSelected)="run($event)">
+  <button nineAmMenuItem value="csv">Export as CSV</button>
+  <button nineAmMenuItem value="json">Export as JSON</button>
+  <hr nineAmMenuDivider />
+  <button nineAmMenuItem value="purge" danger>Delete export history</button>
+</nine-am-menu-button>
+
+<!-- One action performed directly, the rest behind the chevron. -->
+<nine-am-combo-button label="Deploy" (primaryAction)="deploy()" (actionSelected)="run($event)">
+  <button nineAmMenuItem value="dry-run">Dry run</button>
+</nine-am-combo-button>
+
+<!-- Three dots, for a row or a toolbar with no room for a word. -->
+<nine-am-overflow-menu label="Row actions" (actionSelected)="run($event)">
+  <button nineAmMenuItem value="stop">Stop app</button>
+</nine-am-overflow-menu>
+```
+
+**Items are the caller's own `<button>` elements**, so Enter and Space work with
+no help from us and the thing is a button to every assistive technology. Two
+handler idioms, because both are wanted: `(actionSelected)` on the menu reports
+the chosen `value` in one place, and `(selected)` on an item handles that action
+alone.
+
+**A combo button is two tab stops.** That is Carbon's accessibility spec, not a
+shortcut: the primary action has to be reachable without opening anything, and
+one control cannot both perform an action and offer a list of others. It is also
+primary-only — Carbon allows any kind on a menu button and only a primary on a
+combo button, so there is no `kind` to get wrong.
+
+**Item labels are one line and cut with an ellipsis**, which is Carbon's design
+— its `.cds--menu-item__label` is `nowrap` with `text-overflow: ellipsis`, and
+the item's fixed height follows from that. The panel grows from 10rem to 18rem to
+fit the longest action before anything is cut, and every item carries its own
+text as a `title` so a truncated action is still readable.
+
+**The panel is inline, not in an overlay.** No flip away from a viewport edge,
+and an ancestor with `overflow: hidden` will clip it — the same limitation Carbon
+has, which it answers with a `data-floating-menu-container` escape hatch. Inside
+a table, give the scrolling ancestor room.
+
 ## Shell
 
 Composed, not configured. Every piece is optional — an app with no side nav

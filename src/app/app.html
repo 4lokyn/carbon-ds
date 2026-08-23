@@ -1088,12 +1088,12 @@
 
         <div class="demo__row">
           <nine-am-overflow-menu label="Row actions" (actionSelected)="lastAction.set($event)">
-            <button nineAmOverflowMenuItem value="stop">Stop app</button>
-            <button nineAmOverflowMenuItem value="restart">Restart app</button>
-            <button nineAmOverflowMenuItem value="rename">Rename app</button>
-            <button nineAmOverflowMenuItem value="clone" [disabled]="true">Clone and move</button>
-            <hr nineAmOverflowMenuDivider />
-            <button nineAmOverflowMenuItem value="delete" danger>Delete app</button>
+            <button nineAmMenuItem value="stop">Stop app</button>
+            <button nineAmMenuItem value="restart">Restart app</button>
+            <button nineAmMenuItem value="rename">Rename app</button>
+            <button nineAmMenuItem value="clone" [disabled]="true">Clone and move</button>
+            <hr nineAmMenuDivider />
+            <button nineAmMenuItem value="delete" danger>Delete app</button>
           </nine-am-overflow-menu>
 
           <span class="demo__result">
@@ -1108,10 +1108,59 @@
         </p>
 
         <p class="demo__note">
-          Like the toggletip, the panel is inline rather than in an overlay, because that is how
-          Aria drives it. So it does not flip at a viewport edge and an ancestor with
+          Like the toggletip, the panel is inline rather than in an overlay. So it does not flip at
+          a viewport edge and an ancestor with
           <code>overflow: hidden</code> will clip it — the same limitation Carbon has, which they
           answer with a <code>data-floating-menu-container</code> escape hatch.
+        </p>
+      </section>
+
+      <!-- ── Menu buttons ────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Menu button and combo button</h2>
+        <p class="demo__note">
+          Carbon documents these and the overflow menu above as one component, "menu buttons", and
+          here they are one too: all three extend <code>MenuSurface</code>, which owns the roving
+          focus, the arrows, Home and End, type-ahead, Escape and the focus return. They differ only
+          in what the user presses to get there.
+        </p>
+
+        <div class="demo__row">
+          <nine-am-menu-button
+            label="Export"
+            kind="tertiary"
+            (actionSelected)="menuAction.set($event)"
+          >
+            <button nineAmMenuItem value="csv">Export as CSV</button>
+            <button nineAmMenuItem value="json">Export as JSON</button>
+            <button nineAmMenuItem value="pdf" [disabled]="true">Export as PDF</button>
+            <hr nineAmMenuDivider />
+            <button nineAmMenuItem value="purge" danger>Delete export history</button>
+          </nine-am-menu-button>
+
+          <nine-am-combo-button
+            label="Deploy"
+            menuLabel="Other deploy actions"
+            (primaryAction)="menuAction.set('deploy')"
+            (actionSelected)="menuAction.set($event)"
+          >
+            <button nineAmMenuItem value="dry-run">Dry run</button>
+            <button nineAmMenuItem value="rollback">Roll back</button>
+            <hr nineAmMenuDivider />
+            <button nineAmMenuItem value="destroy" danger>Destroy environment</button>
+          </nine-am-combo-button>
+
+          <span class="demo__result">
+            last action: <code>{{ menuAction() || 'none' }}</code>
+          </span>
+        </div>
+
+        <p class="demo__note">
+          The combo button is <strong>two controls and two tab stops</strong>, which is Carbon's
+          accessibility spec rather than a shortcut: the primary action has to be reachable without
+          opening anything, and one control cannot both do a thing and offer a list of other things.
+          Carbon also allows any button kind on a menu button and only a primary one on a combo
+          button, so there is no <code>kind</code> here to get wrong.
         </p>
       </section>
 

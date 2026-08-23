@@ -54,7 +54,7 @@ npm test           # vitest, via @angular/build:unit-test
 | `ToastNotification` + `NotificationService` | top-right stack, newest first, optional 5s timeout |
 | `ActionableNotification` | inline or toast, one action button, `role="alertdialog"` with a real focus trap |
 | `Callout` | loads with the page, never dismisses, no live region |
-| `OverflowMenu` | three-dot trigger, danger item, divider; the WAI-ARIA menu button keyboard, ours |
+| `MenuButton` + `ComboButton` + `OverflowMenu` | Carbon's three menu buttons, sharing one `MenuSurface`: roving focus, arrows, Home/End, type-ahead, Escape, focus return |
 | `Breadcrumb` | `nav` + `ol`, 2 sizes, current page, optional trailing slash |
 | `Accordion` | real `ul`/`ol` of `li`, chevron either side, 3 sizes, flush; open state owned by the caller |
 | `Table` — `foldBelow` | opt-in: under a breakpoint the table becomes one accordion per row, keeping selection and expansion |
@@ -532,7 +532,7 @@ role to the chevron alone instead.
 
 ### What is left, in the order worth building it
 
-31 of Carbon's ~48 components exist, and the two that had missing variants no
+33 of Carbon's ~48 components exist, and the two that had missing variants no
 longer do: Notification has all four of Carbon's, and Tile has all of its
 subcomponents bar the AI label. Nothing built is half-built. What is left is the
 long tail.
@@ -544,10 +544,8 @@ with steppers — our `type="number"` is a passthrough and says so), `Slider`,
 and `Slider` may never be needed.
 
 **Everything else**, roughly by how often it comes up: `ProgressIndicator`,
-`ProgressBar`, `PageHeader`, `Menu` / `MenuButton` / `ComboButton`, `CopyButton`,
-`CodeSnippet`, `StructuredList`, `ContainedList`, `List`, `TreeView`,
-`PaginationNav`. The `Menu` family is the cheap one now: the overflow menu's
-keyboard is written and moves across almost as is.
+`ProgressBar`, `PageHeader`, `CopyButton`, `CodeSnippet`, `StructuredList`,
+`ContainedList`, `List`, `TreeView`, `PaginationNav`.
 
 - **Table extras:** column resize/reorder, row overflow menu, CSV export, and
   virtual scroll for very large pages (`@angular/cdk/scrolling`).

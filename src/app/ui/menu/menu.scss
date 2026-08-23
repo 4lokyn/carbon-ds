@@ -1,0 +1,132 @@
+@use 'nine-am' as *;
+
+// ── The surface ─────────────────────────────────────────────────────────────
+//
+// Shared by the menu button, the combo button and the overflow menu, which
+// Carbon documents as one family for the same reason this is one stylesheet.
+
+.nine-am-menu {
+  position: relative;
+  display: inline-flex;
+}
+
+.nine-am-menu__chevron {
+  flex: 0 0 rem(16px);
+  margin-inline-start: $spacing-03;
+  transition: transform $duration-fast-02 motion(standard, productive);
+}
+
+.nine-am-menu--open .nine-am-menu__chevron {
+  transform: rotate(180deg);
+}
+
+// The panel is inline rather than in an overlay, the same trade the toggletip
+// makes: no flip away from a viewport edge, and an ancestor with
+// `overflow: hidden` will clip it. Carbon has the same limitation and answers
+// it with a `data-floating-menu-container` escape hatch.
+.nine-am-menu__panel {
+  position: absolute;
+  z-index: 100;
+  display: none;
+
+  // Carbon's own bounds: 10rem to 18rem. The panel grows to fit its longest
+  // action and then stops, which is what makes the ellipsis on an item reachable
+  // — without a cap a single wordy action would simply widen the menu instead.
+  min-width: rem(160px);
+  max-width: rem(288px);
+  box-shadow: 0 rem(2px) rem(6px) 0 rgb(0 0 0 / 20%);
+  background-color: $layer-01;
+}
+
+.nine-am-menu__panel--open {
+  display: block;
+}
+
+.nine-am-menu--bottom .nine-am-menu__panel {
+  top: 100%;
+  left: 0;
+}
+
+.nine-am-menu--top .nine-am-menu__panel {
+  bottom: 100%;
+  left: 0;
+}
+
+// ── Items ───────────────────────────────────────────────────────────────────
+
+// One line, cut with an ellipsis — Carbon's `.cds--menu-item__label` is
+// `white-space: nowrap` with `text-overflow: ellipsis`, and its item has a fixed
+// height and no vertical padding for exactly that reason: the text can never be
+// two lines, so there is nothing to make room for. A menu is a list of short
+// actions, and a wrapped one stops being scannable.
+//
+// The padding here is 11px rather than nothing, because our height is a
+// *minimum* rather than a fixed size: 11 + an 18px line + 11 is the 40px, and a
+// caller who puts something taller in the item gets a row that grows around it
+// instead of one that clips.
+.nine-am-menu__item {
+  @include unstyled-button;
+  @include type-style('body-compact-01');
+
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  min-height: rem(40px);
+  padding: rem(11px) $spacing-05;
+  color: $text-primary;
+  text-align: start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: background-color $duration-fast-01 motion(standard, productive);
+
+  &:hover {
+    background-color: $layer-hover-01;
+  }
+
+  &:focus {
+    @include focus-ring;
+  }
+
+  &[aria-disabled='true'] {
+    color: $text-disabled;
+    cursor: not-allowed;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+}
+
+// Destructive. Red only on hover and focus, not at rest: a menu with a
+// permanently red row draws the eye to the one thing you least want clicked.
+.nine-am-menu__item--danger {
+  &:hover,
+  &:focus {
+    background-color: $button-danger-primary;
+    color: $text-on-color;
+  }
+}
+
+.nine-am-menu__divider {
+  height: rem(1px);
+  border: 0;
+  margin: 0;
+  background-color: $border-subtle-01;
+}
+
+// ── The combo button's split ────────────────────────────────────────────────
+//
+// Two buttons sharing an edge. Carbon's spec puts them in the tab order one
+// after the other, so they have to look like one control and behave like two.
+
+.nine-am-menu--combo .nine-am-menu__primary {
+  padding-inline-end: $spacing-05;
+}
+
+.nine-am-menu__trigger--split {
+  border-inline-start: rem(1px) solid $button-separator;
+}
+
+.nine-am-menu--combo .nine-am-menu__chevron {
+  margin-inline-start: 0;
+}

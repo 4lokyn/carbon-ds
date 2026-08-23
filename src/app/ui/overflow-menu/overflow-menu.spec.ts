@@ -1,15 +1,16 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { OverflowMenu, OverflowMenuDivider, OverflowMenuItem } from './overflow-menu';
+import { MenuDivider, MenuItem } from '../menu/menu-surface';
+import { OverflowMenu } from './overflow-menu';
 
 @Component({
-  imports: [OverflowMenu, OverflowMenuItem, OverflowMenuDivider],
+  imports: [OverflowMenu, MenuItem, MenuDivider],
   template: `
     <nine-am-overflow-menu label="Row actions" (actionSelected)="picked.set($event)">
-      <button nineAmOverflowMenuItem value="stop">Stop app</button>
-      <button nineAmOverflowMenuItem value="clone" [disabled]="true">Clone</button>
-      <hr nineAmOverflowMenuDivider />
-      <button nineAmOverflowMenuItem value="delete" danger>Delete app</button>
+      <button nineAmMenuItem value="stop">Stop app</button>
+      <button nineAmMenuItem value="clone" [disabled]="true">Clone</button>
+      <hr nineAmMenuDivider />
+      <button nineAmMenuItem value="delete" danger>Delete app</button>
     </nine-am-overflow-menu>
   `,
 })
@@ -32,7 +33,7 @@ describe('OverflowMenu', () => {
       root,
       trigger,
       panel: root.querySelector('.nine-am-overflow-menu__panel') as HTMLElement,
-      items: () => Array.from(root.querySelectorAll<HTMLElement>('.nine-am-overflow-menu__item')),
+      items: () => Array.from(root.querySelectorAll<HTMLElement>('.nine-am-menu__item')),
       expanded: () => trigger.getAttribute('aria-expanded'),
       focused: () => (document.activeElement as HTMLElement | null)?.textContent?.trim() ?? '',
       click(target: EventTarget) {

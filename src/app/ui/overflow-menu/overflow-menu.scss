@@ -1,9 +1,7 @@
 @use 'nine-am' as *;
 
-.nine-am-overflow-menu {
-  position: relative;
-  display: inline-flex;
-}
+// Only what is this menu's own. The panel, the items and the divider come from
+// menu.scss, which the three menu buttons share — see `MenuSurface`.
 
 // A square the height of a field, so it lines up in a table row and in a
 // toolbar without either one nudging it.
@@ -31,87 +29,18 @@
   }
 }
 
-// ── The panel ───────────────────────────────────────────────────────────────
-//
-// Positioned in CSS, because Aria keeps the menu inline and only toggles its
-// visibility — see the note in overflow-menu.ts for what that costs.
-
+// Aligned to the trigger's trailing edge rather than its leading one, unlike
+// the other two menus: an overflow menu sits at the end of a row, and a panel
+// opening rightwards from there would leave the viewport.
 .nine-am-overflow-menu__panel {
-  position: absolute;
-  z-index: 10;
-  min-width: rem(160px);
-  max-width: rem(320px);
-  background-color: $layer-01;
-  box-shadow: 0 rem(2px) rem(6px) rgb(0 0 0 / 20%);
-
-  padding: 0;
-
-  // Closed is the default state. Aria drives `visible`; the class below is what
-  // that turns into on screen.
-  display: none;
+  right: 0;
+  left: auto;
 }
 
-.nine-am-overflow-menu__panel--open {
-  display: block;
-}
-
-// Opens down by default; `top` sends it up, for a row near the bottom of a page.
 .nine-am-overflow-menu--bottom .nine-am-overflow-menu__panel {
   top: 100%;
-  right: 0;
 }
 
 .nine-am-overflow-menu--top .nine-am-overflow-menu__panel {
-  right: 0;
   bottom: 100%;
-}
-
-// ── Items ───────────────────────────────────────────────────────────────────
-
-.nine-am-overflow-menu__item {
-  @include unstyled-button;
-  @include type-style('body-compact-01');
-
-  display: flex;
-  width: 100%;
-  min-height: rem(40px);
-  align-items: center;
-  padding: 0 $spacing-05;
-  color: $text-primary;
-  transition: background-color $duration-fast-01 motion(standard, productive);
-
-  &:hover {
-    background-color: $layer-hover-01;
-  }
-
-  &:focus {
-    @include focus-ring;
-  }
-
-  &[aria-disabled='true'],
-  &:disabled {
-    color: $text-disabled;
-    cursor: not-allowed;
-
-    &:hover {
-      background-color: transparent;
-    }
-  }
-}
-
-// Destructive. Red only on hover and focus, not at rest: a menu with a
-// permanently red row draws the eye to the one thing you least want clicked.
-.nine-am-overflow-menu__item--danger {
-  &:hover,
-  &:focus {
-    background-color: $button-danger-primary;
-    color: $text-on-color;
-  }
-}
-
-.nine-am-overflow-menu__divider {
-  height: rem(1px);
-  border: 0;
-  margin: 0;
-  background-color: $border-subtle-01;
 }

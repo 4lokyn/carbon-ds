@@ -31,12 +31,12 @@ export { Icon } from './icon/icon';
 export { type IconName } from './icon/icons';
 export { Input, type InputType } from './input/input';
 export { Link, type LinkSize } from './link/link';
+export { ComboButton, type MenuAlign, MenuButton, NINE_AM_MENU } from './menu/menu-button';
+export { MenuDivider, MenuItem, MenuSurface } from './menu/menu-surface';
 export {
   NINE_AM_OVERFLOW_MENU,
   OverflowMenu,
   type OverflowMenuAlign,
-  OverflowMenuDivider,
-  OverflowMenuItem,
 } from './overflow-menu/overflow-menu';
 export { Popover } from './popover/popover';
 export {

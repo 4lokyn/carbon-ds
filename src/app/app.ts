@@ -9,6 +9,7 @@ import {
   type ButtonSize,
   Callout,
   NINE_AM_BREADCRUMB,
+  NINE_AM_MENU,
   NINE_AM_OVERFLOW_MENU,
   NINE_AM_CHECKBOX,
   NINE_AM_TABS,
@@ -78,6 +79,7 @@ const INITIAL_TAGS: readonly TagColor[] = ['blue', 'green', 'red', 'purple'];
     RouterLinkActive,
     RouterOutlet,
     ...NINE_AM_BREADCRUMB,
+    ...NINE_AM_MENU,
     ...NINE_AM_OVERFLOW_MENU,
     ...NINE_AM_CHECKBOX,
     ...NINE_AM_RADIO_GROUP,
@@ -325,6 +327,8 @@ export class App {
     this.accepted.set(false);
     this.termsSubmitted.set(false);
   }
+
+  protected readonly menuAction = signal('');
 
   protected readonly clusterSize = signal('medium');
 
