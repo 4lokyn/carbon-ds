@@ -165,6 +165,46 @@ can see. `demo/services-table.ts` is the worked example.
 Do not combine `zebra` with `selectable`: the stripe and the selected background
 are the same token in every Carbon theme.
 
+### Folding it into accordions on a narrow screen
+
+Off unless asked for. `foldBelow` names a Carbon breakpoint, and under it the
+table becomes a list of accordions — one item per row, the title column as the
+heading, every other column as a label/value pair beneath it.
+
+```html
+<nine-am-table
+  foldBelow="md"
+  foldTitle="name"
+  selectable
+  caption="Services"
+  [columns]="columns()"
+  [rows]="rows()"
+  [rowKey]="rowKey"
+  [(selection)]="selected"
+/>
+```
+
+**Opt in per table, because it is a question about the data.** Six short columns
+fold into a readable card; twenty numeric ones do not, and sideways scrolling
+serves those better. `foldTitle` defaults to the first column.
+
+What carries over and what does not:
+
+- **Selection carries over.** The checkbox moves beside the heading rather than
+  inside it, because the heading is a `<button>` and a button may not contain a
+  checkbox.
+- **Expansion carries over**, and it is the same open state — a row expanded in
+  the table is open when it folds. `expandedContent` renders under the fields.
+- **Sorting does not.** The header row is where sorting lives and it is gone, so
+  put a sort control in the toolbar if a narrow screen needs one.
+- **Pagination is unaffected**, because it was never inside the table.
+
+Measured against the viewport, not the table's own width. A container query
+would be the more precise answer and needs a `ResizeObserver`; the viewport is
+what a caller can reason about from a stylesheet. Where `matchMedia` does not
+exist — a server render — the table stays a table, which is the safe way to be
+wrong: every column is still there, just wide.
+
 ### The form's own errors
 
 Field-level messages cover *which* input is wrong. They do not cover the

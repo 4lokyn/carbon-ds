@@ -3,19 +3,30 @@ import {
   booleanAttribute,
   Component,
   computed,
+  effect,
   input,
   model,
   signal,
   TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
+import { Accordion, AccordionItem, AccordionLead, AccordionTitle } from '../accordion/accordion';
 import { Checkbox } from '../checkbox/checkbox';
 import { Icon } from '../icon/icon';
 import type { IconName } from '../icon/icons';
 import { displayAccessorFor, nextSort, sortRows } from './table-sort';
-import type { DsColumn, DsSort, TableSize } from './table-types';
+import type { DsColumn, DsSort, TableBreakpoint, TableSize } from './table-types';
 
 let nextTableId = 0;
+
+/** Carbon's breakpoints, in the pixels `foldBelow` measures against. */
+const BREAKPOINTS: Record<TableBreakpoint, number> = {
+  sm: 320,
+  md: 672,
+  lg: 1056,
+  xlg: 1312,
+  max: 1584,
+};
 
 /**
  * Carbon data table, driven by a column config rather than per-column templates.
@@ -36,7 +47,15 @@ let nextTableId = 0;
 @Component({
   selector: 'nine-am-table',
   encapsulation: ViewEncapsulation.None,
-  imports: [NgTemplateOutlet, Checkbox, Icon],
+  imports: [
+    NgTemplateOutlet,
+    Checkbox,
+    Icon,
+    Accordion,
+    AccordionItem,
+    AccordionLead,
+    AccordionTitle,
+  ],
   templateUrl: './table.html',
   styleUrl: './table.scss',
 })
@@ -101,6 +120,29 @@ export class Table<T> {
   /** Supplying this switches on the expand column. */
   readonly expandedContent = input<TemplateRef<{ $implicit: T }>>();
 
+  /**
+   * Below this breakpoint the table stops being a table and becomes a list of
+   * accordions, one per row. Off by default: a table that reshapes itself
+   * without being asked is a surprise, and plenty of tables are better served by
+   * scrolling sideways.
+   *
+   * Opt in per table, because whether a row reads as a card is a question about
+   * the *data* — six short columns fold well, twenty numeric ones do not.
+   *
+   * Measured against the viewport rather than this element's own width. A
+   * container query would be the more correct answer and needs a
+   * `ResizeObserver` to drive rendering; the viewport is what "responsive"
+   * usually means and is what a caller can reason about from a stylesheet.
+   */
+  readonly foldBelow = input<TableBreakpoint | null>(null);
+
+  /**
+   * Which column becomes the heading when folded. Defaults to the first, which
+   * is the name column often enough to be the right default and never wrong
+   * enough to be silent about — it shows on screen the moment it is not.
+   */
+  readonly foldTitle = input<string>();
+
   readonly selectAllLabel = input('Select all rows on this page');
 
   /**
@@ -114,22 +156,59 @@ export class Table<T> {
   private readonly tableId = `nine-am-table-${nextTableId++}`;
   private readonly expandedKeys = signal<ReadonlySet<unknown>>(new Set());
 
-  protected readonly expandable = computed(
-    () => this.expandedContent() !== undefined,
-  );
+  /** True while the viewport is under `foldBelow`. Always false without it. */
+  protected readonly folded = signal(false);
+
+  constructor() {
+    effect((onCleanup) => {
+      const at = this.foldBelow();
+
+      // No `matchMedia` — a server render, or jsdom, which does not ship one —
+      // means the table stays a table. That is the safe way to be wrong: every
+      // column is still there and still readable, just wide. Folding by default
+      // would hide columns in an environment that cannot say how wide it is.
+      if (at === null || typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+        this.folded.set(false);
+        return;
+      }
+
+      // 0.02 below the breakpoint, which is the usual guard against a viewport
+      // sitting exactly on it and matching both the table and the list.
+      const query = window.matchMedia(`(max-width: ${BREAKPOINTS[at] - 0.02}px)`);
+
+      this.folded.set(query.matches);
+
+      const onChange = (event: MediaQueryListEvent) => this.folded.set(event.matches);
+
+      query.addEventListener('change', onChange);
+      onCleanup(() => query.removeEventListener('change', onChange));
+    });
+  }
+
+  /** The column that becomes the accordion heading. */
+  protected readonly titleColumn = computed(() => {
+    const key = this.foldTitle();
+    const columns = this.columns();
+
+    return columns.find((column) => column.key === key) ?? columns[0];
+  });
+
+  /** Everything else, rendered as label/value pairs under the heading. */
+  protected readonly fieldColumns = computed(() => {
+    const title = this.titleColumn();
+
+    return this.columns().filter((column) => column.key !== title?.key);
+  });
+
+  protected readonly expandable = computed(() => this.expandedContent() !== undefined);
 
   /** Total rendered columns, including the control columns. Drives colspan. */
   protected readonly columnCount = computed(
-    () =>
-      this.columns().length +
-      (this.selectable() ? 1 : 0) +
-      (this.expandable() ? 1 : 0),
+    () => this.columns().length + (this.selectable() ? 1 : 0) + (this.expandable() ? 1 : 0),
   );
 
   protected readonly displayRows = computed(() =>
-    this.serverSide()
-      ? this.rows()
-      : sortRows(this.rows(), this.columns(), this.sort()),
+    this.serverSide() ? this.rows() : sortRows(this.rows(), this.columns(), this.sort()),
   );
 
   protected readonly tableClass = computed(() => {
@@ -148,10 +227,7 @@ export class Table<T> {
 
   // Built once per column change rather than per cell render.
   private readonly accessors = computed(
-    () =>
-      new Map(
-        this.columns().map((column) => [column.key, displayAccessorFor(column)]),
-      ),
+    () => new Map(this.columns().map((column) => [column.key, displayAccessorFor(column)])),
   );
 
   private readonly selectedKeys = computed(
@@ -177,10 +253,7 @@ export class Table<T> {
   protected readonly partiallySelected = computed(() => {
     const keys = this.selectedKeys();
 
-    return (
-      this.displayRows().some((row) => keys.has(this.rowKey()(row))) &&
-      !this.allSelected()
-    );
+    return this.displayRows().some((row) => keys.has(this.rowKey()(row))) && !this.allSelected();
   });
 
   protected cellText(column: DsColumn<T>, row: T): string {
@@ -199,9 +272,7 @@ export class Table<T> {
     return sort.direction === 'asc' ? 'arrow-up' : 'arrow-down';
   }
 
-  protected ariaSort(
-    column: DsColumn<T>,
-  ): 'ascending' | 'descending' | 'none' | null {
+  protected ariaSort(column: DsColumn<T>): 'ascending' | 'descending' | 'none' | null {
     if (column.sortable !== true) {
       return null;
     }
@@ -245,9 +316,7 @@ export class Table<T> {
       // Drop only this page's rows. Selections made on other pages survive —
       // clearing them would quietly undo work the user can't even see.
       this.selection.set(
-        this.selection().filter(
-          (selected) => !pageKeys.has(this.rowKey()(selected)),
-        ),
+        this.selection().filter((selected) => !pageKeys.has(this.rowKey()(selected))),
       );
 
       return;

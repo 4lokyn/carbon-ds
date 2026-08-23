@@ -38,33 +38,262 @@ interface Service {
 }
 
 const NOW = Date.now();
-const minutesAgo = (minutes: number): string =>
-  new Date(NOW - minutes * 60_000).toISOString();
+const minutesAgo = (minutes: number): string => new Date(NOW - minutes * 60_000).toISOString();
 
 const SERVICES: readonly Service[] = [
-  { id: 'svc-01', name: 'api-gateway', namespace: 'edge', status: 'running', replicas: 6, cpu: 42, updatedAt: minutesAgo(8), image: 'ghcr.io/acme/gateway:2.14.1', owner: 'platform' },
-  { id: 'svc-02', name: 'auth-service', namespace: 'identity', status: 'running', replicas: 4, cpu: 18, updatedAt: minutesAgo(35), image: 'ghcr.io/acme/auth:5.2.0', owner: 'identity' },
-  { id: 'svc-03', name: 'billing-worker', namespace: 'payments', status: 'degraded', replicas: 2, cpu: 91, updatedAt: minutesAgo(3), image: 'ghcr.io/acme/billing:1.8.7', owner: 'payments' },
-  { id: 'svc-04', name: 'catalog-api', namespace: 'commerce', status: 'running', replicas: 8, cpu: 55, updatedAt: minutesAgo(120), image: 'ghcr.io/acme/catalog:4.0.3', owner: 'commerce' },
-  { id: 'svc-05', name: 'cdn-purge', namespace: 'edge', status: 'stopped', replicas: 0, cpu: null, updatedAt: minutesAgo(2880), image: 'ghcr.io/acme/purge:0.9.2', owner: 'platform' },
-  { id: 'svc-06', name: 'email-dispatch', namespace: 'comms', status: 'running', replicas: 3, cpu: 12, updatedAt: minutesAgo(48), image: 'ghcr.io/acme/email:3.1.0', owner: 'growth' },
-  { id: 'svc-07', name: 'event-bus', namespace: 'core', status: 'running', replicas: 5, cpu: 67, updatedAt: minutesAgo(15), image: 'ghcr.io/acme/bus:7.4.1', owner: 'platform' },
-  { id: 'svc-08', name: 'export-runner', namespace: 'reporting', status: 'degraded', replicas: 1, cpu: 88, updatedAt: minutesAgo(6), image: 'ghcr.io/acme/export:2.0.0', owner: 'data' },
-  { id: 'svc-09', name: 'feature-flags', namespace: 'core', status: 'running', replicas: 2, cpu: 4, updatedAt: minutesAgo(600), image: 'ghcr.io/acme/flags:1.2.4', owner: 'platform' },
-  { id: 'svc-10', name: 'image-resize', namespace: 'media', status: 'running', replicas: 12, cpu: 74, updatedAt: minutesAgo(22), image: 'ghcr.io/acme/resize:6.3.0', owner: 'media' },
-  { id: 'svc-11', name: 'invoice-pdf', namespace: 'payments', status: 'stopped', replicas: 0, cpu: null, updatedAt: minutesAgo(4320), image: 'ghcr.io/acme/pdf:1.0.9', owner: 'payments' },
-  { id: 'svc-12', name: 'ledger-sync', namespace: 'payments', status: 'running', replicas: 3, cpu: 31, updatedAt: minutesAgo(75), image: 'ghcr.io/acme/ledger:9.1.2', owner: 'payments' },
-  { id: 'svc-13', name: 'notification-hub', namespace: 'comms', status: 'running', replicas: 4, cpu: 26, updatedAt: minutesAgo(11), image: 'ghcr.io/acme/notify:4.5.1', owner: 'growth' },
-  { id: 'svc-14', name: 'oauth-bridge', namespace: 'identity', status: 'degraded', replicas: 2, cpu: 79, updatedAt: minutesAgo(1), image: 'ghcr.io/acme/oauth:2.2.2', owner: 'identity' },
-  { id: 'svc-15', name: 'order-intake', namespace: 'commerce', status: 'running', replicas: 7, cpu: 61, updatedAt: minutesAgo(30), image: 'ghcr.io/acme/intake:5.0.0', owner: 'commerce' },
-  { id: 'svc-16', name: 'price-engine', namespace: 'commerce', status: 'running', replicas: 5, cpu: 48, updatedAt: minutesAgo(180), image: 'ghcr.io/acme/pricing:3.7.0', owner: 'commerce' },
-  { id: 'svc-17', name: 'search-indexer', namespace: 'search', status: 'running', replicas: 6, cpu: 83, updatedAt: minutesAgo(5), image: 'ghcr.io/acme/indexer:8.2.1', owner: 'data' },
-  { id: 'svc-18', name: 'session-store', namespace: 'identity', status: 'running', replicas: 3, cpu: 22, updatedAt: minutesAgo(240), image: 'ghcr.io/acme/session:2.9.0', owner: 'identity' },
-  { id: 'svc-19', name: 'sms-relay', namespace: 'comms', status: 'stopped', replicas: 0, cpu: null, updatedAt: minutesAgo(10080), image: 'ghcr.io/acme/sms:0.4.1', owner: 'growth' },
-  { id: 'svc-20', name: 'telemetry-agent', namespace: 'observability', status: 'running', replicas: 24, cpu: 37, updatedAt: minutesAgo(18), image: 'ghcr.io/acme/telemetry:11.0.2', owner: 'platform' },
-  { id: 'svc-21', name: 'trace-collector', namespace: 'observability', status: 'degraded', replicas: 4, cpu: 94, updatedAt: minutesAgo(2), image: 'ghcr.io/acme/traces:5.5.5', owner: 'platform' },
-  { id: 'svc-22', name: 'webhook-fanout', namespace: 'edge', status: 'running', replicas: 9, cpu: 58, updatedAt: minutesAgo(64), image: 'ghcr.io/acme/fanout:1.6.3', owner: 'platform' },
-  { id: 'svc-23', name: 'zone-resolver', namespace: 'edge', status: 'running', replicas: 2, cpu: 9, updatedAt: minutesAgo(900), image: 'ghcr.io/acme/zones:0.8.0', owner: 'platform' },
+  {
+    id: 'svc-01',
+    name: 'api-gateway',
+    namespace: 'edge',
+    status: 'running',
+    replicas: 6,
+    cpu: 42,
+    updatedAt: minutesAgo(8),
+    image: 'ghcr.io/acme/gateway:2.14.1',
+    owner: 'platform',
+  },
+  {
+    id: 'svc-02',
+    name: 'auth-service',
+    namespace: 'identity',
+    status: 'running',
+    replicas: 4,
+    cpu: 18,
+    updatedAt: minutesAgo(35),
+    image: 'ghcr.io/acme/auth:5.2.0',
+    owner: 'identity',
+  },
+  {
+    id: 'svc-03',
+    name: 'billing-worker',
+    namespace: 'payments',
+    status: 'degraded',
+    replicas: 2,
+    cpu: 91,
+    updatedAt: minutesAgo(3),
+    image: 'ghcr.io/acme/billing:1.8.7',
+    owner: 'payments',
+  },
+  {
+    id: 'svc-04',
+    name: 'catalog-api',
+    namespace: 'commerce',
+    status: 'running',
+    replicas: 8,
+    cpu: 55,
+    updatedAt: minutesAgo(120),
+    image: 'ghcr.io/acme/catalog:4.0.3',
+    owner: 'commerce',
+  },
+  {
+    id: 'svc-05',
+    name: 'cdn-purge',
+    namespace: 'edge',
+    status: 'stopped',
+    replicas: 0,
+    cpu: null,
+    updatedAt: minutesAgo(2880),
+    image: 'ghcr.io/acme/purge:0.9.2',
+    owner: 'platform',
+  },
+  {
+    id: 'svc-06',
+    name: 'email-dispatch',
+    namespace: 'comms',
+    status: 'running',
+    replicas: 3,
+    cpu: 12,
+    updatedAt: minutesAgo(48),
+    image: 'ghcr.io/acme/email:3.1.0',
+    owner: 'growth',
+  },
+  {
+    id: 'svc-07',
+    name: 'event-bus',
+    namespace: 'core',
+    status: 'running',
+    replicas: 5,
+    cpu: 67,
+    updatedAt: minutesAgo(15),
+    image: 'ghcr.io/acme/bus:7.4.1',
+    owner: 'platform',
+  },
+  {
+    id: 'svc-08',
+    name: 'export-runner',
+    namespace: 'reporting',
+    status: 'degraded',
+    replicas: 1,
+    cpu: 88,
+    updatedAt: minutesAgo(6),
+    image: 'ghcr.io/acme/export:2.0.0',
+    owner: 'data',
+  },
+  {
+    id: 'svc-09',
+    name: 'feature-flags',
+    namespace: 'core',
+    status: 'running',
+    replicas: 2,
+    cpu: 4,
+    updatedAt: minutesAgo(600),
+    image: 'ghcr.io/acme/flags:1.2.4',
+    owner: 'platform',
+  },
+  {
+    id: 'svc-10',
+    name: 'image-resize',
+    namespace: 'media',
+    status: 'running',
+    replicas: 12,
+    cpu: 74,
+    updatedAt: minutesAgo(22),
+    image: 'ghcr.io/acme/resize:6.3.0',
+    owner: 'media',
+  },
+  {
+    id: 'svc-11',
+    name: 'invoice-pdf',
+    namespace: 'payments',
+    status: 'stopped',
+    replicas: 0,
+    cpu: null,
+    updatedAt: minutesAgo(4320),
+    image: 'ghcr.io/acme/pdf:1.0.9',
+    owner: 'payments',
+  },
+  {
+    id: 'svc-12',
+    name: 'ledger-sync',
+    namespace: 'payments',
+    status: 'running',
+    replicas: 3,
+    cpu: 31,
+    updatedAt: minutesAgo(75),
+    image: 'ghcr.io/acme/ledger:9.1.2',
+    owner: 'payments',
+  },
+  {
+    id: 'svc-13',
+    name: 'notification-hub',
+    namespace: 'comms',
+    status: 'running',
+    replicas: 4,
+    cpu: 26,
+    updatedAt: minutesAgo(11),
+    image: 'ghcr.io/acme/notify:4.5.1',
+    owner: 'growth',
+  },
+  {
+    id: 'svc-14',
+    name: 'oauth-bridge',
+    namespace: 'identity',
+    status: 'degraded',
+    replicas: 2,
+    cpu: 79,
+    updatedAt: minutesAgo(1),
+    image: 'ghcr.io/acme/oauth:2.2.2',
+    owner: 'identity',
+  },
+  {
+    id: 'svc-15',
+    name: 'order-intake',
+    namespace: 'commerce',
+    status: 'running',
+    replicas: 7,
+    cpu: 61,
+    updatedAt: minutesAgo(30),
+    image: 'ghcr.io/acme/intake:5.0.0',
+    owner: 'commerce',
+  },
+  {
+    id: 'svc-16',
+    name: 'price-engine',
+    namespace: 'commerce',
+    status: 'running',
+    replicas: 5,
+    cpu: 48,
+    updatedAt: minutesAgo(180),
+    image: 'ghcr.io/acme/pricing:3.7.0',
+    owner: 'commerce',
+  },
+  {
+    id: 'svc-17',
+    name: 'search-indexer',
+    namespace: 'search',
+    status: 'running',
+    replicas: 6,
+    cpu: 83,
+    updatedAt: minutesAgo(5),
+    image: 'ghcr.io/acme/indexer:8.2.1',
+    owner: 'data',
+  },
+  {
+    id: 'svc-18',
+    name: 'session-store',
+    namespace: 'identity',
+    status: 'running',
+    replicas: 3,
+    cpu: 22,
+    updatedAt: minutesAgo(240),
+    image: 'ghcr.io/acme/session:2.9.0',
+    owner: 'identity',
+  },
+  {
+    id: 'svc-19',
+    name: 'sms-relay',
+    namespace: 'comms',
+    status: 'stopped',
+    replicas: 0,
+    cpu: null,
+    updatedAt: minutesAgo(10080),
+    image: 'ghcr.io/acme/sms:0.4.1',
+    owner: 'growth',
+  },
+  {
+    id: 'svc-20',
+    name: 'telemetry-agent',
+    namespace: 'observability',
+    status: 'running',
+    replicas: 24,
+    cpu: 37,
+    updatedAt: minutesAgo(18),
+    image: 'ghcr.io/acme/telemetry:11.0.2',
+    owner: 'platform',
+  },
+  {
+    id: 'svc-21',
+    name: 'trace-collector',
+    namespace: 'observability',
+    status: 'degraded',
+    replicas: 4,
+    cpu: 94,
+    updatedAt: minutesAgo(2),
+    image: 'ghcr.io/acme/traces:5.5.5',
+    owner: 'platform',
+  },
+  {
+    id: 'svc-22',
+    name: 'webhook-fanout',
+    namespace: 'edge',
+    status: 'running',
+    replicas: 9,
+    cpu: 58,
+    updatedAt: minutesAgo(64),
+    image: 'ghcr.io/acme/fanout:1.6.3',
+    owner: 'platform',
+  },
+  {
+    id: 'svc-23',
+    name: 'zone-resolver',
+    namespace: 'edge',
+    status: 'running',
+    replicas: 2,
+    cpu: 9,
+    updatedAt: minutesAgo(900),
+    image: 'ghcr.io/acme/zones:0.8.0',
+    owner: 'platform',
+  },
 ];
 
 // `cool-gray` rather than `gray` for stopped: $tag-background-gray is the exact
@@ -106,16 +335,7 @@ function formatUpdated(iso: string): string {
 @Component({
   selector: 'app-services-table',
   encapsulation: ViewEncapsulation.None,
-  imports: [
-    Table,
-    TableHeader,
-    TableToolbar,
-    Pagination,
-    Search,
-    Tag,
-    Button,
-    Icon,
-  ],
+  imports: [Table, TableHeader, TableToolbar, Pagination, Search, Tag, Button, Icon],
   styleUrl: './services-table.scss',
   template: `
     <!-- The escape hatch: config covers text columns, a template covers markup. -->
@@ -126,7 +346,9 @@ function formatUpdated(iso: string): string {
     <ng-template #expandedRow let-row>
       <dl class="services__detail">
         <dt>Image</dt>
-        <dd><code>{{ row.image }}</code></dd>
+        <dd>
+          <code>{{ row.image }}</code>
+        </dd>
         <dt>Owner</dt>
         <dd>{{ row.owner }}</dd>
         <dt>Namespace</dt>
@@ -193,6 +415,8 @@ function formatUpdated(iso: string): string {
       <nine-am-table
         serverSide
         selectable
+        foldBelow="md"
+        foldTitle="name"
         caption="Services"
         [columns]="columns()"
         [rows]="pageRows()"
@@ -231,16 +455,13 @@ export class ServicesTable {
   // Not `required`: view queries resolve after the first render pass, so on that
   // pass this is undefined and the status column falls back to plain text. The
   // computed re-runs once the query lands.
-  private readonly statusCell =
-    viewChild<TemplateRef<{ $implicit: Service }>>('statusCell');
+  private readonly statusCell = viewChild<TemplateRef<{ $implicit: Service }>>('statusCell');
 
   // Stable field references, not inline arrows in the template — a new function
   // identity on every change detection pass would defeat the table's memoization.
   protected readonly rowKey = (row: Service): string => row.id;
-  protected readonly selectRowLabel = (row: Service): string =>
-    `Select ${row.name}`;
-  protected readonly expandRowLabel = (row: Service): string =>
-    `Show details for ${row.name}`;
+  protected readonly selectRowLabel = (row: Service): string => `Select ${row.name}`;
+  protected readonly expandRowLabel = (row: Service): string => `Show details for ${row.name}`;
   protected readonly countLabel = (count: number): string =>
     `${count} ${count === 1 ? 'service' : 'services'} selected`;
 
@@ -298,9 +519,7 @@ export class ServicesTable {
     );
   });
 
-  private readonly sorted = computed(() =>
-    sortRows(this.filtered(), this.columns(), this.sort()),
-  );
+  private readonly sorted = computed(() => sortRows(this.filtered(), this.columns(), this.sort()));
 
   protected readonly pageRows = computed(() => {
     const start = (this.page() - 1) * this.pageSize();
@@ -322,9 +541,7 @@ export class ServicesTable {
   protected deleteSelected(): void {
     const doomed = new Set(this.selected().map((service) => service.id));
 
-    this.all.update((services) =>
-      services.filter((service) => !doomed.has(service.id)),
-    );
+    this.all.update((services) => services.filter((service) => !doomed.has(service.id)));
     this.selected.set([]);
   }
 

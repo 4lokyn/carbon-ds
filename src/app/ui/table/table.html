@@ -1,104 +1,48 @@
 @let expandTemplate = expandedContent();
 
-<div class="nine-am-table__container" [class.nine-am-table__container--sticky]="stickyHeader()">
-  <table [class]="tableClass()">
-    <!-- Visually hidden: the visible heading belongs in the toolbar above. Present
-         so the table is announced by name rather than as an anonymous "table". -->
-    <caption class="nine-am-visually-hidden">{{ caption() }}</caption>
+@if (folded()) {
+  <!-- One accordion item per row. The heading is the title column, the body is
+       every other column as a label/value pair, and the expansion template — if
+       there is one — follows them. Sorting has no home here: the header row is
+       gone, so a folded table sorts from the toolbar above it or not at all. -->
+  <nine-am-accordion class="nine-am-table__folded" align="start" flush>
+    @if (loading()) {
+      @for (skeletonRow of skeletonRange(); track skeletonRow) {
+        <li class="nine-am-table__folded-skeleton" aria-hidden="true">
+          <span class="nine-am-table__skeleton"></span>
+        </li>
+      }
+    } @else {
+      @for (row of displayRows(); track rowKey()(row)) {
+        <li nineAmAccordionItem [open]="isExpanded(row)" (openChange)="toggleExpand(row)">
+          @if (selectable()) {
+            <span nineAmAccordionLead>
+              <nine-am-checkbox
+                hideLabel
+                [label]="selectRowLabel()(row)"
+                [checked]="isSelected(row)"
+                (toggled)="toggleRow(row)"
+              />
+            </span>
+          }
 
-    <thead class="nine-am-table__head">
-      <tr class="nine-am-table__head-row">
-        @if (expandable()) {
-          <th class="nine-am-table__cell nine-am-table__cell--control" scope="col">
-            <span class="nine-am-visually-hidden">Expand</span>
-          </th>
-        }
-
-        @if (selectable()) {
-          <th class="nine-am-table__cell nine-am-table__cell--control" scope="col">
-            <nine-am-checkbox
-              hideLabel
-              [label]="selectAllLabel()"
-              [checked]="allSelected()"
-              [indeterminate]="partiallySelected()"
-              (toggled)="toggleAll()"
-            />
-          </th>
-        }
-
-        @for (column of columns(); track column.key) {
-          <th
-            class="nine-am-table__cell nine-am-table__cell--header"
-            scope="col"
-            [class.nine-am-table__cell--end]="column.align === 'end'"
-            [class.nine-am-table__cell--sortable]="column.sortable"
-            [style.width]="column.width"
-            [attr.aria-sort]="ariaSort(column)"
-          >
-            @if (column.sortable) {
-              <button class="nine-am-table__sort" type="button" (click)="toggleSort(column)">
-                <span class="nine-am-table__sort-label">{{ column.header }}</span>
-                <nine-am-icon class="nine-am-table__sort-icon" [name]="sortIcon(column)" />
-              </button>
-            } @else {
-              <span class="nine-am-table__header-label">{{ column.header }}</span>
-            }
-          </th>
-        }
-      </tr>
-    </thead>
-
-    <tbody class="nine-am-table__body">
-      @if (loading()) {
-        <!-- aria-hidden, and the live region below is what actually gets announced.
-             Otherwise a screen reader reads out a screenful of placeholder cells. -->
-        @for (skeletonRow of skeletonRange(); track skeletonRow) {
-          <tr class="nine-am-table__row nine-am-table__row--skeleton" aria-hidden="true">
-            @for (skeletonCell of columnRange(); track skeletonCell) {
-              <td class="nine-am-table__cell">
-                <span class="nine-am-table__skeleton"></span>
-              </td>
-            }
-          </tr>
-        }
-      } @else {
-        @for (row of displayRows(); track rowKey()(row); let rowIndex = $index) {
-          <tr
-            class="nine-am-table__row"
-            [class.nine-am-table__row--selected]="isSelected(row)"
-            [class.nine-am-table__row--expanded]="isExpanded(row)"
-          >
-            @if (expandable()) {
-              <td class="nine-am-table__cell nine-am-table__cell--control">
-                <button
-                  class="nine-am-table__expand"
-                  type="button"
-                  [attr.aria-expanded]="isExpanded(row)"
-                  [attr.aria-controls]="expansionId(rowIndex)"
-                  [attr.aria-label]="expandRowLabel()(row)"
-                  (click)="toggleExpand(row)"
-                >
-                  <nine-am-icon name="chevron-right" />
-                </button>
-              </td>
-            }
-
-            @if (selectable()) {
-              <td class="nine-am-table__cell nine-am-table__cell--control">
-                <nine-am-checkbox
-                  hideLabel
-                  [label]="selectRowLabel()(row)"
-                  [checked]="isSelected(row)"
-                  (toggled)="toggleRow(row)"
+          <span nineAmAccordionTitle>
+            @if (titleColumn(); as column) {
+              @if (column.cell) {
+                <ng-container
+                  [ngTemplateOutlet]="column.cell"
+                  [ngTemplateOutletContext]="{ $implicit: row }"
                 />
-              </td>
+              } @else {
+                {{ cellText(column, row) }}
+              }
             }
+          </span>
 
-            @for (column of columns(); track column.key) {
-              <td
-                class="nine-am-table__cell"
-                [class.nine-am-table__cell--end]="column.align === 'end'"
-              >
+          <dl class="nine-am-table__fields">
+            @for (column of fieldColumns(); track column.key) {
+              <dt class="nine-am-table__field-label">{{ column.header }}</dt>
+              <dd class="nine-am-table__field-value">
                 @if (column.cell) {
                   <ng-container
                     [ngTemplateOutlet]="column.cell"
@@ -107,35 +51,172 @@
                 } @else {
                   {{ cellText(column, row) }}
                 }
-              </td>
+              </dd>
             }
-          </tr>
+          </dl>
 
-          @if (expandTemplate && isExpanded(row)) {
-            <tr class="nine-am-table__row nine-am-table__row--expansion" [id]="expansionId(rowIndex)">
+          @if (expandTemplate) {
+            <ng-container
+              [ngTemplateOutlet]="expandTemplate"
+              [ngTemplateOutletContext]="{ $implicit: row }"
+            />
+          }
+        </li>
+      } @empty {
+        <li class="nine-am-table__folded-empty">
+          <ng-content>No data to display</ng-content>
+        </li>
+      }
+    }
+  </nine-am-accordion>
+} @else {
+  <div class="nine-am-table__container" [class.nine-am-table__container--sticky]="stickyHeader()">
+    <table [class]="tableClass()">
+      <!-- Visually hidden: the visible heading belongs in the toolbar above. Present
+         so the table is announced by name rather than as an anonymous "table". -->
+      <caption class="nine-am-visually-hidden">
+        {{
+          caption()
+        }}
+      </caption>
+
+      <thead class="nine-am-table__head">
+        <tr class="nine-am-table__head-row">
+          @if (expandable()) {
+            <th class="nine-am-table__cell nine-am-table__cell--control" scope="col">
+              <span class="nine-am-visually-hidden">Expand</span>
+            </th>
+          }
+
+          @if (selectable()) {
+            <th class="nine-am-table__cell nine-am-table__cell--control" scope="col">
+              <nine-am-checkbox
+                hideLabel
+                [label]="selectAllLabel()"
+                [checked]="allSelected()"
+                [indeterminate]="partiallySelected()"
+                (toggled)="toggleAll()"
+              />
+            </th>
+          }
+
+          @for (column of columns(); track column.key) {
+            <th
+              class="nine-am-table__cell nine-am-table__cell--header"
+              scope="col"
+              [class.nine-am-table__cell--end]="column.align === 'end'"
+              [class.nine-am-table__cell--sortable]="column.sortable"
+              [style.width]="column.width"
+              [attr.aria-sort]="ariaSort(column)"
+            >
+              @if (column.sortable) {
+                <button class="nine-am-table__sort" type="button" (click)="toggleSort(column)">
+                  <span class="nine-am-table__sort-label">{{ column.header }}</span>
+                  <nine-am-icon class="nine-am-table__sort-icon" [name]="sortIcon(column)" />
+                </button>
+              } @else {
+                <span class="nine-am-table__header-label">{{ column.header }}</span>
+              }
+            </th>
+          }
+        </tr>
+      </thead>
+
+      <tbody class="nine-am-table__body">
+        @if (loading()) {
+          <!-- aria-hidden, and the live region below is what actually gets announced.
+             Otherwise a screen reader reads out a screenful of placeholder cells. -->
+          @for (skeletonRow of skeletonRange(); track skeletonRow) {
+            <tr class="nine-am-table__row nine-am-table__row--skeleton" aria-hidden="true">
+              @for (skeletonCell of columnRange(); track skeletonCell) {
+                <td class="nine-am-table__cell">
+                  <span class="nine-am-table__skeleton"></span>
+                </td>
+              }
+            </tr>
+          }
+        } @else {
+          @for (row of displayRows(); track rowKey()(row); let rowIndex = $index) {
+            <tr
+              class="nine-am-table__row"
+              [class.nine-am-table__row--selected]="isSelected(row)"
+              [class.nine-am-table__row--expanded]="isExpanded(row)"
+            >
+              @if (expandable()) {
+                <td class="nine-am-table__cell nine-am-table__cell--control">
+                  <button
+                    class="nine-am-table__expand"
+                    type="button"
+                    [attr.aria-expanded]="isExpanded(row)"
+                    [attr.aria-controls]="expansionId(rowIndex)"
+                    [attr.aria-label]="expandRowLabel()(row)"
+                    (click)="toggleExpand(row)"
+                  >
+                    <nine-am-icon name="chevron-right" />
+                  </button>
+                </td>
+              }
+
+              @if (selectable()) {
+                <td class="nine-am-table__cell nine-am-table__cell--control">
+                  <nine-am-checkbox
+                    hideLabel
+                    [label]="selectRowLabel()(row)"
+                    [checked]="isSelected(row)"
+                    (toggled)="toggleRow(row)"
+                  />
+                </td>
+              }
+
+              @for (column of columns(); track column.key) {
+                <td
+                  class="nine-am-table__cell"
+                  [class.nine-am-table__cell--end]="column.align === 'end'"
+                >
+                  @if (column.cell) {
+                    <ng-container
+                      [ngTemplateOutlet]="column.cell"
+                      [ngTemplateOutletContext]="{ $implicit: row }"
+                    />
+                  } @else {
+                    {{ cellText(column, row) }}
+                  }
+                </td>
+              }
+            </tr>
+
+            @if (expandTemplate && isExpanded(row)) {
+              <tr
+                class="nine-am-table__row nine-am-table__row--expansion"
+                [id]="expansionId(rowIndex)"
+              >
+                <td
+                  class="nine-am-table__cell nine-am-table__cell--expansion"
+                  [attr.colspan]="columnCount()"
+                >
+                  <ng-container
+                    [ngTemplateOutlet]="expandTemplate"
+                    [ngTemplateOutletContext]="{ $implicit: row }"
+                  />
+                </td>
+              </tr>
+            }
+          } @empty {
+            <tr class="nine-am-table__row nine-am-table__row--empty">
               <td
-                class="nine-am-table__cell nine-am-table__cell--expansion"
+                class="nine-am-table__cell nine-am-table__cell--empty"
                 [attr.colspan]="columnCount()"
               >
-                <ng-container
-                  [ngTemplateOutlet]="expandTemplate"
-                  [ngTemplateOutletContext]="{ $implicit: row }"
-                />
+                <!-- Consumers override by projecting content into <nine-am-table>. -->
+                <ng-content>No data to display</ng-content>
               </td>
             </tr>
           }
-        } @empty {
-          <tr class="nine-am-table__row nine-am-table__row--empty">
-            <td class="nine-am-table__cell nine-am-table__cell--empty" [attr.colspan]="columnCount()">
-              <!-- Consumers override by projecting content into <nine-am-table>. -->
-              <ng-content>No data to display</ng-content>
-            </td>
-          </tr>
         }
-      }
-    </tbody>
-  </table>
-</div>
+      </tbody>
+    </table>
+  </div>
+}
 
 <!-- Loading is a state change with no visual text, so it needs announcing.
      polite rather than assertive: a table refresh should not interrupt. -->

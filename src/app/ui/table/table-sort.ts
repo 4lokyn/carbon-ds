@@ -19,9 +19,7 @@ function keyReader<T>(column: DsColumn<T>): (row: T) => CellValue {
 }
 
 /** What the cell renders. */
-export function displayAccessorFor<T>(
-  column: DsColumn<T>,
-): (row: T) => CellValue {
+export function displayAccessorFor<T>(column: DsColumn<T>): (row: T) => CellValue {
   return column.value ?? keyReader(column);
 }
 

@@ -62,18 +62,16 @@ describe('Table', () => {
   }
 
   function nameColumnText(el: HTMLElement): string[] {
-    return Array.from(
-      el.querySelectorAll('tbody tr:not(.nine-am-table__row--expansion)'),
-    ).map((row) => row.querySelectorAll('td')[2]?.textContent?.trim() ?? '');
+    return Array.from(el.querySelectorAll('tbody tr:not(.nine-am-table__row--expansion)')).map(
+      (row) => row.querySelectorAll('td')[2]?.textContent?.trim() ?? '',
+    );
   }
 
   it('renders a visually hidden caption as the accessible name', () => {
     const { el } = setup();
 
     expect(el.querySelector('caption')?.textContent?.trim()).toBe('Widgets');
-    expect(el.querySelector('caption')?.className).toContain(
-      'nine-am-visually-hidden',
-    );
+    expect(el.querySelector('caption')?.className).toContain('nine-am-visually-hidden');
   });
 
   it('marks sortable headers with aria-sort=none and leaves others bare', () => {
@@ -123,9 +121,7 @@ describe('Table', () => {
   it('puts the select-all checkbox in the indeterminate state for a partial selection', () => {
     const { fixture, host, el } = setup();
 
-    const selectAll = el.querySelector(
-      'thead input[type="checkbox"]',
-    ) as HTMLInputElement;
+    const selectAll = el.querySelector('thead input[type="checkbox"]') as HTMLInputElement;
 
     expect(selectAll.indeterminate).toBe(false);
     expect(selectAll.checked).toBe(false);
@@ -146,9 +142,7 @@ describe('Table', () => {
   it('select-all toggles every row, and toggles them all back off', () => {
     const { fixture, host, el } = setup();
 
-    const selectAll = el.querySelector(
-      'thead input[type="checkbox"]',
-    ) as HTMLInputElement;
+    const selectAll = el.querySelector('thead input[type="checkbox"]') as HTMLInputElement;
 
     selectAll.click();
     fixture.detectChanges();
@@ -163,9 +157,7 @@ describe('Table', () => {
     const { fixture, host, el } = setup();
 
     // Select 'carbon', which is first while unsorted and last once sorted asc.
-    const firstRowCheckbox = el.querySelector(
-      'tbody input[type="checkbox"]',
-    ) as HTMLInputElement;
+    const firstRowCheckbox = el.querySelector('tbody input[type="checkbox"]') as HTMLInputElement;
     firstRowCheckbox.click();
     fixture.detectChanges();
 
@@ -207,9 +199,7 @@ describe('Table', () => {
   it('wires the expand button to the row it reveals', () => {
     const { fixture, el } = setup();
 
-    const expand = el.querySelector(
-      'tbody .nine-am-table__expand',
-    ) as HTMLButtonElement;
+    const expand = el.querySelector('tbody .nine-am-table__expand') as HTMLButtonElement;
 
     expect(expand.getAttribute('aria-expanded')).toBe('false');
     expect(el.querySelector('.nine-am-table__row--expansion')).toBeNull();
@@ -256,9 +246,7 @@ describe('Table', () => {
     class LoadingHost {
       readonly rows = WIDGETS;
       readonly rowKey = (row: Widget): string => row.id;
-      readonly columns: readonly DsColumn<Widget>[] = [
-        { key: 'name', header: 'Name' },
-      ];
+      readonly columns: readonly DsColumn<Widget>[] = [{ key: 'name', header: 'Name' }];
     }
 
     const fixture = TestBed.createComponent(LoadingHost);
@@ -268,8 +256,144 @@ describe('Table', () => {
 
     expect(el.querySelectorAll('.nine-am-table__row--skeleton').length).toBe(3);
     expect(el.textContent).not.toContain('carbon');
-    expect(el.querySelector('[role="status"]')?.textContent).toContain(
-      'Loading Widgets',
-    );
+    expect(el.querySelector('[role="status"]')?.textContent).toContain('Loading Widgets');
+  });
+});
+
+/**
+ * jsdom ships a `matchMedia` that always reports `matches: false`, so the fold
+ * is unreachable without standing in for it. This is the whole of the stub: a
+ * controllable answer and a listener list nobody uses, because the component
+ * reads `matches` once when the query is created.
+ */
+function stubMatchMedia(matches: boolean): void {
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    configurable: true,
+    value: () => ({
+      matches,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+    }),
+  });
+}
+
+interface Plan {
+  readonly id: string;
+  readonly name: string;
+  readonly region: string;
+  readonly seats: number;
+}
+
+@Component({
+  imports: [Table],
+  template: `
+    <nine-am-table
+      caption="Plans"
+      selectable
+      [columns]="columns"
+      [rows]="rows"
+      [rowKey]="rowKey"
+      [foldBelow]="foldBelow()"
+      [foldTitle]="foldTitle()"
+      [(selection)]="selection"
+    />
+  `,
+})
+class FoldHost {
+  readonly foldBelow = signal<'md' | null>('md');
+  readonly foldTitle = signal<string | undefined>(undefined);
+  readonly selection = signal<readonly Plan[]>([]);
+
+  readonly rows: readonly Plan[] = [
+    { id: 'a', name: 'api-gateway', region: 'eu-central', seats: 6 },
+    { id: 'b', name: 'billing', region: 'us-east', seats: 2 },
+  ];
+
+  readonly columns: readonly DsColumn<Plan>[] = [
+    { key: 'name', header: 'Name' },
+    { key: 'region', header: 'Region' },
+    { key: 'seats', header: 'Seats' },
+  ];
+
+  readonly rowKey = (row: Plan) => row.id;
+}
+
+describe('Table, folded', () => {
+  function setup(matches: boolean) {
+    stubMatchMedia(matches);
+
+    const fixture = TestBed.createComponent(FoldHost);
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement as HTMLElement;
+
+    return {
+      host: fixture.componentInstance,
+      table: () => el.querySelector('table'),
+      items: () => Array.from(el.querySelectorAll('li[nineamaccordionitem], li')),
+      headings: () => Array.from(el.querySelectorAll('.nine-am-accordion__heading')),
+      labels: () =>
+        Array.from(el.querySelectorAll('.nine-am-table__field-label')).map((n) =>
+          n.textContent?.trim(),
+        ),
+      apply(change: () => void) {
+        change();
+        fixture.detectChanges();
+      },
+    };
+  }
+
+  it('stays a table when the viewport is wide enough', () => {
+    const { table, headings } = setup(false);
+
+    expect(table()).not.toBeNull();
+    expect(headings()).toHaveLength(0);
+  });
+
+  it('stays a table when nothing asked it to fold', () => {
+    const { table, apply, host } = setup(true);
+
+    apply(() => host.foldBelow.set(null));
+
+    // The flag is the whole of it. A table that reshapes itself without being
+    // asked is a surprise, and sideways scrolling suits plenty of them.
+    expect(table()).not.toBeNull();
+  });
+
+  it('becomes one accordion item per row', () => {
+    const { table, headings } = setup(true);
+
+    expect(table()).toBeNull();
+    expect(headings()).toHaveLength(2);
+    expect(headings()[0].textContent?.trim()).toBe('api-gateway');
+  });
+
+  it('puts every other column under the heading, and follows foldTitle', () => {
+    const { labels, apply, host, headings } = setup(true);
+
+    expect(labels()).toEqual(['Region', 'Seats', 'Region', 'Seats']);
+
+    apply(() => host.foldTitle.set('region'));
+
+    expect(headings()[0].textContent?.trim()).toBe('eu-central');
+    expect(labels()).toEqual(['Name', 'Seats', 'Name', 'Seats']);
+  });
+
+  it('keeps selection, with the checkbox outside the heading button', () => {
+    const { headings, host } = setup(true);
+
+    const checkbox = (document.querySelectorAll('.nine-am-accordion__lead input')[0] ??
+      null) as HTMLInputElement | null;
+
+    // Load-bearing, not tidiness: a `<button>` may not contain a checkbox. Put
+    // it inside the heading and the markup is invalid and the checkbox is
+    // unreachable by keyboard.
+    expect(checkbox).not.toBeNull();
+    expect(headings()[0].contains(checkbox)).toBe(false);
+
+    checkbox!.click();
+
+    expect(host.selection().map((row) => row.id)).toEqual(['a']);
   });
 });

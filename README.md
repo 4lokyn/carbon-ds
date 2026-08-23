@@ -57,6 +57,7 @@ npm test           # vitest, via @angular/build:unit-test
 | `OverflowMenu` | three-dot trigger, danger item, divider; the WAI-ARIA menu button keyboard, ours |
 | `Breadcrumb` | `nav` + `ol`, 2 sizes, current page, optional trailing slash |
 | `Accordion` | real `ul`/`ol` of `li`, chevron either side, 3 sizes, flush; open state owned by the caller |
+| `Table` — `foldBelow` | opt-in: under a breakpoint the table becomes one accordion per row, keeping selection and expansion |
 | `Tile` family | plain, clickable `<a>`, selectable on a real checkbox, single-select on real radios in a `<fieldset>`, expandable with a CSS-only reveal |
 | `Popover` + `Tooltip` + `Toggletip` | one surface; tooltip flips in a CDK overlay, toggletip stays in the DOM for focus order |
 | `Link` | 3 sizes, standalone and inline, optional icon, disabled that stays an `<a>` |

@@ -1,10 +1,4 @@
-import {
-  Component,
-  computed,
-  input,
-  output,
-  ViewEncapsulation,
-} from '@angular/core';
+import { Component, computed, input, output, ViewEncapsulation } from '@angular/core';
 import { Button } from '../button/button';
 
 /**

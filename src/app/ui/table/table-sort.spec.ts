@@ -20,8 +20,7 @@ const row = (name: string, size: number | null, rank = 'a'): Row => ({
 });
 
 const names = (rows: readonly Row[]): string[] => rows.map((r) => r.name);
-const sizes = (rows: readonly Row[]): (number | null)[] =>
-  rows.map((r) => r.size);
+const sizes = (rows: readonly Row[]): (number | null)[] => rows.map((r) => r.size);
 
 describe('nextSort', () => {
   it('cycles unsorted -> ascending -> descending -> unsorted', () => {
@@ -63,17 +62,13 @@ describe('sortRows', () => {
   it('ignores sort state pointing at a column that is gone', () => {
     const rows = [row('b', 1), row('a', 2)];
 
-    expect(sortRows(rows, columns, { column: 'removed', direction: 'asc' })).toBe(
-      rows,
-    );
+    expect(sortRows(rows, columns, { column: 'removed', direction: 'asc' })).toBe(rows);
   });
 
   it('ignores a column that is not marked sortable', () => {
     const rows = [row('b', 1, 'z'), row('a', 2, 'a')];
 
-    expect(sortRows(rows, columns, { column: 'rank', direction: 'asc' })).toBe(
-      rows,
-    );
+    expect(sortRows(rows, columns, { column: 'rank', direction: 'asc' })).toBe(rows);
   });
 
   it('sorts numbers numerically rather than lexically', () => {
@@ -102,23 +97,29 @@ describe('sortRows', () => {
   it('keeps empty values last in BOTH directions', () => {
     const rows = [row('a', null), row('b', 5), row('c', 1)];
 
-    expect(
-      sizes(sortRows(rows, columns, { column: 'size', direction: 'asc' })),
-    ).toEqual([1, 5, null]);
+    expect(sizes(sortRows(rows, columns, { column: 'size', direction: 'asc' }))).toEqual([
+      1,
+      5,
+      null,
+    ]);
 
     // The point of baking direction into the comparator: a missing reading is not
     // "the largest value", so it must not float to the top on a descending sort.
-    expect(
-      sizes(sortRows(rows, columns, { column: 'size', direction: 'desc' })),
-    ).toEqual([5, 1, null]);
+    expect(sizes(sortRows(rows, columns, { column: 'size', direction: 'desc' }))).toEqual([
+      5,
+      1,
+      null,
+    ]);
   });
 
   it('treats an empty string as empty, not as the smallest string', () => {
     const rows = [row('', 1), row('b', 1), row('a', 1)];
 
-    expect(
-      names(sortRows(rows, columns, { column: 'name', direction: 'asc' })),
-    ).toEqual(['a', 'b', '']);
+    expect(names(sortRows(rows, columns, { column: 'name', direction: 'asc' }))).toEqual([
+      'a',
+      'b',
+      '',
+    ]);
   });
 
   it('uses a custom comparator when the column supplies one', () => {
@@ -132,9 +133,11 @@ describe('sortRows', () => {
 
     const rows = [row('a', 1, 'a'), row('b', 1, 'b'), row('c', 1, 'c')];
 
-    expect(
-      names(sortRows(rows, [ranked], { column: 'rank', direction: 'asc' })),
-    ).toEqual(['c', 'b', 'a']);
+    expect(names(sortRows(rows, [ranked], { column: 'rank', direction: 'asc' }))).toEqual([
+      'c',
+      'b',
+      'a',
+    ]);
   });
 
   it('sorts on sortBy in preference to value and key', () => {
@@ -148,9 +151,11 @@ describe('sortRows', () => {
 
     const rows = [row('a', 3), row('b', 1), row('c', 2)];
 
-    expect(
-      names(sortRows(rows, [column], { column: 'name', direction: 'asc' })),
-    ).toEqual(['b', 'c', 'a']);
+    expect(names(sortRows(rows, [column], { column: 'name', direction: 'asc' }))).toEqual([
+      'b',
+      'c',
+      'a',
+    ]);
   });
 
   it('judges emptiness from sortBy, not from the formatted value', () => {
@@ -166,12 +171,16 @@ describe('sortRows', () => {
 
     const rows = [row('a', null), row('b', 5), row('c', 1)];
 
-    expect(
-      sizes(sortRows(rows, [column], { column: 'size', direction: 'asc' })),
-    ).toEqual([1, 5, null]);
-    expect(
-      sizes(sortRows(rows, [column], { column: 'size', direction: 'desc' })),
-    ).toEqual([5, 1, null]);
+    expect(sizes(sortRows(rows, [column], { column: 'size', direction: 'asc' }))).toEqual([
+      1,
+      5,
+      null,
+    ]);
+    expect(sizes(sortRows(rows, [column], { column: 'size', direction: 'desc' }))).toEqual([
+      5,
+      1,
+      null,
+    ]);
   });
 
   it('never hands an empty value to a custom comparator', () => {
@@ -195,12 +204,22 @@ describe('sortRows', () => {
       row('f', 1),
     ];
 
-    expect(
-      sizes(sortRows(rows, [naive], { column: 'size', direction: 'asc' })),
-    ).toEqual([1, 2, 9, 10, null, null]);
-    expect(
-      sizes(sortRows(rows, [naive], { column: 'size', direction: 'desc' })),
-    ).toEqual([10, 9, 2, 1, null, null]);
+    expect(sizes(sortRows(rows, [naive], { column: 'size', direction: 'asc' }))).toEqual([
+      1,
+      2,
+      9,
+      10,
+      null,
+      null,
+    ]);
+    expect(sizes(sortRows(rows, [naive], { column: 'size', direction: 'desc' }))).toEqual([
+      10,
+      9,
+      2,
+      1,
+      null,
+      null,
+    ]);
   });
 
   it('clamps a NaN comparator result instead of letting it scramble the array', () => {
@@ -215,9 +234,11 @@ describe('sortRows', () => {
 
     // Every pair reads as equal, so a stable sort leaves the input order and,
     // crucially, loses nothing.
-    expect(
-      names(sortRows(rows, [broken], { column: 'size', direction: 'asc' })),
-    ).toEqual(['a', 'b', 'c']);
+    expect(names(sortRows(rows, [broken], { column: 'size', direction: 'asc' }))).toEqual([
+      'a',
+      'b',
+      'c',
+    ]);
   });
 
   it('reads a value function in preference to the key', () => {
@@ -231,8 +252,9 @@ describe('sortRows', () => {
     const rows = [row('ba', 1), row('ab', 1)];
 
     // 'ab' -> 'ba', 'ba' -> 'ab', so ascending on the reversed value flips them.
-    expect(
-      names(sortRows(rows, [reversed], { column: 'name', direction: 'asc' })),
-    ).toEqual(['ba', 'ab']);
+    expect(names(sortRows(rows, [reversed], { column: 'name', direction: 'asc' }))).toEqual([
+      'ba',
+      'ab',
+    ]);
   });
 });

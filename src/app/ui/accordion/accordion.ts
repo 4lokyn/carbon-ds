@@ -3,6 +3,7 @@ import {
   booleanAttribute,
   Component,
   computed,
+  contentChild,
   Directive,
   inject,
   input,
@@ -127,6 +128,24 @@ export class Accordion {
 export class AccordionTitle {}
 
 /**
+ * A control that sits beside the heading rather than inside it — a checkbox
+ * selecting the row, a status dot, an avatar.
+ *
+ * It exists because the heading is a real `<button>`, and a button may not
+ * contain a checkbox or a link: the markup is invalid and the inner control
+ * becomes unreachable by keyboard. Anything interactive that belongs to the
+ * item as a whole goes here, outside the button, in its own tab stop.
+ *
+ * Carbon has no equivalent because Carbon's accordion holds prose. A row of
+ * data is what asks for it.
+ */
+@Directive({
+  selector: '[nineAmAccordionLead]',
+  host: { class: 'nine-am-accordion__lead' },
+})
+export class AccordionLead {}
+
+/**
  * One heading and the content it reveals.
  *
  * `title` covers the common case; project `[nineAmAccordionTitle]` instead when
@@ -146,6 +165,8 @@ export class AccordionTitle {}
   styleUrl: './accordion.scss',
   host: { '[class]': 'itemClass()' },
   template: `
+    <ng-content select="[nineAmAccordionLead]" />
+
     <button
       type="button"
       class="nine-am-accordion__heading"
@@ -196,6 +217,13 @@ export class AccordionItem {
 
   private readonly accordion = inject(Accordion);
 
+  /**
+   * Whether anything was projected into the lead slot. The item only becomes a
+   * two-column grid when something is there — otherwise the heading would be
+   * squeezed into a column it does not need.
+   */
+  private readonly lead = contentChild(AccordionLead);
+
   protected readonly headingId = `nine-am-accordion-heading-${nextId}`;
   protected readonly contentId = `nine-am-accordion-content-${nextId++}`;
 
@@ -212,6 +240,10 @@ export class AccordionItem {
       classes.push('nine-am-accordion__item--disabled');
     }
 
+    if (this.lead()) {
+      classes.push('nine-am-accordion__item--with-lead');
+    }
+
     return classes.join(' ');
   });
 
@@ -223,4 +255,4 @@ export class AccordionItem {
   }
 }
 
-export const NINE_AM_ACCORDION = [Accordion, AccordionItem, AccordionTitle] as const;
+export const NINE_AM_ACCORDION = [Accordion, AccordionItem, AccordionLead, AccordionTitle] as const;

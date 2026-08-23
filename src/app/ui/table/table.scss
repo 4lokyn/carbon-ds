@@ -281,3 +281,50 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
     animation: none;
   }
 }
+
+// ── Folded ──────────────────────────────────────────────────────────────────
+//
+// What the table becomes under `foldBelow`: one accordion item per row. The
+// accordion is `flush` because the table's own container already draws the
+// edges, and `align="start"` because at this width the chevron belongs next to
+// the name rather than a screen away from it.
+
+.nine-am-table__folded {
+  border-block-start: rem(1px) solid $border-subtle-01;
+}
+
+// A definition list, because a label and its value are exactly that — and it is
+// what makes the pair read as a pair rather than as two loose runs of text.
+.nine-am-table__fields {
+  display: grid;
+  margin: 0;
+  gap: $spacing-02 $spacing-05;
+  grid-template-columns: auto 1fr;
+}
+
+.nine-am-table__field-label {
+  @include type-style('label-01');
+
+  color: $text-secondary;
+}
+
+.nine-am-table__field-value {
+  @include type-style('body-compact-01');
+
+  margin: 0;
+  word-break: break-word;
+}
+
+.nine-am-table__folded-skeleton,
+.nine-am-table__folded-empty {
+  display: block;
+  padding: $spacing-05;
+  border-block-end: rem(1px) solid $border-subtle-01;
+}
+
+.nine-am-table__folded-empty {
+  @include type-style('body-compact-01');
+
+  color: $text-secondary;
+  text-align: center;
+}

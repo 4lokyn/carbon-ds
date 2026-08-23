@@ -13,6 +13,12 @@ export type TableSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type CellAlign = 'start' | 'end';
 
 /**
+ * Carbon's breakpoints by name, for `foldBelow`. The values are Carbon's own:
+ * sm 320, md 672, lg 1056, xlg 1312, max 1584.
+ */
+export type TableBreakpoint = 'sm' | 'md' | 'lg' | 'xlg' | 'max';
+
+/**
  * One column, described as data rather than as a template.
  *
  * The 80% case is a text column, which is a single line here. Reach for `cell`
