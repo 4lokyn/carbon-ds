@@ -67,7 +67,7 @@ npm test           # vitest, via @angular/build:unit-test
 | `Icon` | Carbon paths inlined; no `@carbon/icons-angular` |
 | `Tabs` | line and contained, 3 sizes, full width; `@angular/aria` for behavior |
 | `Modal` | 4 widths; `@angular/cdk/dialog` for focus trap / Escape / restore focus |
-| **`Table`** | config-driven columns, tri-state sort, keyed selection, expansion, skeleton, empty state |
+| **`Table`** | config-driven columns, tri-state sort, keyed selection (checkbox or radio), expansion, skeleton, empty state |
 | `TableHeader` | title + description above the toolbar |
 | `TableToolbar` | switches to a batch action bar while rows are selected |
 | `Pagination` | page size, range, page select, prev/next, unknown totals, 3 sizes |

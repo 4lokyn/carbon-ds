@@ -165,6 +165,22 @@ can see. `demo/services-table.ts` is the worked example.
 Do not combine `zebra` with `selectable`: the stripe and the selected background
 are the same token in every Carbon theme.
 
+### Which one of these
+
+`selectionMode="single"` swaps the checkboxes for radios and drops the
+select-all, because there is nothing to select all of.
+
+```html
+<nine-am-table selectable selectionMode="single" [(selection)]="chosen" … />
+```
+
+The markup is the whole of the difference and it is not cosmetic: a checkbox
+answers *which of these* and a radio answers *which one of these*, and a screen
+reader announces which question it is being asked. Choosing a row replaces the
+selection rather than adding to it, and a chosen row cannot be un-chosen by
+clicking it again — a radio that could would leave the question unanswered with
+no way to say so.
+
 ### Long text
 
 **Cells truncate with an ellipsis by default**, which is a deviation from Carbon

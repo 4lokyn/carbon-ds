@@ -6,7 +6,7 @@
        <ul> may only own <li> elements. Its label shows here, unlike in the
        header cell, because nothing else on a folded row explains what a lone
        checkbox at the top would select. -->
-  @if (selectable() && !loading()) {
+  @if (selectable() && !loading() && !singleSelect()) {
     <div class="nine-am-table__folded-select-all">
       <nine-am-checkbox
         [label]="selectAllLabel()"
@@ -33,12 +33,23 @@
         <li nineAmAccordionItem [open]="isExpanded(row)" (openChange)="toggleExpand(row)">
           @if (selectable()) {
             <span nineAmAccordionLead>
-              <nine-am-checkbox
-                hideLabel
-                [label]="selectRowLabel()(row)"
-                [checked]="isSelected(row)"
-                (toggled)="toggleRow(row)"
-              />
+              @if (singleSelect()) {
+                <input
+                  type="radio"
+                  class="nine-am-table__radio"
+                  [name]="selectionName"
+                  [checked]="isSelected(row)"
+                  [attr.aria-label]="selectRowLabel()(row)"
+                  (change)="toggleRow(row)"
+                />
+              } @else {
+                <nine-am-checkbox
+                  hideLabel
+                  [label]="selectRowLabel()(row)"
+                  [checked]="isSelected(row)"
+                  (toggled)="toggleRow(row)"
+                />
+              }
             </span>
           }
 
@@ -106,13 +117,19 @@
 
           @if (selectable()) {
             <th class="nine-am-table__cell nine-am-table__cell--control" scope="col">
-              <nine-am-checkbox
-                hideLabel
-                [label]="selectAllLabel()"
-                [checked]="allSelected()"
-                [indeterminate]="partiallySelected()"
-                (toggled)="toggleAll()"
-              />
+              @if (singleSelect()) {
+                <!-- Nothing to select all of. The column stays so the rows below
+                     line up with the headers beside them. -->
+                <span class="nine-am-visually-hidden">Select</span>
+              } @else {
+                <nine-am-checkbox
+                  hideLabel
+                  [label]="selectAllLabel()"
+                  [checked]="allSelected()"
+                  [indeterminate]="partiallySelected()"
+                  (toggled)="toggleAll()"
+                />
+              }
             </th>
           }
 
@@ -175,12 +192,23 @@
 
               @if (selectable()) {
                 <td class="nine-am-table__cell nine-am-table__cell--control">
-                  <nine-am-checkbox
-                    hideLabel
-                    [label]="selectRowLabel()(row)"
-                    [checked]="isSelected(row)"
-                    (toggled)="toggleRow(row)"
-                  />
+                  @if (singleSelect()) {
+                    <input
+                      type="radio"
+                      class="nine-am-table__radio"
+                      [name]="selectionName"
+                      [checked]="isSelected(row)"
+                      [attr.aria-label]="selectRowLabel()(row)"
+                      (change)="toggleRow(row)"
+                    />
+                  } @else {
+                    <nine-am-checkbox
+                      hideLabel
+                      [label]="selectRowLabel()(row)"
+                      [checked]="isSelected(row)"
+                      (toggled)="toggleRow(row)"
+                    />
+                  }
                 </td>
               }
 

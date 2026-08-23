@@ -461,3 +461,84 @@ describe('Table, folded', () => {
     expect(host.selection().map((row) => row.id)).toEqual(['a']);
   });
 });
+
+@Component({
+  imports: [Table],
+  template: `
+    <nine-am-table
+      caption="Plans"
+      selectable
+      selectionMode="single"
+      [columns]="columns"
+      [rows]="rows"
+      [rowKey]="rowKey"
+      [(selection)]="selection"
+    />
+  `,
+})
+class SingleSelectHost {
+  readonly selection = signal<readonly Plan[]>([]);
+
+  readonly rows: readonly Plan[] = [
+    { id: 'a', name: 'api-gateway', region: 'eu-central', seats: 6 },
+    { id: 'b', name: 'billing', region: 'us-east', seats: 2 },
+  ];
+
+  readonly columns: readonly NineAmColumn<Plan>[] = [
+    { key: 'name', header: 'Name' },
+    { key: 'region', header: 'Region' },
+  ];
+
+  readonly rowKey = (row: Plan) => row.id;
+}
+
+describe('Table, single select', () => {
+  function setup() {
+    stubMatchMedia(false);
+
+    const fixture = TestBed.createComponent(SingleSelectHost);
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement as HTMLElement;
+
+    return {
+      fixture,
+      host: fixture.componentInstance,
+      radios: () => Array.from(el.querySelectorAll<HTMLInputElement>('input[type="radio"]')),
+      checkboxes: () => Array.from(el.querySelectorAll('input[type="checkbox"]')),
+    };
+  }
+
+  it('asks which one of these, in the markup and not only in the styling', () => {
+    const { radios, checkboxes } = setup();
+
+    // A checkbox answers "which of these" and a radio answers "which one of
+    // these" — and a screen reader announces which question it is being asked.
+    expect(radios()).toHaveLength(2);
+    expect(checkboxes()).toHaveLength(0);
+
+    const names = new Set(radios().map((radio) => radio.name));
+
+    expect(names.size).toBe(1);
+  });
+
+  it('replaces the selection rather than adding to it', () => {
+    const { radios, host, fixture } = setup();
+
+    radios()[0].click();
+    fixture.detectChanges();
+
+    expect(host.selection().map((row) => row.id)).toEqual(['a']);
+
+    radios()[1].click();
+    fixture.detectChanges();
+
+    expect(host.selection().map((row) => row.id)).toEqual(['b']);
+  });
+
+  it('drops select-all, because there is nothing to select all of', () => {
+    const { checkboxes } = setup();
+
+    expect(checkboxes()).toHaveLength(0);
+  });
+});

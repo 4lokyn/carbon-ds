@@ -19,6 +19,13 @@ export type CellAlign = 'start' | 'end';
 export type TableBreakpoint = 'sm' | 'md' | 'lg' | 'xlg' | 'max';
 
 /**
+ * Whether rows are chosen with checkboxes or with radios. Carbon has both, and
+ * the markup is the difference that matters: a checkbox answers "which of
+ * these" and a radio answers "which one of these".
+ */
+export type TableSelectionMode = 'multiple' | 'single';
+
+/**
  * One column, described as data rather than as a template.
  *
  * The 80% case is a text column, which is a single line here. Reach for `cell`

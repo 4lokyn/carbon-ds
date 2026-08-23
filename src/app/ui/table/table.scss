@@ -359,3 +359,19 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
   border-block-end: rem(1px) solid $border-subtle-01;
   background-color: $layer-accent-01;
 }
+
+// Single-select rows. A bare native radio rather than `nine-am-radio`, which
+// needs a `nine-am-radio-group` around it for its name, its value and its
+// validation — none of which a table row has. The appearance is the browser's,
+// tinted to Carbon's accent, because a radio is a shape every platform already
+// draws correctly and at the right size for touch.
+.nine-am-table__radio {
+  width: rem(16px);
+  height: rem(16px);
+  accent-color: $interactive;
+  cursor: pointer;
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}

@@ -15,7 +15,13 @@ import { Checkbox } from '../checkbox/checkbox';
 import { Icon } from '../icon/icon';
 import type { IconName } from '../icon/icons';
 import { displayAccessorFor, nextSort, sortRows } from './table-sort';
-import type { NineAmColumn, NineAmSort, TableBreakpoint, TableSize } from './table-types';
+import type {
+  NineAmColumn,
+  NineAmSort,
+  TableBreakpoint,
+  TableSelectionMode,
+  TableSize,
+} from './table-types';
 
 let nextTableId = 0;
 
@@ -131,6 +137,19 @@ export class Table<T> {
 
   readonly selectable = input(false, { transform: booleanAttribute });
   readonly selection = model<readonly T[]>([]);
+
+  /**
+   * Checkboxes by default; `single` swaps them for radios and drops the
+   * select-all, because there is nothing to select all of.
+   *
+   * The markup is the whole of the difference and it is not cosmetic: a
+   * checkbox answers "which of these" and a radio answers "which one of these",
+   * and a screen reader announces which question it is being asked. Choosing a
+   * row in single mode replaces the selection rather than adding to it — the
+   * same thing the browser would do for radios sharing a name, done here
+   * because these are not in one native group.
+   */
+  readonly selectionMode = input<TableSelectionMode>('multiple');
 
   /** Supplying this switches on the expand column. */
   readonly expandedContent = input<TemplateRef<{ $implicit: T }>>();
@@ -317,8 +336,20 @@ export class Table<T> {
     return this.selectedKeys().has(this.rowKey()(row));
   }
 
+  /** Shared by every row's control, so the name is one group per table. */
+  protected readonly selectionName = `${this.tableId}-selection`;
+
+  protected readonly singleSelect = computed(() => this.selectionMode() === 'single');
+
   protected toggleRow(row: T): void {
     const key = this.rowKey()(row);
+
+    if (this.singleSelect()) {
+      // Replaces rather than adds. A radio that could be unchecked by clicking
+      // it again would leave the question unanswered with no way to say so.
+      this.selection.set([row]);
+      return;
+    }
 
     this.selection.set(
       this.selectedKeys().has(key)
