@@ -35,8 +35,10 @@ would have failed loudly. The Sass facade needed three separate passes — the
 file name, the `@use 'ds'` in thirty stylesheets, and prose naming "the `ds`
 facade" — because none of those match a `ds-` pattern at all.
 
-Still open, and deliberately: `package.json` still says `"name": "carbon-ds"`,
-which matches the repository. That is item 7's decision, not this one's.
+The package name went with it, later the same day: `package.json`, the Angular
+project name in `angular.json` and the lockfile all read `carbon-nine-am`. The
+repository, the remote and the local directory are still `carbon-ds` — those are
+not in the repo's own files and have to be renamed on GitHub and on disk.
 
 ### 5. Add `.component.*` to filenames
 
@@ -82,10 +84,11 @@ built for exactly this.
 
 ### 7. A library project (`nine-am-design-system`)
 
-**Depends on 5.** The prefix is settled — item 4 is done and every class,
-selector and token now reads `nine-am-`. The file layout is not, so that half
-still comes first or gets done twice. Publishing would also settle
-`package.json`'s name, which still says `carbon-ds`.
+**Depends on 5.** The prefix is settled — item 4 is done, every class, selector
+and token reads `nine-am-`, and the package is `carbon-nine-am`. The file layout
+is not settled, so that half still comes first or gets done twice. The published
+name is a separate question again: `carbon-nine-am` describes where the design
+language comes from, and a library on npm may want to say what it is instead.
 
 Also needs decisions this repo has not had to make: what is public API versus
 internal, whether the Sass facade ships or consumers bring their own Carbon, and

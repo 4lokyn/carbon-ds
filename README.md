@@ -1,4 +1,4 @@
-# carbon-ds
+# carbon-nine-am
 
 An Angular design system that uses IBM Carbon's **design language** without depending
 on IBM's Angular **components**.
@@ -568,12 +568,17 @@ themes.
 ### On a different machine
 
 ```bash
-git clone https://github.com/4lokyn/carbon-ds.git
-cd carbon-ds && npm install && npm start
+git clone https://github.com/4lokyn/carbon-nine-am.git
+cd carbon-nine-am && npm install && npm start
 ```
 
 The branch is `main`. It started as `master` and was renamed, so a clone made
 before that will be on the wrong branch.
+
+The repository was `carbon-ds` until 2026-08-23. GitHub redirects the old URL, so
+a clone of it still works and lands in a directory named after the old name — but
+a remote pointing at the old URL is worth updating:
+`git remote set-url origin https://github.com/4lokyn/carbon-nine-am.git`.
 
 ### Not verified
 

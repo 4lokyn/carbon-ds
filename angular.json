@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "carbon-ds": {
+    "carbon-nine-am": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -79,10 +79,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "carbon-ds:build:production"
+              "buildTarget": "carbon-nine-am:build:production"
             },
             "development": {
-              "buildTarget": "carbon-ds:build:development"
+              "buildTarget": "carbon-nine-am:build:development"
             }
           },
           "defaultConfiguration": "development"

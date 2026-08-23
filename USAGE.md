@@ -1,4 +1,4 @@
-# Using carbon-ds
+# Using carbon-nine-am
 
 How to build with it. The *why* behind the decisions is in `README.md`; the
 conventions for *adding* a component are in `src/app/ui/README.md`.
