@@ -1,0 +1,218 @@
+@use 'nine-am' as *;
+
+// Heading heights. The same 32/40/48 the fields and buttons use, so an accordion
+// in a form column lines up with the controls beside it.
+$-heights: (
+  'sm': rem(32px),
+  'md': rem(40px),
+  'lg': rem(48px),
+);
+
+.nine-am-accordion-host {
+  display: block;
+}
+
+.nine-am-accordion {
+  @include unstyled-list;
+
+  width: 100%;
+}
+
+// The rule between items is drawn on the item's leading edge, with the last one
+// closing the stack. Drawn per item rather than as a gap so the heading's hover
+// fill runs the full width.
+.nine-am-accordion__item {
+  display: list-item;
+  border-block-start: rem(1px) solid $border-subtle-01;
+  transition: border-color $duration-fast-02 motion(standard, productive);
+
+  &:last-child {
+    border-block-end: rem(1px) solid $border-subtle-01;
+  }
+}
+
+// Carbon blends the rule into the hover fill: the heading's background reaches
+// the edge, and a visible line across it would cut the hovered row in two. The
+// item after it loses its leading rule for the same reason.
+@media (any-hover: hover) {
+  .nine-am-accordion__item:not(.nine-am-accordion__item--open):hover,
+  .nine-am-accordion__item:not(.nine-am-accordion__item--open):hover + .nine-am-accordion__item {
+    border-block-start-color: $layer-hover-01;
+  }
+
+  .nine-am-accordion__item:not(.nine-am-accordion__item--open):last-child:hover {
+    border-block-end-color: $layer-hover-01;
+  }
+}
+
+.nine-am-accordion__heading {
+  @include unstyled-button;
+  @include focus-ring-state;
+
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+
+  // The chevron is written first in the template and put last by the layout,
+  // which is Carbon's own arrangement: `row-reverse` by default, `row` under
+  // `--start`. Writing it first keeps the markup in reading order — the control
+  // that names the section comes before the one that decorates it.
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  padding-inline-end: $spacing-05;
+  color: $text-primary;
+  cursor: pointer;
+  text-align: start;
+  transition: background-color $duration-fast-02 motion(standard, productive);
+
+  @media (any-hover: hover) {
+    &:hover {
+      background-color: $layer-hover-01;
+    }
+  }
+
+  &:disabled {
+    color: $text-disabled;
+    cursor: not-allowed;
+
+    @media (any-hover: hover) {
+      &:hover {
+        background-color: transparent;
+      }
+    }
+  }
+}
+
+@each $name, $height in $-heights {
+  .nine-am-accordion--#{$name} .nine-am-accordion__heading {
+    min-height: $height;
+  }
+}
+
+.nine-am-accordion__title {
+  @include type-style('body-01');
+
+  width: 100%;
+  padding-block: $spacing-03;
+  padding-inline-start: $spacing-05;
+}
+
+.nine-am-accordion__arrow {
+  flex: 0 0 rem(16px);
+  color: $icon-primary;
+  transition: transform $duration-fast-02 motion(standard, productive);
+}
+
+.nine-am-accordion__item--open .nine-am-accordion__arrow {
+  transform: rotate(180deg);
+}
+
+.nine-am-accordion__heading:disabled .nine-am-accordion__arrow {
+  color: $icon-disabled;
+}
+
+// ── The reveal ──────────────────────────────────────────────────────────────
+//
+// A grid row from 0fr to 1fr. Carbon animates `max-block-size` with
+// `@starting-style`, which is not widely supported and which its own source
+// says so about; this needs neither a measurement nor a new CSS feature, and it
+// is what `ExpandableTile` already does.
+
+.nine-am-accordion__wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows $duration-moderate-01 motion(standard, productive);
+}
+
+.nine-am-accordion__item--open .nine-am-accordion__wrapper {
+  grid-template-rows: 1fr;
+}
+
+.nine-am-accordion__content {
+  min-height: 0;
+  padding-inline: $spacing-05;
+  opacity: 0;
+  overflow: hidden;
+
+  // The part that matters: it takes collapsed content out of the tab order.
+  // Clipping with `overflow` alone would leave a keyboard user tabbing into
+  // things nobody can see.
+  visibility: hidden;
+
+  transition:
+    opacity $duration-fast-02 motion(standard, productive),
+    visibility $duration-fast-02 motion(standard, productive);
+}
+
+.nine-am-accordion__item--open .nine-am-accordion__content {
+  padding-block: $spacing-03 $spacing-06;
+  opacity: 1;
+  visibility: visible;
+}
+
+// Carbon's reading measure: past 640px the content stops short of the right
+// edge so a paragraph does not run the width of a desktop. It is a prose rule,
+// and content that is not prose — a grid of fields, a table row folded into a
+// list — wants the room back. `flush` is the way out, and takes the side
+// padding with it.
+@include breakpoint-up(480px) {
+  .nine-am-accordion:not(.nine-am-accordion--flush) .nine-am-accordion__content {
+    padding-inline-end: $spacing-09;
+  }
+}
+
+@include breakpoint-up(640px) {
+  .nine-am-accordion:not(.nine-am-accordion--flush) .nine-am-accordion__content {
+    padding-inline-end: 25%;
+  }
+}
+
+// ── Chevron at the start ────────────────────────────────────────────────────
+
+.nine-am-accordion--start {
+  .nine-am-accordion__heading {
+    flex-direction: row;
+    justify-content: flex-start;
+    padding-inline: $spacing-05 0;
+  }
+
+  .nine-am-accordion__title {
+    padding-inline: $spacing-05 0;
+  }
+
+  // Indented to clear the chevron, so the content lines up with the title above
+  // it rather than with the arrow.
+  .nine-am-accordion__content {
+    padding-inline-start: calc(#{$spacing-05} + #{rem(16px)} + #{$spacing-05});
+  }
+}
+
+// ── Flush ───────────────────────────────────────────────────────────────────
+
+.nine-am-accordion--flush {
+  .nine-am-accordion__item,
+  .nine-am-accordion__item:last-child {
+    border-color: transparent;
+  }
+
+  .nine-am-accordion__heading {
+    padding-inline: 0;
+  }
+
+  .nine-am-accordion__title {
+    padding-inline-start: 0;
+  }
+
+  .nine-am-accordion__content {
+    padding-inline: 0;
+  }
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  .nine-am-accordion__wrapper,
+  .nine-am-accordion__content,
+  .nine-am-accordion__arrow {
+    transition: none;
+  }
+}

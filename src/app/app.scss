@@ -163,3 +163,31 @@ code {
 
   @include type-style('label-01');
 }
+
+// The folded-row example under Accordion. A definition list, because that is
+// what a field and its value are — and it is what makes the pair read as a pair
+// to a screen reader rather than as two loose runs of text.
+.demo__folded-title {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-03;
+}
+
+.demo__fields-list {
+  display: grid;
+  margin: 0;
+  gap: $spacing-02 $spacing-05;
+  grid-template-columns: auto 1fr;
+
+  dt {
+    @include type-style('label-01');
+
+    color: $text-secondary;
+  }
+
+  dd {
+    @include type-style('body-compact-01');
+
+    margin: 0;
+  }
+}

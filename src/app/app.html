@@ -1582,7 +1582,72 @@
         </p>
       </section>
 
+      <!-- ── Accordion ───────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Accordion</h2>
+        <p class="demo__note">
+          A real <code>&lt;ul&gt;</code> of real <code>&lt;li&gt;</code> elements, so a screen
+          reader announces "list, 3 items" and can jump through it. Each heading is a
+          <code>&lt;button&gt;</code> tied to its region with <code>aria-expanded</code> and
+          <code>aria-controls</code>. <strong>Several can be open at once</strong> and there is no
+          input to prevent it — that is Carbon's behaviour, and an accordion that closes what you
+          were reading is a tab list wearing the wrong component.
+        </p>
+
+        <nine-am-accordion>
+          <li nineAmAccordionItem title="Choose your plan">
+            <p>Compare plan features and pick the one matching your expected usage.</p>
+          </li>
+          <li nineAmAccordionItem title="Add team members">
+            <p>Invite collaborators by email and assign their workspace roles.</p>
+          </li>
+          <li nineAmAccordionItem title="Set payment details" [disabled]="true">
+            <p>Unavailable until a plan is chosen.</p>
+          </li>
+        </nine-am-accordion>
+
+        <p class="demo__note">
+          The reveal is CSS — a grid row from <code>0fr</code> to <code>1fr</code> — and
+          <code>visibility</code> is what keeps collapsed content out of the tab order. Same
+          technique the expandable tile uses; one reveal in the system rather than two.
+        </p>
+
+        <h3 class="demo__subtitle">A table row, folded</h3>
+        <p class="demo__note">
+          The same <code>DsColumn</code> objects the data table takes, read with the table's own
+          <code>displayAccessorFor</code>. The title is markup rather than a string — a name and a
+          status tag are one heading — and open state is keyed by row id, the way the table keys
+          selection. Nothing below is accordion-specific, which is what makes a narrow-screen table
+          a layout decision instead of a second implementation.
+        </p>
+
+        <nine-am-accordion align="start">
+          @for (row of deployments; track row.id) {
+            <li
+              nineAmAccordionItem
+              [open]="isRowOpen(row.id)"
+              (openChange)="setRowOpen(row.id, $event)"
+            >
+              <span nineAmAccordionTitle class="demo__folded-title">
+                {{ row.name }}
+                <nine-am-tag [color]="deploymentTagColor(row.status)" size="sm">
+                  {{ row.status }}
+                </nine-am-tag>
+              </span>
+
+              <dl class="demo__fields-list">
+                @for (column of deploymentColumns; track column.key) {
+                  <dt>{{ column.header }}</dt>
+                  <dd>{{ field(column, row) }}</dd>
+                }
+              </dl>
+            </li>
+          }
+        </nine-am-accordion>
+      </section>
+
       <!-- ── Nested theme ────────────────────────────────────────────────────── -->
+
       <section class="demo__section">
         <h2 class="demo__title">Nested theme</h2>
         <p class="demo__note">

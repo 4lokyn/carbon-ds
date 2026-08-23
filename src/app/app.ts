@@ -1,5 +1,8 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import {
+  Accordion,
+  AccordionItem,
+  AccordionTitle,
   ActionableNotification,
   Button,
   type ButtonKind,
@@ -24,6 +27,8 @@ import {
   TOAST_TIMEOUT,
   DatePicker,
   DateRangePicker,
+  displayAccessorFor,
+  type DsColumn,
   NINE_AM_RADIO_GROUP,
   NINE_AM_SHELL,
   Search,
@@ -47,6 +52,9 @@ const INITIAL_TAGS: readonly TagColor[] = ['blue', 'green', 'red', 'purple'];
 @Component({
   selector: 'app-root',
   imports: [
+    Accordion,
+    AccordionItem,
+    AccordionTitle,
     ActionableNotification,
     Button,
     Callout,
@@ -319,6 +327,59 @@ export class App {
   }
 
   protected readonly clusterSize = signal('medium');
+
+  // ── Accordion, and the table's own column model ──────────────────────────
+  //
+  // These are `DsColumn` objects, the same shape `nine-am-table` takes, and the
+  // fields below are read with `displayAccessorFor` — the table's own accessor.
+  // Nothing here is accordion-specific: a row folded into a list item is the
+  // same data with a different shape around it, which is what makes a
+  // responsive table a layout decision rather than a second implementation.
+  protected readonly deployments = [
+    { id: 'd1', name: 'api-gateway', namespace: 'edge', status: 'running', replicas: 6, cpu: 42 },
+    {
+      id: 'd2',
+      name: 'billing-worker',
+      namespace: 'payments',
+      status: 'degraded',
+      replicas: 2,
+      cpu: 91,
+    },
+    { id: 'd3', name: 'cdn-purge', namespace: 'edge', status: 'stopped', replicas: 0, cpu: null },
+  ] as const;
+
+  protected readonly deploymentColumns: readonly DsColumn<(typeof this.deployments)[number]>[] = [
+    { key: 'namespace', header: 'Namespace' },
+    { key: 'replicas', header: 'Replicas' },
+    { key: 'cpu', header: 'CPU', value: (row) => (row.cpu === null ? '—' : `${row.cpu}%`) },
+  ];
+
+  /** Open state keyed by row id, the way the table keys selection. */
+  protected readonly openRows = signal<ReadonlySet<string>>(new Set(['d2']));
+
+  protected isRowOpen(id: string): boolean {
+    return this.openRows().has(id);
+  }
+
+  protected setRowOpen(id: string, open: boolean): void {
+    this.openRows.update((rows) => {
+      const next = new Set(rows);
+      open ? next.add(id) : next.delete(id);
+      return next;
+    });
+  }
+
+  protected field(
+    column: DsColumn<(typeof this.deployments)[number]>,
+    row: (typeof this.deployments)[number],
+  ): string {
+    return String(displayAccessorFor(column)(row) ?? '');
+  }
+
+  protected deploymentTagColor(status: string): TagColor {
+    if (status === 'running') return 'green';
+    return status === 'degraded' ? 'red' : 'gray';
+  }
 
   protected readonly notificationStatuses: readonly NotificationStatus[] = [
     'error',

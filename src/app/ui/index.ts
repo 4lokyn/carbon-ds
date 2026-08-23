@@ -1,6 +1,14 @@
 // Public surface of the design system. Application code imports from here, never
 // from the component folders directly — that keeps the file layout free to change.
 
+export {
+  Accordion,
+  type AccordionAlign,
+  AccordionItem,
+  type AccordionSize,
+  AccordionTitle,
+  NINE_AM_ACCORDION,
+} from './accordion/accordion';
 export { Button, type ButtonKind, type ButtonSize } from './button/button';
 export {
   Breadcrumb,

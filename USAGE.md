@@ -433,6 +433,73 @@ point at it — this is what Carbon's `titleId` is for:
 </nine-am-callout>
 ```
 
+## Accordion
+
+A real `<ul>` of real `<li>` elements — the caller writes the `<li>`, which is
+what keeps "list, 3 items" in what a screen reader announces.
+
+```html
+<nine-am-accordion>
+  <li nineAmAccordionItem title="Choose your plan">
+    <p>Compare plan features and pick the one matching your usage.</p>
+  </li>
+  <li nineAmAccordionItem title="Add team members" [(open)]="membersOpen">
+    <p>Invite collaborators by email.</p>
+  </li>
+</nine-am-accordion>
+```
+
+`align="start"` moves the chevron before the title, `size` is `sm` / `md` / `lg`
+against the same 32/40/48 scale as the fields, and `flush` drops the side padding
+and the rules between items for an accordion that already sits inside something
+with its own edges.
+
+**Several items can be open at once and there is no input to prevent it.** That
+is Carbon's behaviour and the accessible one — closing what someone is reading
+because they opened something else is a tab list wearing the wrong component. If
+your case really needs one-at-a-time, you own every item's `open`, so it is a
+few lines in your own component.
+
+**`(toggled)` fires only on interaction.** Writing to `[(open)]` does not echo
+back through it, which is what makes it safe for "load this section the first
+time it is asked for".
+
+### Folding a table row into one
+
+The accordion takes no data of its own, which is the point: a row folded into a
+list item is the same `DsColumn` model the table takes, read with the table's own
+`displayAccessorFor`.
+
+```html
+<nine-am-accordion align="start">
+  @for (row of rows(); track row.id) {
+    <li nineAmAccordionItem [open]="isOpen(row.id)" (openChange)="setOpen(row.id, $event)">
+      <span nineAmAccordionTitle>
+        {{ row.name }} <nine-am-tag [color]="hue(row)">{{ row.status }}</nine-am-tag>
+      </span>
+
+      <dl>
+        @for (column of columns(); track column.key) {
+          <dt>{{ column.header }}</dt>
+          <dd>{{ displayAccessorFor(column)(row) }}</dd>
+        }
+      </dl>
+    </li>
+  }
+</nine-am-accordion>
+```
+
+Three things make that work, and each is deliberate. The title takes markup
+(`[nineAmAccordionTitle]`), because a name and a status tag are one heading
+rather than a heading with something after it — Carbon allows the same. Nothing
+queries the items or holds a selected index, so `@for` behaves. And `open` is the
+caller's, so it can be keyed by row id and survive sorting, filtering and paging
+the way the table's selection does.
+
+**Use `flush`, or expect the reading measure.** Carbon caps content width past
+640px — `padding-inline-end: 25%` — because it is written for prose. A grid of
+fields wants that room back.
+
 ## Shell
 
 Composed, not configured. Every piece is optional — an app with no side nav

@@ -56,6 +56,7 @@ npm test           # vitest, via @angular/build:unit-test
 | `Callout` | loads with the page, never dismisses, no live region |
 | `OverflowMenu` | three-dot trigger, danger item, divider; the WAI-ARIA menu button keyboard, ours |
 | `Breadcrumb` | `nav` + `ol`, 2 sizes, current page, optional trailing slash |
+| `Accordion` | real `ul`/`ol` of `li`, chevron either side, 3 sizes, flush; open state owned by the caller |
 | `Tile` family | plain, clickable `<a>`, selectable on a real checkbox, single-select on real radios in a `<fieldset>`, expandable with a CSS-only reveal |
 | `Popover` + `Tooltip` + `Toggletip` | one surface; tooltip flips in a CDK overlay, toggletip stays in the DOM for focus order |
 | `Link` | 3 sizes, standalone and inline, optional icon, disabled that stays an `<a>` |
@@ -529,7 +530,7 @@ role to the chevron alone instead.
 
 ### What is left, in the order worth building it
 
-30 of Carbon's ~48 components exist, and the two that had missing variants no
+31 of Carbon's ~48 components exist, and the two that had missing variants no
 longer do: Notification has all four of Carbon's, and Tile has all of its
 subcomponents bar the AI label. Nothing built is half-built. What is left is the
 long tail.
@@ -540,10 +541,11 @@ with steppers — our `type="number"` is a passthrough and says so), `Slider`,
 `Dropdown` (a styled listbox, where `nine-am-select` is the native one). `TimePicker`
 and `Slider` may never be needed.
 
-**Everything else**, roughly by how often it comes up: `Accordion`,
-`ProgressIndicator`, `ProgressBar`, `PageHeader`, `Menu` / `MenuButton` /
-`ComboButton`, `CopyButton`, `CodeSnippet`, `StructuredList`, `ContainedList`,
-`List`, `TreeView`, `PaginationNav`.
+**Everything else**, roughly by how often it comes up: `ProgressIndicator`,
+`ProgressBar`, `PageHeader`, `Menu` / `MenuButton` / `ComboButton`, `CopyButton`,
+`CodeSnippet`, `StructuredList`, `ContainedList`, `List`, `TreeView`,
+`PaginationNav`. The `Menu` family is the cheap one now: the overflow menu's
+keyboard is written and moves across almost as is.
 
 - **Table extras:** column resize/reorder, row overflow menu, CSV export, and
   virtual scroll for very large pages (`@angular/cdk/scrolling`).
