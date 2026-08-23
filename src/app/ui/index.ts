@@ -27,7 +27,8 @@ export {
 export { type DateFormatter } from './date-picker/date-picker-panel';
 export { DatePicker, type DateParser, type FirstDayOfWeek } from './date-picker/date-picker';
 export { DateRangePicker } from './date-picker/date-range-picker';
-export { type FieldSize } from './field/field-types';
+export { type FieldSize, type ListOption } from './field/field-types';
+export { Dropdown, type DropdownOption } from './dropdown/dropdown';
 export { Icon } from './icon/icon';
 export { type IconName } from './icon/icons';
 export { Input, type InputType } from './input/input';

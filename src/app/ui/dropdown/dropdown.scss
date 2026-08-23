@@ -1,0 +1,247 @@
+@use 'nine-am' as *;
+
+// The field chrome — label, helper, requirement, the surface and the height
+// scale — comes from `_field.scss`, the same place every other control gets it.
+// What is here is the closed field's own layout and the list it opens.
+
+.nine-am-dropdown {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.nine-am-dropdown__label {
+  @include field-label;
+}
+
+// The bordered box. Carbon puts the fill and the bottom rule here rather than on
+// the button inside, so the focus ring can sit on the button without doubling up
+// with the border. Same arrangement as the multi-select.
+.nine-am-dropdown__box {
+  position: relative;
+  width: 100%;
+  border-block-end: rem(1px) solid $border-strong-01;
+  background-color: $field-01;
+  transition: background-color $field-transition;
+
+  &:hover {
+    background-color: $field-hover-01;
+  }
+}
+
+// Open, the rule under the field softens — the list below now supplies the
+// visual edge, and two hard lines stacked read as a seam.
+.nine-am-dropdown--open .nine-am-dropdown__box {
+  border-block-end-color: $border-subtle-01;
+}
+
+.nine-am-dropdown__field {
+  @include unstyled-button;
+  @include type-style('body-compact-01');
+
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  align-items: center;
+  padding-inline: $field-padding-inline;
+  color: $text-primary;
+  cursor: pointer;
+  gap: $spacing-03;
+  text-align: start;
+  white-space: nowrap;
+
+  &:focus {
+    @include field-focus;
+  }
+
+  &:disabled {
+    color: $text-disabled;
+    cursor: not-allowed;
+  }
+}
+
+.nine-am-dropdown__value {
+  @include truncate;
+
+  flex: 1;
+}
+
+// Carbon's prompt colour: the field says what it wants, not what was chosen.
+.nine-am-dropdown__value--placeholder {
+  color: $text-helper;
+}
+
+.nine-am-dropdown__chevron {
+  flex-shrink: 0;
+  color: $icon-primary;
+  transition: transform $duration-fast-02 motion(standard, productive);
+}
+
+.nine-am-dropdown--open .nine-am-dropdown__chevron {
+  transform: rotate(180deg);
+}
+
+.nine-am-dropdown__status {
+  @include field-status-icon;
+
+  flex-shrink: 0;
+}
+
+.nine-am-dropdown--invalid {
+  .nine-am-dropdown__box {
+    @include field-invalid;
+  }
+
+  .nine-am-dropdown__status {
+    @include field-status-icon-invalid;
+  }
+
+  .nine-am-dropdown__requirement {
+    @include field-requirement-invalid;
+  }
+}
+
+.nine-am-dropdown--warn .nine-am-dropdown__status {
+  @include field-status-icon-warn;
+}
+
+.nine-am-dropdown--disabled .nine-am-dropdown__box {
+  @include field-disabled;
+}
+
+.nine-am-dropdown--readonly .nine-am-dropdown__box {
+  @include field-read-only;
+}
+
+.nine-am-dropdown__helper {
+  @include field-helper-text;
+}
+
+.nine-am-dropdown__requirement {
+  @include field-requirement;
+}
+
+// ── The list ────────────────────────────────────────────────────────────────
+
+.nine-am-dropdown__menu {
+  box-shadow: 0 rem(2px) rem(6px) 0 rgb(0 0 0 / 20%);
+  background-color: $layer-01;
+}
+
+.nine-am-dropdown__list {
+  overflow-y: auto;
+
+  // No ring of its own. ng-primitives makes the list a real focusable element,
+  // so the global `:focus` rule would draw a second blue ring around the whole
+  // panel, inside the one on the active row. Same call, and the same reason, as
+  // the multi-select next door.
+  &:focus {
+    outline: none;
+  }
+}
+
+.nine-am-dropdown__item {
+  @include type-style('body-compact-01');
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-inline: $field-padding-inline;
+  color: $text-secondary;
+  cursor: pointer;
+  gap: $spacing-03;
+  transition: background-color $field-transition;
+
+  &:hover {
+    background-color: $layer-hover-01;
+    color: $text-primary;
+  }
+}
+
+.nine-am-dropdown__item-text {
+  @include truncate;
+
+  flex: 1;
+}
+
+.nine-am-dropdown__check {
+  flex-shrink: 0;
+  color: $icon-primary;
+}
+
+// `data-active` is the roving focus, `data-selected` the value — the
+// primitive's own attributes, the same contract the multi-select styles against.
+.nine-am-dropdown__item[data-active] {
+  @include field-focus;
+
+  color: $text-primary;
+}
+
+.nine-am-dropdown__item[data-selected] {
+  background-color: $layer-selected-01;
+  color: $text-primary;
+}
+
+.nine-am-dropdown__item[data-disabled] {
+  color: $text-disabled;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.nine-am-dropdown__item + .nine-am-dropdown__item {
+  border-block-start: rem(1px) solid $border-subtle-01;
+}
+
+// The divider above the active row and above the row after it, cleared so the
+// 2px ring is not sliced by a 1px line. After the rule above, because the two
+// carry the same specificity and order is the whole of what decides it.
+.nine-am-dropdown__item[data-active],
+.nine-am-dropdown__item[data-active] + .nine-am-dropdown__item {
+  border-block-start-color: transparent;
+}
+
+.nine-am-dropdown__empty {
+  @include type-style('body-compact-01');
+
+  padding: $spacing-05;
+  margin: 0;
+  color: $text-secondary;
+}
+
+// ── Sizes ───────────────────────────────────────────────────────────────────
+
+@each $name, $height in $field-heights {
+  .nine-am-dropdown--#{$name} .nine-am-dropdown__field {
+    min-height: $height;
+  }
+
+  .nine-am-dropdown__menu--#{$name} {
+    .nine-am-dropdown__list {
+      max-height: calc(#{$height} * 5.5);
+    }
+
+    .nine-am-dropdown__item {
+      min-height: $height;
+    }
+  }
+}
+
+// ── Inline ──────────────────────────────────────────────────────────────────
+//
+// Carbon's `type="inline"`: the label sits beside the field for a control that
+// is part of a sentence or a toolbar rather than a form column.
+
+.nine-am-dropdown--inline {
+  display: flex;
+  align-items: center;
+  gap: $spacing-03;
+
+  .nine-am-dropdown__label {
+    margin-block-end: 0;
+  }
+
+  .nine-am-dropdown__box {
+    flex: 1;
+  }
+}

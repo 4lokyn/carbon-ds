@@ -1,0 +1,86 @@
+<label
+  class="nine-am-dropdown__label"
+  [class.nine-am-visually-hidden]="hideLabel()"
+  [attr.for]="fieldId"
+>
+  {{ label() }}
+</label>
+
+<div class="nine-am-dropdown__box" cdkOverlayOrigin #origin="cdkOverlayOrigin">
+  <button
+    #trigger
+    type="button"
+    class="nine-am-dropdown__field"
+    [id]="fieldId"
+    [disabled]="disabled()"
+    [attr.aria-expanded]="open()"
+    aria-haspopup="listbox"
+    [attr.aria-invalid]="invalid() ? 'true' : null"
+    [attr.aria-describedby]="describedBy()"
+    [attr.aria-readonly]="readOnly() ? 'true' : null"
+    (click)="toggle()"
+  >
+    <span
+      class="nine-am-dropdown__value"
+      [class.nine-am-dropdown__value--placeholder]="!selectedOption()"
+    >
+      {{ selectedOption()?.label ?? placeholder() }}
+    </span>
+
+    @if (statusIcon(); as icon) {
+      <nine-am-icon class="nine-am-dropdown__status" [name]="icon" />
+    }
+
+    <nine-am-icon class="nine-am-dropdown__chevron" name="chevron-down" />
+  </button>
+</div>
+
+@if (message(); as text) {
+  <div class="nine-am-dropdown__requirement" [id]="messageId">{{ text }}</div>
+} @else if (helperText()) {
+  <div class="nine-am-dropdown__helper" [id]="helperId">{{ helperText() }}</div>
+}
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="origin"
+  [cdkConnectedOverlayOpen]="open()"
+  [cdkConnectedOverlayPositions]="positions"
+  [cdkConnectedOverlayScrollStrategy]="scrollStrategy"
+  [cdkConnectedOverlayDisableClose]="true"
+  (overlayOutsideClick)="onOutsideClick($event)"
+  (overlayKeydown)="onOverlayKeydown($event)"
+  (detach)="open.set(false)"
+>
+  <!-- The size modifier is repeated here rather than inherited: the overlay is
+       portaled to the CDK container at body level, so the host's own size class
+       is not an ancestor of any of this and cannot reach it. -->
+  <div [class]="menuClass()" [style.width.px]="menuWidth()">
+    <div
+      class="nine-am-dropdown__list"
+      ngpListbox
+      ngpListboxMode="single"
+      [ngpListboxValue]="selectedValues()"
+      [ngpListboxCompareWith]="compareWith()"
+      [attr.aria-label]="label()"
+    >
+      @for (option of options(); track option.value) {
+        <div
+          class="nine-am-dropdown__item"
+          ngpListboxOption
+          [ngpListboxOptionValue]="option.value"
+          [ngpListboxOptionDisabled]="option.disabled ?? false"
+          (click)="choose(option)"
+        >
+          <span class="nine-am-dropdown__item-text">{{ option.label }}</span>
+
+          @if (isSelected(option)) {
+            <nine-am-icon class="nine-am-dropdown__check" name="checkmark" [size]="16" />
+          }
+        </div>
+      } @empty {
+        <p class="nine-am-dropdown__empty">No options</p>
+      }
+    </div>
+  </div>
+</ng-template>

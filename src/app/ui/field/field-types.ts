@@ -15,3 +15,20 @@
  * layout rather than a taller one, so it is a flag and not a size.
  */
 export type FieldSize = 'sm' | 'md' | 'lg';
+
+/**
+ * One choosable row, for the controls that take their options as data rather
+ * than as projected elements — `nine-am-multi-select` and `nine-am-dropdown`.
+ *
+ * Configured rather than projected for a reason those two share: a select-all
+ * has to know the whole set and a filter has to know each row's text, and
+ * projected `<option>` elements expose neither.
+ */
+export interface ListOption<T> {
+  readonly value: T;
+
+  /** What the row reads as, and what a filter and type-ahead match against. */
+  readonly label: string;
+
+  readonly disabled?: boolean;
+}

@@ -16,16 +16,17 @@ import { NgpListbox, NgpListboxOption } from 'ng-primitives/listbox';
 import { Checkbox } from '../checkbox/checkbox';
 import { Icon } from '../icon/icon';
 import type { IconName } from '../icon/icons';
-import type { FieldSize } from '../field/field-types';
+import type { FieldSize, ListOption } from '../field/field-types';
 
 let nextId = 0;
 
 /** One row. `label` is what the filter matches and what the row renders. */
-export interface MultiSelectOption<T> {
-  readonly value: T;
-  readonly label: string;
-  readonly disabled?: boolean;
-}
+/**
+ * Kept as a name because it reads better at the call site, but the shape lives
+ * in `field/field-types.ts` — `nine-am-dropdown` takes the same rows, and one
+ * of them defining the interface for both would be an odd place for it.
+ */
+export type MultiSelectOption<T> = ListOption<T>;
 
 /**
  * Where the selected rows sit in the list.

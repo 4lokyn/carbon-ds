@@ -845,6 +845,43 @@
         </div>
       </section>
 
+      <!-- ── Dropdown ────────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Dropdown</h2>
+        <p class="demo__note">
+          Pick one, in a list this page draws. The difference from
+          <code>nine-am-select</code> is who draws the options: that one is a native
+          <code>&lt;select&gt;</code>, so the operating system draws them and they can never be
+          styled or hold markup. This one buys Carbon's appearance and pays for it with a keyboard
+          it has to provide — <code>ng-primitives</code> here, the same primitive the multi-select
+          uses.
+        </p>
+
+        <div class="demo__fields">
+          <nine-am-dropdown
+            label="Region"
+            placeholder="Choose a region"
+            helperText="Where the cluster runs."
+            [options]="dropdownRegions"
+            [(selected)]="dropdownRegion"
+          />
+
+          <nine-am-dropdown
+            label="Instance type"
+            [options]="dropdownRegions"
+            [selected]="'eu'"
+            [invalid]="true"
+            invalidText="That type is not available in this region."
+          />
+        </div>
+
+        <p class="demo__note">
+          Chosen: <code>{{ dropdownRegion() ?? 'nothing' }}</code
+          >. It closes on a choice, unlike the multi-select — one value means the question is
+          answered, and a list that stays open over an answered question invites a second answer.
+        </p>
+      </section>
+
       <!-- ── Multi-select ────────────────────────────────────────────────────── -->
       <section class="demo__section">
         <h2 class="demo__title">Multi-select</h2>

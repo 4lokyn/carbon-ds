@@ -9,6 +9,8 @@ import {
   type ButtonSize,
   Callout,
   CopyButton,
+  Dropdown,
+  type DropdownOption,
   NINE_AM_BREADCRUMB,
   NINE_AM_MENU,
   NINE_AM_OVERFLOW_MENU,
@@ -62,6 +64,7 @@ const INITIAL_TAGS: readonly TagColor[] = ['blue', 'green', 'red', 'purple'];
     Button,
     Callout,
     CopyButton,
+    Dropdown,
     ProgressBar,
     DatePicker,
     DateRangePicker,
@@ -334,6 +337,14 @@ export class App {
 
   protected readonly menuAction = signal('');
   protected readonly lastCopy = signal('');
+  protected readonly dropdownRegion = signal<string | null>(null);
+
+  protected readonly dropdownRegions: readonly DropdownOption<string>[] = [
+    { value: 'eu', label: 'eu-central-1' },
+    { value: 'us', label: 'us-east-1' },
+    { value: 'ap', label: 'ap-south-1' },
+    { value: 'sa', label: 'sa-east-1 (no capacity)', disabled: true },
+  ];
   protected readonly exportProgress = signal(35);
 
   /** Walks the determinate bar to 100 so the transition is visible on screen. */
