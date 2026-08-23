@@ -159,6 +159,24 @@
 
 .nine-am-multi-select__list {
   overflow-y: auto;
+
+  // No ring of its own, and this is the one place in the system that turns one
+  // off on purpose.
+  //
+  // The list is a real focusable element — ng-primitives moves DOM focus into it
+  // rather than pointing at rows from the field — so the global `:focus` rule
+  // would draw a second blue ring around the whole panel, inside the first one
+  // on the active row. Carbon never shows that: its menu is not focusable at
+  // all, and Downshift names the active row with `aria-activedescendant` from
+  // the field. Two nested rings say "focus is here" twice and neither says
+  // *where*.
+  //
+  // Safe because the row always carries one: ng-primitives marks an option
+  // active the instant the list takes focus, measured — focus the list without
+  // touching an arrow key and the first option already has the 2px ring.
+  &:focus {
+    outline: none;
+  }
 }
 
 .nine-am-multi-select__item {
