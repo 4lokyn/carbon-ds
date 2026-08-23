@@ -24,7 +24,7 @@ export type ToggleSize = 'sm' | 'md';
  * the same contract `Checkbox` meets, with no adapter. See ui/README.md.
  */
 @Component({
-  selector: 'ds-toggle',
+  selector: 'nine-am-toggle',
   encapsulation: ViewEncapsulation.None,
   templateUrl: './toggle.html',
   styleUrl: './toggle.scss',
@@ -55,22 +55,22 @@ export class Toggle {
   /** Fires only on user interaction, unlike writes to the `checked` model. */
   readonly toggled = output<boolean>();
 
-  protected readonly buttonId = `ds-toggle-${nextId++}`;
+  protected readonly buttonId = `nine-am-toggle-${nextId++}`;
   protected readonly labelId = `${this.buttonId}-label`;
 
   protected readonly hostClass = computed(() => {
-    const classes = ['ds-toggle', `ds-toggle--${this.size()}`];
+    const classes = ['nine-am-toggle', `nine-am-toggle--${this.size()}`];
 
     if (this.checked()) {
-      classes.push('ds-toggle--checked');
+      classes.push('nine-am-toggle--checked');
     }
 
     if (this.disabled()) {
-      classes.push('ds-toggle--disabled');
+      classes.push('nine-am-toggle--disabled');
     }
 
     if (this.readOnly()) {
-      classes.push('ds-toggle--readonly');
+      classes.push('nine-am-toggle--readonly');
     }
 
     return classes.join(' ');

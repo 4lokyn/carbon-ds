@@ -1,28 +1,28 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { DS_SHELL } from './shell';
+import { NINE_AM_SHELL } from './shell';
 
 @Component({
-  imports: [...DS_SHELL],
+  imports: [...NINE_AM_SHELL],
   template: `
-    <ds-shell>
-      <ds-shell-header>
-        <button dsShellMenuButton aria-label="Open navigation"></button>
+    <nine-am-shell>
+      <nine-am-shell-header>
+        <button nineAmShellMenuButton aria-label="Open navigation"></button>
 
-        <a dsShellName href="#" [prefix]="prefix()">Platform</a>
+        <a nineAmShellName href="#" [prefix]="prefix()">Platform</a>
 
-        <nav dsShellNav aria-label="Sections">
-          <a dsShellLink href="#" [current]="true">Link 1</a>
-          <a dsShellLink href="#">Link 2</a>
+        <nav nineAmShellNav aria-label="Sections">
+          <a nineAmShellLink href="#" [current]="true">Link 1</a>
+          <a nineAmShellLink href="#">Link 2</a>
 
-          <ds-shell-nav-menu label="Sub-menu" [(expanded)]="subMenuOpen">
-            <a dsShellLink href="#">Overview</a>
-          </ds-shell-nav-menu>
+          <nine-am-shell-nav-menu label="Sub-menu" [(expanded)]="subMenuOpen">
+            <a nineAmShellLink href="#">Overview</a>
+          </nine-am-shell-nav-menu>
         </nav>
 
-        <div dsShellActions>
+        <div nineAmShellActions>
           <button
-            dsShellAction
+            nineAmShellAction
             icon="switcher"
             activeIcon="close"
             label="Switch sites"
@@ -30,28 +30,28 @@ import { DS_SHELL } from './shell';
             (click)="panelOpen.set(!panelOpen())"
           ></button>
         </div>
-      </ds-shell-header>
+      </nine-am-shell-header>
 
-      <ds-shell-side-nav>
-        <div dsShellSideNavItem>
-          <a dsShellLink href="#">Components</a>
+      <nine-am-shell-side-nav>
+        <div nineAmShellSideNavItem>
+          <a nineAmShellLink href="#">Components</a>
         </div>
 
-        <ds-shell-side-nav-menu label="Form controls" [(expanded)]="groupOpen">
-          <div dsShellSideNavItem><a dsShellLink href="#">Input</a></div>
-        </ds-shell-side-nav-menu>
-      </ds-shell-side-nav>
+        <nine-am-shell-side-nav-menu label="Form controls" [(expanded)]="groupOpen">
+          <div nineAmShellSideNavItem><a nineAmShellLink href="#">Input</a></div>
+        </nine-am-shell-side-nav-menu>
+      </nine-am-shell-side-nav>
 
-      <ds-shell-overlay />
+      <nine-am-shell-overlay />
 
-      <ds-shell-panel [(expanded)]="panelOpen">
-        <ds-shell-panel-section label="Foundations">
-          <a dsShellLink href="#">Brand</a>
-        </ds-shell-panel-section>
-      </ds-shell-panel>
+      <nine-am-shell-panel [(expanded)]="panelOpen">
+        <nine-am-shell-panel-section label="Foundations">
+          <a nineAmShellLink href="#">Brand</a>
+        </nine-am-shell-panel-section>
+      </nine-am-shell-panel>
 
-      <ds-shell-content withSideNav>content</ds-shell-content>
-    </ds-shell>
+      <nine-am-shell-content withSideNav>content</nine-am-shell-content>
+    </nine-am-shell>
   `,
 })
 class Host {
@@ -74,11 +74,11 @@ describe('Shell', () => {
       host: fixture.componentInstance,
       el,
       q,
-      burger: () => q<HTMLButtonElement>('.ds-shell-header__menu'),
-      sideNav: () => q<HTMLElement>('.ds-shell-side-nav'),
-      overlay: () => q<HTMLElement>('.ds-shell-overlay'),
-      panel: () => q<HTMLElement>('.ds-shell-panel'),
-      action: () => q<HTMLButtonElement>('[dsShellAction]'),
+      burger: () => q<HTMLButtonElement>('.nine-am-shell-header__menu'),
+      sideNav: () => q<HTMLElement>('.nine-am-shell-side-nav'),
+      overlay: () => q<HTMLElement>('.nine-am-shell-overlay'),
+      panel: () => q<HTMLElement>('.nine-am-shell-panel'),
+      action: () => q<HTMLButtonElement>('[nineAmShellAction]'),
       apply(change: () => void) {
         change();
         fixture.detectChanges();
@@ -90,13 +90,13 @@ describe('Shell', () => {
     const { burger, sideNav, fixture } = setup();
 
     expect(burger().getAttribute('aria-expanded')).toBe('false');
-    expect(sideNav().classList).not.toContain('ds-shell-side-nav--expanded');
+    expect(sideNav().classList).not.toContain('nine-am-shell-side-nav--expanded');
 
     burger().click();
     fixture.detectChanges();
 
     expect(burger().getAttribute('aria-expanded')).toBe('true');
-    expect(sideNav().classList).toContain('ds-shell-side-nav--expanded');
+    expect(sideNav().classList).toContain('nine-am-shell-side-nav--expanded');
   });
 
   it('closes the side nav when the scrim is clicked', () => {
@@ -104,45 +104,45 @@ describe('Shell', () => {
 
     burger().click();
     fixture.detectChanges();
-    expect(overlay().classList).toContain('ds-shell-overlay--visible');
+    expect(overlay().classList).toContain('nine-am-shell-overlay--visible');
 
     overlay().click();
     fixture.detectChanges();
 
     // Closing is the overlay's own default rather than something the caller
     // wires up — a scrim that darkens the page and ignores the click is a trap.
-    expect(sideNav().classList).not.toContain('ds-shell-side-nav--expanded');
-    expect(overlay().classList).not.toContain('ds-shell-overlay--visible');
+    expect(sideNav().classList).not.toContain('nine-am-shell-side-nav--expanded');
+    expect(overlay().classList).not.toContain('nine-am-shell-overlay--visible');
   });
 
   it('renders the name prefix separately, so it can be lighter', () => {
     const { q, apply, host } = setup();
 
-    expect(q('.ds-shell-header__name-prefix')?.textContent?.trim()).toBe('IBM');
+    expect(q('.nine-am-shell-header__name-prefix')?.textContent?.trim()).toBe('IBM');
 
     apply(() => host.prefix.set(''));
-    expect(q('.ds-shell-header__name-prefix')).toBeNull();
+    expect(q('.nine-am-shell-header__name-prefix')).toBeNull();
   });
 
   it('marks a current link with aria-current, not only a class', () => {
     const { el } = setup();
 
     const links = Array.from(
-      el.querySelectorAll('.ds-shell-header__nav .ds-shell-link'),
+      el.querySelectorAll('.nine-am-shell-header__nav .nine-am-shell-link'),
     );
 
     // The attribute is what a screen reader announces, and it is also what
     // Angular's router writes — which is why the styles key off it.
     expect(links[0].getAttribute('aria-current')).toBe('page');
-    expect(links[0].classList).toContain('ds-shell-link--current');
+    expect(links[0].classList).toContain('nine-am-shell-link--current');
     expect(links[1].getAttribute('aria-current')).toBeNull();
   });
 
   it('expands a side nav group and reports it', () => {
     const { q, host, fixture } = setup();
 
-    const trigger = q<HTMLButtonElement>('.ds-shell-side-nav__submenu');
-    const panel = q<HTMLElement>('.ds-shell-side-nav__menu');
+    const trigger = q<HTMLButtonElement>('.nine-am-shell-side-nav__submenu');
+    const panel = q<HTMLElement>('.nine-am-shell-side-nav__menu');
 
     expect(trigger.getAttribute('aria-expanded')).toBe('false');
 
@@ -161,8 +161,8 @@ describe('Shell', () => {
   it('closes the header dropdown on Escape', () => {
     const { q, host, fixture } = setup();
 
-    const menu = q<HTMLElement>('ds-shell-nav-menu');
-    q<HTMLButtonElement>('.ds-shell-header__submenu-title').click();
+    const menu = q<HTMLElement>('nine-am-shell-nav-menu');
+    q<HTMLButtonElement>('.nine-am-shell-header__submenu-title').click();
     fixture.detectChanges();
     expect(host.subMenuOpen()).toBe(true);
 
@@ -175,10 +175,10 @@ describe('Shell', () => {
   it('closes the header dropdown on the way out, but not on the way in', () => {
     const { q, host, fixture } = setup();
 
-    const menu = q<HTMLElement>('ds-shell-nav-menu');
-    const trigger = q<HTMLButtonElement>('.ds-shell-header__submenu-title');
+    const menu = q<HTMLElement>('nine-am-shell-nav-menu');
+    const trigger = q<HTMLButtonElement>('.nine-am-shell-header__submenu-title');
     const item = q<HTMLAnchorElement>(
-      '.ds-shell-header__submenu-list .ds-shell-link',
+      '.nine-am-shell-header__submenu-list .nine-am-shell-link',
     );
 
     trigger.click();
@@ -210,8 +210,8 @@ describe('Shell', () => {
     fixture.detectChanges();
 
     expect(paths()).toBe(1);
-    expect(action().classList).toContain('ds-shell-header__action--active');
-    expect(panel().classList).toContain('ds-shell-panel--expanded');
+    expect(action().classList).toContain('nine-am-shell-header__action--active');
+    expect(panel().classList).toContain('nine-am-shell-panel--expanded');
     expect(panel().getAttribute('aria-hidden')).toBeNull();
   });
 
@@ -228,10 +228,10 @@ describe('Shell', () => {
     // cannot be written as nested <li> in an Angular template — the parser
     // reparents them. Explicit roles give the same semantics with no implied
     // end tags. If this ever goes back to <ul>, the nested group breaks.
-    expect(q('.ds-shell-side-nav__items').getAttribute('role')).toBe('list');
-    expect(el.querySelectorAll('.ds-shell-side-nav li')).toHaveLength(0);
+    expect(q('.nine-am-shell-side-nav__items').getAttribute('role')).toBe('list');
+    expect(el.querySelectorAll('.nine-am-shell-side-nav li')).toHaveLength(0);
     expect(
-      q('[dsShellSideNavItem]').getAttribute('role'),
+      q('[nineAmShellSideNavItem]').getAttribute('role'),
     ).toBe('listitem');
   });
 
@@ -240,9 +240,9 @@ describe('Shell', () => {
 
     // Its own element rather than an attribute on the app's <main>: the offsets
     // are margins, and an app class on the same element wiped them.
-    const content = q<HTMLElement>('ds-shell-content');
+    const content = q<HTMLElement>('nine-am-shell-content');
 
-    expect(content.classList).toContain('ds-shell-content--with-side-nav');
+    expect(content.classList).toContain('nine-am-shell-content--with-side-nav');
     expect(content.getAttribute('role')).toBe('main');
   });
 });

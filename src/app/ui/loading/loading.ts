@@ -29,14 +29,14 @@ const STATUS_ICON: Record<'finished' | 'error', IconName> = {
  *
  * `withOverlay` is on by default, and that is Carbon's default rather than a
  * choice made here. Know what it does before reaching for it: a bare
- * `<ds-loading />` covers the entire viewport and blocks the page.
+ * `<nine-am-loading />` covers the entire viewport and blocks the page.
  *
  * Carbon's own guidance is to reach for it rarely. Two rules from the usage
  * page, neither obvious from the API:
  *
  * - **Only past three seconds.** Below that the indicator is more disruptive
  *   than the wait.
- * - **For a full-screen load, prefer a skeleton.** `ds-table` already has one,
+ * - **For a full-screen load, prefer a skeleton.** `nine-am-table` already has one,
  *   and a skeleton shows the shape of what is coming where a spinner shows
  *   nothing. The overlay is for a section that is genuinely blocked — a form
  *   mid-submit — rather than for a page that is merely still arriving.
@@ -44,7 +44,7 @@ const STATUS_ICON: Record<'finished' | 'error', IconName> = {
  * And never more than one at a time on a screen.
  */
 @Component({
-  selector: 'ds-loading',
+  selector: 'nine-am-loading',
   encapsulation: ViewEncapsulation.None,
   templateUrl: './loading.html',
   styleUrl: './loading.scss',
@@ -59,7 +59,7 @@ export class Loading {
   /**
    * Whether this spinner announces itself.
    *
-   * Off when something around it already does — `ds-inline-loading` is itself
+   * Off when something around it already does — `nine-am-inline-loading` is itself
    * the live region, and a live region nested inside another is a reliable way
    * to get a message read twice or not at all.
    */
@@ -82,28 +82,28 @@ export class Loading {
   readonly description = input('Loading');
 
   protected readonly hostClass = computed(() => {
-    const classes = ['ds-loading-host'];
+    const classes = ['nine-am-loading-host'];
 
     if (this.withOverlay()) {
-      classes.push('ds-loading-host--overlay');
+      classes.push('nine-am-loading-host--overlay');
     }
 
     if (!this.active()) {
-      classes.push('ds-loading-host--stopped');
+      classes.push('nine-am-loading-host--stopped');
     }
 
     return classes.join(' ');
   });
 
   protected readonly spinnerClass = computed(() => {
-    const classes = ['ds-loading', 'ds-loading__svg'];
+    const classes = ['nine-am-loading', 'nine-am-loading__svg'];
 
     if (this.small()) {
-      classes.push('ds-loading--small');
+      classes.push('nine-am-loading--small');
     }
 
     if (!this.active()) {
-      classes.push('ds-loading--stop');
+      classes.push('nine-am-loading--stop');
     }
 
     return classes.join(' ');
@@ -131,7 +131,7 @@ export class Loading {
  * status behind the caller's back. Left out on purpose.
  */
 @Component({
-  selector: 'ds-inline-loading',
+  selector: 'nine-am-inline-loading',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon, Loading],
   templateUrl: './inline-loading.html',
@@ -150,7 +150,7 @@ export class InlineLoading {
   /** The visible line beside the spinner. Change it as the status changes. */
   readonly description = input('');
 
-  protected readonly labelId = `ds-inline-loading-${nextId++}`;
+  protected readonly labelId = `nine-am-inline-loading-${nextId++}`;
 
   protected readonly icon = computed<IconName | null>(() => {
     const status = this.status();
@@ -159,8 +159,8 @@ export class InlineLoading {
   });
 
   protected readonly hostClass = computed(
-    () => `ds-inline-loading ds-inline-loading--${this.status()}`,
+    () => `nine-am-inline-loading nine-am-inline-loading--${this.status()}`,
   );
 }
 
-export const DS_LOADING = [Loading, InlineLoading] as const;
+export const NINE_AM_LOADING = [Loading, InlineLoading] as const;

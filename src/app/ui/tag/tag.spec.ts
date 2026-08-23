@@ -5,11 +5,11 @@ import { InteractiveTag, Tag } from './tag';
 @Component({
   imports: [Tag, InteractiveTag],
   template: `
-    <ds-tag color="blue">plain</ds-tag>
+    <nine-am-tag color="blue">plain</nine-am-tag>
 
-    <button dsTag selectable [(selected)]="picked">filter</button>
+    <button nineAmTag selectable [(selected)]="picked">filter</button>
 
-    <button dsTag color="teal" (click)="opens.set(opens() + 1)">open</button>
+    <button nineAmTag color="teal" (click)="opens.set(opens() + 1)">open</button>
   `,
 })
 class Host {
@@ -27,7 +27,7 @@ describe('Tag', () => {
     return {
       fixture,
       host: fixture.componentInstance,
-      plain: () => el.querySelector('ds-tag') as HTMLElement,
+      plain: () => el.querySelector('nine-am-tag') as HTMLElement,
       buttons: () => Array.from(el.querySelectorAll<HTMLButtonElement>('button')),
     };
   }
@@ -36,7 +36,7 @@ describe('Tag', () => {
     const { plain } = setup();
 
     // A tag that does nothing must not be focusable or announced as a control.
-    expect(plain().tagName).toBe('DS-TAG');
+    expect(plain().tagName).toBe('NINE-AM-TAG');
     expect(plain().querySelector('button')).toBeNull();
   });
 
@@ -75,8 +75,8 @@ describe('Tag', () => {
     // selected has two things saying "picked" and neither wins.
     const classes = buttons()[0].className;
 
-    expect(classes).toContain('ds-tag--selectable');
-    expect(classes).not.toContain('ds-tag--gray');
-    expect(classes).not.toContain('ds-tag--blue');
+    expect(classes).toContain('nine-am-tag--selectable');
+    expect(classes).not.toContain('nine-am-tag--gray');
+    expect(classes).not.toContain('nine-am-tag--blue');
   });
 });

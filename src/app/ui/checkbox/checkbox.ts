@@ -25,7 +25,7 @@ export type CheckboxOrientation = 'vertical' | 'horizontal';
  * Lets a checkbox find its group without the group having to pass anything down.
  * Optional on purpose — a lone checkbox ("I accept the terms") is a valid use.
  */
-export const DS_CHECKBOX_GROUP = new InjectionToken<CheckboxGroup>('DS_CHECKBOX_GROUP');
+export const NINE_AM_CHECKBOX_GROUP = new InjectionToken<CheckboxGroup>('NINE_AM_CHECKBOX_GROUP');
 
 /**
  * Carbon checkbox group: a `<fieldset>` with a `<legend>`, one helper or
@@ -43,13 +43,13 @@ export const DS_CHECKBOX_GROUP = new InjectionToken<CheckboxGroup>('DS_CHECKBOX_
  * screen reader. Neither works on a div.
  */
 @Component({
-  selector: 'ds-checkbox-group',
+  selector: 'nine-am-checkbox-group',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
   templateUrl: './checkbox-group.html',
   styleUrl: './checkbox.scss',
   host: { '[class]': 'hostClass()' },
-  providers: [{ provide: DS_CHECKBOX_GROUP, useExisting: CheckboxGroup }],
+  providers: [{ provide: NINE_AM_CHECKBOX_GROUP, useExisting: CheckboxGroup }],
 })
 export class CheckboxGroup {
   /** Names the set. Rendered as the `<legend>`, hidden with `hideLegend`. */
@@ -73,7 +73,7 @@ export class CheckboxGroup {
   readonly warn = input(false, { transform: booleanAttribute });
   readonly warnText = input('');
 
-  private readonly groupId = `ds-checkbox-group-${nextGroupId++}`;
+  private readonly groupId = `nine-am-checkbox-group-${nextGroupId++}`;
 
   protected readonly helperId = `${this.groupId}-helper`;
   protected readonly messageId = `${this.groupId}-message`;
@@ -104,20 +104,20 @@ export class CheckboxGroup {
   });
 
   protected readonly hostClass = computed(() => {
-    const classes = ['ds-checkbox-group', `ds-checkbox-group--${this.orientation()}`];
+    const classes = ['nine-am-checkbox-group', `nine-am-checkbox-group--${this.orientation()}`];
 
     if (this.invalid()) {
-      classes.push('ds-checkbox-group--invalid');
+      classes.push('nine-am-checkbox-group--invalid');
     } else if (this.warn()) {
-      classes.push('ds-checkbox-group--warn');
+      classes.push('nine-am-checkbox-group--warn');
     }
 
     if (this.disabled()) {
-      classes.push('ds-checkbox-group--disabled');
+      classes.push('nine-am-checkbox-group--disabled');
     }
 
     if (this.readOnly()) {
-      classes.push('ds-checkbox-group--readonly');
+      classes.push('nine-am-checkbox-group--readonly');
     }
 
     return classes.join(' ');
@@ -131,13 +131,13 @@ export class CheckboxGroup {
  * *property*, not an attribute, so a template binding on the input cannot set it.
  * A table's select-all needs it.
  *
- * Works alone or inside a `ds-checkbox-group`. Inside one it stays quiet: the
+ * Works alone or inside a `nine-am-checkbox-group`. Inside one it stays quiet: the
  * group's message is the set's message, so a checkbox does not render a second
  * copy of it — twelve options in an invalid group would otherwise print the same
  * error twelve times. Its own `invalid` / `warn` are for the standalone case.
  */
 @Component({
-  selector: 'ds-checkbox',
+  selector: 'nine-am-checkbox',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
   templateUrl: './checkbox.html',
@@ -183,11 +183,11 @@ export class Checkbox {
   /** Fires only on user interaction, unlike writes to the `checked` model. */
   readonly toggled = output<boolean>();
 
-  protected readonly inputId = `ds-checkbox-${nextId++}`;
+  protected readonly inputId = `nine-am-checkbox-${nextId++}`;
   protected readonly helperId = `${this.inputId}-helper`;
   protected readonly messageId = `${this.inputId}-message`;
 
-  protected readonly group = inject(DS_CHECKBOX_GROUP, { optional: true });
+  protected readonly group = inject(NINE_AM_CHECKBOX_GROUP, { optional: true });
 
   private readonly inputRef = viewChild.required<ElementRef<HTMLInputElement>>('input');
 
@@ -235,22 +235,22 @@ export class Checkbox {
   });
 
   protected readonly hostClass = computed(() => {
-    const classes = ['ds-checkbox'];
+    const classes = ['nine-am-checkbox'];
 
     if (this.hideLabel()) {
-      classes.push('ds-checkbox--hide-label');
+      classes.push('nine-am-checkbox--hide-label');
     }
 
     if (!this.group) {
       if (this.invalid()) {
-        classes.push('ds-checkbox--invalid');
+        classes.push('nine-am-checkbox--invalid');
       } else if (this.warn()) {
-        classes.push('ds-checkbox--warn');
+        classes.push('nine-am-checkbox--warn');
       }
     }
 
     if (this.isReadOnly()) {
-      classes.push('ds-checkbox--readonly');
+      classes.push('nine-am-checkbox--readonly');
     }
 
     return classes.join(' ');
@@ -277,4 +277,4 @@ export class Checkbox {
   }
 }
 
-export const DS_CHECKBOX = [Checkbox, CheckboxGroup] as const;
+export const NINE_AM_CHECKBOX = [Checkbox, CheckboxGroup] as const;

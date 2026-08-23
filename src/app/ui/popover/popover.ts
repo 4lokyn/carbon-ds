@@ -15,16 +15,16 @@ import type { PopoverSide } from './popover-position';
  * flips a panel away from a viewport edge the trigger is on the other side.
  */
 @Component({
-  selector: 'ds-popover',
+  selector: 'nine-am-popover',
   encapsulation: ViewEncapsulation.None,
   styleUrl: './popover.scss',
   host: { '[class]': 'hostClass()' },
   template: `
     @if (caret()) {
-      <span class="ds-popover__caret"></span>
+      <span class="nine-am-popover__caret"></span>
     }
 
-    <div class="ds-popover__content"><ng-content /></div>
+    <div class="nine-am-popover__content"><ng-content /></div>
   `,
 })
 export class Popover {
@@ -40,10 +40,10 @@ export class Popover {
   readonly highContrast = input(false, { transform: booleanAttribute });
 
   protected readonly hostClass = computed(() => {
-    const classes = ['ds-popover', `ds-popover--${this.side()}`];
+    const classes = ['nine-am-popover', `nine-am-popover--${this.side()}`];
 
     if (this.highContrast()) {
-      classes.push('ds-popover--high-contrast');
+      classes.push('nine-am-popover--high-contrast');
     }
 
     return classes.join(' ');

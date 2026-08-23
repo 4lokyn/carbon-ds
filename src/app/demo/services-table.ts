@@ -95,7 +95,7 @@ function formatUpdated(iso: string): string {
 }
 
 /**
- * Realistic exercise of ds-table: filter, sort, page, select, expand, all at once.
+ * Realistic exercise of nine-am-table: filter, sort, page, select, expand, all at once.
  *
  * Note the sort/page composition. The table is in `serverSide` mode even though
  * the data is local — because pagination lives outside the table, the table only
@@ -120,7 +120,7 @@ function formatUpdated(iso: string): string {
   template: `
     <!-- The escape hatch: config covers text columns, a template covers markup. -->
     <ng-template #statusCell let-row>
-      <ds-tag size="sm" [color]="statusColor(row.status)">{{ row.status }}</ds-tag>
+      <nine-am-tag size="sm" [color]="statusColor(row.status)">{{ row.status }}</nine-am-tag>
     </ng-template>
 
     <ng-template #expandedRow let-row>
@@ -135,20 +135,20 @@ function formatUpdated(iso: string): string {
     </ng-template>
 
     <div class="services">
-      <ds-table-header
+      <nine-am-table-header
         heading="Services"
         description="Everything running in this cluster. Search, sort and page through it."
       />
 
-      <ds-table-toolbar
+      <nine-am-table-toolbar
         [selectedCount]="selected().length"
         [countLabel]="countLabel"
         (cancelled)="selected.set([])"
       >
-        <div dsToolbarActions class="services__tools">
+        <div nineAmToolbarActions class="services__tools">
           <!-- Not [(value)]: narrowing the list has to reset the page too, and a
                two-way bind would leave you on page 4 of 1. -->
-          <ds-search
+          <nine-am-search
             class="services__filter"
             size="sm"
             expandable
@@ -159,38 +159,38 @@ function formatUpdated(iso: string): string {
           />
 
           <button
-            dsButton
+            nineAmButton
             kind="ghost"
             size="sm"
             iconOnly
             aria-label="Download as CSV"
             (click)="reload()"
           >
-            <ds-icon name="arrow-down" />
+            <nine-am-icon name="arrow-down" />
           </button>
 
           <button
-            dsButton
+            nineAmButton
             kind="ghost"
             size="sm"
             iconOnly
             aria-label="Table settings"
             (click)="reload()"
           >
-            <ds-icon name="settings" />
+            <nine-am-icon name="settings" />
           </button>
 
-          <button dsButton size="sm" (click)="reload()">Add new</button>
+          <button nineAmButton size="sm" (click)="reload()">Add new</button>
         </div>
 
-        <div dsBatchActions>
-          <button dsButton kind="ghost" size="sm" (click)="deleteSelected()">Delete</button>
+        <div nineAmBatchActions>
+          <button nineAmButton kind="ghost" size="sm" (click)="deleteSelected()">Delete</button>
         </div>
-      </ds-table-toolbar>
+      </nine-am-table-toolbar>
 
       <!-- No zebra here: this table is selectable, and the stripe and the
            selected background are the same token color in every Carbon theme. -->
-      <ds-table
+      <nine-am-table
         serverSide
         selectable
         caption="Services"
@@ -209,9 +209,9 @@ function formatUpdated(iso: string): string {
         } @else {
           Everything here has been deleted.
         }
-      </ds-table>
+      </nine-am-table>
 
-      <ds-pagination [total]="filtered().length" [(page)]="page" [(pageSize)]="pageSize" />
+      <nine-am-pagination [total]="filtered().length" [(page)]="page" [(pageSize)]="pageSize" />
     </div>
   `,
 })

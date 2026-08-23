@@ -1,26 +1,26 @@
-<ds-icon class="ds-notification__icon" [name]="icon()" [size]="20" />
+<nine-am-icon class="nine-am-notification__icon" [name]="icon()" [size]="20" />
 
-<div class="ds-notification__details">
-  <p class="ds-notification__heading">{{ heading() }}</p>
+<div class="nine-am-notification__details">
+  <p class="nine-am-notification__heading">{{ heading() }}</p>
 
   @if (subtitle()) {
-    <p class="ds-notification__subtitle">{{ subtitle() }}</p>
+    <p class="nine-am-notification__subtitle">{{ subtitle() }}</p>
   }
 
   <ng-content />
 
   @if (caption()) {
-    <p class="ds-notification__caption">{{ caption() }}</p>
+    <p class="nine-am-notification__caption">{{ caption() }}</p>
   }
 </div>
 
 @if (!hideCloseButton()) {
   <button
     type="button"
-    class="ds-notification__close"
+    class="nine-am-notification__close"
     [attr.aria-label]="closeLabel()"
     (click)="closed.emit()"
   >
-    <ds-icon name="close" [size]="20" />
+    <nine-am-icon name="close" [size]="20" />
   </button>
 }

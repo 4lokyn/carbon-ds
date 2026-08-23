@@ -6,7 +6,7 @@ import type { InputType } from './input';
 @Component({
   imports: [Input],
   template: `
-    <ds-input
+    <nine-am-input
       label="Namespace"
       [type]="type()"
       [helperText]="helperText()"
@@ -44,10 +44,10 @@ describe('Input', () => {
       host: fixture.componentInstance,
       el,
       input: () => el.querySelector('input') as HTMLInputElement,
-      helper: () => el.querySelector('.ds-input__helper'),
-      requirement: () => el.querySelector('.ds-input__requirement'),
+      helper: () => el.querySelector('.nine-am-input__helper'),
+      requirement: () => el.querySelector('.nine-am-input__requirement'),
       statusPaths: () =>
-        Array.from(el.querySelectorAll('.ds-input__status path')),
+        Array.from(el.querySelectorAll('.nine-am-input__status path')),
       apply(change: () => void) {
         change();
         fixture.detectChanges();
@@ -112,13 +112,13 @@ describe('Input', () => {
       host.warn.set(true);
     });
 
-    const wrapper = el.querySelector('ds-input') as HTMLElement;
+    const wrapper = el.querySelector('nine-am-input') as HTMLElement;
 
     expect(requirement()?.textContent?.trim()).toBe(
       'That namespace already exists.',
     );
-    expect(wrapper.classList).toContain('ds-input--invalid');
-    expect(wrapper.classList).not.toContain('ds-input--warn');
+    expect(wrapper.classList).toContain('nine-am-input--invalid');
+    expect(wrapper.classList).not.toContain('nine-am-input--warn');
   });
 
   it('marks aria-invalid only for invalid, never for warn', () => {
@@ -173,7 +173,7 @@ describe('Input', () => {
 
     expect(input().type).toBe('password');
 
-    const reveal = el.querySelector('.ds-input__reveal') as HTMLButtonElement;
+    const reveal = el.querySelector('.nine-am-input__reveal') as HTMLButtonElement;
     expect(reveal.getAttribute('aria-label')).toBe('Show password');
 
     reveal.click();
@@ -187,7 +187,7 @@ describe('Input', () => {
   it('offers no reveal button on a field that is not a password', () => {
     const { el } = setup();
 
-    expect(el.querySelector('.ds-input__reveal')).toBeNull();
+    expect(el.querySelector('.nine-am-input__reveal')).toBeNull();
   });
 
   it('reports blur, which is what the validation policy hangs off', () => {
@@ -206,10 +206,10 @@ describe('Input', () => {
 
     // No message, no divider: in fluid the field keeps its own bottom border and
     // a divider would draw a second rule right on top of it.
-    expect(el.querySelector('.ds-input__divider')).toBeNull();
+    expect(el.querySelector('.nine-am-input__divider')).toBeNull();
 
     apply(() => host.invalid.set(true));
-    expect(el.querySelector('.ds-input__divider')).not.toBeNull();
+    expect(el.querySelector('.nine-am-input__divider')).not.toBeNull();
   });
 
   it('reports every keystroke through the value model', () => {

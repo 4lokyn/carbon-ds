@@ -32,13 +32,13 @@ export type TagSize = 'sm' | 'md' | 'lg';
 /**
  * A read-only tag: a piece of data about the thing it sits on.
  *
- * If it is clickable it is not this component — see `button[dsTag]` below. That
+ * If it is clickable it is not this component — see `button[nineAmTag]` below. That
  * split is the same one the button makes: a control that responds to a click is
  * a `<button>`, and no amount of `role` and `tabindex` on a `<span>` is as good
  * as the element that already means it.
  */
 @Component({
-  selector: 'ds-tag',
+  selector: 'nine-am-tag',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
   styleUrl: './tag.scss',
@@ -47,16 +47,16 @@ export type TagSize = 'sm' | 'md' | 'lg';
   },
   template: `
     @if (icon(); as name) {
-      <ds-icon class="ds-tag__icon" [name]="name" />
+      <nine-am-icon class="nine-am-tag__icon" [name]="name" />
     }
 
-    <span class="ds-tag__label">
+    <span class="nine-am-tag__label">
       <ng-content />
     </span>
 
     @if (dismissible()) {
       <button
-        class="ds-tag__close"
+        class="nine-am-tag__close"
         type="button"
         [attr.aria-label]="dismissLabel()"
         (click)="dismissed.emit()"
@@ -98,10 +98,10 @@ export class Tag {
   readonly dismissed = output<void>();
 
   protected readonly hostClass = computed(() => {
-    const classes = ['ds-tag', `ds-tag--${this.color()}`, `ds-tag--${this.size()}`];
+    const classes = ['nine-am-tag', `nine-am-tag--${this.color()}`, `nine-am-tag--${this.size()}`];
 
     if (this.disabled()) {
-      classes.push('ds-tag--disabled');
+      classes.push('nine-am-tag--disabled');
     }
 
     return classes.join(' ');
@@ -125,7 +125,7 @@ export class Tag {
  * saying "picked" and neither wins.
  */
 @Component({
-  selector: 'button[dsTag]',
+  selector: 'button[nineAmTag]',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
   styleUrl: './tag.scss',
@@ -138,10 +138,10 @@ export class Tag {
   },
   template: `
     @if (icon(); as name) {
-      <ds-icon class="ds-tag__icon" [name]="name" />
+      <nine-am-icon class="nine-am-tag__icon" [name]="name" />
     }
 
-    <span class="ds-tag__label">
+    <span class="nine-am-tag__label">
       <ng-content />
     </span>
   `,
@@ -163,20 +163,20 @@ export class InteractiveTag {
   readonly toggled = output<boolean>();
 
   protected readonly hostClass = computed(() => {
-    const classes = ['ds-tag', 'ds-tag--interactive', `ds-tag--${this.size()}`];
+    const classes = ['nine-am-tag', 'nine-am-tag--interactive', `nine-am-tag--${this.size()}`];
 
     if (this.selectable()) {
-      classes.push('ds-tag--selectable');
+      classes.push('nine-am-tag--selectable');
 
       if (this.selected()) {
-        classes.push('ds-tag--selected');
+        classes.push('nine-am-tag--selected');
       }
     } else {
-      classes.push('ds-tag--operational', `ds-tag--${this.color()}`);
+      classes.push('nine-am-tag--operational', `nine-am-tag--${this.color()}`);
     }
 
     if (this.disabled()) {
-      classes.push('ds-tag--disabled');
+      classes.push('nine-am-tag--disabled');
     }
 
     return classes.join(' ');
@@ -194,4 +194,4 @@ export class InteractiveTag {
   }
 }
 
-export const DS_TAG = [Tag, InteractiveTag] as const;
+export const NINE_AM_TAG = [Tag, InteractiveTag] as const;

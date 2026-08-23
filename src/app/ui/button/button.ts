@@ -37,7 +37,7 @@ export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
  * Encapsulation is None across the whole DS. See ui/README.md for why.
  */
 @Component({
-  selector: 'button[dsButton]',
+  selector: 'button[nineAmButton]',
   encapsulation: ViewEncapsulation.None,
   template: '<ng-content />',
   styleUrl: './button.scss',
@@ -71,17 +71,17 @@ export class Button {
   // of truth for the host class list, and easier to read in devtools.
   protected readonly hostClass = computed(() => {
     const classes = [
-      'ds-btn',
-      `ds-btn--${this.kind()}`,
-      `ds-btn--${this.size()}`,
+      'nine-am-btn',
+      `nine-am-btn--${this.kind()}`,
+      `nine-am-btn--${this.size()}`,
     ];
 
     if (this.fullWidth()) {
-      classes.push('ds-btn--full');
+      classes.push('nine-am-btn--full');
     }
 
     if (this.iconOnly()) {
-      classes.push('ds-btn--icon-only');
+      classes.push('nine-am-btn--icon-only');
     }
 
     return classes.join(' ');

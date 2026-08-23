@@ -5,7 +5,7 @@ import { Textarea } from './textarea';
 @Component({
   imports: [Textarea],
   template: `
-    <ds-textarea
+    <nine-am-textarea
       label="Description"
       [helperText]="helperText()"
       [maxLength]="maxLength()"
@@ -47,9 +47,9 @@ describe('Textarea', () => {
       host: fixture.componentInstance,
       el,
       field: () => el.querySelector('textarea') as HTMLTextAreaElement,
-      counter: () => el.querySelector('.ds-textarea__counter'),
-      helper: () => el.querySelector('.ds-textarea__helper'),
-      requirement: () => el.querySelector('.ds-textarea__requirement'),
+      counter: () => el.querySelector('.nine-am-textarea__counter'),
+      helper: () => el.querySelector('.nine-am-textarea__helper'),
+      requirement: () => el.querySelector('.nine-am-textarea__requirement'),
       apply(change: () => void) {
         change();
         fixture.detectChanges();
@@ -128,10 +128,10 @@ describe('Textarea', () => {
       host.warn.set(true);
     });
 
-    const wrapper = el.querySelector('ds-textarea') as HTMLElement;
+    const wrapper = el.querySelector('nine-am-textarea') as HTMLElement;
 
-    expect(wrapper.classList).toContain('ds-textarea--invalid');
-    expect(wrapper.classList).not.toContain('ds-textarea--warn');
+    expect(wrapper.classList).toContain('nine-am-textarea--invalid');
+    expect(wrapper.classList).not.toContain('nine-am-textarea--warn');
     expect(requirement()?.textContent?.trim()).toBe('Needs more context.');
   });
 

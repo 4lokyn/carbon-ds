@@ -13,7 +13,7 @@ const OWNERS: readonly MultiSelectOption<string>[] = [
 @Component({
   imports: [MultiSelect],
   template: `
-    <ds-multi-select
+    <nine-am-multi-select
       label="Owners"
       selectAll
       [filterable]="filterable()"
@@ -36,7 +36,7 @@ describe('MultiSelect', () => {
     const el = fixture.nativeElement as HTMLElement;
 
     const open = () => {
-      (el.querySelector('.ds-multi-select__field') as HTMLButtonElement).click();
+      (el.querySelector('.nine-am-multi-select__field') as HTMLButtonElement).click();
       fixture.detectChanges();
     };
 
@@ -47,21 +47,21 @@ describe('MultiSelect', () => {
       rows: () =>
         Array.from(
           document.querySelectorAll(
-            '.ds-multi-select__item:not(.ds-multi-select__item--select-all)',
+            '.nine-am-multi-select__item:not(.nine-am-multi-select__item--select-all)',
           ),
         ),
       rowLabels: () =>
         Array.from(
           document.querySelectorAll(
-            '.ds-multi-select__item:not(.ds-multi-select__item--select-all) .ds-multi-select__item-text',
+            '.nine-am-multi-select__item:not(.nine-am-multi-select__item--select-all) .nine-am-multi-select__item-text',
           ),
         ).map((e) => e.textContent?.trim()),
       selectAllRow: () =>
-        document.querySelector('.ds-multi-select__item--select-all') as HTMLElement,
+        document.querySelector('.nine-am-multi-select__item--select-all') as HTMLElement,
       selectAllBox: () =>
-        document.querySelector('.ds-multi-select__item--select-all input') as HTMLInputElement,
+        document.querySelector('.nine-am-multi-select__item--select-all input') as HTMLInputElement,
       type(text: string) {
-        const filter = document.querySelector('.ds-multi-select__filter') as HTMLInputElement;
+        const filter = document.querySelector('.nine-am-multi-select__filter') as HTMLInputElement;
         filter.value = text;
         filter.dispatchEvent(new Event('input'));
         fixture.detectChanges();
@@ -77,7 +77,7 @@ describe('MultiSelect', () => {
     fixture.detectChanges();
 
     // A field is one line; five labels are not.
-    expect(el.querySelector('.ds-multi-select__count')?.textContent?.trim()).toBe('2');
+    expect(el.querySelector('.nine-am-multi-select__count')?.textContent?.trim()).toBe('2');
   });
 
   it('picks and unpicks a row', () => {
@@ -175,7 +175,7 @@ describe('MultiSelect', () => {
 
     (
       (fixture.nativeElement as HTMLElement).querySelector(
-        '.ds-multi-select__field',
+        '.nine-am-multi-select__field',
       ) as HTMLButtonElement
     ).click();
     fixture.detectChanges();
@@ -211,7 +211,7 @@ describe('MultiSelect', () => {
 
     (
       (fixture.nativeElement as HTMLElement).querySelector(
-        '.ds-multi-select__field',
+        '.nine-am-multi-select__field',
       ) as HTMLButtonElement
     ).click();
     fixture.detectChanges();
@@ -226,7 +226,7 @@ describe('MultiSelect with fixed ordering', () => {
   @Component({
     imports: [MultiSelect],
     template: `
-      <ds-multi-select
+      <nine-am-multi-select
         label="Owners"
         selectionFeedback="fixed"
         [options]="options"
@@ -245,14 +245,14 @@ describe('MultiSelect with fixed ordering', () => {
 
     (
       (fixture.nativeElement as HTMLElement).querySelector(
-        '.ds-multi-select__field',
+        '.nine-am-multi-select__field',
       ) as HTMLButtonElement
     ).click();
     fixture.detectChanges();
 
     const labels = Array.from(
       document.querySelectorAll(
-        '.ds-multi-select__item:not(.ds-multi-select__item--select-all) .ds-multi-select__item-text',
+        '.nine-am-multi-select__item:not(.nine-am-multi-select__item--select-all) .nine-am-multi-select__item-text',
       ),
     ).map((e) => e.textContent?.trim());
 

@@ -20,7 +20,7 @@ const WIDGETS: readonly Widget[] = [
   template: `
     <ng-template #detail let-row>detail for {{ row.name }}</ng-template>
 
-    <ds-table
+    <nine-am-table
       caption="Widgets"
       selectable
       [columns]="columns"
@@ -63,7 +63,7 @@ describe('Table', () => {
 
   function nameColumnText(el: HTMLElement): string[] {
     return Array.from(
-      el.querySelectorAll('tbody tr:not(.ds-table__row--expansion)'),
+      el.querySelectorAll('tbody tr:not(.nine-am-table__row--expansion)'),
     ).map((row) => row.querySelectorAll('td')[2]?.textContent?.trim() ?? '');
   }
 
@@ -72,7 +72,7 @@ describe('Table', () => {
 
     expect(el.querySelector('caption')?.textContent?.trim()).toBe('Widgets');
     expect(el.querySelector('caption')?.className).toContain(
-      'ds-visually-hidden',
+      'nine-am-visually-hidden',
     );
   });
 
@@ -208,18 +208,18 @@ describe('Table', () => {
     const { fixture, el } = setup();
 
     const expand = el.querySelector(
-      'tbody .ds-table__expand',
+      'tbody .nine-am-table__expand',
     ) as HTMLButtonElement;
 
     expect(expand.getAttribute('aria-expanded')).toBe('false');
-    expect(el.querySelector('.ds-table__row--expansion')).toBeNull();
+    expect(el.querySelector('.nine-am-table__row--expansion')).toBeNull();
 
     expand.click();
     fixture.detectChanges();
 
     expect(expand.getAttribute('aria-expanded')).toBe('true');
 
-    const expansion = el.querySelector('.ds-table__row--expansion');
+    const expansion = el.querySelector('.nine-am-table__row--expansion');
     expect(expansion).toBeTruthy();
 
     // aria-controls has to resolve to the row that actually appeared.
@@ -233,7 +233,7 @@ describe('Table', () => {
     host.rows.set([]);
     fixture.detectChanges();
 
-    const emptyCell = el.querySelector('.ds-table__cell--empty');
+    const emptyCell = el.querySelector('.nine-am-table__cell--empty');
 
     // 3 data columns + select + expand
     expect(emptyCell?.getAttribute('colspan')).toBe('5');
@@ -243,7 +243,7 @@ describe('Table', () => {
     @Component({
       imports: [Table],
       template: `
-        <ds-table
+        <nine-am-table
           loading
           caption="Widgets"
           [skeletonRows]="3"
@@ -266,7 +266,7 @@ describe('Table', () => {
 
     const el = fixture.nativeElement as HTMLElement;
 
-    expect(el.querySelectorAll('.ds-table__row--skeleton').length).toBe(3);
+    expect(el.querySelectorAll('.nine-am-table__row--skeleton').length).toBe(3);
     expect(el.textContent).not.toContain('carbon');
     expect(el.querySelector('[role="status"]')?.textContent).toContain(
       'Loading Widgets',

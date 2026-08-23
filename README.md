@@ -319,7 +319,7 @@ is exactly why correcting a bad value updates as you type. The nuance the earlie
 draft got backwards: "never while typing" applies to *raising* an error, not to
 clearing one.
 
-The control has no part in this. `invalid` is a plain input on `ds-input`, the way
+The control has no part in this. `invalid` is a plain input on `nine-am-input`, the way
 it is a plain prop in Carbon React, and `(blurred)` is the hook the policy hangs
 off — a control cannot see a submit it is not part of.
 
@@ -340,13 +340,13 @@ keep the per-field errors.
 - **Always** disable on submit, to stop a second one going out.
 
 **Does the label belong to the control or to a wrapper?** To the control:
-`<ds-input label="…" helperText="…">`. This is Carbon's own API shape
+`<nine-am-input label="…" helperText="…">`. This is Carbon's own API shape
 (`labelText` / `helperText` / `invalidText` all live on the component), and it
 keeps every field one element deep instead of two. The cost is that each control
 repeats the markup, and it is paid in Sass: `src/styles/_field.scss` holds the
 label, helper, requirement and field-surface mixins, mirroring the way Carbon
 factors the same three into `components/form/_form.scss`. There is no
-`ds-form-field`, and there should not be one.
+`nine-am-form-field`, and there should not be one.
 
 ### Where we deviate from Carbon, and why
 
@@ -426,7 +426,7 @@ rather than Carbon's padding-top trick, which predates browser support.
 
 **The shell's colour is a theme zone, not a token.** Carbon's header is
 `$background` like everything else — it looks black in every Carbon screenshot
-because the shell is wrapped in a g100 zone. Ours uses the `ds-theme-inverse`
+because the shell is wrapped in a g100 zone. Ours uses the `nine-am-theme-inverse`
 class that already existed, so a light shell is one class away.
 
 **The week starts on Monday.** Carbon inherits Sunday from flatpickr's US
@@ -469,7 +469,7 @@ up when the boxes were measured:
   `@angular/aria`: the import lives in `date-picker/` and nowhere else.
   *An earlier version of this file said no good headless option existed. That is
   no longer true.*
-- ~~**Combobox / MultiSelect.**~~ Built as `ds-multi-select`, with the
+- ~~**Combobox / MultiSelect.**~~ Built as `nine-am-multi-select`, with the
   select-all row and an optional filter (which is Carbon's combo box shape).
   Select-all applies to the *filtered* rows and nothing else — the part
   implementations usually get wrong.
@@ -501,7 +501,7 @@ person can tell a decision from an oversight.
 | | why not |
 |---|---|
 | `Notification` — `info-square`, `warning-alt` | Alternate icon treatments, not statuses. Carbon documents four statuses and we have four. |
-| `NotificationService` — actionable toasts | Ours, not Carbon's: the service owns the stack and does the announcing through `LiveAnnouncer`, while an actionable notification owns focus and announces itself as a dialog. Two of those stacked is a focus question nobody has asked yet, so `ds-actionable-notification` is placed in the page instead. |
+| `NotificationService` — actionable toasts | Ours, not Carbon's: the service owns the stack and does the announcing through `LiveAnnouncer`, while an actionable notification owns focus and announces itself as a dialog. Two of those stacked is a focus question nobody has asked yet, so `nine-am-actionable-notification` is placed in the page instead. |
 | `Tile` — `light`, `hasRoundedCorners`, `decorator` | `light` is deprecated in Carbon v11 in favour of `Layer`, and this system has `Layer`. `hasRoundedCorners` is a v12 direction we have not taken anywhere else. `decorator` is the AI label slot, and there are no AI components here. |
 | `Tile` — `clicked`, `renderIcon` | `clicked` is a visited state Carbon paints but does not track for you; nothing here has asked for one. `renderIcon` is the corner glyph on a clickable tile — our tile projects its content, so the icon goes in the markup rather than through a prop, and it is unpositioned. Worth revisiting the moment a second caller wants it. |
 | `ActionableNotification` — `timeout` | Carbon accepts one and defaults it to 0. Auto-dismissing a notification that has trapped focus takes the focus with it and drops the user somewhere they did not ask to be. If it can time out, it did not need an action. |
@@ -535,7 +535,7 @@ real screen anyone writes. What is left is the long tail.
 **The remaining form controls**, none of them urgent: `NumberInput` (the one
 with steppers — our `type="number"` is a passthrough and says so), `Slider`,
 `FileUploader`, `TimePicker`, `ContentSwitcher`, and Carbon's non-filterable
-`Dropdown` (a styled listbox, where `ds-select` is the native one). `TimePicker`
+`Dropdown` (a styled listbox, where `nine-am-select` is the native one). `TimePicker`
 and `Slider` may never be needed.
 
 **The one gap in a component that already exists:** Carbon's `RadioTile` and
@@ -552,9 +552,10 @@ copy.
 - **Table extras:** column resize/reorder, row overflow menu, CSV export, and
   virtual scroll for very large pages (`@angular/cdk/scrolling`).
 
-Everything that is not a component — the `ds-` rename, the library split, the
-Angular 22 bump, whether to vendor Carbon's tokens locally — is in `TODO.md`.
-Two of those are cheapest right now and get worse with every component added.
+Everything that is not a component — the library split, the Angular 22 bump,
+whether to vendor Carbon's tokens locally — is in `TODO.md`. The `ds-` →
+`nine-am-` rename that used to head that list is done, and its entry there now
+records what it cost against what it was estimated at.
 
 ## Picking this up cold
 

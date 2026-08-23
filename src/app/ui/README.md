@@ -19,10 +19,10 @@ Angular library stalls, or its API changes under us, nothing here breaks.
 ## Conventions
 
 **Never import `@carbon/*` from a component.** Component styles start with
-`@use 'ds' as *;`. `src/styles/_ds.scss` is the single facade over Carbon, so
+`@use 'nine-am' as *;`. `src/styles/_ds.scss` is the single facade over Carbon, so
 swapping the token source touches one file rather than forty.
 
-**`ViewEncapsulation.None` everywhere, with a `ds-` prefix on every class.** The
+**`ViewEncapsulation.None` everywhere, with a `nine-am-` prefix on every class.** The
 class names are part of the public API — consumers need to be able to override
 them, and multi-element components (tabs, table, modal) would otherwise duplicate
 the same CSS once per child component in the bundle. The prefix is what keeps this
@@ -71,7 +71,7 @@ template deliberately, in one commit.
 off those signals and never keep a second copy of the state.
 
 **Attribute selectors on native elements where a native element already works.**
-`button[dsButton]`, not `<ds-button>`. Free form submission, `disabled`, and
+`button[nineAmButton]`, not `<nine-am-button>`. Free form submission, `disabled`, and
 `type="submit"` semantics.
 
 **Check what the platform already does before reaching for a primitive.**
@@ -108,14 +108,14 @@ belongs to the control, so there is nothing to hang shared markup on. Label,
 helper text, the requirement line, the field surface and the 32/40/48 height scale
 all live in `src/styles/_field.scss` and are reached through the `ds` facade like
 anything else. Carbon factors the same pieces into `components/form/_form.scss`;
-this mirrors it. A `ds-form-field` was considered and rejected — see the root
+this mirrors it. A `nine-am-form-field` was considered and rejected — see the root
 README.
 
 ## The shell
 
-Composed, not configured. `ds-shell` holds the one piece of state its parts have
+Composed, not configured. `nine-am-shell` holds the one piece of state its parts have
 to agree on — whether the side nav is open — and every other piece is a separate
-element the caller writes or omits. `dsShellAction` takes any icon and any
+element the caller writes or omits. `nineAmShellAction` takes any icon and any
 handler, so the right-hand cluster is whatever the app needs.
 
 Two things could not follow Carbon's own markup, and both are worth knowing
@@ -128,8 +128,8 @@ template. Carbon gets away with it in JSX, where no HTML parser is involved; the
 Angular template parser reparents them. Explicit roles give the same semantics
 with no implied end tags. A test pins this.
 
-**`ds-shell-content` is an element, not an attribute.** It was
-`main[dsShellContent]` first and that was wrong: the offsets are margins, the
+**`nine-am-shell-content` is an element, not an attribute.** It was
+`main[nineAmShellContent]` first and that was wrong: the offsets are margins, the
 app puts its own layout class on the same element, and a `margin: 0 auto` there
 silently wiped both — the content slid under the header and ignored the side
 nav. Owning the element means nothing else can write to it.
@@ -143,7 +143,7 @@ uses `:focus`, which is what Carbon does. See `focus-ring-state` in
 
 Three pieces, and two of them are not table code at all.
 
-`ds-table-header` is the title and description. Its own component, as in Carbon:
+`nine-am-table-header` is the title and description. Its own component, as in Carbon:
 a table can have a heading with no toolbar, or a toolbar with no heading.
 
 **Icon-only buttons are a `Button` variant, not a toolbar feature.** `iconOnly`
@@ -164,7 +164,7 @@ grow into.
 
 ## The table
 
-`ds-table` is column-config driven rather than template driven — a text column is
+`nine-am-table` is column-config driven rather than template driven — a text column is
 one line. Four things about it are non-obvious and were each a bug first.
 
 **`value` is display, `sortBy` is order.** A column that renders `"3 hours ago"`
@@ -242,6 +242,6 @@ minor versions. Exposure is contained to `tabs/tabs.ts` — a breaking change me
 editing that file, not every call site.
 
 `@angular/aria/grid` (`ngGrid`, roving cell focus, range selection) is deliberately
-*not* used by `ds-table`. Carbon data tables are tables, not grids: users tab
+*not* used by `nine-am-table`. Carbon data tables are tables, not grids: users tab
 through the controls rather than arrowing between cells. Reach for `ngGrid` if an
 editable, spreadsheet-style grid ever comes up.

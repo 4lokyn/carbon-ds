@@ -5,10 +5,10 @@ import { Toggletip, ToggletipButton } from './toggletip';
 @Component({
   imports: [Toggletip, ToggletipButton],
   template: `
-    <ds-toggletip>
-      <button dsToggletipButton>Filter</button>
+    <nine-am-toggletip>
+      <button nineAmToggletipButton>Filter</button>
       <a href="/clear">Clear all</a>
-    </ds-toggletip>
+    </nine-am-toggletip>
   `,
 })
 class Host {}
@@ -19,13 +19,13 @@ describe('Toggletip', () => {
     fixture.detectChanges();
 
     const el = fixture.nativeElement as HTMLElement;
-    const root = el.querySelector('ds-toggletip') as HTMLElement;
+    const root = el.querySelector('nine-am-toggletip') as HTMLElement;
 
     return {
       fixture,
       root,
-      trigger: root.querySelector('[dsToggletipButton]') as HTMLButtonElement,
-      panel: () => root.querySelector('.ds-toggletip__panel'),
+      trigger: root.querySelector('[nineAmToggletipButton]') as HTMLButtonElement,
+      panel: () => root.querySelector('.nine-am-toggletip__panel'),
       click(target: EventTarget) {
         (target as HTMLElement).dispatchEvent(new MouseEvent('click', { bubbles: true }));
         fixture.detectChanges();
@@ -57,7 +57,7 @@ describe('Toggletip', () => {
       trigger.compareDocumentPosition(panel() as Node) & Node.DOCUMENT_POSITION_FOLLOWING;
 
     expect(following).not.toBe(0);
-    expect(panel()?.closest('ds-toggletip')).not.toBeNull();
+    expect(panel()?.closest('nine-am-toggletip')).not.toBeNull();
   });
 
   it('stays open when something inside it is clicked', () => {

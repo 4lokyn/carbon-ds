@@ -5,11 +5,11 @@ import { Breadcrumb, BreadcrumbItem } from './breadcrumb';
 @Component({
   imports: [Breadcrumb, BreadcrumbItem],
   template: `
-    <ds-breadcrumb [noTrailingSlash]="noTrailingSlash()">
-      <li dsBreadcrumbItem><a href="/">Home</a></li>
-      <li dsBreadcrumbItem><a href="/clusters">Clusters</a></li>
-      <li dsBreadcrumbItem [current]="true">carbon-prod-01</li>
-    </ds-breadcrumb>
+    <nine-am-breadcrumb [noTrailingSlash]="noTrailingSlash()">
+      <li nineAmBreadcrumbItem><a href="/">Home</a></li>
+      <li nineAmBreadcrumbItem><a href="/clusters">Clusters</a></li>
+      <li nineAmBreadcrumbItem [current]="true">carbon-prod-01</li>
+    </nine-am-breadcrumb>
   `,
 })
 class Host {
@@ -28,7 +28,7 @@ describe('Breadcrumb', () => {
       host: fixture.componentInstance,
       nav: () => el.querySelector('nav') as HTMLElement,
       list: () => el.querySelector('ol') as HTMLOListElement,
-      items: () => Array.from(el.querySelectorAll('.ds-breadcrumb-item')),
+      items: () => Array.from(el.querySelectorAll('.nine-am-breadcrumb-item')),
     };
   }
 
@@ -46,7 +46,7 @@ describe('Breadcrumb', () => {
     const { list } = setup();
 
     // The reason the item is an attribute on a real <li> rather than its own
-    // element: a <ds-breadcrumb-item> in between would break the relationship
+    // element: a <nine-am-breadcrumb-item> in between would break the relationship
     // the list semantics depend on.
     const children = Array.from(list().children);
 
@@ -61,7 +61,7 @@ describe('Breadcrumb', () => {
 
     expect(first.getAttribute('aria-current')).toBeNull();
     expect(last.getAttribute('aria-current')).toBe('page');
-    expect(last.classList).toContain('ds-breadcrumb-item--current');
+    expect(last.classList).toContain('nine-am-breadcrumb-item--current');
   });
 
   it('drops the trailing separator only when asked', () => {
@@ -72,7 +72,7 @@ describe('Breadcrumb', () => {
       },
     };
 
-    expect(list().classList).toContain('ds-breadcrumb--no-trailing-slash');
+    expect(list().classList).toContain('nine-am-breadcrumb--no-trailing-slash');
 
     apply(() => host.noTrailingSlash.set(false));
     fixture.detectChanges();
@@ -80,6 +80,6 @@ describe('Breadcrumb', () => {
     // Carbon's default keeps it, even though a slash after the current page
     // points at a level that does not exist. Matching the default means a port
     // behaves the same.
-    expect(list().classList).not.toContain('ds-breadcrumb--no-trailing-slash');
+    expect(list().classList).not.toContain('nine-am-breadcrumb--no-trailing-slash');
   });
 });

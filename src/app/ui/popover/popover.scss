@@ -1,4 +1,4 @@
-@use 'ds' as *;
+@use 'nine-am' as *;
 
 // Carbon's caret is 12 wide and 6 deep. Ours is a square rotated 45°, so the
 // side that produces a 12-wide diamond is 12 / √2 ≈ 8.49 — which also gives the
@@ -13,13 +13,13 @@ $-caret: rem(8.49px);
 // second one along its own square edges. `filter: drop-shadow()` follows the
 // painted shape — content and caret together — so the two read as one piece of
 // paper. Carbon has an entire intermediate element for exactly this reason.
-.ds-popover {
+.nine-am-popover {
   position: relative;
   display: block;
   filter: drop-shadow(0 rem(2px) rem(2px) rgb(0 0 0 / 20%));
 }
 
-.ds-popover__content {
+.nine-am-popover__content {
   position: relative;
   border: rem(1px) solid $border-subtle-01;
   background-color: $layer-01;
@@ -39,7 +39,7 @@ $-caret: rem(8.49px);
 // from under the content so only the outer half shows. The content's own
 // background covers the inner half, which is what hides the seam.
 
-.ds-popover__caret {
+.nine-am-popover__caret {
   position: absolute;
   z-index: 1;
   width: $-caret;
@@ -56,25 +56,25 @@ $-caret: rem(8.49px);
 // The caret sits on the side of the panel facing the trigger, which is the
 // opposite of the side the panel was placed on: a panel below its trigger wears
 // its caret on top.
-.ds-popover--bottom .ds-popover__caret {
+.nine-am-popover--bottom .nine-am-popover__caret {
   top: calc(#{$-caret} / -2);
   left: 50%;
   margin-left: calc(#{$-caret} / -2);
 }
 
-.ds-popover--top .ds-popover__caret {
+.nine-am-popover--top .nine-am-popover__caret {
   bottom: calc(#{$-caret} / -2);
   left: 50%;
   margin-left: calc(#{$-caret} / -2);
 }
 
-.ds-popover--right .ds-popover__caret {
+.nine-am-popover--right .nine-am-popover__caret {
   top: 50%;
   left: calc(#{$-caret} / -2);
   margin-top: calc(#{$-caret} / -2);
 }
 
-.ds-popover--left .ds-popover__caret {
+.nine-am-popover--left .nine-am-popover__caret {
   top: 50%;
   right: calc(#{$-caret} / -2);
   margin-top: calc(#{$-caret} / -2);
@@ -85,21 +85,21 @@ $-caret: rem(8.49px);
 // The inverse surface, which is what a tooltip uses: a tooltip is glanced at,
 // and inverting it separates it from the page without a heavier shadow.
 
-.ds-popover--high-contrast {
-  .ds-popover__content {
+.nine-am-popover--high-contrast {
+  .nine-am-popover__content {
     border-color: transparent;
     background-color: $background-inverse;
     color: $text-inverse;
   }
 
-  .ds-popover__caret {
+  .nine-am-popover__caret {
     border-color: transparent;
     background-color: $background-inverse;
   }
 }
 // ── Tooltip ─────────────────────────────────────────────────────────────────
 
-.ds-tooltip__text {
+.nine-am-tooltip__text {
   max-width: rem(288px);
   padding: $spacing-03 $spacing-04;
 
@@ -111,17 +111,17 @@ $-caret: rem(8.49px);
 // Positioned in CSS rather than by the CDK, because this panel stays in the DOM
 // next to its trigger so that Tab reaches it — see the note in toggletip.ts.
 
-.ds-toggletip {
+.nine-am-toggletip {
   position: relative;
   display: inline-flex;
 }
 
-.ds-toggletip__panel {
+.nine-am-toggletip__panel {
   position: absolute;
   z-index: 10;
 }
 
-.ds-toggletip__content {
+.nine-am-toggletip__content {
   min-width: rem(240px);
   max-width: rem(320px);
   padding: $spacing-05;
@@ -129,21 +129,21 @@ $-caret: rem(8.49px);
 
 // Placed off the trigger's edge. 13px is Carbon's own `popover-offset` for a
 // toggletip — three more than the tooltip's, because this panel is heavier.
-.ds-toggletip--bottom .ds-toggletip__panel {
+.nine-am-toggletip--bottom .nine-am-toggletip__panel {
   top: calc(100% + #{rem(13px)});
 }
 
-.ds-toggletip--top .ds-toggletip__panel {
+.nine-am-toggletip--top .nine-am-toggletip__panel {
   bottom: calc(100% + #{rem(13px)});
 }
 
-.ds-toggletip--right .ds-toggletip__panel {
+.nine-am-toggletip--right .nine-am-toggletip__panel {
   top: 50%;
   left: calc(100% + #{rem(13px)});
   transform: translateY(-50%);
 }
 
-.ds-toggletip--left .ds-toggletip__panel {
+.nine-am-toggletip--left .nine-am-toggletip__panel {
   top: 50%;
   right: calc(100% + #{rem(13px)});
   transform: translateY(-50%);
@@ -152,25 +152,25 @@ $-caret: rem(8.49px);
 // Alignment along the edge, for the vertical sides only — `start` and `end`
 // slide the panel so its edge lines up with the trigger's rather than its
 // centre. The caret stays centred on the panel, which is Carbon's behaviour.
-.ds-toggletip--bottom.ds-toggletip--center .ds-toggletip__panel,
-.ds-toggletip--top.ds-toggletip--center .ds-toggletip__panel {
+.nine-am-toggletip--bottom.nine-am-toggletip--center .nine-am-toggletip__panel,
+.nine-am-toggletip--top.nine-am-toggletip--center .nine-am-toggletip__panel {
   left: 50%;
   transform: translateX(-50%);
 }
 
-.ds-toggletip--bottom.ds-toggletip--start .ds-toggletip__panel,
-.ds-toggletip--top.ds-toggletip--start .ds-toggletip__panel {
+.nine-am-toggletip--bottom.nine-am-toggletip--start .nine-am-toggletip__panel,
+.nine-am-toggletip--top.nine-am-toggletip--start .nine-am-toggletip__panel {
   left: 0;
 }
 
-.ds-toggletip--bottom.ds-toggletip--end .ds-toggletip__panel,
-.ds-toggletip--top.ds-toggletip--end .ds-toggletip__panel {
+.nine-am-toggletip--bottom.nine-am-toggletip--end .nine-am-toggletip__panel,
+.nine-am-toggletip--top.nine-am-toggletip--end .nine-am-toggletip__panel {
   right: 0;
 }
 
 // The action row Carbon puts at the foot of a toggletip: `space-between`, so a
 // quiet link sits at one end and the real action at the other.
-.ds-toggletip__actions {
+.nine-am-toggletip__actions {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -185,37 +185,37 @@ $-caret: rem(8.49px);
 // The controls need saying explicitly. A checkbox label is `$text-primary`,
 // which is near-black — correct on a layer, invisible on this. Caught by eye in
 // the browser, because every one of these components tests fine on its own.
-.ds-toggletip__panel {
-  .ds-checkbox__label,
-  .ds-radio__label,
-  .ds-checkbox__text,
+.nine-am-toggletip__panel {
+  .nine-am-checkbox__label,
+  .nine-am-radio__label,
+  .nine-am-checkbox__text,
   p {
     color: $text-inverse;
   }
 
-  .ds-checkbox__label::before {
+  .nine-am-checkbox__label::before {
     border-color: $icon-inverse;
   }
 
-  .ds-checkbox__input:checked + .ds-checkbox__label::before {
+  .nine-am-checkbox__input:checked + .nine-am-checkbox__label::before {
     border-color: $icon-inverse;
     background-color: $icon-inverse;
   }
 
-  .ds-checkbox__label::after {
+  .nine-am-checkbox__label::after {
     border-color: $background-inverse;
   }
 
-  .ds-link {
+  .nine-am-link {
     color: $link-inverse;
   }
 
-  .ds-link:hover,
-  .ds-link:visited:hover {
+  .nine-am-link:hover,
+  .nine-am-link:visited:hover {
     color: $link-inverse-hover;
   }
 
-  .ds-link:focus {
+  .nine-am-link:focus {
     outline-color: $focus-inverse;
   }
 }

@@ -20,7 +20,7 @@ let nextId = 0;
 /**
  * Carbon select, on a native `<select>`.
  *
- * Options are projected rather than configured — `<ds-select><option …>` — which
+ * Options are projected rather than configured — `<nine-am-select><option …>` — which
  * is what Carbon does and what keeps `<optgroup>`, `disabled` and a native
  * placeholder row working without us re-exposing each one. The table went the
  * other way (config-driven columns) because a table cell needs formatting and
@@ -30,7 +30,7 @@ let nextId = 0;
  * is the native idiom and the caller already has one.
  */
 @Component({
-  selector: 'ds-select',
+  selector: 'nine-am-select',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
   templateUrl: './select.html',
@@ -67,7 +67,7 @@ export class Select {
 
   readonly blurred = output<void>();
 
-  protected readonly selectId = `ds-select-${nextId++}`;
+  protected readonly selectId = `nine-am-select-${nextId++}`;
   protected readonly helperId = `${this.selectId}-helper`;
   protected readonly messageId = `${this.selectId}-message`;
 
@@ -99,26 +99,26 @@ export class Select {
   });
 
   protected readonly hostClass = computed(() => {
-    const classes = ['ds-select', `ds-select--${this.size()}`];
+    const classes = ['nine-am-select', `nine-am-select--${this.size()}`];
 
     if (this.fluid()) {
-      classes.push('ds-select--fluid');
+      classes.push('nine-am-select--fluid');
     } else if (this.inline()) {
-      classes.push('ds-select--inline');
+      classes.push('nine-am-select--inline');
     }
 
     if (this.invalid()) {
-      classes.push('ds-select--invalid');
+      classes.push('nine-am-select--invalid');
     } else if (this.warn()) {
-      classes.push('ds-select--warn');
+      classes.push('nine-am-select--warn');
     }
 
     if (this.disabled()) {
-      classes.push('ds-select--disabled');
+      classes.push('nine-am-select--disabled');
     }
 
     if (this.readOnly()) {
-      classes.push('ds-select--readonly');
+      classes.push('nine-am-select--readonly');
     }
 
     return classes.join(' ');

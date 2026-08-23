@@ -40,7 +40,7 @@ export type RadioLabelPosition = 'right' | 'left';
  * free, and neither works if you swap the fieldset for a div.
  */
 @Component({
-  selector: 'ds-radio-group',
+  selector: 'nine-am-radio-group',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
   templateUrl: './radio-group.html',
@@ -79,7 +79,7 @@ export class RadioGroup {
   readonly selected = output<string>();
 
   /** Shared by every radio in the group — this is what makes it a group. */
-  readonly name = `ds-radio-group-${nextGroupId++}`;
+  readonly name = `nine-am-radio-group-${nextGroupId++}`;
 
   protected readonly helperId = `${this.name}-helper`;
   protected readonly messageId = `${this.name}-message`;
@@ -111,23 +111,23 @@ export class RadioGroup {
 
   protected readonly hostClass = computed(() => {
     const classes = [
-      'ds-radio-group',
-      `ds-radio-group--${this.orientation()}`,
-      `ds-radio-group--label-${this.labelPosition()}`,
+      'nine-am-radio-group',
+      `nine-am-radio-group--${this.orientation()}`,
+      `nine-am-radio-group--label-${this.labelPosition()}`,
     ];
 
     if (this.invalid()) {
-      classes.push('ds-radio-group--invalid');
+      classes.push('nine-am-radio-group--invalid');
     } else if (this.warn()) {
-      classes.push('ds-radio-group--warn');
+      classes.push('nine-am-radio-group--warn');
     }
 
     if (this.disabled()) {
-      classes.push('ds-radio-group--disabled');
+      classes.push('nine-am-radio-group--disabled');
     }
 
     if (this.readOnly()) {
-      classes.push('ds-radio-group--readonly');
+      classes.push('nine-am-radio-group--readonly');
     }
 
     return classes.join(' ');
@@ -145,14 +145,14 @@ export class RadioGroup {
 }
 
 /**
- * One option. Has to be inside a `ds-radio-group` — the group owns the `name`,
+ * One option. Has to be inside a `nine-am-radio-group` — the group owns the `name`,
  * the selected value and the validation state, and there is nothing sensible a
  * lone radio could do with any of them.
  */
 @Component({
-  selector: 'ds-radio',
+  selector: 'nine-am-radio',
   encapsulation: ViewEncapsulation.None,
-  host: { class: 'ds-radio' },
+  host: { class: 'nine-am-radio' },
   templateUrl: './radio.html',
 })
 export class Radio {
@@ -163,7 +163,7 @@ export class Radio {
   readonly disabled = input(false, { transform: booleanAttribute });
 
   protected readonly group = inject(RadioGroup);
-  protected readonly inputId = `ds-radio-${nextRadioId++}`;
+  protected readonly inputId = `nine-am-radio-${nextRadioId++}`;
 
   /**
    * Read-only has to be stopped here, on the click, and not in `change`.
@@ -190,4 +190,4 @@ export class Radio {
 }
 
 /** Import this instead of the two classes one by one. */
-export const DS_RADIO_GROUP = [RadioGroup, Radio] as const;
+export const NINE_AM_RADIO_GROUP = [RadioGroup, Radio] as const;

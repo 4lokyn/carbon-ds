@@ -10,25 +10,33 @@ wait and one of them may be the wrong idea.
 
 ## Do these before building more components
 
-Both are mechanical, both touch every file, and both get worse with every
-component added. There are 22 components now and ~26 still to build — doing
-these at the end means doing them at roughly twice the size.
+Mechanical, touches every file, and gets worse with every component added. The
+prefix rename that used to head this list is done — see below for what it
+actually cost against what this file predicted.
 
-### 4. Rename the `ds-` prefix to `nine-am-`
+### ~~4. Rename the `ds-` prefix to `nine-am-`~~ — done 2026-08-23
 
-**Measured cost today:** 581 occurrences across the stylesheets, 1015 across
-templates and TypeScript, 24 component folders. Plus the stylelint rule in
-`.stylelintrc.json` that enforces the prefix, the `ds` Sass facade name, and
-every test that asserts a class name.
+Kept here because the estimate is worth checking against the outcome. This file
+predicted 581 occurrences in stylesheets and 1015 across templates and
+TypeScript, measured on 2026-08-22. By the time it was done, two days and six
+components later, it was **2003 `ds-`, 197 `dsCamel` and 56 `DS_` — 2285
+replacements across 121 files.** The warning that it doubles if you wait was, if
+anything, mild.
 
-Mostly a careful find-and-replace, but not entirely: `ds-` also appears inside
-words in comments and prose, and `dsButton`-style attribute selectors need the
-camel-case form (`nineAmButton`). The class-name assertions in specs are what
-will catch a miss.
+What the prediction got right: the specs caught the miss. Exactly one
+substitution slipped through every anchored rule — `expect(tag.tagName).toBe(
+'DS-TAG')`, uppercase because `tagName` is, and a case no pattern covered.
+Nothing else in the build, the type checker or stylelint would have found it.
 
-Worth deciding the exact spelling first — `nine-am-button` and `nineAmButton` are
-both a little awkward to type a hundred times. `na-` / `naButton` is shorter but
-collides with nothing readable.
+What it did not mention, and what actually needed care: the replacement has to
+be anchored on a word boundary. A bare `ds-` → `nine-am-` also rewrites Carbon's
+own `--cds-*` custom properties and words like `fields--single`, and neither
+would have failed loudly. The Sass facade needed three separate passes — the
+file name, the `@use 'ds'` in thirty stylesheets, and prose naming "the `ds`
+facade" — because none of those match a `ds-` pattern at all.
+
+Still open, and deliberately: `package.json` still says `"name": "carbon-ds"`,
+which matches the repository. That is item 7's decision, not this one's.
 
 ### 5. Add `.component.*` to filenames
 
@@ -74,8 +82,10 @@ built for exactly this.
 
 ### 7. A library project (`nine-am-design-system`)
 
-**Depends on 4 and 5.** Publishing under a name means committing to the prefix
-and the file layout, so do those first or do them twice.
+**Depends on 5.** The prefix is settled — item 4 is done and every class,
+selector and token now reads `nine-am-`. The file layout is not, so that half
+still comes first or gets done twice. Publishing would also settle
+`package.json`'s name, which still says `carbon-ds`.
 
 Also needs decisions this repo has not had to make: what is public API versus
 internal, whether the Sass facade ships or consumers bring their own Carbon, and
@@ -86,8 +96,8 @@ documentation, and a library has no obvious place for it.
 
 ### 2. Does the table's paginator match a real backend?
 
-Half-answered already. `ds-pagination` now takes `total: number | null` plus
-`isLastPage`, which covers a cursor-paged API that cannot count. `ds-table` has
+Half-answered already. `nine-am-pagination` now takes `total: number | null` plus
+`isLastPage`, which covers a cursor-paged API that cannot count. `nine-am-table` has
 `serverSide` so it stops re-sorting the one page it can see, and `sort` is a
 two-way model.
 
@@ -104,7 +114,7 @@ Careful here: it argues with two positions the repo holds deliberately.
 - **Validation timing is the form's job, not the control's.** A builder that
   owns validation has to own that policy too, and the README documents it as one
   rule for the whole app.
-- **There is no `ds-form-field` wrapper**, on purpose — the label belongs to the
+- **There is no `nine-am-form-field` wrapper**, on purpose — the label belongs to the
   control, which is Carbon's own API shape.
 
 A schema-driven builder can respect both, but only if it generates the controls

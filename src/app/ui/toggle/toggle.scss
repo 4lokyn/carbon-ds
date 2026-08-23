@@ -1,11 +1,11 @@
-@use 'ds' as *;
+@use 'nine-am' as *;
 
-.ds-toggle {
+.nine-am-toggle {
   display: inline-block;
   user-select: none;
 }
 
-.ds-toggle__button {
+.nine-am-toggle__button {
   @include visually-hidden;
 
   // The ring is drawn on the switch instead, so the hidden button must not draw
@@ -15,7 +15,7 @@
   }
 }
 
-.ds-toggle__label-text {
+.nine-am-toggle__label-text {
   @include field-label;
 
   // Carbon spaces the toggle's label further from its control than a field does:
@@ -25,7 +25,7 @@
   margin-block-end: $spacing-05;
 }
 
-.ds-toggle__appearance {
+.nine-am-toggle__appearance {
   display: inline-grid;
   align-items: center;
   column-gap: $spacing-03;
@@ -33,7 +33,7 @@
   grid-template-columns: max-content max-content;
 }
 
-.ds-toggle__switch {
+.nine-am-toggle__switch {
   position: relative;
   width: rem(48px);
   height: rem(24px);
@@ -61,7 +61,7 @@
 
 // Green, not $focus-blue or a brand color: the switch is reporting a state, and
 // Carbon uses the support palette for states.
-.ds-toggle--checked .ds-toggle__switch {
+.nine-am-toggle--checked .nine-am-toggle__switch {
   background-color: $support-success;
 
   &::before {
@@ -75,8 +75,8 @@
 // Two triggers, both Carbon's: focus, and :active for the duration of a press.
 // The second is not redundant now that the ring is on :focus — a press on an
 // already-focused switch would otherwise show no acknowledgement at all.
-.ds-toggle__button:focus + .ds-toggle__label .ds-toggle__switch::after,
-.ds-toggle:not(.ds-toggle--disabled):active .ds-toggle__switch::after {
+.nine-am-toggle__button:focus + .nine-am-toggle__label .nine-am-toggle__switch::after,
+.nine-am-toggle:not(.nine-am-toggle--disabled):active .nine-am-toggle__switch::after {
   position: absolute;
   display: block;
   width: 100%;
@@ -88,14 +88,14 @@
   outline-offset: rem(1px);
 }
 
-.ds-toggle__text {
+.nine-am-toggle__text {
   @include type-style('body-01');
 
   color: $text-primary;
 }
 
 // The check only exists on the small size — see the note in toggle.ts.
-.ds-toggle__check {
+.nine-am-toggle__check {
   position: absolute;
   color: $support-success;
   inset-block-start: rem(6px);
@@ -103,13 +103,13 @@
   visibility: hidden;
 }
 
-.ds-toggle--checked .ds-toggle__check {
+.nine-am-toggle--checked .nine-am-toggle__check {
   visibility: visible;
 }
 
 // ── Small ───────────────────────────────────────────────────────────────────
 
-.ds-toggle--sm .ds-toggle__switch {
+.nine-am-toggle--sm .nine-am-toggle__switch {
   width: rem(32px);
   height: rem(16px);
 
@@ -119,23 +119,23 @@
   }
 }
 
-.ds-toggle--sm.ds-toggle--checked .ds-toggle__switch::before {
+.nine-am-toggle--sm.nine-am-toggle--checked .nine-am-toggle__switch::before {
   transform: translateX(rem(16px));
 }
 
 // ── Disabled ────────────────────────────────────────────────────────────────
 
-.ds-toggle--disabled {
-  .ds-toggle__appearance {
+.nine-am-toggle--disabled {
+  .nine-am-toggle__appearance {
     cursor: not-allowed;
   }
 
-  .ds-toggle__label-text,
-  .ds-toggle__text {
+  .nine-am-toggle__label-text,
+  .nine-am-toggle__text {
     color: $text-disabled;
   }
 
-  .ds-toggle__switch {
+  .nine-am-toggle__switch {
     background-color: $button-disabled;
 
     &::before {
@@ -144,7 +144,7 @@
   }
 
   // Still visible, but flat — a disabled switch should not look successful.
-  .ds-toggle__check {
+  .nine-am-toggle__check {
     color: $button-disabled;
   }
 }
@@ -154,12 +154,12 @@
 // Outlined rather than filled: the state is still legible, but the control does
 // not look like something you can push.
 
-.ds-toggle--readonly {
-  .ds-toggle__appearance {
+.nine-am-toggle--readonly {
+  .nine-am-toggle__appearance {
     cursor: default;
   }
 
-  .ds-toggle__switch {
+  .nine-am-toggle__switch {
     border: rem(1px) solid $icon-disabled;
     background-color: transparent;
 
@@ -170,13 +170,13 @@
     }
   }
 
-  .ds-toggle__check {
+  .nine-am-toggle__check {
     color: $background;
     inset-block-start: rem(5px);
     inset-inline-end: rem(4px);
   }
 
-  .ds-toggle__text {
+  .nine-am-toggle__text {
     cursor: text;
     user-select: text;
   }

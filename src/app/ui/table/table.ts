@@ -31,10 +31,10 @@ let nextTableId = 0;
  *
  * Pagination is deliberately outside: the caller slices `rows`, so the same table
  * works against a client-side array and a server-paged endpoint without a mode
- * switch. See `ds-pagination`.
+ * switch. See `nine-am-pagination`.
  */
 @Component({
-  selector: 'ds-table',
+  selector: 'nine-am-table',
   encapsulation: ViewEncapsulation.None,
   imports: [NgTemplateOutlet, Checkbox, Icon],
   templateUrl: './table.html',
@@ -111,7 +111,7 @@ export class Table<T> {
   readonly selectRowLabel = input<(row: T) => string>(() => 'Select row');
   readonly expandRowLabel = input<(row: T) => string>(() => 'Expand row');
 
-  private readonly tableId = `ds-table-${nextTableId++}`;
+  private readonly tableId = `nine-am-table-${nextTableId++}`;
   private readonly expandedKeys = signal<ReadonlySet<unknown>>(new Set());
 
   protected readonly expandable = computed(
@@ -133,14 +133,14 @@ export class Table<T> {
   );
 
   protected readonly tableClass = computed(() => {
-    const classes = ['ds-table', `ds-table--${this.size()}`];
+    const classes = ['nine-am-table', `nine-am-table--${this.size()}`];
 
     if (this.zebra()) {
-      classes.push('ds-table--zebra');
+      classes.push('nine-am-table--zebra');
     }
 
     if (this.staticWidth()) {
-      classes.push('ds-table--static-width');
+      classes.push('nine-am-table--static-width');
     }
 
     return classes.join(' ');

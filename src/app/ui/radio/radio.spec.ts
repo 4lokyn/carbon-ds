@@ -1,11 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { DS_RADIO_GROUP } from './radio';
+import { NINE_AM_RADIO_GROUP } from './radio';
 
 @Component({
-  imports: [...DS_RADIO_GROUP],
+  imports: [...NINE_AM_RADIO_GROUP],
   template: `
-    <ds-radio-group
+    <nine-am-radio-group
       legend="Deployment strategy"
       [helperText]="helperText()"
       [disabled]="disabled()"
@@ -17,10 +17,10 @@ import { DS_RADIO_GROUP } from './radio';
       [(value)]="value"
       (selected)="selectedCount.set(selectedCount() + 1)"
     >
-      <ds-radio label="Rolling" value="rolling" />
-      <ds-radio label="Blue-green" value="blue-green" />
-      <ds-radio label="Canary" value="canary" [disabled]="canaryDisabled()" />
-    </ds-radio-group>
+      <nine-am-radio label="Rolling" value="rolling" />
+      <nine-am-radio label="Blue-green" value="blue-green" />
+      <nine-am-radio label="Canary" value="canary" [disabled]="canaryDisabled()" />
+    </nine-am-radio-group>
   `,
 })
 class Host {
@@ -51,8 +51,8 @@ describe('RadioGroup', () => {
         Array.from(el.querySelectorAll<HTMLInputElement>('input[type="radio"]')),
       legend: () => el.querySelector('legend'),
       fieldset: () => el.querySelector('fieldset') as HTMLFieldSetElement,
-      helper: () => el.querySelector('.ds-radio-group__helper'),
-      requirement: () => el.querySelector('.ds-radio-group__requirement'),
+      helper: () => el.querySelector('.nine-am-radio-group__helper'),
+      requirement: () => el.querySelector('.nine-am-radio-group__requirement'),
       apply(change: () => void) {
         change();
         fixture.detectChanges();
@@ -68,7 +68,7 @@ describe('RadioGroup', () => {
     const names = new Set(radios().map((r) => r.name));
 
     expect(names.size).toBe(1);
-    expect([...names][0]).toMatch(/^ds-radio-group-\d+$/);
+    expect([...names][0]).toMatch(/^nine-am-radio-group-\d+$/);
   });
 
   it('names the group with a real legend inside a real fieldset', () => {
@@ -193,9 +193,9 @@ describe('RadioGroup', () => {
       host.warn.set(true);
     });
 
-    const group = el.querySelector('ds-radio-group') as HTMLElement;
+    const group = el.querySelector('nine-am-radio-group') as HTMLElement;
 
-    expect(group.classList).toContain('ds-radio-group--invalid');
-    expect(group.classList).not.toContain('ds-radio-group--warn');
+    expect(group.classList).toContain('nine-am-radio-group--invalid');
+    expect(group.classList).not.toContain('nine-am-radio-group--warn');
   });
 });

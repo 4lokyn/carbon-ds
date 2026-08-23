@@ -1,4 +1,4 @@
-@use 'ds' as *;
+@use 'nine-am' as *;
 
 // ── The group ───────────────────────────────────────────────────────────────
 //
@@ -6,7 +6,7 @@
 // in real forms, and a legend that is 12px in one and 14px in the other is the
 // kind of difference nobody can name but everybody sees.
 
-.ds-checkbox-group {
+.nine-am-checkbox-group {
   display: block;
   width: 100%;
 }
@@ -14,14 +14,14 @@
 // A fieldset carries a default border, padding and min-width that nothing here
 // wants; `min-width: 0` is the one that matters, because the browser default of
 // min-content stops a fieldset from ever shrinking inside a grid.
-.ds-checkbox-group__fieldset {
+.nine-am-checkbox-group__fieldset {
   min-width: 0;
   padding: 0;
   border: 0;
   margin: 0;
 }
 
-.ds-checkbox-group__legend {
+.nine-am-checkbox-group__legend {
   @include field-label;
 
   padding: 0;
@@ -29,26 +29,26 @@
 
 // Carbon stacks checkboxes by default, unlike radios. A set of them is usually
 // "all that apply", which reads as a list rather than as a row of choices.
-.ds-checkbox-group__items {
+.nine-am-checkbox-group__items {
   display: flex;
   align-items: flex-start;
   flex-direction: column;
   gap: rem(6px);
 }
 
-.ds-checkbox-group--horizontal .ds-checkbox-group__items {
+.nine-am-checkbox-group--horizontal .nine-am-checkbox-group__items {
   align-items: center;
   flex-direction: row;
   gap: $spacing-05;
 }
 
-.ds-checkbox-group__helper {
+.nine-am-checkbox-group__helper {
   @include field-helper-text;
 }
 
 // Next to an icon rather than under one — a group has no field box to hang a
 // trailing icon inside.
-.ds-checkbox-group__requirement {
+.nine-am-checkbox-group__requirement {
   @include field-requirement;
 
   display: flex;
@@ -56,11 +56,11 @@
   gap: $spacing-02;
 }
 
-.ds-checkbox-group--invalid .ds-checkbox-group__requirement {
+.nine-am-checkbox-group--invalid .nine-am-checkbox-group__requirement {
   @include field-requirement-invalid;
 }
 
-.ds-checkbox-group__status {
+.nine-am-checkbox-group__status {
   flex-shrink: 0;
 
   // Nudged down onto the text's baseline: the message is helper-text-01, whose
@@ -68,22 +68,22 @@
   margin-block-start: rem(1px);
 }
 
-.ds-checkbox-group--invalid .ds-checkbox-group__status {
+.nine-am-checkbox-group--invalid .nine-am-checkbox-group__status {
   @include field-status-icon-invalid;
 }
 
-.ds-checkbox-group--warn .ds-checkbox-group__status {
+.nine-am-checkbox-group--warn .nine-am-checkbox-group__status {
   @include field-status-icon-warn;
 }
 
-.ds-checkbox-group--disabled .ds-checkbox-group__legend,
-.ds-checkbox-group--disabled .ds-checkbox-group__helper {
+.nine-am-checkbox-group--disabled .nine-am-checkbox-group__legend,
+.nine-am-checkbox-group--disabled .nine-am-checkbox-group__helper {
   color: $text-disabled;
 }
 
 // ── One checkbox ────────────────────────────────────────────────────────────
 
-.ds-checkbox {
+.nine-am-checkbox {
   position: relative;
   display: flex;
   align-items: flex-start;
@@ -96,7 +96,7 @@
 // :checked / :indeterminate state we style against. It must not be display:none,
 // which would drop it from the a11y tree and out of tab order; opacity 0 keeps
 // both while letting the label draw the visible control.
-.ds-checkbox__input {
+.nine-am-checkbox__input {
   position: absolute;
   width: rem(16px);
   height: rem(16px);
@@ -104,7 +104,7 @@
   opacity: 0;
 }
 
-.ds-checkbox__label {
+.nine-am-checkbox__label {
   position: relative;
   display: flex;
   min-height: rem(24px);
@@ -119,7 +119,7 @@
 }
 
 // The box.
-.ds-checkbox__label::before {
+.nine-am-checkbox__label::before {
   position: absolute;
   top: rem(3px);
   left: 0;
@@ -142,7 +142,7 @@
 // The 16px box spans y 3..19 here, so its centre is (8, 11) and the offsets below
 // solve for that. Change the box position or the mark size and these have to be
 // re-solved — the intuitive values put the tick low and left of centre.
-.ds-checkbox__label::after {
+.nine-am-checkbox__label::after {
   position: absolute;
   top: rem(3px);
   left: rem(4px);
@@ -155,19 +155,19 @@
   transform-origin: bottom right;
 }
 
-.ds-checkbox__input:checked + .ds-checkbox__label::before,
-.ds-checkbox__input:indeterminate + .ds-checkbox__label::before {
+.nine-am-checkbox__input:checked + .nine-am-checkbox__label::before,
+.nine-am-checkbox__input:indeterminate + .nine-am-checkbox__label::before {
   border-color: $icon-primary;
   background-color: $icon-primary;
 }
 
-.ds-checkbox__input:checked + .ds-checkbox__label::after {
+.nine-am-checkbox__input:checked + .nine-am-checkbox__label::after {
   transform: scale(1) rotate(-45deg);
 }
 
 // Indeterminate: a filled box with a horizontal bar rather than a check. Reuses
 // the same pseudo-element, reset to a single flat border.
-.ds-checkbox__input:indeterminate + .ds-checkbox__label::after {
+.nine-am-checkbox__input:indeterminate + .nine-am-checkbox__label::after {
   top: rem(10px);
   left: rem(3px);
   width: rem(10px);
@@ -179,22 +179,22 @@
 
 // The ring goes on the box, not the label — a ring around the whole label would
 // be enormous next to long text.
-.ds-checkbox__input:focus + .ds-checkbox__label::before {
+.nine-am-checkbox__input:focus + .nine-am-checkbox__label::before {
   outline: rem(2px) solid $focus;
   outline-offset: rem(1px);
 }
 
-.ds-checkbox__input:disabled + .ds-checkbox__label {
+.nine-am-checkbox__input:disabled + .nine-am-checkbox__label {
   color: $text-disabled;
   cursor: not-allowed;
 }
 
-.ds-checkbox__input:disabled + .ds-checkbox__label::before {
+.nine-am-checkbox__input:disabled + .nine-am-checkbox__label::before {
   border-color: $icon-disabled;
 }
 
-.ds-checkbox__input:disabled:checked + .ds-checkbox__label::before,
-.ds-checkbox__input:disabled:indeterminate + .ds-checkbox__label::before {
+.nine-am-checkbox__input:disabled:checked + .nine-am-checkbox__label::before,
+.nine-am-checkbox__input:disabled:indeterminate + .nine-am-checkbox__label::before {
   border-color: $icon-disabled;
   background-color: $icon-disabled;
 }
@@ -204,24 +204,24 @@
 // A checkbox inside a group never carries these: the group draws one message for
 // the whole set, and the box borders follow it there.
 
-.ds-checkbox--invalid .ds-checkbox__label::before,
-.ds-checkbox-group--invalid .ds-checkbox__label::before {
+.nine-am-checkbox--invalid .nine-am-checkbox__label::before,
+.nine-am-checkbox-group--invalid .nine-am-checkbox__label::before {
   border-color: $support-error;
 }
 
 // Both messages line up with the label text rather than the box, so a wrapped
 // message does not start under the tick.
-.ds-checkbox__helper,
-.ds-checkbox__requirement {
+.nine-am-checkbox__helper,
+.nine-am-checkbox__requirement {
   flex-basis: 100%;
   padding-left: rem(24px);
 }
 
-.ds-checkbox__helper {
+.nine-am-checkbox__helper {
   @include field-helper-text;
 }
 
-.ds-checkbox__requirement {
+.nine-am-checkbox__requirement {
   @include field-requirement;
 
   display: flex;
@@ -229,37 +229,37 @@
   gap: $spacing-02;
 }
 
-.ds-checkbox--invalid .ds-checkbox__requirement {
+.nine-am-checkbox--invalid .nine-am-checkbox__requirement {
   @include field-requirement-invalid;
 }
 
-.ds-checkbox__status {
+.nine-am-checkbox__status {
   flex-shrink: 0;
   margin-block-start: rem(1px);
 }
 
-.ds-checkbox--invalid .ds-checkbox__status {
+.nine-am-checkbox--invalid .nine-am-checkbox__status {
   @include field-status-icon-invalid;
 }
 
-.ds-checkbox--warn .ds-checkbox__status {
+.nine-am-checkbox--warn .nine-am-checkbox__status {
   @include field-status-icon-warn;
 }
 
 // Read-only. The input stays enabled — see checkbox.ts for why — so this is
 // only a look, and the change handler is what actually refuses the toggle.
-.ds-checkbox--readonly,
-.ds-checkbox-group--readonly {
-  .ds-checkbox__label {
+.nine-am-checkbox--readonly,
+.nine-am-checkbox-group--readonly {
+  .nine-am-checkbox__label {
     cursor: default;
   }
 
-  .ds-checkbox__label::before {
+  .nine-am-checkbox__label::before {
     border-color: $icon-disabled;
   }
 
   // Read-only content is still content — let people select it.
-  .ds-checkbox__text {
+  .nine-am-checkbox__text {
     cursor: text;
     user-select: text;
   }
@@ -267,20 +267,22 @@
 
 // Label-less variant, for table cells. Shrinks the hit area to the box and drops
 // the 8px text gap, so a column of these stays narrow.
-.ds-checkbox--hide-label .ds-checkbox__label {
+.nine-am-checkbox--hide-label .nine-am-checkbox__label {
   min-height: rem(16px);
   padding-left: rem(16px);
 }
 
-.ds-checkbox--hide-label .ds-checkbox__label::before {
+.nine-am-checkbox--hide-label .nine-am-checkbox__label::before {
   top: 0;
 }
 
 // Box centre moves from (8, 11) to (8, 8), so top solves to 8 - 8.18 ≈ 0.
-.ds-checkbox--hide-label .ds-checkbox__label::after {
+.nine-am-checkbox--hide-label .nine-am-checkbox__label::after {
   top: 0;
 }
 
-.ds-checkbox--hide-label .ds-checkbox__input:indeterminate + .ds-checkbox__label::after {
+.nine-am-checkbox--hide-label
+  .nine-am-checkbox__input:indeterminate
+  + .nine-am-checkbox__label::after {
   top: rem(7px);
 }

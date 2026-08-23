@@ -1,18 +1,18 @@
-@use 'ds' as *;
+@use 'nine-am' as *;
 
-.ds-table-header {
+.nine-am-table-header {
   display: block;
   padding: $spacing-05 0 $spacing-06 $spacing-05;
   background-color: $layer-01;
 }
 
-.ds-table-header__title {
+.nine-am-table-header__title {
   @include type-style('heading-03');
 
   color: $text-primary;
 }
 
-.ds-table-header__description {
+.nine-am-table-header__description {
   @include type-style('body-compact-01');
 
   color: $text-secondary;

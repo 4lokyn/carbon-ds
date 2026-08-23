@@ -6,7 +6,9 @@ import { popoverPositions, sideFromPosition } from './popover-position';
 @Component({
   imports: [Tooltip],
   template: `
-    <button [dsTooltip]="label()" [tooltipEnterDelay]="0" [tooltipLeaveDelay]="0">Settings</button>
+    <button [nineAmTooltip]="label()" [tooltipEnterDelay]="0" [tooltipLeaveDelay]="0">
+      Settings
+    </button>
   `,
 })
 class Host {
@@ -52,8 +54,9 @@ describe('Tooltip', () => {
       fixture,
       host: fixture.componentInstance,
       trigger,
-      panel: () => document.querySelector('ds-tooltip-panel'),
-      text: () => document.querySelector('ds-tooltip-panel [role="tooltip"]')?.textContent?.trim(),
+      panel: () => document.querySelector('nine-am-tooltip-panel'),
+      text: () =>
+        document.querySelector('nine-am-tooltip-panel [role="tooltip"]')?.textContent?.trim(),
     };
   }
 

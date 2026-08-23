@@ -1,29 +1,29 @@
-<ds-shell>
-  <ds-shell-header class="ds-theme-inverse">
-    <button dsShellMenuButton aria-label="Open navigation"></button>
+<nine-am-shell>
+  <nine-am-shell-header class="nine-am-theme-inverse">
+    <button nineAmShellMenuButton aria-label="Open navigation"></button>
 
-    <a dsShellName href="#" prefix="Carbon">ds</a>
+    <a nineAmShellName href="#" prefix="Carbon">ds</a>
 
-    <nav dsShellNav aria-label="Sections">
-      <a dsShellLink href="#" current>Components</a>
-      <a dsShellLink href="#">Tokens</a>
-      <a dsShellLink href="#">Patterns</a>
+    <nav nineAmShellNav aria-label="Sections">
+      <a nineAmShellLink href="#" current>Components</a>
+      <a nineAmShellLink href="#">Tokens</a>
+      <a nineAmShellLink href="#">Patterns</a>
 
-      <ds-shell-nav-menu label="Sub-menu">
-        <a dsShellLink href="#">Overview</a>
-        <a dsShellLink href="#">Changelog</a>
-        <a dsShellLink href="#">Roadmap</a>
-      </ds-shell-nav-menu>
+      <nine-am-shell-nav-menu label="Sub-menu">
+        <a nineAmShellLink href="#">Overview</a>
+        <a nineAmShellLink href="#">Changelog</a>
+        <a nineAmShellLink href="#">Roadmap</a>
+      </nine-am-shell-nav-menu>
     </nav>
 
     <!-- Carbon's rule for this row: left-to-right is product-to-global, and the
          utilities are "reserved for universal, system-level functions such as
          profile, search, notifications, and similar". A preference belongs; four
          raw theme buttons did not, and they used to live here. -->
-    <div dsShellActions>
-      <button dsShellAction icon="search" label="Search"></button>
+    <div nineAmShellActions>
+      <button nineAmShellAction icon="search" label="Search"></button>
       <button
-        dsShellAction
+        nineAmShellAction
         icon="switcher"
         activeIcon="close"
         label="Switch sites"
@@ -31,7 +31,7 @@
         (click)="togglePanel('switcher')"
       ></button>
       <button
-        dsShellAction
+        nineAmShellAction
         icon="settings"
         activeIcon="close"
         label="Settings"
@@ -39,82 +39,82 @@
         (click)="togglePanel('settings')"
       ></button>
     </div>
-  </ds-shell-header>
+  </nine-am-shell-header>
 
-  <ds-shell-side-nav>
-    <div dsShellSideNavItem>
-      <a dsShellLink href="#">Components</a>
+  <nine-am-shell-side-nav>
+    <div nineAmShellSideNavItem>
+      <a nineAmShellLink href="#">Components</a>
     </div>
 
-    <ds-shell-side-nav-menu label="Form controls" [(expanded)]="formsOpen">
+    <nine-am-shell-side-nav-menu label="Form controls" [(expanded)]="formsOpen">
       @for (item of formControls; track item) {
-        <div dsShellSideNavItem>
-          <a dsShellLink href="#">{{ item }}</a>
+        <div nineAmShellSideNavItem>
+          <a nineAmShellLink href="#">{{ item }}</a>
         </div>
       }
-    </ds-shell-side-nav-menu>
+    </nine-am-shell-side-nav-menu>
 
-    <ds-shell-side-nav-menu label="Data">
-      <div dsShellSideNavItem><a dsShellLink href="#">Table</a></div>
-      <div dsShellSideNavItem><a dsShellLink href="#">Pagination</a></div>
-    </ds-shell-side-nav-menu>
+    <nine-am-shell-side-nav-menu label="Data">
+      <div nineAmShellSideNavItem><a nineAmShellLink href="#">Table</a></div>
+      <div nineAmShellSideNavItem><a nineAmShellLink href="#">Pagination</a></div>
+    </nine-am-shell-side-nav-menu>
 
     <!-- Router-driven. `routerLinkActive` with `ariaCurrentWhenActive` writes
          aria-current="page", which is the hook the shell styles against — so
          the highlight follows the URL with no binding of our own. -->
     @for (item of routedNav; track item.path) {
-      <div dsShellSideNavItem>
-        <a dsShellLink [routerLink]="item.path" routerLinkActive ariaCurrentWhenActive="page">
+      <div nineAmShellSideNavItem>
+        <a nineAmShellLink [routerLink]="item.path" routerLinkActive ariaCurrentWhenActive="page">
           {{ item.label }}
         </a>
       </div>
     }
-  </ds-shell-side-nav>
+  </nine-am-shell-side-nav>
 
-  <ds-shell-overlay />
+  <nine-am-shell-overlay />
 
   <!-- One panel, two contents. Two panels would both be fixed to the same right
        edge and could open on top of each other. -->
-  <ds-shell-panel class="ds-theme-inverse" [expanded]="shellPanel() !== null">
+  <nine-am-shell-panel class="nine-am-theme-inverse" [expanded]="shellPanel() !== null">
     @if (shellPanel() === 'switcher') {
-      <ds-shell-panel-section label="Foundations">
-        <a dsShellLink href="#">IBM Brand Center</a>
-        <a dsShellLink href="#">IBM Design Language</a>
-      </ds-shell-panel-section>
+      <nine-am-shell-panel-section label="Foundations">
+        <a nineAmShellLink href="#">IBM Brand Center</a>
+        <a nineAmShellLink href="#">IBM Design Language</a>
+      </nine-am-shell-panel-section>
 
-      <ds-shell-panel-section label="Implementation">
-        <a dsShellLink href="#">Carbon Design System</a>
-        <a dsShellLink href="#">Carbon for IBM Products</a>
-        <a dsShellLink href="#">Carbon for Cloud</a>
-      </ds-shell-panel-section>
+      <nine-am-shell-panel-section label="Implementation">
+        <a nineAmShellLink href="#">Carbon Design System</a>
+        <a nineAmShellLink href="#">Carbon for IBM Products</a>
+        <a nineAmShellLink href="#">Carbon for Cloud</a>
+      </nine-am-shell-panel-section>
 
-      <ds-shell-panel-section label="Practices">
-        <a dsShellLink href="#">IBM Accessibility</a>
-        <a dsShellLink href="#">IBM Design Research</a>
-      </ds-shell-panel-section>
+      <nine-am-shell-panel-section label="Practices">
+        <a nineAmShellLink href="#">IBM Accessibility</a>
+        <a nineAmShellLink href="#">IBM Design Research</a>
+      </nine-am-shell-panel-section>
     }
 
     @if (shellPanel() === 'settings') {
-      <ds-shell-panel-section label="Appearance">
+      <nine-am-shell-panel-section label="Appearance">
         <!-- A radio group, because it is one choice out of four — and with names
              a person can read. `g10` is a token, not a label. -->
         <div class="demo-panel__field">
-          <ds-radio-group
+          <nine-am-radio-group
             legend="Theme"
             orientation="vertical"
             [value]="theme.theme()"
             (selected)="theme.set($any($event))"
           >
             @for (option of themeOptions; track option.value) {
-              <ds-radio [label]="option.label" [value]="option.value" />
+              <nine-am-radio [label]="option.label" [value]="option.value" />
             }
-          </ds-radio-group>
+          </nine-am-radio-group>
         </div>
-      </ds-shell-panel-section>
+      </nine-am-shell-panel-section>
     }
-  </ds-shell-panel>
+  </nine-am-shell-panel>
 
-  <ds-shell-content withSideNav>
+  <nine-am-shell-content withSideNav>
     <div class="demo">
       <section class="demo__intro">
         <h1>Carbon tokens, our components</h1>
@@ -133,8 +133,8 @@
         <p class="demo__note">
           Carbon's 2x grid: 16 columns from <code>lg</code> up, 8 on <code>md</code>, 4 on
           <code>sm</code>. The column count changing is the whole idea —
-          <code>ds-col-span-8</code> is half the page on a laptop and the entire width of a tablet,
-          from one class.
+          <code>nine-am-col-span-8</code> is half the page on a laptop and the entire width of a
+          tablet, from one class.
         </p>
         <p class="demo__note">
           Resize the window and watch the row below re-flow. The gutter is padding on the columns
@@ -143,26 +143,26 @@
           insets only its content.
         </p>
 
-        <div class="ds-grid ds-grid--full-width ds-grid--row-gap demo-grid">
+        <div class="nine-am-grid nine-am-grid--full-width nine-am-grid--row-gap demo-grid">
           @for (n of gridCells; track n) {
-            <div class="ds-col-span-4"><span class="demo-grid__cell">span 4</span></div>
+            <div class="nine-am-col-span-4"><span class="demo-grid__cell">span 4</span></div>
           }
-          <div class="ds-col-span-8"><span class="demo-grid__cell">span 8</span></div>
-          <div class="ds-col-span-8"><span class="demo-grid__cell">span 8</span></div>
-          <div class="ds-col-span-16"><span class="demo-grid__cell">span 16</span></div>
+          <div class="nine-am-col-span-8"><span class="demo-grid__cell">span 8</span></div>
+          <div class="nine-am-col-span-8"><span class="demo-grid__cell">span 8</span></div>
+          <div class="nine-am-col-span-16"><span class="demo-grid__cell">span 16</span></div>
         </div>
 
         <p class="demo__note">
           Breakpoint-scoped spans read "from here up", the same as Carbon:
-          <code>ds-col-md-4</code> applies from <code>md</code>, and anything below it falls back to
-          the unprefixed span or to a single track.
+          <code>nine-am-col-md-4</code> applies from <code>md</code>, and anything below it falls
+          back to the unprefixed span or to a single track.
         </p>
 
-        <div class="ds-grid ds-grid--full-width ds-grid--row-gap demo-grid">
-          <div class="ds-col-span-4 ds-col-md-2 ds-col-lg-8">
+        <div class="nine-am-grid nine-am-grid--full-width nine-am-grid--row-gap demo-grid">
+          <div class="nine-am-col-span-4 nine-am-col-md-2 nine-am-col-lg-8">
             <span class="demo-grid__cell">4 / md 2 / lg 8</span>
           </div>
-          <div class="ds-col-span-4 ds-col-md-6 ds-col-lg-8">
+          <div class="nine-am-col-span-4 nine-am-col-md-6 nine-am-col-lg-8">
             <span class="demo-grid__cell">4 / md 6 / lg 8</span>
           </div>
         </div>
@@ -192,20 +192,20 @@
 
         <div class="demo__row">
           @for (kind of kinds; track kind) {
-            <button dsButton [kind]="kind">{{ kind }}</button>
+            <button nineAmButton [kind]="kind">{{ kind }}</button>
           }
         </div>
 
         <div class="demo__row">
           @for (size of sizes; track size) {
-            <button dsButton kind="secondary" [size]="size">size {{ size }}</button>
+            <button nineAmButton kind="secondary" [size]="size">size {{ size }}</button>
           }
         </div>
 
         <div class="demo__row">
-          <button dsButton disabled>disabled</button>
-          <button dsButton kind="danger" disabled>danger, disabled</button>
-          <button dsButton kind="ghost">ghost</button>
+          <button nineAmButton disabled>disabled</button>
+          <button nineAmButton kind="danger" disabled>danger, disabled</button>
+          <button nineAmButton kind="ghost">ghost</button>
         </div>
 
         <p class="demo__note">
@@ -225,13 +225,13 @@
 
         <div class="demo__row">
           @for (color of colors; track color) {
-            <ds-tag [color]="color">{{ color }}</ds-tag>
+            <nine-am-tag [color]="color">{{ color }}</nine-am-tag>
           }
         </div>
 
         <div class="demo__row">
           @for (color of removable(); track color) {
-            <ds-tag
+            <nine-am-tag
               [color]="color"
               size="lg"
               dismissible
@@ -239,13 +239,13 @@
               (dismissed)="remove(color)"
             >
               {{ color }}
-            </ds-tag>
+            </nine-am-tag>
           } @empty {
             <span class="demo__empty">All dismissed.</span>
           }
 
           @if (removable().length < 4) {
-            <button dsButton kind="ghost" size="sm" (click)="resetTags()">Reset</button>
+            <button nineAmButton kind="ghost" size="sm" (click)="resetTags()">Reset</button>
           }
         </div>
 
@@ -258,7 +258,7 @@
         <div class="demo__row">
           @for (region of regions; track region) {
             <button
-              dsTag
+              nineAmTag
               selectable
               [selected]="isRegionOn(region)"
               (toggled)="toggleRegion(region)"
@@ -273,12 +273,12 @@
         </div>
 
         <div class="demo__row">
-          <button dsTag color="teal" icon="settings" (click)="openConfirm()">
+          <button nineAmTag color="teal" icon="settings" (click)="openConfirm()">
             operational, opens something
           </button>
 
-          <ds-tag color="purple" icon="calendar">with an icon</ds-tag>
-          <ds-tag color="red" disabled>disabled</ds-tag>
+          <nine-am-tag color="purple" icon="calendar">with an icon</nine-am-tag>
+          <nine-am-tag color="red" disabled>disabled</nine-am-tag>
         </div>
       </section>
 
@@ -294,7 +294,7 @@
         </p>
 
         <div class="demo__fields demo__fields--single">
-          <ds-search
+          <nine-am-search
             label="Search components"
             placeholder="Try typing something"
             [(value)]="searchValue"
@@ -303,12 +303,16 @@
 
         <div class="demo__row">
           @for (size of fieldSizes; track size) {
-            <ds-search [size]="size" [label]="'Search, ' + size" [placeholder]="'size ' + size" />
+            <nine-am-search
+              [size]="size"
+              [label]="'Search, ' + size"
+              [placeholder]="'size ' + size"
+            />
           }
         </div>
 
         <div class="demo__fields demo__fields--single">
-          <ds-search label="Disabled search" placeholder="Disabled" disabled />
+          <nine-am-search label="Disabled search" placeholder="Disabled" disabled />
         </div>
 
         <p class="demo__note">
@@ -328,14 +332,14 @@
         </p>
 
         <div class="demo__fields">
-          <ds-input
+          <nine-am-input
             label="Cluster name"
             placeholder="my-cluster"
             helperText="Lowercase letters, digits and dashes."
             [(value)]="clusterName"
           />
 
-          <ds-input
+          <nine-am-input
             label="Replicas"
             type="number"
             placeholder="3"
@@ -346,7 +350,7 @@
 
         <div class="demo__row">
           @for (size of fieldSizes; track size) {
-            <ds-input [size]="size" [label]="'Size ' + size" [placeholder]="size" />
+            <nine-am-input [size]="size" [label]="'Size ' + size" [placeholder]="size" />
           }
         </div>
 
@@ -359,14 +363,14 @@
         </p>
 
         <div class="demo__fields">
-          <ds-input
+          <nine-am-input
             label="Namespace"
             value="Production"
             invalid
             invalidText="That namespace already exists."
           />
 
-          <ds-input
+          <nine-am-input
             label="Memory limit"
             value="512Mi"
             warn
@@ -380,14 +384,14 @@
         </p>
 
         <div class="demo__fields">
-          <ds-input
+          <nine-am-input
             label="API token"
             type="password"
             value="hunter2-but-longer"
             helperText="Click the eye to reveal."
           />
 
-          <ds-input
+          <nine-am-input
             label="Expired token"
             type="password"
             value="cannot-touch-this"
@@ -395,9 +399,9 @@
             invalidText="This token expired 3 days ago."
           />
 
-          <ds-input label="Disabled" value="Not editable" disabled />
+          <nine-am-input label="Disabled" value="Not editable" disabled />
 
-          <ds-input
+          <nine-am-input
             label="Cluster ID"
             value="clu_8f2a41"
             readOnly
@@ -412,9 +416,9 @@
         </p>
 
         <div class="demo__fields">
-          <ds-input fluid label="Cluster name" placeholder="my-cluster" />
+          <nine-am-input fluid label="Cluster name" placeholder="my-cluster" />
 
-          <ds-input
+          <nine-am-input
             fluid
             label="Namespace"
             value="Production"
@@ -430,12 +434,13 @@
         <p class="demo__note">
           A native <code>&lt;select&gt;</code> with the arrow drawn over it, because a native arrow
           cannot be styled. Options are projected rather than configured —
-          <code>&lt;ds-select&gt;&lt;option&gt;</code> — which keeps <code>&lt;optgroup&gt;</code>,
-          disabled options and an empty placeholder row working without re-exposing any of them.
+          <code>&lt;nine-am-select&gt;&lt;option&gt;</code> — which keeps
+          <code>&lt;optgroup&gt;</code>, disabled options and an empty placeholder row working
+          without re-exposing any of them.
         </p>
 
         <div class="demo__fields">
-          <ds-select label="Region" helperText="Where the cluster runs." [(value)]="region">
+          <nine-am-select label="Region" helperText="Where the cluster runs." [(value)]="region">
             <option value="">Choose a region</option>
             <optgroup label="Europe">
               <option value="eu-central">eu-central</option>
@@ -445,50 +450,50 @@
               <option value="us-east">us-east</option>
               <option value="us-west" disabled>us-west (at capacity)</option>
             </optgroup>
-          </ds-select>
+          </nine-am-select>
 
-          <ds-select label="Tier" helperText="Selected: {{ tier() }}" [(value)]="tier">
+          <nine-am-select label="Tier" helperText="Selected: {{ tier() }}" [(value)]="tier">
             <option value="dev">Development</option>
             <option value="staging">Staging</option>
             <option value="prod">Production</option>
-          </ds-select>
+          </nine-am-select>
         </div>
 
         <div class="demo__row">
           @for (size of fieldSizes; track size) {
-            <ds-select [size]="size" [label]="'Size ' + size">
+            <nine-am-select [size]="size" [label]="'Size ' + size">
               <option>size {{ size }}</option>
-            </ds-select>
+            </nine-am-select>
           }
         </div>
 
         <div class="demo__fields">
-          <ds-select label="Instance type" invalid invalidText="No longer offered.">
+          <nine-am-select label="Instance type" invalid invalidText="No longer offered.">
             <option>m4.large</option>
-          </ds-select>
+          </nine-am-select>
 
-          <ds-select label="Storage class" warn warnText="Slower than the default.">
+          <nine-am-select label="Storage class" warn warnText="Slower than the default.">
             <option>cold-hdd</option>
-          </ds-select>
+          </nine-am-select>
 
-          <ds-select label="Disabled" disabled>
+          <nine-am-select label="Disabled" disabled>
             <option>Not editable</option>
-          </ds-select>
+          </nine-am-select>
 
-          <ds-select label="Provider" readOnly helperText="Read-only, set at creation.">
+          <nine-am-select label="Provider" readOnly helperText="Read-only, set at creation.">
             <option>aws</option>
-          </ds-select>
+          </nine-am-select>
         </div>
 
         <div class="demo__fields">
-          <ds-select fluid label="Region">
+          <nine-am-select fluid label="Region">
             <option value="">Choose a region</option>
             <option>eu-central</option>
-          </ds-select>
+          </nine-am-select>
 
-          <ds-select fluid label="Instance type" invalid invalidText="No longer offered.">
+          <nine-am-select fluid label="Instance type" invalid invalidText="No longer offered.">
             <option>m4.large</option>
-          </ds-select>
+          </nine-am-select>
         </div>
 
         <p class="demo__note">
@@ -510,14 +515,14 @@
         </p>
 
         <div class="demo__fields">
-          <ds-textarea
+          <nine-am-textarea
             label="Description"
             placeholder="What does this service do?"
             helperText="Shown on the service detail page."
             [(value)]="description"
           />
 
-          <ds-textarea
+          <nine-am-textarea
             label="Release notes"
             [rows]="4"
             [maxLength]="120"
@@ -528,23 +533,23 @@
         </div>
 
         <div class="demo__fields">
-          <ds-textarea
+          <nine-am-textarea
             label="Rollback reason"
             value="Because"
             invalid
             invalidText="Give at least 20 characters of context."
           />
 
-          <ds-textarea
+          <nine-am-textarea
             label="Runbook"
             value="See the wiki."
             warn
             warnText="Linking out means this is empty during an incident."
           />
 
-          <ds-textarea label="Disabled" value="Not editable" disabled />
+          <nine-am-textarea label="Disabled" value="Not editable" disabled />
 
-          <ds-textarea
+          <nine-am-textarea
             label="Audit note"
             value="Created by the platform team."
             readOnly
@@ -553,9 +558,9 @@
         </div>
 
         <div class="demo__fields">
-          <ds-textarea fluid label="Description" placeholder="What does this do?" />
+          <nine-am-textarea fluid label="Description" placeholder="What does this do?" />
 
-          <ds-textarea
+          <nine-am-textarea
             fluid
             label="Rollback reason"
             value="Because"
@@ -584,58 +589,58 @@
         </p>
 
         <div class="demo__fields">
-          <ds-radio-group
+          <nine-am-radio-group
             legend="Deployment strategy"
             helperText="Selected: {{ strategy() }}"
             [(value)]="strategy"
           >
-            <ds-radio label="Rolling" value="rolling" />
-            <ds-radio label="Blue-green" value="blue-green" />
-            <ds-radio label="Canary" value="canary" />
-          </ds-radio-group>
+            <nine-am-radio label="Rolling" value="rolling" />
+            <nine-am-radio label="Blue-green" value="blue-green" />
+            <nine-am-radio label="Canary" value="canary" />
+          </nine-am-radio-group>
         </div>
 
         <div class="demo__fields">
-          <ds-radio-group
+          <nine-am-radio-group
             legend="Log level"
             orientation="vertical"
             helperText="Vertical, and one option disabled on its own."
             [(value)]="logLevel"
           >
-            <ds-radio label="Error" value="error" />
-            <ds-radio label="Warn" value="warn" />
-            <ds-radio label="Info" value="info" />
-            <ds-radio label="Debug (not on production)" value="debug" disabled />
-          </ds-radio-group>
+            <nine-am-radio label="Error" value="error" />
+            <nine-am-radio label="Warn" value="warn" />
+            <nine-am-radio label="Info" value="info" />
+            <nine-am-radio label="Debug (not on production)" value="debug" disabled />
+          </nine-am-radio-group>
 
-          <ds-radio-group
+          <nine-am-radio-group
             legend="Retention"
             orientation="vertical"
             value="30"
             invalid
             invalidText="Your plan caps retention at 7 days."
           >
-            <ds-radio label="7 days" value="7" />
-            <ds-radio label="30 days" value="30" />
-            <ds-radio label="1 year" value="365" />
-          </ds-radio-group>
+            <nine-am-radio label="7 days" value="7" />
+            <nine-am-radio label="30 days" value="30" />
+            <nine-am-radio label="1 year" value="365" />
+          </nine-am-radio-group>
         </div>
 
         <div class="demo__fields">
-          <ds-radio-group legend="Disabled group" value="a" disabled>
-            <ds-radio label="Option A" value="a" />
-            <ds-radio label="Option B" value="b" />
-          </ds-radio-group>
+          <nine-am-radio-group legend="Disabled group" value="a" disabled>
+            <nine-am-radio label="Option A" value="a" />
+            <nine-am-radio label="Option B" value="b" />
+          </nine-am-radio-group>
 
-          <ds-radio-group
+          <nine-am-radio-group
             legend="Read-only group"
             value="b"
             readOnly
             helperText="Focusable and readable, but it will not change."
           >
-            <ds-radio label="Option A" value="a" />
-            <ds-radio label="Option B" value="b" />
-          </ds-radio-group>
+            <nine-am-radio label="Option A" value="a" />
+            <nine-am-radio label="Option B" value="b" />
+          </nine-am-radio-group>
         </div>
 
         <p class="demo__note">
@@ -657,21 +662,21 @@
         </p>
 
         <div class="demo__fields">
-          <ds-checkbox-group
+          <nine-am-checkbox-group
             legend="Notify me about"
             helperText="You can change this later."
             [invalid]="notifyInvalid()"
             invalidText="Pick at least one."
           >
-            <ds-checkbox label="Deploys" [(checked)]="notifyDeploys" />
-            <ds-checkbox label="Incidents" [(checked)]="notifyIncidents" />
-            <ds-checkbox label="Weekly digest" [(checked)]="notifyDigest" />
-          </ds-checkbox-group>
+            <nine-am-checkbox label="Deploys" [(checked)]="notifyDeploys" />
+            <nine-am-checkbox label="Incidents" [(checked)]="notifyIncidents" />
+            <nine-am-checkbox label="Weekly digest" [(checked)]="notifyDigest" />
+          </nine-am-checkbox-group>
 
-          <ds-checkbox-group legend="Read-only set" readOnly>
-            <ds-checkbox label="Deploys" [checked]="true" />
-            <ds-checkbox label="Incidents" />
-          </ds-checkbox-group>
+          <nine-am-checkbox-group legend="Read-only set" readOnly>
+            <nine-am-checkbox label="Deploys" [checked]="true" />
+            <nine-am-checkbox label="Incidents" />
+          </nine-am-checkbox-group>
         </div>
 
         <p class="demo__note">
@@ -682,7 +687,7 @@
         </p>
 
         <div class="demo__fields demo__fields--single">
-          <ds-checkbox
+          <nine-am-checkbox
             label="I accept the terms"
             [(checked)]="accepted"
             [invalid]="termsSubmitted() && !accepted()"
@@ -691,8 +696,8 @@
         </div>
 
         <div class="demo__row">
-          <button dsButton size="sm" (click)="termsSubmitted.set(true)">Submit</button>
-          <button dsButton kind="ghost" size="sm" (click)="resetTerms()">Reset</button>
+          <button nineAmButton size="sm" (click)="termsSubmitted.set(true)">Submit</button>
+          <button nineAmButton kind="ghost" size="sm" (click)="resetTerms()">Reset</button>
         </div>
 
         <p class="demo__note">
@@ -713,20 +718,20 @@
         </p>
 
         <div class="demo__fields">
-          <ds-toggle label="Auto-scaling" [(checked)]="autoScaling" />
-          <ds-toggle label="Public endpoint" [(checked)]="publicEndpoint" />
+          <nine-am-toggle label="Auto-scaling" [(checked)]="autoScaling" />
+          <nine-am-toggle label="Public endpoint" [(checked)]="publicEndpoint" />
         </div>
 
         <div class="demo__fields">
-          <ds-toggle label="Small" size="sm" [(checked)]="smallToggle" />
-          <ds-toggle label="No state text" hideStateText [(checked)]="terseToggle" />
+          <nine-am-toggle label="Small" size="sm" [(checked)]="smallToggle" />
+          <nine-am-toggle label="No state text" hideStateText [(checked)]="terseToggle" />
         </div>
 
         <div class="demo__fields">
-          <ds-toggle label="Disabled, off" disabled />
-          <ds-toggle label="Disabled, on" disabled [checked]="true" />
-          <ds-toggle label="Read-only" readOnly [checked]="true" />
-          <ds-toggle
+          <nine-am-toggle label="Disabled, off" disabled />
+          <nine-am-toggle label="Disabled, on" disabled [checked]="true" />
+          <nine-am-toggle label="Read-only" readOnly [checked]="true" />
+          <nine-am-toggle
             label="Custom state text"
             onLabel="Enabled"
             offLabel="Disabled"
@@ -754,13 +759,13 @@
         </p>
 
         <div class="demo__fields">
-          <ds-date-picker
+          <nine-am-date-picker
             label="Start date"
             helperText="Selected: {{ startDate() ? startDate()!.toDateString() : 'nothing' }}"
             [(value)]="startDate"
           />
 
-          <ds-date-picker
+          <nine-am-date-picker
             label="Cutoff"
             helperText="Only this month, and no weekends."
             [min]="monthStart"
@@ -777,13 +782,13 @@
         </p>
 
         <div class="demo__fields">
-          <ds-date-picker label="Expiry" invalid invalidText="That date is in the past." />
+          <nine-am-date-picker label="Expiry" invalid invalidText="That date is in the past." />
 
-          <ds-date-picker label="Renewal" warn warnText="Falls on a public holiday." />
+          <nine-am-date-picker label="Renewal" warn warnText="Falls on a public holiday." />
 
-          <ds-date-picker label="Disabled" disabled />
+          <nine-am-date-picker label="Disabled" disabled />
 
-          <ds-date-picker
+          <nine-am-date-picker
             label="Created"
             readOnly
             helperText="Read-only closes the calendar button too."
@@ -799,7 +804,7 @@
         </p>
 
         <div class="demo__fields demo__fields--single">
-          <ds-date-picker
+          <nine-am-date-picker
             label="Locale formatted"
             placeholder="dd.mm.yyyy."
             helperText="Same picker, both functions replaced."
@@ -830,7 +835,7 @@
         </p>
 
         <div class="demo__fields demo__fields--single">
-          <ds-date-range-picker
+          <nine-am-date-range-picker
             label="Reporting period"
             placeholder="yyyy-mm-dd – yyyy-mm-dd"
             [(start)]="rangeStart"
@@ -846,18 +851,18 @@
         <p class="demo__note">
           Carbon's MultiSelect: a count in the field, a listbox of checkboxes below it.
           <code>ng-primitives</code> owns selection, roving focus and the keyboard; the field, the
-          popover and the class names are ours. The rows reuse <code>ds-checkbox</code>, which
+          popover and the class names are ours. The rows reuse <code>nine-am-checkbox</code>, which
           already does indeterminate — which is exactly what a partial select-all needs.
         </p>
         <p class="demo__note">
           Options are configured here rather than projected, the opposite of
-          <code>ds-select</code>, and for a concrete reason: select-all has to know the whole set
-          and the filter has to know each row's text. Projected <code>&lt;option&gt;</code> elements
-          expose neither.
+          <code>nine-am-select</code>, and for a concrete reason: select-all has to know the whole
+          set and the filter has to know each row's text. Projected
+          <code>&lt;option&gt;</code> elements expose neither.
         </p>
 
         <div class="demo__fields">
-          <ds-multi-select
+          <nine-am-multi-select
             label="Namespaces"
             selectAll
             helperText="Selected: {{ namespaces().length ? namespaces().join(', ') : 'nothing' }}"
@@ -865,7 +870,7 @@
             [(selected)]="namespaces"
           />
 
-          <ds-multi-select
+          <nine-am-multi-select
             label="Owners"
             selectAll
             filterable
@@ -883,14 +888,14 @@
         </p>
 
         <div class="demo__fields">
-          <ds-multi-select
+          <nine-am-multi-select
             label="Regions"
             invalid
             invalidText="Pick at least one region."
             [options]="regionOptions"
           />
 
-          <ds-multi-select label="Disabled" disabled [options]="regionOptions" />
+          <nine-am-multi-select label="Disabled" disabled [options]="regionOptions" />
         </div>
       </section>
 
@@ -914,7 +919,7 @@
          cannot otherwise see. -->
         @if (submitFailed()) {
           <div class="demo__stack">
-            <ds-inline-notification
+            <nine-am-inline-notification
               status="error"
               lowContrast
               heading="Could not create the cluster"
@@ -925,7 +930,7 @@
         }
 
         <div class="demo__fields demo__fields--single">
-          <ds-input
+          <nine-am-input
             label="Email"
             type="email"
             placeholder="you@example.com"
@@ -939,9 +944,9 @@
         </div>
 
         <div class="demo__row">
-          <button dsButton (click)="submitForm()">Create</button>
+          <button nineAmButton (click)="submitForm()">Create</button>
 
-          <button dsButton kind="ghost" (click)="resetForm()">Reset</button>
+          <button nineAmButton kind="ghost" (click)="resetForm()">Reset</button>
 
           @if (submitted() && !emailInvalid() && !submitFailed()) {
             <span class="demo__result"
@@ -985,15 +990,15 @@
           all come from the primitive. We wrote none of it.
         </p>
 
-        <div dsTabs>
-          <div dsTabList [(selectedTab)]="selectedTab" aria-label="Implementation notes">
-            <button dsTab value="behavior">What Aria gives us</button>
-            <button dsTab value="tokens">What Carbon gives us</button>
-            <button dsTab value="ours">What is ours</button>
-            <button dsTab value="blocked" disabled>Disabled</button>
+        <div nineAmTabs>
+          <div nineAmTabList [(selectedTab)]="selectedTab" aria-label="Implementation notes">
+            <button nineAmTab value="behavior">What Aria gives us</button>
+            <button nineAmTab value="tokens">What Carbon gives us</button>
+            <button nineAmTab value="ours">What is ours</button>
+            <button nineAmTab value="blocked" disabled>Disabled</button>
           </div>
 
-          <div dsTabPanel value="behavior">
+          <div nineAmTabPanel value="behavior">
             <ul class="demo__list">
               <li>Roving tabindex — only the active tab is in the tab order</li>
               <li>Arrow keys, Home and End move between tabs</li>
@@ -1002,7 +1007,7 @@
             </ul>
           </div>
 
-          <div dsTabPanel value="tokens">
+          <div nineAmTabPanel value="tokens">
             <ul class="demo__list">
               <li><code>$border-interactive</code> — the 2px selected underline</li>
               <li>
@@ -1013,12 +1018,12 @@
             </ul>
           </div>
 
-          <div dsTabPanel value="ours">
+          <div nineAmTabPanel value="ours">
             <ul class="demo__list">
               <li>The markup — which element carries which class</li>
               <li>
-                The public API: <code>dsTab</code>, <code>dsTabPanel</code>, and only the inputs we
-                chose to re-expose
+                The public API: <code>nineAmTab</code>, <code>nineAmTabPanel</code>, and only the
+                inputs we chose to re-expose
               </li>
               <li>
                 Selected state read straight off Aria's <code>selected()</code> signal, so there is
@@ -1027,7 +1032,7 @@
             </ul>
           </div>
 
-          <div dsTabPanel value="blocked">Unreachable while disabled.</div>
+          <div nineAmTabPanel value="blocked">Unreachable while disabled.</div>
         </div>
 
         <p class="demo__note">
@@ -1037,16 +1042,16 @@
           cut it off from the thing it opens.
         </p>
 
-        <div dsTabs variant="contained" fullWidth>
-          <div dsTabList [(selectedTab)]="containedTab" aria-label="Environments">
-            <button dsTab value="dev">Development</button>
-            <button dsTab value="stage">Staging</button>
-            <button dsTab value="prod">Production</button>
+        <div nineAmTabs variant="contained" fullWidth>
+          <div nineAmTabList [(selectedTab)]="containedTab" aria-label="Environments">
+            <button nineAmTab value="dev">Development</button>
+            <button nineAmTab value="stage">Staging</button>
+            <button nineAmTab value="prod">Production</button>
           </div>
 
-          <div dsTabPanel value="dev">Two replicas, no autoscaling.</div>
-          <div dsTabPanel value="stage">Four replicas, autoscaling to eight.</div>
-          <div dsTabPanel value="prod">Twelve replicas across three zones.</div>
+          <div nineAmTabPanel value="dev">Two replicas, no autoscaling.</div>
+          <div nineAmTabPanel value="stage">Four replicas, autoscaling to eight.</div>
+          <div nineAmTabPanel value="prod">Twelve replicas across three zones.</div>
         </div>
       </section>
 
@@ -1059,7 +1064,7 @@
         </p>
 
         <div class="demo__row">
-          <button dsButton kind="danger" (click)="openConfirm()">Delete cluster…</button>
+          <button nineAmButton kind="danger" (click)="openConfirm()">Delete cluster…</button>
 
           @if (modalResult(); as result) {
             <span class="demo__result">
@@ -1082,14 +1087,14 @@
         </p>
 
         <div class="demo__row">
-          <ds-overflow-menu label="Row actions" (actionSelected)="lastAction.set($event)">
-            <button dsOverflowMenuItem value="stop">Stop app</button>
-            <button dsOverflowMenuItem value="restart">Restart app</button>
-            <button dsOverflowMenuItem value="rename">Rename app</button>
-            <button dsOverflowMenuItem value="clone" [disabled]="true">Clone and move</button>
-            <hr dsOverflowMenuDivider />
-            <button dsOverflowMenuItem value="delete" danger>Delete app</button>
-          </ds-overflow-menu>
+          <nine-am-overflow-menu label="Row actions" (actionSelected)="lastAction.set($event)">
+            <button nineAmOverflowMenuItem value="stop">Stop app</button>
+            <button nineAmOverflowMenuItem value="restart">Restart app</button>
+            <button nineAmOverflowMenuItem value="rename">Rename app</button>
+            <button nineAmOverflowMenuItem value="clone" [disabled]="true">Clone and move</button>
+            <hr nineAmOverflowMenuDivider />
+            <button nineAmOverflowMenuItem value="delete" danger>Delete app</button>
+          </nine-am-overflow-menu>
 
           <span class="demo__result">
             last action: <code>{{ lastAction() || 'none' }}</code>
@@ -1122,22 +1127,22 @@
         </p>
 
         <div class="demo__stack">
-          <ds-breadcrumb noTrailingSlash>
-            <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Home</a></li>
-            <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Clusters</a></li>
-            <li dsBreadcrumbItem current>carbon-prod-01</li>
-          </ds-breadcrumb>
+          <nine-am-breadcrumb noTrailingSlash>
+            <li nineAmBreadcrumbItem><a nineAmLink href="#breadcrumb">Home</a></li>
+            <li nineAmBreadcrumbItem><a nineAmLink href="#breadcrumb">Clusters</a></li>
+            <li nineAmBreadcrumbItem current>carbon-prod-01</li>
+          </nine-am-breadcrumb>
 
-          <ds-breadcrumb size="sm" noTrailingSlash>
-            <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Home</a></li>
-            <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Clusters</a></li>
-            <li dsBreadcrumbItem current>carbon-prod-01</li>
-          </ds-breadcrumb>
+          <nine-am-breadcrumb size="sm" noTrailingSlash>
+            <li nineAmBreadcrumbItem><a nineAmLink href="#breadcrumb">Home</a></li>
+            <li nineAmBreadcrumbItem><a nineAmLink href="#breadcrumb">Clusters</a></li>
+            <li nineAmBreadcrumbItem current>carbon-prod-01</li>
+          </nine-am-breadcrumb>
 
-          <ds-breadcrumb>
-            <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Home</a></li>
-            <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Clusters</a></li>
-          </ds-breadcrumb>
+          <nine-am-breadcrumb>
+            <li nineAmBreadcrumbItem><a nineAmLink href="#breadcrumb">Home</a></li>
+            <li nineAmBreadcrumbItem><a nineAmLink href="#breadcrumb">Clusters</a></li>
+          </nine-am-breadcrumb>
         </div>
 
         <p class="demo__note">
@@ -1161,11 +1166,13 @@
         </p>
 
         <div class="demo__row">
-          <ds-tile>Plain tile. It holds content and does nothing else.</ds-tile>
+          <nine-am-tile>Plain tile. It holds content and does nothing else.</nine-am-tile>
 
-          <a dsClickableTile href="#tile">Clickable tile. A real anchor, so it navigates.</a>
+          <a nineAmClickableTile href="#tile">Clickable tile. A real anchor, so it navigates.</a>
 
-          <a dsClickableTile href="#tile" disabled>Disabled. The href is gone, not just greyed.</a>
+          <a nineAmClickableTile href="#tile" disabled
+            >Disabled. The href is gone, not just greyed.</a
+          >
         </div>
 
         <p class="demo__note">
@@ -1175,16 +1182,16 @@
         </p>
 
         <div class="demo__row">
-          <ds-selectable-tile [(selected)]="planSelected" name="plan" value="pro">
+          <nine-am-selectable-tile [(selected)]="planSelected" name="plan" value="pro">
             Pro plan
-          </ds-selectable-tile>
+          </nine-am-selectable-tile>
 
-          <ds-selectable-tile [(selected)]="addonSelected" name="addon" value="backups">
+          <nine-am-selectable-tile [(selected)]="addonSelected" name="addon" value="backups">
             Nightly backups
-          </ds-selectable-tile>
+          </nine-am-selectable-tile>
 
-          <ds-selectable-tile [selected]="true" disabled
-            >Enterprise (contact sales)</ds-selectable-tile
+          <nine-am-selectable-tile [selected]="true" disabled
+            >Enterprise (contact sales)</nine-am-selectable-tile
           >
         </div>
 
@@ -1201,30 +1208,30 @@
         </p>
 
         <div class="demo__stack">
-          <ds-expandable-tile [(expanded)]="tileExpanded">
-            <div dsTileAboveFold>
+          <nine-am-expandable-tile [(expanded)]="tileExpanded">
+            <div nineAmTileAboveFold>
               <strong>carbon-prod-01</strong><br />
               3 services, 12 replicas
             </div>
-            <div dsTileBelowFold>
+            <div nineAmTileBelowFold>
               <p class="demo__note">
                 Region eu-central-1 · Kubernetes 1.29 · last deploy 4 hours ago.
               </p>
             </div>
-          </ds-expandable-tile>
+          </nine-am-expandable-tile>
 
-          <ds-expandable-tile [(expanded)]="tileExpandedInteractive" interactive>
-            <div dsTileAboveFold>
+          <nine-am-expandable-tile [(expanded)]="tileExpandedInteractive" interactive>
+            <div nineAmTileAboveFold>
               <strong>carbon-staging-02</strong><br />
               1 service, 2 replicas
             </div>
-            <div dsTileBelowFold>
+            <div nineAmTileBelowFold>
               <p class="demo__note">
                 This one holds a link, so the tile cannot be the button —
-                <a dsLink href="#tile">open the cluster</a>.
+                <a nineAmLink href="#tile">open the cluster</a>.
               </p>
             </div>
-          </ds-expandable-tile>
+          </nine-am-expandable-tile>
         </div>
 
         <p class="demo__note">
@@ -1255,15 +1262,17 @@
         </p>
 
         <div class="demo__row">
-          <button dsButton kind="tertiary" dsTooltip="Sits below by default">Bottom</button>
-          <button dsButton kind="tertiary" dsTooltip="Above the trigger" tooltipAlign="top">
+          <button nineAmButton kind="tertiary" nineAmTooltip="Sits below by default">Bottom</button>
+          <button nineAmButton kind="tertiary" nineAmTooltip="Above the trigger" tooltipAlign="top">
             Top
           </button>
-          <button dsButton kind="tertiary" dsTooltip="Beside it" tooltipAlign="right">Right</button>
+          <button nineAmButton kind="tertiary" nineAmTooltip="Beside it" tooltipAlign="right">
+            Right
+          </button>
           <button
-            dsButton
+            nineAmButton
             kind="tertiary"
-            dsTooltip="No wait before showing"
+            nineAmTooltip="No wait before showing"
             [tooltipEnterDelay]="0"
           >
             No delay
@@ -1289,26 +1298,26 @@
         </p>
 
         <div class="demo__row">
-          <ds-toggletip align="bottom">
-            <button dsToggletipButton dsButton kind="tertiary" size="sm">Filter</button>
+          <nine-am-toggletip align="bottom">
+            <button nineAmToggletipButton nineAmButton kind="tertiary" size="sm">Filter</button>
 
             <p>Show only the rows that match:</p>
 
-            <ds-checkbox label="Failing" [(checked)]="filterFailing" />
-            <ds-checkbox label="Recently changed" [(checked)]="filterRecent" />
+            <nine-am-checkbox label="Failing" [(checked)]="filterFailing" />
+            <nine-am-checkbox label="Recently changed" [(checked)]="filterRecent" />
 
             <!-- Carbon's action row: a quiet link at one end, the real action at
              the other. `space-between`, not a gap. -->
-            <div class="ds-toggletip__actions">
-              <a dsLink href="#toggletip">Learn more</a>
-              <button dsButton size="sm">Apply</button>
+            <div class="nine-am-toggletip__actions">
+              <a nineAmLink href="#toggletip">Learn more</a>
+              <button nineAmButton size="sm">Apply</button>
             </div>
-          </ds-toggletip>
+          </nine-am-toggletip>
 
-          <ds-toggletip align="right">
-            <button dsToggletipButton dsButton kind="ghost" size="sm">To the right</button>
+          <nine-am-toggletip align="right">
+            <button nineAmToggletipButton nineAmButton kind="ghost" size="sm">To the right</button>
             <p>Placed beside the trigger instead of below it.</p>
-          </ds-toggletip>
+          </nine-am-toggletip>
 
           <span class="demo__result">
             filters on: <code>{{ (filterFailing() ? 1 : 0) + (filterRecent() ? 1 : 0) }}</code>
@@ -1334,21 +1343,21 @@
         </p>
 
         <div class="demo__row">
-          <a dsLink href="#link" size="sm">Small</a>
-          <a dsLink href="#link">Default</a>
-          <a dsLink href="#link" size="lg">Large</a>
-          <a dsLink href="#link" icon="arrow-up">With an icon</a>
-          <a dsLink href="#link" visited>Visited style on</a>
-          <a dsLink href="#link" disabled>Disabled</a>
+          <a nineAmLink href="#link" size="sm">Small</a>
+          <a nineAmLink href="#link">Default</a>
+          <a nineAmLink href="#link" size="lg">Large</a>
+          <a nineAmLink href="#link" icon="arrow-up">With an icon</a>
+          <a nineAmLink href="#link" visited>Visited style on</a>
+          <a nineAmLink href="#link" disabled>Disabled</a>
         </div>
 
         <p class="demo__note">
           The decision worth making is standalone versus inline. Those above are standalone —
           underlined only on hover, because nothing around them competes for the eye. In a sentence
           it is the other way round:
-          <a dsLink inline href="#link">this link is underlined at rest</a>, because colour alone is
-          not a reliable signal that something is clickable, and for a colour-blind reader it is no
-          signal at all.
+          <a nineAmLink inline href="#link">this link is underlined at rest</a>, because colour
+          alone is not a reliable signal that something is clickable, and for a colour-blind reader
+          it is no signal at all.
         </p>
 
         <p class="demo__note">
@@ -1368,9 +1377,9 @@
         </p>
 
         <div class="demo__row">
-          <ds-loading [withOverlay]="false" description="Loading the page" />
-          <ds-loading small [withOverlay]="false" description="Loading" />
-          <ds-loading small [withOverlay]="false" [active]="false" description="Stopped" />
+          <nine-am-loading [withOverlay]="false" description="Loading the page" />
+          <nine-am-loading small [withOverlay]="false" description="Loading" />
+          <nine-am-loading small [withOverlay]="false" [active]="false" description="Stopped" />
           <span class="demo__result">88px · 16px · 16px stopped</span>
         </div>
 
@@ -1380,25 +1389,26 @@
         </p>
 
         <p class="demo__note">
-          <code>ds-inline-loading</code> is the one that belongs in a button row. It reports the end
-          of the job as well as the middle — which is the whole reason it is not just a small
-          spinner, because a spinner that disappears says nothing about whether the thing worked.
+          <code>nine-am-inline-loading</code> is the one that belongs in a button row. It reports
+          the end of the job as well as the middle — which is the whole reason it is not just a
+          small spinner, because a spinner that disappears says nothing about whether the thing
+          worked.
         </p>
 
         <div class="demo__stack">
-          <ds-inline-loading status="active" description="Creating cluster…" />
-          <ds-inline-loading status="inactive" description="Queued behind two jobs" />
-          <ds-inline-loading status="finished" description="Cluster created" />
-          <ds-inline-loading status="error" description="Region rejected the request" />
+          <nine-am-inline-loading status="active" description="Creating cluster…" />
+          <nine-am-inline-loading status="inactive" description="Queued behind two jobs" />
+          <nine-am-inline-loading status="finished" description="Cluster created" />
+          <nine-am-inline-loading status="error" description="Region rejected the request" />
         </div>
 
         <div class="demo__row">
-          <button dsButton kind="secondary" [disabled]="deploying()" (click)="deploy()">
+          <button nineAmButton kind="secondary" [disabled]="deploying()" (click)="deploy()">
             {{ deployStatus() === 'active' ? 'Deploying…' : 'Deploy' }}
           </button>
 
           @if (deployStatus(); as status) {
-            <ds-inline-loading [status]="status" [description]="deployText()" />
+            <nine-am-inline-loading [status]="status" [description]="deployText()" />
           }
         </div>
 
@@ -1419,7 +1429,7 @@
         </p>
 
         <div class="demo__row">
-          <ds-toggle
+          <nine-am-toggle
             label="Low contrast"
             onLabel="Low"
             offLabel="High"
@@ -1429,7 +1439,7 @@
 
         <div class="demo__stack">
           @for (status of notificationStatuses; track status) {
-            <ds-inline-notification
+            <nine-am-inline-notification
               [status]="status"
               [lowContrast]="notificationLowContrast()"
               [heading]="notificationCopy[status].heading"
@@ -1446,12 +1456,12 @@
 
         <div class="demo__row">
           @for (status of notificationStatuses; track status) {
-            <button dsButton kind="tertiary" size="sm" (click)="openToast(status)">
+            <button nineAmButton kind="tertiary" size="sm" (click)="openToast(status)">
               {{ status }}
             </button>
           }
 
-          <button dsButton kind="ghost" size="sm" (click)="openTimedToast()">
+          <button nineAmButton kind="ghost" size="sm" (click)="openTimedToast()">
             with a 5s timeout
           </button>
         </div>
@@ -1468,9 +1478,11 @@
         </p>
 
         <div class="demo__row">
-          <button dsButton kind="tertiary" size="sm" (click)="openActionable()">Raise one</button>
+          <button nineAmButton kind="tertiary" size="sm" (click)="openActionable()">
+            Raise one
+          </button>
 
-          <ds-toggle
+          <nine-am-toggle
             label="Inline layout"
             onLabel="Inline"
             offLabel="Toast"
@@ -1480,7 +1492,7 @@
 
         @if (actionableOpen()) {
           <div class="demo__stack">
-            <ds-actionable-notification
+            <nine-am-actionable-notification
               status="error"
               heading="Deployment failed"
               subtitle="The cluster rejected the manifest. Check the image tag and retry."
@@ -1515,7 +1527,7 @@
           from the container instead of from a breakpoint cap.
         </p>
 
-        <ds-callout
+        <nine-am-callout
           status="info"
           heading="This region is read-only"
           subtitle="Resources here can be viewed but not changed."
@@ -1524,7 +1536,7 @@
           <a href="https://carbondesignsystem.com/components/notification/usage/">
             Where to request write access
           </a>
-        </ds-callout>
+        </nine-am-callout>
 
         <p class="demo__note">
           Links inside it are reached with Tab like any other content, which is the whole reason a
@@ -1541,14 +1553,14 @@
           component inside adapts with no extra props.
         </p>
 
-        <div class="ds-theme-inverse demo__zone">
+        <div class="nine-am-theme-inverse demo__zone">
           <div class="demo__row">
-            <button dsButton>primary</button>
-            <button dsButton kind="tertiary">tertiary</button>
-            <ds-tag color="teal">inverted</ds-tag>
+            <button nineAmButton>primary</button>
+            <button nineAmButton kind="tertiary">tertiary</button>
+            <nine-am-tag color="teal">inverted</nine-am-tag>
           </div>
         </div>
       </section>
     </div>
-  </ds-shell-content>
-</ds-shell>
+  </nine-am-shell-content>
+</nine-am-shell>

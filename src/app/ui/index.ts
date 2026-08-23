@@ -6,14 +6,14 @@ export {
   Breadcrumb,
   BreadcrumbItem,
   type BreadcrumbSize,
-  DS_BREADCRUMB,
+  NINE_AM_BREADCRUMB,
 } from './breadcrumb/breadcrumb';
 export {
   Checkbox,
   CheckboxGroup,
   type CheckboxOrientation,
-  DS_CHECKBOX,
-  DS_CHECKBOX_GROUP,
+  NINE_AM_CHECKBOX,
+  NINE_AM_CHECKBOX_GROUP,
 } from './checkbox/checkbox';
 export { type DateFormatter } from './date-picker/date-picker-panel';
 export {
@@ -28,7 +28,7 @@ export { type IconName } from './icon/icons';
 export { Input, type InputType } from './input/input';
 export { Link, type LinkSize } from './link/link';
 export {
-  DS_OVERFLOW_MENU,
+  NINE_AM_OVERFLOW_MENU,
   OverflowMenu,
   type OverflowMenuAlign,
   OverflowMenuDivider,
@@ -41,19 +41,19 @@ export {
   type PopoverSide,
 } from './popover/popover-position';
 export {
-  DS_TOGGLETIP,
-  DS_TOGGLETIP_PARTS,
+  NINE_AM_TOGGLETIP,
+  NINE_AM_TOGGLETIP_PARTS,
   Toggletip,
   ToggletipButton,
 } from './popover/toggletip';
 export { Tooltip } from './popover/tooltip';
 export {
-  DS_LOADING,
+  NINE_AM_LOADING,
   InlineLoading,
   type InlineLoadingStatus,
   Loading,
 } from './loading/loading';
-export { DS_MODAL, Modal, ModalBody, ModalFooter } from './modal/modal';
+export { NINE_AM_MODAL, Modal, ModalBody, ModalFooter } from './modal/modal';
 export { ModalService, type ModalSize } from './modal/modal.service';
 export {
   MultiSelect,
@@ -77,7 +77,7 @@ export {
 export { ToastNotification } from './notification/toast-notification';
 export { Pagination } from './pagination/pagination';
 export {
-  DS_RADIO_GROUP,
+  NINE_AM_RADIO_GROUP,
   Radio,
   RadioGroup,
   type RadioLabelPosition,
@@ -85,7 +85,7 @@ export {
 } from './radio/radio';
 export { Search } from './search/search';
 export {
-  DS_SHELL,
+  NINE_AM_SHELL,
   Shell,
   ShellActions,
   ShellContent,
@@ -100,7 +100,7 @@ export {
 } from './shell/shell';
 export { Select } from './select/select';
 export {
-  DS_TABS,
+  NINE_AM_TABS,
   DsTab,
   DsTabList,
   DsTabPanel,
@@ -126,7 +126,7 @@ export {
   type TableSize,
 } from './table/table-types';
 export {
-  DS_TAG,
+  NINE_AM_TAG,
   InteractiveTag,
   Tag,
   type TagColor,
@@ -135,7 +135,7 @@ export {
 export { Textarea } from './textarea/textarea';
 export {
   ClickableTile,
-  DS_TILE,
+  NINE_AM_TILE,
   ExpandableTile,
   SelectableTile,
   Tile,

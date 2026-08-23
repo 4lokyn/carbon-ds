@@ -5,7 +5,7 @@ import { InlineLoading, Loading, type InlineLoadingStatus } from './loading';
 @Component({
   imports: [Loading],
   template: `
-    <ds-loading
+    <nine-am-loading
       [active]="active()"
       [withOverlay]="withOverlay()"
       [small]="small()"
@@ -21,7 +21,7 @@ class LoadingHost {
 
 @Component({
   imports: [InlineLoading],
-  template: `<ds-inline-loading [status]="status()" [description]="text()" />`,
+  template: `<nine-am-inline-loading [status]="status()" [description]="text()" />`,
 })
 class InlineHost {
   readonly status = signal<InlineLoadingStatus>('active');
@@ -37,7 +37,7 @@ describe('Loading', () => {
 
     return {
       host: fixture.componentInstance,
-      root: () => el.querySelector('ds-loading') as HTMLElement,
+      root: () => el.querySelector('nine-am-loading') as HTMLElement,
       svg: () => el.querySelector('svg') as SVGElement,
       apply(change: () => void) {
         change();
@@ -56,11 +56,11 @@ describe('Loading', () => {
   it('covers the page by default, which is Carbon and worth knowing', () => {
     const { root, apply, host } = setup();
 
-    expect(root().classList).toContain('ds-loading-host--overlay');
+    expect(root().classList).toContain('nine-am-loading-host--overlay');
 
     apply(() => host.withOverlay.set(false));
 
-    expect(root().classList).not.toContain('ds-loading-host--overlay');
+    expect(root().classList).not.toContain('nine-am-loading-host--overlay');
   });
 
   it('draws a track as well as an arc', () => {
@@ -68,20 +68,20 @@ describe('Loading', () => {
 
     // An arc alone on an empty background reads as a broken circle rather than
     // as progress, so both circles are always there.
-    expect(svg().querySelector('.ds-loading__background')).not.toBeNull();
-    expect(svg().querySelector('.ds-loading__stroke')).not.toBeNull();
+    expect(svg().querySelector('.nine-am-loading__background')).not.toBeNull();
+    expect(svg().querySelector('.nine-am-loading__stroke')).not.toBeNull();
   });
 
   it('stops rather than vanishing', () => {
     const { svg, apply, host } = setup();
 
-    expect(svg().classList).not.toContain('ds-loading--stop');
+    expect(svg().classList).not.toContain('nine-am-loading--stop');
 
     apply(() => host.active.set(false));
 
     // Still rendered — the stop animation needs something to run on, and
     // removing it is the caller's call.
-    expect(svg().classList).toContain('ds-loading--stop');
+    expect(svg().classList).toContain('nine-am-loading--stop');
   });
 });
 
@@ -94,9 +94,9 @@ describe('InlineLoading', () => {
 
     return {
       host: fixture.componentInstance,
-      root: () => el.querySelector('ds-inline-loading') as HTMLElement,
-      spinner: () => el.querySelector('.ds-loading'),
-      icon: () => el.querySelector('.ds-inline-loading__icon'),
+      root: () => el.querySelector('nine-am-inline-loading') as HTMLElement,
+      spinner: () => el.querySelector('.nine-am-loading'),
+      icon: () => el.querySelector('.nine-am-inline-loading__icon'),
       apply(change: () => void) {
         change();
         fixture.detectChanges();
@@ -124,7 +124,7 @@ describe('InlineLoading', () => {
     apply(() => host.status.set('inactive'));
 
     expect(spinner()).not.toBeNull();
-    expect(spinner()?.classList).toContain('ds-loading--stop');
+    expect(spinner()?.classList).toContain('nine-am-loading--stop');
   });
 
   it('interrupts for a failure and not for a success', () => {

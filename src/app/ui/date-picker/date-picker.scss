@@ -1,25 +1,25 @@
-@use 'ds' as *;
+@use 'nine-am' as *;
 
 // ── The field ───────────────────────────────────────────────────────────────
 
-.ds-date-picker {
+.nine-am-date-picker {
   display: flex;
   width: 100%;
   flex-direction: column;
   align-items: flex-start;
 }
 
-.ds-date-picker__label {
+.nine-am-date-picker__label {
   @include field-label;
 }
 
-.ds-date-picker__field-wrapper {
+.nine-am-date-picker__field-wrapper {
   position: relative;
   display: flex;
   width: 100%;
 }
 
-.ds-date-picker__field {
+.nine-am-date-picker__field {
   @include field-surface;
 
   // Room for the calendar button, which is a square the height of the field.
@@ -31,29 +31,29 @@
 }
 
 // A status icon and the calendar button share the gutter, so it doubles.
-.ds-date-picker--invalid .ds-date-picker__field,
-.ds-date-picker--warn .ds-date-picker__field {
+.nine-am-date-picker--invalid .nine-am-date-picker__field,
+.nine-am-date-picker--warn .nine-am-date-picker__field {
   padding-inline-end: $spacing-10;
 }
 
 @each $name, $height in $field-heights {
-  .ds-date-picker--#{$name} {
-    .ds-date-picker__field {
+  .nine-am-date-picker--#{$name} {
+    .nine-am-date-picker__field {
       height: $height;
     }
 
-    .ds-date-picker__trigger {
+    .nine-am-date-picker__trigger {
       width: $height;
     }
   }
 }
 
-.ds-date-picker:not(.ds-date-picker--fluid).ds-date-picker--invalid
-  .ds-date-picker__field:not(:focus) {
+.nine-am-date-picker:not(.nine-am-date-picker--fluid).nine-am-date-picker--invalid
+  .nine-am-date-picker__field:not(:focus) {
   @include field-invalid;
 }
 
-.ds-date-picker__trigger {
+.nine-am-date-picker__trigger {
   @include unstyled-button;
 
   position: absolute;
@@ -75,7 +75,7 @@
   }
 }
 
-.ds-date-picker__status {
+.nine-am-date-picker__status {
   @include field-status-icon;
 
   transform: translateY(-50%);
@@ -85,38 +85,38 @@
   inset-inline-end: $field-icon-gutter;
 }
 
-.ds-date-picker--invalid .ds-date-picker__status {
+.nine-am-date-picker--invalid .nine-am-date-picker__status {
   @include field-status-icon-invalid;
 }
 
-.ds-date-picker--warn .ds-date-picker__status {
+.nine-am-date-picker--warn .nine-am-date-picker__status {
   @include field-status-icon-warn;
 }
 
-.ds-date-picker__helper {
+.nine-am-date-picker__helper {
   @include field-helper-text;
 }
 
-.ds-date-picker__requirement {
+.nine-am-date-picker__requirement {
   @include field-requirement;
 }
 
-.ds-date-picker--invalid .ds-date-picker__requirement {
+.nine-am-date-picker--invalid .nine-am-date-picker__requirement {
   @include field-requirement-invalid;
 }
 
-.ds-date-picker--disabled {
-  .ds-date-picker__field {
+.nine-am-date-picker--disabled {
+  .nine-am-date-picker__field {
     @include field-disabled;
   }
 
-  .ds-date-picker__label,
-  .ds-date-picker__helper {
+  .nine-am-date-picker__label,
+  .nine-am-date-picker__helper {
     color: $text-disabled;
   }
 }
 
-.ds-date-picker--readonly .ds-date-picker__field {
+.nine-am-date-picker--readonly .nine-am-date-picker__field {
   @include field-read-only;
 }
 
@@ -127,7 +127,7 @@
 // Carbon does not build its own date picker either. None of that CSS applies to
 // our markup, so these are Carbon's values on our class names.
 
-.ds-date-picker__calendar {
+.nine-am-date-picker__calendar {
   display: flex;
   overflow: hidden;
   width: rem(288px);
@@ -143,14 +143,14 @@
   box-shadow: 0 rem(2px) rem(6px) $shadow;
 }
 
-.ds-date-picker__header {
+.nine-am-date-picker__header {
   display: flex;
   width: 100%;
   align-items: center;
   justify-content: space-between;
 }
 
-.ds-date-picker__month {
+.nine-am-date-picker__month {
   @include type-style('heading-compact-01');
 
   display: flex;
@@ -160,7 +160,7 @@
   line-height: 1;
 }
 
-.ds-date-picker__nav {
+.nine-am-date-picker__nav {
   @include unstyled-button;
 
   display: flex;
@@ -185,11 +185,11 @@
   }
 }
 
-.ds-date-picker__grid {
+.nine-am-date-picker__grid {
   border-collapse: collapse;
 }
 
-.ds-date-picker__weekday {
+.nine-am-date-picker__weekday {
   @include type-style('body-compact-01');
 
   width: rem(40px);
@@ -199,7 +199,7 @@
   font-weight: 400;
 }
 
-.ds-date-picker__day {
+.nine-am-date-picker__day {
   @include unstyled-button;
   @include type-style('body-compact-01');
 
@@ -224,14 +224,14 @@
 // The state hooks are ng-primitives' data attributes, not classes of ours — that
 // is the primitive's public surface, the same way Aria's signals are for tabs.
 
-.ds-date-picker__day[data-outside-month] {
+.nine-am-date-picker__day[data-outside-month] {
   color: $text-helper;
 }
 
 // Today is a dot under the number, not a ring. A ring would collide with both
 // the focus outline and the selected fill, which are the two states that
 // actually need a box.
-.ds-date-picker__day[data-today] {
+.nine-am-date-picker__day[data-today] {
   color: $link-primary;
   font-weight: 600;
 
@@ -248,7 +248,7 @@
   }
 }
 
-.ds-date-picker__day[data-selected] {
+.nine-am-date-picker__day[data-selected] {
   background-color: $button-primary;
   color: $text-on-color;
 
@@ -265,11 +265,11 @@
 }
 
 // Selected wins the colour, so the dot would be invisible against the fill.
-.ds-date-picker__day[data-today][data-selected]::after {
+.nine-am-date-picker__day[data-today][data-selected]::after {
   display: none;
 }
 
-.ds-date-picker__day[data-disabled] {
+.nine-am-date-picker__day[data-disabled] {
   color: $text-disabled;
   cursor: not-allowed;
 
@@ -280,7 +280,7 @@
 
 // ── Range ───────────────────────────────────────────────────────────────────
 
-.ds-date-range-picker {
+.nine-am-date-range-picker {
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -290,15 +290,15 @@
 // $highlight rather than a tint of $button-primary: Carbon has a token for
 // exactly this, and it is the one colour guaranteed to stay legible under
 // $text-primary in all four themes.
-.ds-date-picker__day[data-range-between] {
+.nine-am-date-picker__day[data-range-between] {
   background-color: $highlight;
   color: $text-primary;
 }
 
 // The two ends are selected days, so they already carry the primary fill from
 // the rule above. These only exist to beat the plain hover.
-.ds-date-picker__day[data-range-start],
-.ds-date-picker__day[data-range-end] {
+.nine-am-date-picker__day[data-range-start],
+.nine-am-date-picker__day[data-range-end] {
   background-color: $button-primary;
   color: $text-on-color;
 

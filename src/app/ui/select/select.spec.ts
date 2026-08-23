@@ -5,7 +5,7 @@ import { Select } from './select';
 @Component({
   imports: [Select],
   template: `
-    <ds-select
+    <nine-am-select
       label="Region"
       [helperText]="helperText()"
       [invalid]="invalid()"
@@ -21,7 +21,7 @@ import { Select } from './select';
       @for (region of regions(); track region) {
         <option [value]="region">{{ region }}</option>
       }
-    </ds-select>
+    </nine-am-select>
   `,
 })
 class Host {
@@ -41,10 +41,10 @@ class Host {
 @Component({
   imports: [Select],
   template: `
-    <ds-select label="Tier" [(value)]="value">
+    <nine-am-select label="Tier" [(value)]="value">
       <option value="dev">Development</option>
       <option value="prod">Production</option>
-    </ds-select>
+    </nine-am-select>
   `,
 })
 class NoEmptyOption {
@@ -63,8 +63,8 @@ describe('Select', () => {
       host: fixture.componentInstance,
       el,
       select: () => el.querySelector('select') as HTMLSelectElement,
-      helper: () => el.querySelector('.ds-select__helper'),
-      requirement: () => el.querySelector('.ds-select__requirement'),
+      helper: () => el.querySelector('.nine-am-select__helper'),
+      requirement: () => el.querySelector('.nine-am-select__requirement'),
       apply(change: () => void) {
         change();
         fixture.detectChanges();
@@ -150,10 +150,10 @@ describe('Select', () => {
       host.warn.set(true);
     });
 
-    const wrapper = el.querySelector('ds-select') as HTMLElement;
+    const wrapper = el.querySelector('nine-am-select') as HTMLElement;
 
-    expect(wrapper.classList).toContain('ds-select--invalid');
-    expect(wrapper.classList).not.toContain('ds-select--warn');
+    expect(wrapper.classList).toContain('nine-am-select--invalid');
+    expect(wrapper.classList).not.toContain('nine-am-select--warn');
     expect(requirement()?.textContent?.trim()).toBe('No longer offered.');
   });
 
@@ -162,13 +162,13 @@ describe('Select', () => {
 
     apply(() => host.readOnly.set(true));
 
-    const wrapper = el.querySelector('ds-select') as HTMLElement;
+    const wrapper = el.querySelector('nine-am-select') as HTMLElement;
 
     // `readonly` on a <select> does nothing at all, so the only way to make one
     // uneditable is `disabled`. The class is what puts the enabled look back.
     expect(select().disabled).toBe(true);
-    expect(wrapper.classList).toContain('ds-select--readonly');
-    expect(wrapper.classList).not.toContain('ds-select--disabled');
+    expect(wrapper.classList).toContain('nine-am-select--readonly');
+    expect(wrapper.classList).not.toContain('nine-am-select--disabled');
   });
 
   it('marks aria-invalid only for invalid, never for warn', () => {

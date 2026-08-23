@@ -2,7 +2,7 @@
      focus that the switch below is styled against. The <label> forwards
      clicks to it, because a <button> is a labelable element. -->
 <button
-  class="ds-toggle__button"
+  class="nine-am-toggle__button"
   type="button"
   role="switch"
   [id]="buttonId"
@@ -13,26 +13,26 @@
   (click)="toggle()"
 ></button>
 
-<label class="ds-toggle__label" [for]="buttonId">
+<label class="nine-am-toggle__label" [for]="buttonId">
   <!-- The accessible name comes from this span alone, via aria-labelledby.
        Letting the whole label name the button would fold the "On" / "Off"
        text into it, and role="switch" already announces that state. -->
   <span
-    class="ds-toggle__label-text"
+    class="nine-am-toggle__label-text"
     [id]="labelId"
-    [class.ds-visually-hidden]="hideLabel()"
+    [class.nine-am-visually-hidden]="hideLabel()"
   >
     {{ label() }}
   </span>
 
-  <span class="ds-toggle__appearance">
-    <span class="ds-toggle__switch">
+  <span class="nine-am-toggle__appearance">
+    <span class="nine-am-toggle__switch">
       <!-- Only on the small size. The check is positioned for a 16px switch,
            and on the 24px one the knob is large enough to read on its own —
            which is why Carbon draws it in exactly one of the two. -->
       @if (size() === 'sm') {
         <svg
-          class="ds-toggle__check"
+          class="nine-am-toggle__check"
           width="6"
           height="5"
           viewBox="0 0 6 5"
@@ -45,7 +45,7 @@
     </span>
 
     @if (!hideStateText()) {
-      <span class="ds-toggle__text">
+      <span class="nine-am-toggle__text">
         {{ checked() ? onLabel() : offLabel() }}
       </span>
     }

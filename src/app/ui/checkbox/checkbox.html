@@ -1,6 +1,6 @@
 <input
   #input
-  class="ds-checkbox__input"
+  class="nine-am-checkbox__input"
   type="checkbox"
   [id]="inputId"
   [checked]="checked()"
@@ -11,10 +11,10 @@
   (change)="onChange($event)"
 />
 
-<label class="ds-checkbox__label" [for]="inputId">
+<label class="nine-am-checkbox__label" [for]="inputId">
   <!-- Hidden visually but still in the a11y tree, so it remains the
        accessible name. No aria-label needed — that would only shadow it. -->
-  <span class="ds-checkbox__text" [class.ds-visually-hidden]="hideLabel()">
+  <span class="nine-am-checkbox__text" [class.nine-am-visually-hidden]="hideLabel()">
     {{ label() }}
   </span>
 </label>
@@ -22,12 +22,12 @@
 <!-- Standalone only. Inside a group these are empty, because the group prints
      the one message the whole set shares. -->
 @if (message(); as text) {
-  <div class="ds-checkbox__requirement" [id]="messageId">
+  <div class="nine-am-checkbox__requirement" [id]="messageId">
     @if (statusIcon(); as icon) {
-      <ds-icon class="ds-checkbox__status" [name]="icon" />
+      <nine-am-icon class="nine-am-checkbox__status" [name]="icon" />
     }
     <span>{{ text }}</span>
   </div>
 } @else if (helperText() && !group) {
-  <div class="ds-checkbox__helper" [id]="helperId">{{ helperText() }}</div>
+  <div class="nine-am-checkbox__helper" [id]="helperId">{{ helperText() }}</div>
 }

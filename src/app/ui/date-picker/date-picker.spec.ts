@@ -6,7 +6,7 @@ import { DateRangePicker } from './date-range-picker';
 @Component({
   imports: [DatePicker],
   template: `
-    <ds-date-picker
+    <nine-am-date-picker
       label="Start date"
       [helperText]="helperText()"
       [invalid]="invalid()"
@@ -33,7 +33,7 @@ class Host {
 @Component({
   imports: [DateRangePicker],
   template: `
-    <ds-date-range-picker
+    <nine-am-date-range-picker
       label="Reporting period"
       [(start)]="start"
       [(end)]="end"
@@ -58,9 +58,9 @@ describe('DatePicker', () => {
       el,
       field: () => el.querySelector('input') as HTMLInputElement,
       trigger: () =>
-        el.querySelector('.ds-date-picker__trigger') as HTMLButtonElement,
-      helper: () => el.querySelector('.ds-date-picker__helper'),
-      requirement: () => el.querySelector('.ds-date-picker__requirement'),
+        el.querySelector('.nine-am-date-picker__trigger') as HTMLButtonElement,
+      helper: () => el.querySelector('.nine-am-date-picker__helper'),
+      requirement: () => el.querySelector('.nine-am-date-picker__requirement'),
       apply(change: () => void) {
         change();
         fixture.detectChanges();
@@ -156,7 +156,7 @@ describe('DatePicker', () => {
     fixture.detectChanges();
 
     const day = document.querySelector(
-      '.ds-date-picker__day:not([data-outside-month])',
+      '.nine-am-date-picker__day:not([data-outside-month])',
     ) as HTMLButtonElement;
 
     expect(day).not.toBeNull();
@@ -165,7 +165,7 @@ describe('DatePicker', () => {
     fixture.detectChanges();
 
     expect(host.value()).not.toBeNull();
-    expect(document.querySelector('.ds-date-picker__day')).toBeNull();
+    expect(document.querySelector('.nine-am-date-picker__day')).toBeNull();
   });
 
   it('starts the week on Monday, not Sunday', () => {
@@ -175,7 +175,7 @@ describe('DatePicker', () => {
     fixture.detectChanges();
 
     const headers = Array.from(
-      document.querySelectorAll('.ds-date-picker__weekday'),
+      document.querySelectorAll('.nine-am-date-picker__weekday'),
     ).map((th) => th.getAttribute('abbr'));
 
     // Carbon inherits Sunday from flatpickr's US locale. ISO 8601 — and most of
@@ -226,7 +226,7 @@ describe('DateRangePicker', () => {
       host: fixture.componentInstance,
       field: () => el.querySelector('input') as HTMLInputElement,
       trigger: () =>
-        el.querySelector('.ds-date-picker__trigger') as HTMLButtonElement,
+        el.querySelector('.nine-am-date-picker__trigger') as HTMLButtonElement,
       blur() {
         (el.querySelector('input') as HTMLInputElement).dispatchEvent(
           new Event('blur'),
@@ -320,7 +320,7 @@ describe('DateRangePicker', () => {
     const days = () =>
       Array.from(
         document.querySelectorAll<HTMLButtonElement>(
-          '.ds-date-picker__day:not([data-outside-month]):not([data-disabled])',
+          '.nine-am-date-picker__day:not([data-outside-month]):not([data-disabled])',
         ),
       );
 
@@ -336,7 +336,7 @@ describe('DateRangePicker', () => {
     fixture.detectChanges();
 
     expect(host.end()).not.toBeNull();
-    expect(document.querySelector('.ds-date-picker__day')).toBeNull();
+    expect(document.querySelector('.nine-am-date-picker__day')).toBeNull();
     expect(field().value).toContain('–');
   });
 });

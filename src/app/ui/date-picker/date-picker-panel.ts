@@ -36,7 +36,7 @@ export type DateFormatter = (date: Date) => string;
  * ancestor and would throw without one.
  */
 @Component({
-  selector: 'ds-date-picker-panel',
+  selector: 'nine-am-date-picker-panel',
   encapsulation: ViewEncapsulation.None,
   imports: [
     Icon,
@@ -49,7 +49,7 @@ export type DateFormatter = (date: Date) => string;
     NgpDatePickerCell,
     NgpDatePickerDateButton,
   ],
-  host: { class: 'ds-date-picker__panel' },
+  host: { class: 'nine-am-date-picker__panel' },
   templateUrl: './date-picker-panel.html',
 })
 export class DatePickerPanel {

@@ -16,14 +16,14 @@ let nextId = 0;
 /**
  * Carbon textarea.
  *
- * Two things differ from `ds-input` and both come from Carbon rather than from
+ * Two things differ from `nine-am-input` and both come from Carbon rather than from
  * preference. There is no size scale — a textarea is sized by `rows`, and Carbon
  * ships no 32/40/48 variants for it. And the type style is `body-01` rather than
  * `body-compact-01`: compact line height is for a single line, and stacks badly
  * once text wraps.
  */
 @Component({
-  selector: 'ds-textarea',
+  selector: 'nine-am-textarea',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
   templateUrl: './textarea.html',
@@ -58,7 +58,7 @@ export class Textarea {
 
   readonly blurred = output<void>();
 
-  protected readonly textareaId = `ds-textarea-${nextId++}`;
+  protected readonly textareaId = `nine-am-textarea-${nextId++}`;
   protected readonly helperId = `${this.textareaId}-helper`;
   protected readonly messageId = `${this.textareaId}-message`;
 
@@ -97,24 +97,24 @@ export class Textarea {
   });
 
   protected readonly hostClass = computed(() => {
-    const classes = ['ds-textarea'];
+    const classes = ['nine-am-textarea'];
 
     if (this.fluid()) {
-      classes.push('ds-textarea--fluid');
+      classes.push('nine-am-textarea--fluid');
     }
 
     if (this.invalid()) {
-      classes.push('ds-textarea--invalid');
+      classes.push('nine-am-textarea--invalid');
     } else if (this.warn()) {
-      classes.push('ds-textarea--warn');
+      classes.push('nine-am-textarea--warn');
     }
 
     if (this.disabled()) {
-      classes.push('ds-textarea--disabled');
+      classes.push('nine-am-textarea--disabled');
     }
 
     if (this.readOnly()) {
-      classes.push('ds-textarea--readonly');
+      classes.push('nine-am-textarea--readonly');
     }
 
     return classes.join(' ');

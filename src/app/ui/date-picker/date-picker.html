@@ -1,19 +1,19 @@
 <label
-  class="ds-date-picker__label"
-  [class.ds-visually-hidden]="hideLabel()"
+  class="nine-am-date-picker__label"
+  [class.nine-am-visually-hidden]="hideLabel()"
   [for]="inputId"
 >
   {{ label() }}
 </label>
 
 <div
-  class="ds-date-picker__field-wrapper"
+  class="nine-am-date-picker__field-wrapper"
   cdkOverlayOrigin
   #origin="cdkOverlayOrigin"
 >
   <input
     #field
-    class="ds-date-picker__field"
+    class="nine-am-date-picker__field"
     type="text"
     autocomplete="off"
     [id]="inputId"
@@ -28,25 +28,25 @@
   />
 
   @if (statusIcon(); as icon) {
-    <ds-icon class="ds-date-picker__status" [name]="icon" />
+    <nine-am-icon class="nine-am-date-picker__status" [name]="icon" />
   }
 
   <button
     type="button"
-    class="ds-date-picker__trigger"
+    class="nine-am-date-picker__trigger"
     [disabled]="disabled() || readOnly()"
     [attr.aria-label]="openCalendarLabel()"
     [attr.aria-expanded]="open()"
     (click)="toggle()"
   >
-    <ds-icon name="calendar" />
+    <nine-am-icon name="calendar" />
   </button>
 </div>
 
 @if (message(); as text) {
-  <div class="ds-date-picker__requirement" [id]="messageId">{{ text }}</div>
+  <div class="nine-am-date-picker__requirement" [id]="messageId">{{ text }}</div>
 } @else if (helperText()) {
-  <div class="ds-date-picker__helper" [id]="helperId">{{ helperText() }}</div>
+  <div class="nine-am-date-picker__helper" [id]="helperId">{{ helperText() }}</div>
 }
 
 <ng-template
@@ -64,7 +64,7 @@
        it only provides state, and the panel below picks that up by
        injection like every other directive inside. -->
   <div
-    class="ds-date-picker__calendar"
+    class="nine-am-date-picker__calendar"
     ngpDatePicker
     [ngpDatePickerDate]="value() ?? undefined"
     [ngpDatePickerMin]="min() ?? undefined"
@@ -73,7 +73,7 @@
     [ngpDatePickerFirstDayOfWeek]="firstDayOfWeek()"
     (ngpDatePickerDateChange)="onPick($event)"
   >
-    <ds-date-picker-panel
+    <nine-am-date-picker-panel
       [previousMonthLabel]="previousMonthLabel()"
       [nextMonthLabel]="nextMonthLabel()"
     />

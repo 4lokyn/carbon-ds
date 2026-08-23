@@ -1,6 +1,6 @@
-@use 'ds' as *;
+@use 'nine-am' as *;
 
-.ds-textarea {
+.nine-am-textarea {
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -8,31 +8,31 @@
 }
 
 // The counter sits opposite the label rather than under the field, which is the
-// only reason the label needs a wrapper here and not on ds-input.
-.ds-textarea__label-wrapper {
+// only reason the label needs a wrapper here and not on nine-am-input.
+.nine-am-textarea__label-wrapper {
   display: flex;
   width: 100%;
   justify-content: space-between;
 }
 
-.ds-textarea__label {
+.nine-am-textarea__label {
   @include field-label;
 }
 
-.ds-textarea__counter {
+.nine-am-textarea__counter {
   @include field-label;
 
   white-space: nowrap;
 }
 
-.ds-textarea__field-wrapper {
+.nine-am-textarea__field-wrapper {
   position: relative;
   display: flex;
   width: 100%;
   max-width: 100%;
 }
 
-.ds-textarea__field {
+.nine-am-textarea__field {
   @include field-surface;
 
   // body-01, not the compact variant the single-line fields use: compact line
@@ -58,8 +58,8 @@
 // Not fluid: there the host owns the ring, because the box includes the message.
 // This is the rule that was drawing a second red rectangle around the value, its
 // top edge showing as a stray line under the inset label. See input.scss.
-.ds-textarea:not(.ds-textarea--fluid).ds-textarea--invalid
-  .ds-textarea__field:not(:focus) {
+.nine-am-textarea:not(.nine-am-textarea--fluid).nine-am-textarea--invalid
+  .nine-am-textarea__field:not(:focus) {
   @include field-invalid;
 }
 
@@ -67,12 +67,12 @@
 // icon as a result. We add it: a status icon that obscures the value it is
 // complaining about is worse than a slightly narrower field. Deliberate
 // deviation, noted in the root README.
-.ds-textarea--invalid .ds-textarea__field,
-.ds-textarea--warn .ds-textarea__field {
+.nine-am-textarea--invalid .nine-am-textarea__field,
+.nine-am-textarea--warn .nine-am-textarea__field {
   padding-inline-end: $field-icon-gutter;
 }
 
-.ds-textarea__status {
+.nine-am-textarea__status {
   @include field-status-icon;
 
   // Pinned to the first line, not centred. A textarea can be twenty rows tall,
@@ -81,46 +81,46 @@
   inset-block-start: $spacing-04;
 }
 
-.ds-textarea--invalid .ds-textarea__status {
+.nine-am-textarea--invalid .nine-am-textarea__status {
   @include field-status-icon-invalid;
 }
 
-.ds-textarea--warn .ds-textarea__status {
+.nine-am-textarea--warn .nine-am-textarea__status {
   @include field-status-icon-warn;
 }
 
 // ── Messages ────────────────────────────────────────────────────────────────
 
-.ds-textarea__helper {
+.nine-am-textarea__helper {
   @include field-helper-text;
 }
 
-.ds-textarea__requirement {
+.nine-am-textarea__requirement {
   @include field-requirement;
 }
 
-.ds-textarea--invalid .ds-textarea__requirement {
+.nine-am-textarea--invalid .nine-am-textarea__requirement {
   @include field-requirement-invalid;
 }
 
 // ── Disabled / read-only ────────────────────────────────────────────────────
 
-.ds-textarea--disabled {
-  .ds-textarea__field {
+.nine-am-textarea--disabled {
+  .nine-am-textarea__field {
     @include field-disabled;
 
     // Dragging a field you cannot type into.
     resize: none;
   }
 
-  .ds-textarea__label,
-  .ds-textarea__counter,
-  .ds-textarea__helper {
+  .nine-am-textarea__label,
+  .nine-am-textarea__counter,
+  .nine-am-textarea__helper {
     color: $text-disabled;
   }
 }
 
-.ds-textarea--readonly .ds-textarea__field {
+.nine-am-textarea--readonly .nine-am-textarea__field {
   @include field-read-only;
 
   resize: none;
@@ -128,11 +128,11 @@
 
 // ── Fluid ───────────────────────────────────────────────────────────────────
 
-.ds-textarea--fluid {
+.nine-am-textarea--fluid {
   position: relative;
   background-color: $field-01;
 
-  .ds-textarea__label-wrapper {
+  .nine-am-textarea__label-wrapper {
     position: absolute;
     z-index: 1;
     height: rem(16px);
@@ -140,7 +140,7 @@
     inset-inline: $field-padding-inline;
   }
 
-  .ds-textarea__label {
+  .nine-am-textarea__label {
     margin: 0;
     overflow-x: auto;
     scrollbar-width: none;
@@ -151,15 +151,15 @@
     }
   }
 
-  .ds-textarea__counter {
+  .nine-am-textarea__counter {
     margin: 0;
   }
 
-  .ds-textarea__helper {
+  .nine-am-textarea__helper {
     display: none;
   }
 
-  .ds-textarea__field {
+  .nine-am-textarea__field {
     // The top margin, not padding, is what clears the inset label — padding
     // would scroll with the text and let the first line slide under it.
     margin-block-start: rem(32px);
@@ -172,26 +172,26 @@
     background-color: transparent;
   }
 
-  .ds-textarea__status {
+  .nine-am-textarea__status {
     inset-block-start: rem(40px);
   }
 
   // Column, not `display: block`. Block lets the field's 32px top margin
   // collapse out of the wrapper, which drags the wrapper's top edge down below
   // the inset label — and any ring drawn on it cuts the label off.
-  .ds-textarea__field-wrapper {
+  .nine-am-textarea__field-wrapper {
     flex-direction: column;
   }
 
-  .ds-textarea__requirement {
+  .nine-am-textarea__requirement {
     margin: 0;
     padding: $spacing-03 rem(40px) $spacing-03 $field-padding-inline;
   }
 }
 
-.ds-textarea--fluid.ds-textarea--invalid,
-.ds-textarea--fluid.ds-textarea--warn {
-  .ds-textarea__field {
+.nine-am-textarea--fluid.nine-am-textarea--invalid,
+.nine-am-textarea--fluid.nine-am-textarea--warn {
+  .nine-am-textarea__field {
     border-block-end: 0;
 
     // The fluid padding shorthand above resets the base gutter, so it has to be
@@ -205,19 +205,19 @@
 }
 
 // On the host, not the wrapper — see the note in input.scss.
-.ds-textarea--fluid:focus-within {
+.nine-am-textarea--fluid:focus-within {
   @include field-focus;
 }
 
-.ds-textarea--fluid.ds-textarea--invalid:not(:focus-within) {
+.nine-am-textarea--fluid.nine-am-textarea--invalid:not(:focus-within) {
   @include field-invalid;
 }
 
-.ds-textarea--fluid.ds-textarea--warn {
+.nine-am-textarea--fluid.nine-am-textarea--warn {
   border-block-end: rem(1px) solid $border-strong-01;
 }
 
-.ds-textarea__divider {
+.nine-am-textarea__divider {
   border-block-start: rem(1px) solid $border-subtle-01;
   margin: 0 $field-padding-inline;
 }

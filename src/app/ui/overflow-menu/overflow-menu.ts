@@ -54,7 +54,7 @@ let nextId = 0;
  * scrolling ancestor room or the menu will be cut off.
  */
 @Component({
-  selector: 'ds-overflow-menu',
+  selector: 'nine-am-overflow-menu',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
   styleUrl: './overflow-menu.scss',
@@ -66,7 +66,7 @@ let nextId = 0;
   template: `
     <button
       type="button"
-      class="ds-overflow-menu__trigger"
+      class="nine-am-overflow-menu__trigger"
       [id]="triggerId"
       [attr.aria-label]="label()"
       aria-haspopup="menu"
@@ -75,15 +75,15 @@ let nextId = 0;
       (click)="toggle()"
       (keydown)="onTriggerKeydown($event)"
     >
-      <ds-icon name="overflow-menu" />
+      <nine-am-icon name="overflow-menu" />
     </button>
 
     <div
       role="menu"
       [id]="panelId"
       [attr.aria-labelledby]="triggerId"
-      class="ds-overflow-menu__panel"
-      [class.ds-overflow-menu__panel--open]="expanded()"
+      class="nine-am-overflow-menu__panel"
+      [class.nine-am-overflow-menu__panel--open]="expanded()"
       (keydown)="onPanelKeydown($event)"
     >
       <ng-content />
@@ -107,11 +107,11 @@ export class OverflowMenu {
 
   protected readonly expanded = signal(false);
 
-  protected readonly triggerId = `ds-overflow-menu-trigger-${nextId}`;
-  protected readonly panelId = `ds-overflow-menu-panel-${nextId++}`;
+  protected readonly triggerId = `nine-am-overflow-menu-trigger-${nextId}`;
+  protected readonly panelId = `nine-am-overflow-menu-panel-${nextId++}`;
 
   protected readonly hostClass = computed(
-    () => `ds-overflow-menu ds-overflow-menu--${this.align()}`,
+    () => `nine-am-overflow-menu nine-am-overflow-menu--${this.align()}`,
   );
 
   private readonly items = contentChildren(OverflowMenuItem);
@@ -253,7 +253,9 @@ export class OverflowMenu {
     this.search = '';
 
     if (refocus) {
-      this.host.nativeElement.querySelector<HTMLElement>('.ds-overflow-menu__trigger')?.focus();
+      this.host.nativeElement
+        .querySelector<HTMLElement>('.nine-am-overflow-menu__trigger')
+        ?.focus();
     }
   }
 
@@ -331,7 +333,7 @@ export class OverflowMenu {
  * every action in one place instead of binding a click to each item.
  */
 @Directive({
-  selector: '[dsOverflowMenuItem]',
+  selector: '[nineAmOverflowMenuItem]',
   host: {
     '[class]': 'hostClass()',
     '[attr.type]': '"button"',
@@ -363,8 +365,8 @@ export class OverflowMenuItem {
 
   protected readonly hostClass = computed(() =>
     this.danger()
-      ? 'ds-overflow-menu__item ds-overflow-menu__item--danger'
-      : 'ds-overflow-menu__item',
+      ? 'nine-am-overflow-menu__item nine-am-overflow-menu__item--danger'
+      : 'nine-am-overflow-menu__item',
   );
 
   focus(): void {
@@ -402,12 +404,12 @@ export class OverflowMenuItem {
  * not announced is one less thing between the user and the action.
  */
 @Directive({
-  selector: '[dsOverflowMenuDivider]',
+  selector: '[nineAmOverflowMenuDivider]',
   host: {
-    class: 'ds-overflow-menu__divider',
+    class: 'nine-am-overflow-menu__divider',
     'aria-hidden': 'true',
   },
 })
 export class OverflowMenuDivider {}
 
-export const DS_OVERFLOW_MENU = [OverflowMenu, OverflowMenuItem, OverflowMenuDivider] as const;
+export const NINE_AM_OVERFLOW_MENU = [OverflowMenu, OverflowMenuItem, OverflowMenuDivider] as const;

@@ -1,10 +1,10 @@
-@use 'ds' as *;
+@use 'nine-am' as *;
 
 $shell-header-height: rem(48px);
 $shell-side-nav-width: rem(256px);
 $shell-rail-width: rem(48px);
 
-.ds-shell-side-nav {
+.nine-am-shell-side-nav {
   position: fixed;
   z-index: 7000;
   overflow: hidden;
@@ -18,7 +18,7 @@ $shell-rail-width: rem(48px);
   transition: width 110ms cubic-bezier(0.2, 0, 1, 0.9);
 }
 
-.ds-shell-side-nav__items {
+.nine-am-shell-side-nav__items {
   @include unstyled-list;
 
   overflow-y: auto;
@@ -31,7 +31,7 @@ $shell-rail-width: rem(48px);
 // 256px and permanent from `lg` up. Below that it collapses to nothing rather
 // than to a rail, and the hamburger swings it back out over the content.
 
-.ds-shell-side-nav--ux {
+.nine-am-shell-side-nav--ux {
   width: 0;
 
   @include breakpoint(lg) {
@@ -41,7 +41,7 @@ $shell-rail-width: rem(48px);
 
 // Only meaningful below `lg`. Above it the nav is already open and the class
 // changes nothing, which is why the hamburger is hidden up there.
-.ds-shell-side-nav--ux.ds-shell-side-nav--expanded {
+.nine-am-shell-side-nav--ux.nine-am-shell-side-nav--expanded {
   width: $shell-side-nav-width;
 }
 
@@ -51,7 +51,7 @@ $shell-rail-width: rem(48px);
 // every width, widening on hover. It never hides, so it never needs the
 // hamburger.
 
-.ds-shell-side-nav--rail {
+.nine-am-shell-side-nav--rail {
   width: $shell-rail-width;
 
   &:hover,
@@ -62,12 +62,12 @@ $shell-rail-width: rem(48px);
 
 // ── Links ───────────────────────────────────────────────────────────────────
 
-.ds-shell-side-nav__item {
+.nine-am-shell-side-nav__item {
   display: block;
   width: 100%;
 }
 
-.ds-shell-side-nav .ds-shell-link {
+.nine-am-shell-side-nav .nine-am-shell-link {
   @include type-style('heading-compact-01');
 
   position: relative;
@@ -96,7 +96,7 @@ $shell-rail-width: rem(48px);
 
 // ── Nested groups ───────────────────────────────────────────────────────────
 
-.ds-shell-side-nav__submenu {
+.nine-am-shell-side-nav__submenu {
   @include unstyled-button;
   @include type-style('heading-compact-01');
 
@@ -124,23 +124,25 @@ $shell-rail-width: rem(48px);
 
 // Pushed to the far end by taking the leftover space, rather than by a margin
 // that would have to know the label's width.
-.ds-shell-side-nav__submenu-chevron {
+.nine-am-shell-side-nav__submenu-chevron {
   display: flex;
   flex: 1;
   justify-content: flex-end;
 
-  ds-icon {
+  nine-am-icon {
     transition: transform $duration-fast-02 motion(standard, productive);
   }
 }
 
-.ds-shell-side-nav__submenu[aria-expanded='true'] .ds-shell-side-nav__submenu-chevron ds-icon {
+.nine-am-shell-side-nav__submenu[aria-expanded='true']
+  .nine-am-shell-side-nav__submenu-chevron
+  nine-am-icon {
   transform: rotate(180deg);
 }
 
 // Collapsed, not removed. `max-height` is what animates; `visibility: hidden`
 // is what takes the links out of the tab order while they are still rendered.
-.ds-shell-side-nav__menu {
+.nine-am-shell-side-nav__menu {
   @include unstyled-list;
 
   display: block;
@@ -151,13 +153,13 @@ $shell-rail-width: rem(48px);
 
 // 1500px, which is Carbon's number and is a ceiling rather than a height: a
 // transition needs a length to run to, and `auto` is not one.
-.ds-shell-side-nav__submenu[aria-expanded='true'] + .ds-shell-side-nav__menu {
+.nine-am-shell-side-nav__submenu[aria-expanded='true'] + .nine-am-shell-side-nav__menu {
   max-height: rem(1500px);
   visibility: inherit;
 }
 
 // Indented, and lighter than the group heading above it.
-.ds-shell-side-nav__menu .ds-shell-link {
+.nine-am-shell-side-nav__menu .nine-am-shell-link {
   font-weight: 400;
   padding-inline-start: rem(32px);
 }
@@ -170,8 +172,8 @@ $shell-rail-width: rem(48px);
 // actually reads — `$background-selected` is a faint grey, and in a column of
 // rows a fill alone is easy to miss. The header nav puts its rule underneath
 // instead, because there the items sit in a row.
-.ds-shell-side-nav .ds-shell-link--current,
-.ds-shell-side-nav .ds-shell-link[aria-current='page'] {
+.nine-am-shell-side-nav .nine-am-shell-link--current,
+.nine-am-shell-side-nav .nine-am-shell-link[aria-current='page'] {
   position: relative;
   background-color: $background-selected;
   color: $text-primary;

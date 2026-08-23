@@ -107,14 +107,14 @@ export abstract class NotificationBase {
 
   protected readonly hostClass = computed(() => {
     const classes = [
-      'ds-notification',
-      `ds-notification--${this.variant()}`,
-      `ds-notification--${this.status()}`,
-      ...this.modifiers().map((modifier) => `ds-notification--${modifier}`),
+      'nine-am-notification',
+      `nine-am-notification--${this.variant()}`,
+      `nine-am-notification--${this.status()}`,
+      ...this.modifiers().map((modifier) => `nine-am-notification--${modifier}`),
     ];
 
     if (this.lowContrast()) {
-      classes.push('ds-notification--low-contrast');
+      classes.push('nine-am-notification--low-contrast');
     }
 
     return classes.join(' ');

@@ -52,7 +52,7 @@
 // Nested themes — e.g. a dark header on a light page. Carbon calls these theme
 // zones. It works because theme() emits custom properties on any selector, not
 // just :root.
-.ds-theme-inverse {
+.nine-am-theme-inverse {
   @include theme.theme(themes.$g100);
 
   background-color: theme.$background;

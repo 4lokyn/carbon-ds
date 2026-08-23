@@ -5,7 +5,7 @@ import { Search } from './search';
 @Component({
   imports: [Search],
   template: `
-    <ds-search
+    <nine-am-search
       class="host-supplied"
       label="Filter services"
       placeholder="Filter"
@@ -23,7 +23,7 @@ class Host {
 
 @Component({
   imports: [Search],
-  template: `<ds-search expandable label="Filter" [(value)]="value" />`,
+  template: `<nine-am-search expandable label="Filter" [(value)]="value" />`,
 })
 class ExpandableHost {
   readonly value = signal('');
@@ -41,7 +41,7 @@ describe('Search', () => {
       host: fixture.componentInstance,
       el,
       input: () => el.querySelector('input') as HTMLInputElement,
-      clear: () => el.querySelector('.ds-search__clear') as HTMLButtonElement | null,
+      clear: () => el.querySelector('.nine-am-search__clear') as HTMLButtonElement | null,
       type(text: string) {
         const input = el.querySelector('input') as HTMLInputElement;
         input.value = text;
@@ -59,7 +59,7 @@ describe('Search', () => {
     // A placeholder stops being a label the moment someone types into the field,
     // so the real label has to exist — just not visibly.
     expect(label.textContent?.trim()).toBe('Filter services');
-    expect(label.classList).toContain('ds-visually-hidden');
+    expect(label.classList).toContain('nine-am-visually-hidden');
     expect(label.htmlFor).toBe(input().id);
   });
 
@@ -69,11 +69,11 @@ describe('Search', () => {
     // The host binds [class] for its size and state modifiers. If that binding
     // ever replaces rather than merges, every caller that positions a search
     // from the outside — the services toolbar does — silently loses its layout.
-    const search = el.querySelector('ds-search') as HTMLElement;
+    const search = el.querySelector('nine-am-search') as HTMLElement;
 
     expect(search.classList).toContain('host-supplied');
-    expect(search.classList).toContain('ds-search');
-    expect(search.classList).toContain('ds-search--md');
+    expect(search.classList).toContain('nine-am-search');
+    expect(search.classList).toContain('nine-am-search--md');
   });
 
   it('shows the clear button only once there is something to clear', () => {
@@ -117,20 +117,20 @@ describe('Search', () => {
     fixture.detectChanges();
 
     const el = fixture.nativeElement as HTMLElement;
-    const search = el.querySelector('ds-search') as HTMLElement;
+    const search = el.querySelector('nine-am-search') as HTMLElement;
     const magnifier = el.querySelector(
-      '.ds-search__magnifier--button',
+      '.nine-am-search__magnifier--button',
     ) as HTMLButtonElement;
 
     // Collapsed the magnifier is the only thing on screen, so it has to be a
     // real button rather than the decorative icon the persistent variant uses.
     expect(magnifier).not.toBeNull();
-    expect(search.classList).not.toContain('ds-search--expanded');
+    expect(search.classList).not.toContain('nine-am-search--expanded');
 
     magnifier.click();
     fixture.detectChanges();
 
-    expect(search.classList).toContain('ds-search--expanded');
+    expect(search.classList).toContain('nine-am-search--expanded');
     expect(document.activeElement).toBe(el.querySelector('input'));
   });
 
@@ -139,10 +139,10 @@ describe('Search', () => {
     fixture.detectChanges();
 
     const el = fixture.nativeElement as HTMLElement;
-    const search = el.querySelector('ds-search') as HTMLElement;
+    const search = el.querySelector('nine-am-search') as HTMLElement;
     const input = el.querySelector('input') as HTMLInputElement;
 
-    (el.querySelector('.ds-search__magnifier--button') as HTMLButtonElement).click();
+    (el.querySelector('.nine-am-search__magnifier--button') as HTMLButtonElement).click();
     input.value = 'edge';
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
@@ -151,14 +151,14 @@ describe('Search', () => {
     fixture.detectChanges();
 
     // Collapsing over a live filter would hide the reason the list is short.
-    expect(search.classList).toContain('ds-search--expanded');
+    expect(search.classList).toContain('nine-am-search--expanded');
 
     input.value = '';
     input.dispatchEvent(new Event('input'));
     input.dispatchEvent(new Event('blur'));
     fixture.detectChanges();
 
-    expect(search.classList).not.toContain('ds-search--expanded');
+    expect(search.classList).not.toContain('nine-am-search--expanded');
   });
 
   it('reports every keystroke, because a filter cannot wait for blur', () => {

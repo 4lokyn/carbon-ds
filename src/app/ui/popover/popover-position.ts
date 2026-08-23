@@ -71,7 +71,7 @@ function positionFor({ side, alignment }: Resolved): ConnectedPosition {
       overlayX: alignmentToX(alignment),
       overlayY: OPPOSITE[side] === 'bottom' ? 'bottom' : 'top',
       offsetY: side === 'top' ? -POPOVER_OFFSET : POPOVER_OFFSET,
-      panelClass: `ds-popover--${side}`,
+      panelClass: `nine-am-popover--${side}`,
     };
   }
 
@@ -82,7 +82,7 @@ function positionFor({ side, alignment }: Resolved): ConnectedPosition {
     overlayX: side === 'left' ? 'end' : 'start',
     overlayY: alignmentToY(alignment),
     offsetX: side === 'left' ? -POPOVER_OFFSET : POPOVER_OFFSET,
-    panelClass: `ds-popover--${side}`,
+    panelClass: `nine-am-popover--${side}`,
   };
 }
 
@@ -126,5 +126,5 @@ export function sideFromPosition(position: ConnectedPosition): PopoverSide {
   const panelClass = position.panelClass;
   const name = Array.isArray(panelClass) ? panelClass[0] : panelClass;
 
-  return ((name ?? '').replace('ds-popover--', '') || 'bottom') as PopoverSide;
+  return ((name ?? '').replace('nine-am-popover--', '') || 'bottom') as PopoverSide;
 }

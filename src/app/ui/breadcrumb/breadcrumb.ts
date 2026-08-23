@@ -19,13 +19,13 @@ export type BreadcrumbSize = 'sm' | 'md';
  * is a CSS `::after`, so it is never read out; the list does that job.
  *
  * Consumers write real `<li>` elements, so the `ol > li` relationship survives
- * projection. A `<ds-breadcrumb-item>` element between them would break it.
+ * projection. A `<nine-am-breadcrumb-item>` element between them would break it.
  */
 @Component({
-  selector: 'ds-breadcrumb',
+  selector: 'nine-am-breadcrumb',
   encapsulation: ViewEncapsulation.None,
   styleUrl: './breadcrumb.scss',
-  host: { class: 'ds-breadcrumb-host' },
+  host: { class: 'nine-am-breadcrumb-host' },
   template: `
     <nav [attr.aria-label]="label()">
       <ol [class]="listClass()">
@@ -54,10 +54,10 @@ export class Breadcrumb {
   readonly noTrailingSlash = input(false, { transform: booleanAttribute });
 
   protected readonly listClass = computed(() => {
-    const classes = ['ds-breadcrumb', `ds-breadcrumb--${this.size()}`];
+    const classes = ['nine-am-breadcrumb', `nine-am-breadcrumb--${this.size()}`];
 
     if (this.noTrailingSlash()) {
-      classes.push('ds-breadcrumb--no-trailing-slash');
+      classes.push('nine-am-breadcrumb--no-trailing-slash');
     }
 
     return classes.join(' ');
@@ -72,7 +72,7 @@ export class Breadcrumb {
  * because it does not go anywhere.
  */
 @Directive({
-  selector: '[dsBreadcrumbItem]',
+  selector: '[nineAmBreadcrumbItem]',
   host: {
     '[class]': 'hostClass()',
     '[attr.aria-current]': 'current() ? "page" : null',
@@ -82,8 +82,10 @@ export class BreadcrumbItem {
   readonly current = input(false, { transform: booleanAttribute });
 
   protected readonly hostClass = computed(() =>
-    this.current() ? 'ds-breadcrumb-item ds-breadcrumb-item--current' : 'ds-breadcrumb-item',
+    this.current()
+      ? 'nine-am-breadcrumb-item nine-am-breadcrumb-item--current'
+      : 'nine-am-breadcrumb-item',
   );
 }
 
-export const DS_BREADCRUMB = [Breadcrumb, BreadcrumbItem] as const;
+export const NINE_AM_BREADCRUMB = [Breadcrumb, BreadcrumbItem] as const;

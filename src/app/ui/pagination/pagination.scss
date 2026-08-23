@@ -1,6 +1,6 @@
-@use 'ds' as *;
+@use 'nine-am' as *;
 
-.ds-pagination {
+.nine-am-pagination {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -14,16 +14,16 @@
 // table, so its height has to be able to match the table's density — an `sm`
 // table above a 40px pagination bar reads as two components, not one.
 @each $name, $height in $field-heights {
-  .ds-pagination--#{$name} {
+  .nine-am-pagination--#{$name} {
     min-height: $height;
 
-    .ds-pagination__select {
+    .nine-am-pagination__select {
       height: $height;
     }
 
     // Square. The chevron is 16px whatever the box, so the gutter around it
     // falls out of the height: 8px at sm, 12px at md, 16px at lg.
-    .ds-pagination__nav {
+    .nine-am-pagination__nav {
       width: $height;
       height: $height;
     }
@@ -32,16 +32,16 @@
 
 // Disabled is a whole-control state, for while a page is in flight. The
 // individual controls carry `disabled` too — this is only the look.
-.ds-pagination--disabled {
+.nine-am-pagination--disabled {
   color: $text-disabled;
 
-  .ds-pagination__label,
-  .ds-pagination__range {
+  .nine-am-pagination__label,
+  .nine-am-pagination__range {
     color: $text-disabled;
   }
 }
 
-.ds-pagination__group {
+.nine-am-pagination__group {
   display: flex;
   align-items: center;
 
@@ -55,35 +55,35 @@
 
 // Carbon puts a divider between the size select and the range text, and between
 // the page select and the nav buttons.
-.ds-pagination__group:first-child {
+.nine-am-pagination__group:first-child {
   padding-left: $spacing-05;
 }
 
-.ds-pagination__label,
-.ds-pagination__range {
+.nine-am-pagination__label,
+.nine-am-pagination__range {
   color: $text-secondary;
   white-space: nowrap;
 
   @include type-style('label-01');
 }
 
-.ds-pagination__label {
+.nine-am-pagination__label {
   margin-inline-end: $spacing-05;
 }
 
 // 16px in front, one pixel behind. The single trailing pixel is Carbon's, and
 // it is what lets the next divider sit flush against the text.
-.ds-pagination__range {
+.nine-am-pagination__range {
   margin-inline: $spacing-05 rem(1px);
 }
 
-.ds-pagination__select-wrap {
+.nine-am-pagination__select-wrap {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.ds-pagination__select {
+.nine-am-pagination__select {
   // Room on the right for the chevron sitting on top.
   padding: 0 rem(36px) 0 $spacing-04;
   border: 0;
@@ -103,7 +103,7 @@
   }
 }
 
-.ds-pagination__select-icon {
+.nine-am-pagination__select-icon {
   position: absolute;
   right: $spacing-03;
   color: $icon-primary;
@@ -115,7 +115,7 @@
 // Square, and sized by the `--sm/md/lg` rules at the top of this file rather
 // than here — a nav button that keeps a 40px height inside a 32px bar is the
 // one thing that makes the whole row look misaligned.
-.ds-pagination__nav {
+.nine-am-pagination__nav {
   @include unstyled-button;
 
   position: relative;

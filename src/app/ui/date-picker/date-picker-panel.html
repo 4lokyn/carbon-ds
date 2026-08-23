@@ -1,36 +1,36 @@
-<div class="ds-date-picker__header">
+<div class="nine-am-date-picker__header">
   <button
     type="button"
-    class="ds-date-picker__nav"
+    class="nine-am-date-picker__nav"
     ngpDatePickerPreviousMonth
     [attr.aria-label]="previousMonthLabel()"
   >
-    <ds-icon name="chevron-left" />
+    <nine-am-icon name="chevron-left" />
   </button>
 
   <!-- The primitive supplies only the id and aria-live here; the text is
        ours, which is the whole reason this component needs the state. -->
-  <span class="ds-date-picker__month" ngpDatePickerLabel>
+  <span class="nine-am-date-picker__month" ngpDatePickerLabel>
     {{ monthLabel() }}
   </span>
 
   <button
     type="button"
-    class="ds-date-picker__nav"
+    class="nine-am-date-picker__nav"
     ngpDatePickerNextMonth
     [attr.aria-label]="nextMonthLabel()"
   >
-    <ds-icon name="chevron-right" />
+    <nine-am-icon name="chevron-right" />
   </button>
 </div>
 
-<table class="ds-date-picker__grid" ngpDatePickerGrid>
+<table class="nine-am-date-picker__grid" ngpDatePickerGrid>
   <thead>
     <tr>
       @for (day of weekdays(); track day.long) {
         <!-- One letter to fit the 40px column, the full name in the abbr
              attribute so a screen reader still says "Wednesday". -->
-        <th class="ds-date-picker__weekday" scope="col" [attr.abbr]="day.long">
+        <th class="nine-am-date-picker__weekday" scope="col" [attr.abbr]="day.long">
           {{ day.narrow }}
         </th>
       }
@@ -40,7 +40,7 @@
   <tbody>
     <tr *ngpDatePickerRowRender>
       <td *ngpDatePickerCellRender="let date" ngpDatePickerCell>
-        <button type="button" class="ds-date-picker__day" ngpDatePickerDateButton>
+        <button type="button" class="nine-am-date-picker__day" ngpDatePickerDateButton>
           {{ date.getDate() }}
         </button>
       </td>

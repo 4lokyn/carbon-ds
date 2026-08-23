@@ -10,9 +10,9 @@ import { ICON_PATHS, type IconName } from './icons';
  * no way to accidentally rely on the icon for semantics.
  */
 @Component({
-  selector: 'ds-icon',
+  selector: 'nine-am-icon',
   encapsulation: ViewEncapsulation.None,
-  host: { class: 'ds-icon' },
+  host: { class: 'nine-am-icon' },
   template: `
     <svg
       [attr.width]="size()"
@@ -27,7 +27,7 @@ import { ICON_PATHS, type IconName } from './icons';
     </svg>
   `,
   styles: `
-    .ds-icon {
+    .nine-am-icon {
       display: inline-flex;
       flex: 0 0 auto;
     }

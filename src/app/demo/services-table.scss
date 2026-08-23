@@ -1,4 +1,4 @@
-@use 'ds' as *;
+@use 'nine-am' as *;
 
 // Demo-local. Nothing here belongs in the design system.
 
@@ -16,7 +16,7 @@
   // across two lines inside a 32px box. The search is pointedly NOT included:
   // it has to shrink, because that is how it resolves its `width: 100%` down to
   // "whatever the buttons are not using". A blanket `> *` here froze it at 32px.
-  > .ds-btn {
+  > .nine-am-btn {
     flex-shrink: 0;
   }
 }
@@ -28,7 +28,7 @@
   margin-left: auto;
 }
 
-.services__filter.ds-search--expanded {
+.services__filter.nine-am-search--expanded {
   margin-left: 0;
 }
 

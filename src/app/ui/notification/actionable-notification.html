@@ -1,27 +1,27 @@
-<div class="ds-notification__details">
-  <ds-icon class="ds-notification__icon" [name]="icon()" [size]="20" />
+<div class="nine-am-notification__details">
+  <nine-am-icon class="nine-am-notification__icon" [name]="icon()" [size]="20" />
 
-  <div class="ds-notification__text">
-    <p class="ds-notification__heading" [id]="headingId">{{ heading() }}</p>
+  <div class="nine-am-notification__text">
+    <p class="nine-am-notification__heading" [id]="headingId">{{ heading() }}</p>
 
     @if (subtitle()) {
-      <p class="ds-notification__subtitle" [id]="subtitleId">{{ subtitle() }}</p>
+      <p class="nine-am-notification__subtitle" [id]="subtitleId">{{ subtitle() }}</p>
     }
 
     <ng-content />
 
     <!-- Toast only. Carbon gives the inline layout no room for it. -->
     @if (caption() && !inline()) {
-      <p class="ds-notification__caption">{{ caption() }}</p>
+      <p class="nine-am-notification__caption">{{ caption() }}</p>
     }
   </div>
 </div>
 
 @if (actionLabel()) {
   <button
-    dsButton
+    nineAmButton
     type="button"
-    class="ds-notification__action"
+    class="nine-am-notification__action"
     [kind]="actionKind()"
     size="sm"
     (click)="actionClicked.emit()"
@@ -33,10 +33,10 @@
 @if (!hideCloseButton()) {
   <button
     type="button"
-    class="ds-notification__close"
+    class="nine-am-notification__close"
     [attr.aria-label]="closeLabel()"
     (click)="closed.emit()"
   >
-    <ds-icon name="close" [size]="20" />
+    <nine-am-icon name="close" [size]="20" />
   </button>
 }

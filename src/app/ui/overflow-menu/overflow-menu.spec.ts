@@ -5,12 +5,12 @@ import { OverflowMenu, OverflowMenuDivider, OverflowMenuItem } from './overflow-
 @Component({
   imports: [OverflowMenu, OverflowMenuItem, OverflowMenuDivider],
   template: `
-    <ds-overflow-menu label="Row actions" (actionSelected)="picked.set($event)">
-      <button dsOverflowMenuItem value="stop">Stop app</button>
-      <button dsOverflowMenuItem value="clone" [disabled]="true">Clone</button>
-      <hr dsOverflowMenuDivider />
-      <button dsOverflowMenuItem value="delete" danger>Delete app</button>
-    </ds-overflow-menu>
+    <nine-am-overflow-menu label="Row actions" (actionSelected)="picked.set($event)">
+      <button nineAmOverflowMenuItem value="stop">Stop app</button>
+      <button nineAmOverflowMenuItem value="clone" [disabled]="true">Clone</button>
+      <hr nineAmOverflowMenuDivider />
+      <button nineAmOverflowMenuItem value="delete" danger>Delete app</button>
+    </nine-am-overflow-menu>
   `,
 })
 class Host {
@@ -23,16 +23,16 @@ describe('OverflowMenu', () => {
     fixture.detectChanges();
 
     const el = fixture.nativeElement as HTMLElement;
-    const root = el.querySelector('ds-overflow-menu') as HTMLElement;
-    const trigger = root.querySelector('.ds-overflow-menu__trigger') as HTMLElement;
+    const root = el.querySelector('nine-am-overflow-menu') as HTMLElement;
+    const trigger = root.querySelector('.nine-am-overflow-menu__trigger') as HTMLElement;
 
     return {
       fixture,
       host: fixture.componentInstance,
       root,
       trigger,
-      panel: root.querySelector('.ds-overflow-menu__panel') as HTMLElement,
-      items: () => Array.from(root.querySelectorAll<HTMLElement>('.ds-overflow-menu__item')),
+      panel: root.querySelector('.nine-am-overflow-menu__panel') as HTMLElement,
+      items: () => Array.from(root.querySelectorAll<HTMLElement>('.nine-am-overflow-menu__item')),
       expanded: () => trigger.getAttribute('aria-expanded'),
       focused: () => (document.activeElement as HTMLElement | null)?.textContent?.trim() ?? '',
       click(target: EventTarget) {

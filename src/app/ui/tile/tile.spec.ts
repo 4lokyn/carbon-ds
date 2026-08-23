@@ -12,18 +12,23 @@ import {
 @Component({
   imports: [Tile, ClickableTile, SelectableTile, ExpandableTile, TileAboveFold, TileBelowFold],
   template: `
-    <ds-tile>Plain</ds-tile>
+    <nine-am-tile>Plain</nine-am-tile>
 
-    <a dsClickableTile href="/clusters" [disabled]="linkDisabled()">Clusters</a>
+    <a nineAmClickableTile href="/clusters" [disabled]="linkDisabled()">Clusters</a>
 
-    <ds-selectable-tile [(selected)]="selected" name="plan" value="pro" [disabled]="tileDisabled()">
+    <nine-am-selectable-tile
+      [(selected)]="selected"
+      name="plan"
+      value="pro"
+      [disabled]="tileDisabled()"
+    >
       Pro plan
-    </ds-selectable-tile>
+    </nine-am-selectable-tile>
 
-    <ds-expandable-tile [(expanded)]="expanded" [interactive]="interactive()">
-      <div dsTileAboveFold>Summary</div>
-      <div dsTileBelowFold><a href="/detail">Detail</a></div>
-    </ds-expandable-tile>
+    <nine-am-expandable-tile [(expanded)]="expanded" [interactive]="interactive()">
+      <div nineAmTileAboveFold>Summary</div>
+      <div nineAmTileBelowFold><a href="/detail">Detail</a></div>
+    </nine-am-expandable-tile>
   `,
 })
 class Host {
@@ -44,12 +49,12 @@ describe('Tile', () => {
     return {
       fixture,
       host: fixture.componentInstance,
-      anchor: () => el.querySelector('a[dsClickableTile]') as HTMLAnchorElement,
-      checkbox: () => el.querySelector('.ds-tile-input') as HTMLInputElement,
-      selectableLabel: () => el.querySelector('label.ds-tile--selectable') as HTMLLabelElement,
-      expandable: () => el.querySelector('.ds-tile--expandable') as HTMLElement,
-      chevronButton: () => el.querySelector('.ds-tile__chevron--interactive') as HTMLElement,
-      belowFold: () => el.querySelector('.ds-tile-content__below-the-fold') as HTMLElement,
+      anchor: () => el.querySelector('a[nineAmClickableTile]') as HTMLAnchorElement,
+      checkbox: () => el.querySelector('.nine-am-tile-input') as HTMLInputElement,
+      selectableLabel: () => el.querySelector('label.nine-am-tile--selectable') as HTMLLabelElement,
+      expandable: () => el.querySelector('.nine-am-tile--expandable') as HTMLElement,
+      chevronButton: () => el.querySelector('.nine-am-tile__chevron--interactive') as HTMLElement,
+      belowFold: () => el.querySelector('.nine-am-tile-content__below-the-fold') as HTMLElement,
       apply(change: () => void) {
         change();
         fixture.detectChanges();
@@ -69,7 +74,7 @@ describe('Tile', () => {
     // There is no `disabled` on an <a> to lean on.
     expect(anchor().getAttribute('href')).toBeNull();
     expect(anchor().getAttribute('aria-disabled')).toBe('true');
-    expect(anchor().classList).toContain('ds-tile--disabled');
+    expect(anchor().classList).toContain('nine-am-tile--disabled');
   });
 
   it('makes the selectable tile a real checkbox, and reports through it', () => {
@@ -87,7 +92,7 @@ describe('Tile', () => {
     fixture.detectChanges();
 
     expect(host.selected()).toBe(true);
-    expect(selectableLabel().classList).toContain('ds-tile--is-selected');
+    expect(selectableLabel().classList).toContain('nine-am-tile--is-selected');
   });
 
   it('follows selected in the other direction too', () => {
@@ -104,7 +109,7 @@ describe('Tile', () => {
     apply(() => host.tileDisabled.set(true));
 
     expect(checkbox().disabled).toBe(true);
-    expect(selectableLabel().classList).toContain('ds-tile--disabled');
+    expect(selectableLabel().classList).toContain('nine-am-tile--disabled');
   });
 
   it('expands and collapses from the tile itself by default', () => {
@@ -119,7 +124,7 @@ describe('Tile', () => {
 
     expect(host.expanded()).toBe(true);
     expect(expandable().getAttribute('aria-expanded')).toBe('true');
-    expect(expandable().classList).toContain('ds-tile--is-expanded');
+    expect(expandable().classList).toContain('nine-am-tile--is-expanded');
   });
 
   it('hands the button role to the chevron when the tile is interactive', () => {

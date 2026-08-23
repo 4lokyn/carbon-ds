@@ -1,4 +1,4 @@
-@use 'ds' as *;
+@use 'nine-am' as *;
 
 // Carbon's size scale, read out of @carbon/layout's `$size-*`. Buttons share the
 // middle of it with inputs and selects, which is what makes a form row line up
@@ -21,7 +21,7 @@ $-heights: (
 // immediate; anything slower reads as lag.
 $-transition: 70ms cubic-bezier(0, 0, 0.38, 0.9);
 
-.ds-btn {
+.nine-am-btn {
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
@@ -48,12 +48,12 @@ $-transition: 70ms cubic-bezier(0, 0, 0.38, 0.9);
 }
 
 @each $name, $height in $-heights {
-  .ds-btn--#{$name} {
+  .nine-am-btn--#{$name} {
     min-height: $height;
   }
 }
 
-.ds-btn--full {
+.nine-am-btn--full {
   max-width: none;
   width: 100%;
 }
@@ -62,7 +62,7 @@ $-transition: 70ms cubic-bezier(0, 0, 0.38, 0.9);
 // Every kind reads from the $button-* component tokens rather than raw colors,
 // so all four themes come for free.
 
-.ds-btn--primary {
+.nine-am-btn--primary {
   background-color: $button-primary;
   color: $text-on-color;
 
@@ -75,7 +75,7 @@ $-transition: 70ms cubic-bezier(0, 0, 0.38, 0.9);
   }
 }
 
-.ds-btn--secondary {
+.nine-am-btn--secondary {
   background-color: $button-secondary;
   color: $text-on-color;
 
@@ -88,7 +88,7 @@ $-transition: 70ms cubic-bezier(0, 0, 0.38, 0.9);
   }
 }
 
-.ds-btn--tertiary {
+.nine-am-btn--tertiary {
   border-color: $button-tertiary;
   background-color: transparent;
   color: $button-tertiary;
@@ -106,7 +106,7 @@ $-transition: 70ms cubic-bezier(0, 0, 0.38, 0.9);
 
 // Ghost is the one kind with symmetric padding — it has no fill, so the wide
 // right gutter would read as broken alignment next to body text.
-.ds-btn--ghost {
+.nine-am-btn--ghost {
   padding-right: rem(15px);
   background-color: transparent;
   color: $link-primary;
@@ -121,7 +121,7 @@ $-transition: 70ms cubic-bezier(0, 0, 0.38, 0.9);
   }
 }
 
-.ds-btn--danger {
+.nine-am-btn--danger {
   background-color: $button-danger-primary;
   color: $text-on-color;
 
@@ -137,7 +137,7 @@ $-transition: 70ms cubic-bezier(0, 0, 0.38, 0.9);
 // The two quieter danger kinds. Both rest in `$button-danger-secondary` — the
 // red that is legible as text rather than as a fill — and both fill in on hover,
 // which is the moment the button stops being a label and starts being a threat.
-.ds-btn--danger-tertiary {
+.nine-am-btn--danger-tertiary {
   border-color: $button-danger-secondary;
   background-color: transparent;
   color: $button-danger-secondary;
@@ -157,7 +157,7 @@ $-transition: 70ms cubic-bezier(0, 0, 0.38, 0.9);
 
 // Ghost drops the border and the right gutter, exactly as the non-danger ghost
 // does — see the note above it for why the gutter goes.
-.ds-btn--danger-ghost {
+.nine-am-btn--danger-ghost {
   padding-right: rem(15px);
   background-color: transparent;
   color: $button-danger-secondary;
@@ -180,7 +180,7 @@ $-transition: 70ms cubic-bezier(0, 0, 0.38, 0.9);
 // ghost declared earlier loses and the glyph sits hard against the left edge.
 // Measured before the move: 0.5px on the left, 15.5px on the right.
 
-.ds-btn--icon-only {
+.nine-am-btn--icon-only {
   padding: 0;
   justify-content: center;
 }
@@ -188,7 +188,7 @@ $-transition: 70ms cubic-bezier(0, 0, 0.38, 0.9);
 // Square, from the same height scale — otherwise it stops being square the
 // moment someone changes `size`.
 @each $name, $height in $-heights {
-  .ds-btn--icon-only.ds-btn--#{$name} {
+  .nine-am-btn--icon-only.nine-am-btn--#{$name} {
     width: $height;
   }
 }
@@ -197,13 +197,13 @@ $-transition: 70ms cubic-bezier(0, 0, 0.38, 0.9);
 
 // Declared after the kinds so it wins the cascade. The inset layer is what keeps
 // the ring visible against a filled background.
-.ds-btn:focus {
+.nine-am-btn:focus {
   @include focus-ring($inset-color: $focus-inset);
 }
 
 // One disabled treatment for every kind — Carbon does not distinguish, and a
 // disabled danger button that still looks dangerous is a usability trap.
-.ds-btn:disabled {
+.nine-am-btn:disabled {
   border-color: transparent;
   background-color: $button-disabled;
   box-shadow: none;

@@ -5,8 +5,8 @@ import { Button } from './button';
 @Component({
   imports: [Button],
   template: `
-    <button dsButton kind="ghost" size="sm">Labelled</button>
-    <button dsButton kind="ghost" size="sm" iconOnly aria-label="Settings">
+    <button nineAmButton kind="ghost" size="sm">Labelled</button>
+    <button nineAmButton kind="ghost" size="sm" iconOnly aria-label="Settings">
       <span>i</span>
     </button>
   `,
@@ -28,8 +28,8 @@ describe('Button', () => {
   it('marks an icon-only button so it can shed the label padding', () => {
     const { labelled, iconOnly } = setup();
 
-    expect(labelled.classList).not.toContain('ds-btn--icon-only');
-    expect(iconOnly.classList).toContain('ds-btn--icon-only');
+    expect(labelled.classList).not.toContain('nine-am-btn--icon-only');
+    expect(iconOnly.classList).toContain('nine-am-btn--icon-only');
   });
 
   it('drops the padding that reserves the icon slot beside a label', () => {

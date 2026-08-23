@@ -15,7 +15,7 @@ import type { FieldSize } from '../field/field-types';
 let nextId = 0;
 
 /**
- * `search` is absent on purpose — that is `ds-search`, which brings a magnifier
+ * `search` is absent on purpose — that is `nine-am-search`, which brings a magnifier
  * and a clear button with it.
  */
 export type InputType =
@@ -38,7 +38,7 @@ export type InputType =
  * separate component and is not this.
  */
 @Component({
-  selector: 'ds-input',
+  selector: 'nine-am-input',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
   templateUrl: './input.html',
@@ -93,7 +93,7 @@ export class Input {
   /** Fires on every blur. The validation policy hangs off this. */
   readonly blurred = output<void>();
 
-  protected readonly inputId = `ds-input-${nextId++}`;
+  protected readonly inputId = `nine-am-input-${nextId++}`;
   protected readonly helperId = `${this.inputId}-helper`;
   protected readonly messageId = `${this.inputId}-message`;
 
@@ -134,30 +134,30 @@ export class Input {
   });
 
   protected readonly hostClass = computed(() => {
-    const classes = ['ds-input', `ds-input--${this.size()}`];
+    const classes = ['nine-am-input', `nine-am-input--${this.size()}`];
 
     if (this.fluid()) {
-      classes.push('ds-input--fluid');
+      classes.push('nine-am-input--fluid');
     } else if (this.inline()) {
-      classes.push('ds-input--inline');
+      classes.push('nine-am-input--inline');
     }
 
     if (this.invalid()) {
-      classes.push('ds-input--invalid');
+      classes.push('nine-am-input--invalid');
     } else if (this.warn()) {
-      classes.push('ds-input--warn');
+      classes.push('nine-am-input--warn');
     }
 
     if (this.isPassword()) {
-      classes.push('ds-input--password');
+      classes.push('nine-am-input--password');
     }
 
     if (this.disabled()) {
-      classes.push('ds-input--disabled');
+      classes.push('nine-am-input--disabled');
     }
 
     if (this.readOnly()) {
-      classes.push('ds-input--readonly');
+      classes.push('nine-am-input--readonly');
     }
 
     return classes.join(' ');

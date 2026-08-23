@@ -1,7 +1,7 @@
-@use 'ds' as *;
+@use 'nine-am' as *;
 
 // Demo page layout only. Prefixed `demo-` so it never gets mistaken for part of
-// the design system — everything in ui/ is prefixed `ds-`.
+// the design system — everything in ui/ is prefixed `nine-am-`.
 
 // The theme control lives in the shell's settings panel now, not loose in the
 // header. A form control inside a panel section needs the section's own inset.

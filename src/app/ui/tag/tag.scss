@@ -1,5 +1,5 @@
 @use 'sass:list';
-@use 'ds' as *;
+@use 'nine-am' as *;
 
 // Carbon exposes tag colors as four separate token variables per hue rather than
 // as a map, so the pairing has to be written out. The upside is that background,
@@ -76,7 +76,7 @@ $-heights: (
   'lg': rem(32px),
 );
 
-.ds-tag {
+.nine-am-tag {
   display: inline-flex;
   align-items: center;
   max-width: 100%;
@@ -91,33 +91,33 @@ $-heights: (
 }
 
 @each $name, $height in $-heights {
-  .ds-tag--#{$name} {
+  .nine-am-tag--#{$name} {
     min-height: $height;
     padding: 0 rem(8px);
   }
 }
 
 // lg gets more horizontal room so the label doesn't crowd the pill.
-.ds-tag--lg {
+.nine-am-tag--lg {
   padding: 0 rem(12px);
 }
 
 @each $name, $set in $-palette {
-  .ds-tag--#{$name} {
+  .nine-am-tag--#{$name} {
     background-color: list.nth($set, 1);
     color: list.nth($set, 2);
 
-    .ds-tag__close:hover {
+    .nine-am-tag__close:hover {
       background-color: list.nth($set, 3);
     }
   }
 }
 
-.ds-tag__label {
+.nine-am-tag__label {
   @include truncate;
 }
 
-.ds-tag__icon {
+.nine-am-tag__icon {
   margin-right: rem(4px);
 
   svg {
@@ -126,7 +126,7 @@ $-heights: (
   }
 }
 
-.ds-tag--lg .ds-tag__icon svg {
+.nine-am-tag--lg .nine-am-tag__icon svg {
   width: rem(16px);
   height: rem(16px);
 }
@@ -141,7 +141,7 @@ $-heights: (
 // cascade and took both away: the label sat hard against the pill edge, and the
 // borders that say "this one is pressable" never drew. Reset only what a button
 // brings that a tag does not want.
-.ds-tag--interactive {
+.nine-am-tag--interactive {
   @include truncate;
 
   display: inline-flex;
@@ -166,7 +166,7 @@ $-heights: (
 
 // Selectable: one look, no hue. A chip that is both blue and selected has two
 // things saying "picked" and neither wins.
-.ds-tag--selectable {
+.nine-am-tag--selectable {
   border: rem(1px) solid $border-inverse;
   background-color: $layer-01;
   color: $text-primary;
@@ -176,7 +176,7 @@ $-heights: (
   }
 }
 
-.ds-tag--selected {
+.nine-am-tag--selected {
   border-color: transparent;
   background-color: $layer-selected-inverse;
   color: $text-inverse;
@@ -189,7 +189,7 @@ $-heights: (
 // Operational keeps the palette and gains a border — it is a tag you can press,
 // and the border is what says so before you hover it.
 @each $name, $set in $-palette {
-  .ds-tag--operational.ds-tag--#{$name} {
+  .nine-am-tag--operational.nine-am-tag--#{$name} {
     border: rem(1px) solid list.nth($set, 4);
 
     &:hover {
@@ -198,7 +198,7 @@ $-heights: (
   }
 }
 
-.ds-tag--disabled {
+.nine-am-tag--disabled {
   border-color: transparent;
   background-color: $layer-01;
   color: $text-disabled;
@@ -206,7 +206,7 @@ $-heights: (
   pointer-events: none;
 }
 
-.ds-tag__close {
+.nine-am-tag__close {
   @include unstyled-button;
 
   display: inline-flex;
@@ -229,7 +229,7 @@ $-heights: (
   }
 }
 
-.ds-tag--lg .ds-tag__close {
+.nine-am-tag--lg .nine-am-tag__close {
   width: rem(24px);
   height: rem(24px);
 

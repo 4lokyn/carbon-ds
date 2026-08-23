@@ -16,34 +16,34 @@ import { Button } from '../button/button';
  * any selective slot declared after it would silently receive nothing.
  */
 @Component({
-  selector: 'ds-table-toolbar',
+  selector: 'nine-am-table-toolbar',
   encapsulation: ViewEncapsulation.None,
   imports: [Button],
   styleUrl: './table-toolbar.scss',
-  host: { class: 'ds-toolbar' },
+  host: { class: 'nine-am-toolbar' },
   template: `
-    <div class="ds-toolbar__default" [class.ds-toolbar__default--dimmed]="active()">
-      <ng-content select="[dsToolbarActions]" />
+    <div class="nine-am-toolbar__default" [class.nine-am-toolbar__default--dimmed]="active()">
+      <ng-content select="[nineAmToolbarActions]" />
     </div>
 
     <!-- Slides over the default row rather than pushing it aside, so the table
          below never shifts when a row is selected. -->
     <div
-      class="ds-toolbar__batch"
-      [class.ds-toolbar__batch--active]="active()"
+      class="nine-am-toolbar__batch"
+      [class.nine-am-toolbar__batch--active]="active()"
       [attr.aria-hidden]="!active()"
     >
-      <p class="ds-toolbar__count">{{ countLabel()(selectedCount()) }}</p>
+      <p class="nine-am-toolbar__count">{{ countLabel()(selectedCount()) }}</p>
 
-      <div class="ds-toolbar__batch-actions">
-        <ng-content select="[dsBatchActions]" />
+      <div class="nine-am-toolbar__batch-actions">
+        <ng-content select="[nineAmBatchActions]" />
       </div>
 
       <button
-        dsButton
+        nineAmButton
         kind="ghost"
         size="sm"
-        class="ds-toolbar__cancel"
+        class="nine-am-toolbar__cancel"
         [disabled]="!active()"
         (click)="cancelled.emit()"
       >

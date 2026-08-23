@@ -3,12 +3,12 @@
 //
 // Carbon factors the same pieces into `components/form/_form.scss` and reuses
 // them verbatim across text-input, text-area and select. We mirror that. The
-// alternative — a <ds-form-field> component owning the shared markup — was
+// alternative — a <nine-am-form-field> component owning the shared markup — was
 // rejected deliberately: the label belongs to the control (see the root README),
 // so the sharing has to happen in Sass rather than in the component tree.
 //
 // Like _mixins.scss, this reaches for @carbon/* directly. It cannot go through
-// the 'ds' facade, because the facade is what forwards this file. The
+// the 'nine-am' facade, because the facade is what forwards this file. The
 // no-@carbon-in-components rule binds components, not the two files the facade
 // is assembled from.
 

@@ -46,7 +46,7 @@ export type SelectionFeedback = 'top-after-reopen' | 'top' | 'fixed';
  * Carbon MultiSelect: a field showing a count, and a listbox of checkboxes.
  *
  * Options are configured rather than projected, which is the opposite of
- * `ds-select` and for a concrete reason: select-all has to know the full set,
+ * `nine-am-select` and for a concrete reason: select-all has to know the full set,
  * and the filter has to know each row's text. Projected `<option>` elements
  * expose neither to the component. The table made the same trade for the same
  * reason — see ui/README.md.
@@ -56,7 +56,7 @@ export type SelectionFeedback = 'top-after-reopen' | 'top' | 'fixed';
  * containment rule as the date picker: the import lives in this folder only.
  */
 @Component({
-  selector: 'ds-multi-select',
+  selector: 'nine-am-multi-select',
   encapsulation: ViewEncapsulation.None,
   imports: [Checkbox, Icon, CdkConnectedOverlay, CdkOverlayOrigin, NgpListbox, NgpListboxOption],
   templateUrl: './multi-select.html',
@@ -105,7 +105,7 @@ export class MultiSelect<T> {
 
   readonly opened = output<void>();
 
-  protected readonly fieldId = `ds-multi-select-${nextId++}`;
+  protected readonly fieldId = `nine-am-multi-select-${nextId++}`;
   protected readonly helperId = `${this.fieldId}-helper`;
   protected readonly messageId = `${this.fieldId}-message`;
 
@@ -134,7 +134,7 @@ export class MultiSelect<T> {
   ];
 
   protected readonly menuClass = computed(
-    () => `ds-multi-select__menu ds-multi-select__menu--${this.size()}`,
+    () => `nine-am-multi-select__menu nine-am-multi-select__menu--${this.size()}`,
   );
 
   /**
@@ -239,24 +239,24 @@ export class MultiSelect<T> {
   });
 
   protected readonly hostClass = computed(() => {
-    const classes = ['ds-multi-select', `ds-multi-select--${this.size()}`];
+    const classes = ['nine-am-multi-select', `nine-am-multi-select--${this.size()}`];
 
     if (this.open()) {
-      classes.push('ds-multi-select--open');
+      classes.push('nine-am-multi-select--open');
     }
 
     if (this.invalid()) {
-      classes.push('ds-multi-select--invalid');
+      classes.push('nine-am-multi-select--invalid');
     } else if (this.warn()) {
-      classes.push('ds-multi-select--warn');
+      classes.push('nine-am-multi-select--warn');
     }
 
     if (this.disabled()) {
-      classes.push('ds-multi-select--disabled');
+      classes.push('nine-am-multi-select--disabled');
     }
 
     if (this.readOnly()) {
-      classes.push('ds-multi-select--readonly');
+      classes.push('nine-am-multi-select--readonly');
     }
 
     return classes.join(' ');

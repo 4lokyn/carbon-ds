@@ -1,8 +1,8 @@
 @use 'sass:list';
-@use 'ds' as *;
+@use 'nine-am' as *;
 
 // ── Overlay plumbing ────────────────────────────────────────────────────────
-// .ds-modal-panel is applied to the overlay pane by ModalService (panelClass).
+// .nine-am-modal-panel is applied to the overlay pane by ModalService (panelClass).
 // .cdk-dialog-container is the CDK's own element — it carries role="dialog".
 
 // Carbon's modal widths are percentages that change at every breakpoint, not
@@ -48,14 +48,14 @@ $-modal-widths: (
   ),
 );
 
-.ds-modal-panel {
+.nine-am-modal-panel {
   width: 100%;
   max-height: calc(100vh - #{rem(96px)});
   margin: $spacing-05;
 }
 
 @each $name, $set in $-modal-widths {
-  .ds-modal-panel--#{$name} {
+  .nine-am-modal-panel--#{$name} {
     @include breakpoint(md) {
       width: list.nth($set, 1);
     }
@@ -72,7 +72,7 @@ $-modal-widths: (
 }
 
 // stylelint-disable-next-line selector-class-pattern -- CDK's own container
-.ds-modal-panel .cdk-dialog-container {
+.nine-am-modal-panel .cdk-dialog-container {
   display: flex;
   max-height: inherit;
   background-color: $layer-01;
@@ -81,7 +81,7 @@ $-modal-widths: (
 }
 
 // The component opened via ModalService sits between the CDK container and
-// <ds-modal>. display:contents drops it out of the box tree so the flex column
+// <nine-am-modal>. display:contents drops it out of the box tree so the flex column
 // stays intact — otherwise the body region can't scroll and the footer floats.
 //
 // Scoped to our own panel class, which ModalService sets on every dialog it
@@ -89,13 +89,13 @@ $-modal-widths: (
 // ones another library opened — and display:contents on a wrapper it did not
 // expect takes its layout apart.
 // stylelint-disable-next-line selector-class-pattern -- CDK's own container
-.ds-modal-panel .cdk-dialog-container > *:not(.ds-modal) {
+.nine-am-modal-panel .cdk-dialog-container > *:not(.nine-am-modal) {
   display: contents;
 }
 
 // ── Shell ───────────────────────────────────────────────────────────────────
 
-.ds-modal {
+.nine-am-modal {
   display: flex;
   overflow: hidden;
   flex-direction: column;
@@ -104,20 +104,20 @@ $-modal-widths: (
   min-height: 0;
 }
 
-.ds-modal__header {
+.nine-am-modal__header {
   position: relative;
   padding: $spacing-05 rem(48px) $spacing-03 $spacing-05;
   flex: 0 0 auto;
 }
 
-.ds-modal__label {
+.nine-am-modal__label {
   margin-bottom: $spacing-02;
   color: $text-secondary;
 
   @include type-style('label-01');
 }
 
-.ds-modal__heading {
+.nine-am-modal__heading {
   // Carbon leaves the right fifth clear so long titles don't run under the
   // close button.
   padding-right: 20%;
@@ -126,7 +126,7 @@ $-modal-widths: (
   @include type-style('heading-03');
 }
 
-.ds-modal__close {
+.nine-am-modal__close {
   @include unstyled-button;
 
   position: absolute;
@@ -149,7 +149,7 @@ $-modal-widths: (
   }
 }
 
-.ds-modal__body {
+.nine-am-modal__body {
   overflow-y: auto;
   padding: 0 $spacing-05 $spacing-05;
   color: $text-primary;
@@ -161,7 +161,7 @@ $-modal-widths: (
 
 // Carbon's footer: equal-width buttons separated by a 1px gutter that shows the
 // panel behind them. No padding — the buttons run edge to edge.
-.ds-modal__footer {
+.nine-am-modal__footer {
   display: flex;
   margin-top: auto;
   flex: 0 0 auto;

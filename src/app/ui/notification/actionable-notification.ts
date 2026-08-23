@@ -40,7 +40,7 @@ let nextId = 0;
  * modal.
  */
 @Component({
-  selector: 'ds-actionable-notification',
+  selector: 'nine-am-actionable-notification',
   encapsulation: ViewEncapsulation.None,
   imports: [Button, Icon],
   templateUrl: './actionable-notification.html',
@@ -123,8 +123,8 @@ export class ActionableNotification extends DismissibleNotification {
 
   protected readonly defaultRole = 'alertdialog' as const;
 
-  protected readonly headingId = `ds-notification-heading-${nextId}`;
-  protected readonly subtitleId = `ds-notification-subtitle-${nextId++}`;
+  protected readonly headingId = `nine-am-notification-heading-${nextId}`;
+  protected readonly subtitleId = `nine-am-notification-subtitle-${nextId++}`;
 
   /** Ghost inline, tertiary on a toast. Carbon's own pairing, not a preference. */
   protected readonly actionKind = computed(() => (this.inline() ? 'ghost' : 'tertiary'));

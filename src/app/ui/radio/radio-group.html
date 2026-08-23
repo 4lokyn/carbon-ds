@@ -1,26 +1,26 @@
-<fieldset class="ds-radio-group__fieldset" [disabled]="disabled()">
+<fieldset class="nine-am-radio-group__fieldset" [disabled]="disabled()">
   <!-- Must be the fieldset's first child to name the group. -->
   <legend
-    class="ds-radio-group__legend"
-    [class.ds-visually-hidden]="hideLegend()"
+    class="nine-am-radio-group__legend"
+    [class.nine-am-visually-hidden]="hideLegend()"
   >
     {{ legend() }}
   </legend>
 
-  <div class="ds-radio-group__items">
+  <div class="nine-am-radio-group__items">
     <ng-content />
   </div>
 </fieldset>
 
 @if (message(); as text) {
-  <div class="ds-radio-group__requirement" [id]="messageId">
+  <div class="nine-am-radio-group__requirement" [id]="messageId">
     @if (statusIcon(); as icon) {
-      <ds-icon class="ds-radio-group__status" [name]="icon" />
+      <nine-am-icon class="nine-am-radio-group__status" [name]="icon" />
     }
     <span>{{ text }}</span>
   </div>
 } @else if (helperText()) {
-  <div class="ds-radio-group__helper" [id]="helperId">
+  <div class="nine-am-radio-group__helper" [id]="helperId">
     {{ helperText() }}
   </div>
 }

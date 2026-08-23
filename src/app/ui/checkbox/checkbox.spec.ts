@@ -5,16 +5,16 @@ import { Checkbox, CheckboxGroup } from './checkbox';
 @Component({
   imports: [Checkbox, CheckboxGroup],
   template: `
-    <ds-checkbox-group
+    <nine-am-checkbox-group
       legend="Notify me about"
       [invalid]="invalid()"
       invalidText="Pick at least one."
       helperText="You can change this later."
       [readOnly]="readOnly()"
     >
-      <ds-checkbox label="Deploys" [(checked)]="deploys" />
-      <ds-checkbox label="Incidents" />
-    </ds-checkbox-group>
+      <nine-am-checkbox label="Deploys" [(checked)]="deploys" />
+      <nine-am-checkbox label="Incidents" />
+    </nine-am-checkbox-group>
   `,
 })
 class GroupHost {
@@ -26,7 +26,7 @@ class GroupHost {
 @Component({
   imports: [Checkbox],
   template: `
-    <ds-checkbox
+    <nine-am-checkbox
       label="I accept the terms"
       [invalid]="invalid()"
       invalidText="You must accept to continue."
@@ -47,9 +47,9 @@ describe('CheckboxGroup', () => {
     return {
       host: fixture.componentInstance,
       el,
-      inputs: () => Array.from(el.querySelectorAll<HTMLInputElement>('.ds-checkbox__input')),
-      groupMessage: () => el.querySelector('.ds-checkbox-group__requirement'),
-      boxMessages: () => Array.from(el.querySelectorAll('.ds-checkbox__requirement')),
+      inputs: () => Array.from(el.querySelectorAll<HTMLInputElement>('.nine-am-checkbox__input')),
+      groupMessage: () => el.querySelector('.nine-am-checkbox-group__requirement'),
+      boxMessages: () => Array.from(el.querySelectorAll('.nine-am-checkbox__requirement')),
       apply(change: () => void) {
         change();
         fixture.detectChanges();
@@ -126,9 +126,9 @@ describe('Checkbox on its own', () => {
     fixture.componentInstance.invalid.set(true);
     fixture.detectChanges();
 
-    expect(el.querySelector('.ds-checkbox__requirement')?.textContent).toContain(
+    expect(el.querySelector('.nine-am-checkbox__requirement')?.textContent).toContain(
       'You must accept to continue.',
     );
-    expect(el.querySelector('.ds-checkbox__input')?.getAttribute('aria-invalid')).toBe('true');
+    expect(el.querySelector('.nine-am-checkbox__input')?.getAttribute('aria-invalid')).toBe('true');
   });
 });

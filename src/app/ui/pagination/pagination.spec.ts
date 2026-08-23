@@ -5,7 +5,7 @@ import { Pagination } from './pagination';
 @Component({
   imports: [Pagination],
   template: `
-    <ds-pagination
+    <nine-am-pagination
       [total]="total()"
       [isLastPage]="isLastPage()"
       [(page)]="page"
@@ -30,12 +30,14 @@ describe('Pagination', () => {
     return {
       host: fixture.componentInstance,
       ranges: () =>
-        Array.from(el.querySelectorAll('.ds-pagination__range')).map((e) => e.textContent?.trim()),
+        Array.from(el.querySelectorAll('.nine-am-pagination__range')).map((e) =>
+          e.textContent?.trim(),
+        ),
       pageSelect: () =>
-        el.querySelector('.ds-pagination__select[id*="-page-"]') as HTMLSelectElement | null,
+        el.querySelector('.nine-am-pagination__select[id*="-page-"]') as HTMLSelectElement | null,
       sizeSelect: () =>
-        el.querySelector('.ds-pagination__select[id*="-size-"]') as HTMLSelectElement,
-      nav: () => Array.from(el.querySelectorAll<HTMLButtonElement>('.ds-pagination__nav')),
+        el.querySelector('.nine-am-pagination__select[id*="-size-"]') as HTMLSelectElement,
+      nav: () => Array.from(el.querySelectorAll<HTMLButtonElement>('.nine-am-pagination__nav')),
       apply(change: () => void) {
         change();
         fixture.detectChanges();

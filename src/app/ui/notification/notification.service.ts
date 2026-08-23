@@ -57,13 +57,13 @@ let nextId = 0;
  * application template.
  */
 @Component({
-  selector: 'ds-toast-outlet',
+  selector: 'nine-am-toast-outlet',
   encapsulation: ViewEncapsulation.None,
   imports: [ToastNotification],
   template: `
-    <div class="ds-toast-stack">
+    <div class="nine-am-toast-stack">
       @for (toast of toasts(); track toast.id) {
-        <ds-toast-notification
+        <nine-am-toast-notification
           [status]="toast.status ?? 'info'"
           [heading]="toast.heading"
           [subtitle]="toast.subtitle ?? ''"
@@ -78,7 +78,7 @@ let nextId = 0;
     </div>
   `,
 
-  // No styleUrl of its own on purpose. `.ds-toast-stack` is in notification.scss
+  // No styleUrl of its own on purpose. `.nine-am-toast-stack` is in notification.scss
   // and gets there with the toasts, which are the only thing this ever renders —
   // a third component naming the same stylesheet would put a third copy of it in
   // the bundle for one flex column.
@@ -98,7 +98,7 @@ export class ToastOutlet {
  * there to be watched when the text arrived. The CDK's `LiveAnnouncer` keeps one
  * region in the document from the start, so the announcement happens whether or
  * not this is the first toast — which is why the toasts it renders are given no
- * role of their own. A `ds-toast-notification` placed by hand keeps its
+ * role of their own. A `nine-am-toast-notification` placed by hand keeps its
  * `role="status"`; it is part of the page from the beginning, so it works.
  */
 @Injectable({ providedIn: 'root' })
@@ -191,7 +191,7 @@ export class NotificationService {
       positionStrategy: this.overlay
         .position()
         .global()
-        .top('var(--ds-toast-inset-block-start, 1rem)')
+        .top('var(--nine-am-toast-inset-block-start, 1rem)')
         .right('1rem'),
 
       // A toast does not block the page, so it must not follow it either: the

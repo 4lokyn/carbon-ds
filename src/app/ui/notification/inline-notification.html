@@ -1,14 +1,14 @@
-<div class="ds-notification__details">
-  <ds-icon class="ds-notification__icon" [name]="icon()" [size]="20" />
+<div class="nine-am-notification__details">
+  <nine-am-icon class="nine-am-notification__icon" [name]="icon()" [size]="20" />
 
   <!-- Heading and subtitle wrap as one run of text rather than stacking. On a
        wide notification Carbon reads them as a sentence on one line; the wrap
        to two lines is the narrow case, not the intent. -->
-  <div class="ds-notification__text">
-    <p class="ds-notification__heading">{{ heading() }}</p>
+  <div class="nine-am-notification__text">
+    <p class="nine-am-notification__heading">{{ heading() }}</p>
 
     @if (subtitle()) {
-      <p class="ds-notification__subtitle">{{ subtitle() }}</p>
+      <p class="nine-am-notification__subtitle">{{ subtitle() }}</p>
     }
 
     <!-- For a body that is more than a sentence: a link to where the problem
@@ -20,10 +20,10 @@
 @if (!hideCloseButton()) {
   <button
     type="button"
-    class="ds-notification__close"
+    class="nine-am-notification__close"
     [attr.aria-label]="closeLabel()"
     (click)="closed.emit()"
   >
-    <ds-icon name="close" [size]="20" />
+    <nine-am-icon name="close" [size]="20" />
   </button>
 }

@@ -1,7 +1,7 @@
-<div class="ds-textarea__label-wrapper">
+<div class="nine-am-textarea__label-wrapper">
   <label
-    class="ds-textarea__label"
-    [class.ds-visually-hidden]="hideLabel()"
+    class="nine-am-textarea__label"
+    [class.nine-am-visually-hidden]="hideLabel()"
     [for]="textareaId"
   >
     {{ label() }}
@@ -11,13 +11,13 @@
     <!-- aria-hidden: the native maxlength already stops input, and a live
          count read out on every keystroke is unusable. The limit belongs in
          the helper text, where it is announced once. -->
-    <span class="ds-textarea__counter" aria-hidden="true">{{ text }}</span>
+    <span class="nine-am-textarea__counter" aria-hidden="true">{{ text }}</span>
   }
 </div>
 
-<div class="ds-textarea__field-wrapper">
+<div class="nine-am-textarea__field-wrapper">
   <textarea
-    class="ds-textarea__field"
+    class="nine-am-textarea__field"
     [id]="textareaId"
     [value]="value()"
     [rows]="rows()"
@@ -32,16 +32,16 @@
   ></textarea>
 
   @if (statusIcon(); as icon) {
-    <ds-icon class="ds-textarea__status" [name]="icon" />
+    <nine-am-icon class="nine-am-textarea__status" [name]="icon" />
   }
 
   @if (fluid() && message()) {
-    <div class="ds-textarea__divider"></div>
+    <div class="nine-am-textarea__divider"></div>
   }
 </div>
 
 @if (message(); as text) {
-  <div class="ds-textarea__requirement" [id]="messageId">{{ text }}</div>
+  <div class="nine-am-textarea__requirement" [id]="messageId">{{ text }}</div>
 } @else if (helperText()) {
-  <div class="ds-textarea__helper" [id]="helperId">{{ helperText() }}</div>
+  <div class="nine-am-textarea__helper" [id]="helperId">{{ helperText() }}</div>
 }

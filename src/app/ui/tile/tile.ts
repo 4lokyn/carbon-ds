@@ -24,10 +24,10 @@ let nextId = 0;
  * same problem, which is what the flag is for; put the tile on the page.
  */
 @Component({
-  selector: 'ds-tile',
+  selector: 'nine-am-tile',
   encapsulation: ViewEncapsulation.None,
   styleUrl: './tile.scss',
-  host: { class: 'ds-tile' },
+  host: { class: 'nine-am-tile' },
   template: '<ng-content />',
 })
 export class Tile {}
@@ -43,7 +43,7 @@ export class Tile {}
  * the tab order, and `aria-disabled` says so out loud.
  */
 @Component({
-  selector: 'a[dsClickableTile]',
+  selector: 'a[nineAmClickableTile]',
   encapsulation: ViewEncapsulation.None,
   styleUrl: './tile.scss',
   host: {
@@ -58,10 +58,10 @@ export class ClickableTile {
   readonly disabled = input(false, { transform: booleanAttribute });
 
   protected readonly hostClass = computed(() => {
-    const classes = ['ds-tile', 'ds-tile--clickable'];
+    const classes = ['nine-am-tile', 'nine-am-tile--clickable'];
 
     if (this.disabled()) {
-      classes.push('ds-tile--disabled');
+      classes.push('nine-am-tile--disabled');
     }
 
     return classes.join(' ');
@@ -87,15 +87,15 @@ export class ClickableTile {
  * this follows where Carbon is going rather than where it stands.
  */
 @Component({
-  selector: 'ds-selectable-tile',
+  selector: 'nine-am-selectable-tile',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
   styleUrl: './tile.scss',
-  host: { class: 'ds-selectable-tile-host' },
+  host: { class: 'nine-am-selectable-tile-host' },
   template: `
     <input
       type="checkbox"
-      class="ds-tile-input"
+      class="nine-am-tile-input"
       [id]="inputId"
       [attr.name]="name()"
       [attr.value]="value()"
@@ -105,8 +105,8 @@ export class ClickableTile {
     />
 
     <label [attr.for]="inputId" [class]="tileClass()">
-      <span class="ds-tile-content"><ng-content /></span>
-      <span class="ds-tile__checkmark"><ds-icon name="checkmark-filled" /></span>
+      <span class="nine-am-tile-content"><ng-content /></span>
+      <span class="nine-am-tile__checkmark"><nine-am-icon name="checkmark-filled" /></span>
     </label>
   `,
 })
@@ -118,17 +118,17 @@ export class SelectableTile {
   readonly name = input<string>();
   readonly value = input<string>();
 
-  protected readonly inputId = `ds-selectable-tile-${nextId++}`;
+  protected readonly inputId = `nine-am-selectable-tile-${nextId++}`;
 
   protected readonly tileClass = computed(() => {
-    const classes = ['ds-tile', 'ds-tile--selectable'];
+    const classes = ['nine-am-tile', 'nine-am-tile--selectable'];
 
     if (this.selected()) {
-      classes.push('ds-tile--is-selected');
+      classes.push('nine-am-tile--is-selected');
     }
 
     if (this.disabled()) {
-      classes.push('ds-tile--disabled');
+      classes.push('nine-am-tile--disabled');
     }
 
     return classes.join(' ');
@@ -141,15 +141,15 @@ export class SelectableTile {
 
 /** The part that is always on screen. */
 @Directive({
-  selector: '[dsTileAboveFold]',
-  host: { class: 'ds-tile-content__above-the-fold' },
+  selector: '[nineAmTileAboveFold]',
+  host: { class: 'nine-am-tile-content__above-the-fold' },
 })
 export class TileAboveFold {}
 
 /** The part the chevron reveals. */
 @Directive({
-  selector: '[dsTileBelowFold]',
-  host: { class: 'ds-tile-content__below-the-fold' },
+  selector: '[nineAmTileBelowFold]',
+  host: { class: 'nine-am-tile-content__below-the-fold' },
 })
 export class TileBelowFold {}
 
@@ -180,11 +180,11 @@ export class TileBelowFold {}
  * reflows, and nothing to go stale when a font loads late.
  */
 @Component({
-  selector: 'ds-expandable-tile',
+  selector: 'nine-am-expandable-tile',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon, NgTemplateOutlet],
   styleUrl: './tile.scss',
-  host: { class: 'ds-expandable-tile-host' },
+  host: { class: 'nine-am-expandable-tile-host' },
   template: `
     @if (interactive()) {
       <div [class]="tileClass()">
@@ -192,12 +192,12 @@ export class TileBelowFold {}
 
         <button
           type="button"
-          class="ds-tile__chevron ds-tile__chevron--interactive"
+          class="nine-am-tile__chevron nine-am-tile__chevron--interactive"
           [attr.aria-expanded]="expanded()"
           [attr.aria-label]="chevronLabel()"
           (click)="expanded.set(!expanded())"
         >
-          <ds-icon name="chevron-down" />
+          <nine-am-icon name="chevron-down" />
         </button>
       </div>
     } @else {
@@ -209,8 +209,8 @@ export class TileBelowFold {}
       >
         <ng-container [ngTemplateOutlet]="body" />
 
-        <span class="ds-tile__chevron">
-          <ds-icon name="chevron-down" />
+        <span class="nine-am-tile__chevron">
+          <nine-am-icon name="chevron-down" />
         </span>
       </button>
     }
@@ -221,10 +221,10 @@ export class TileBelowFold {}
       and can only land in one place.
     -->
     <ng-template #body>
-      <ng-content select="[dsTileAboveFold]" />
+      <ng-content select="[nineAmTileAboveFold]" />
 
-      <div class="ds-tile__below">
-        <ng-content select="[dsTileBelowFold]" />
+      <div class="nine-am-tile__below">
+        <ng-content select="[nineAmTileBelowFold]" />
       </div>
     </ng-template>
   `,
@@ -248,21 +248,21 @@ export class ExpandableTile {
   );
 
   protected readonly tileClass = computed(() => {
-    const classes = ['ds-tile', 'ds-tile--expandable'];
+    const classes = ['nine-am-tile', 'nine-am-tile--expandable'];
 
     if (this.interactive()) {
-      classes.push('ds-tile--expandable--interactive');
+      classes.push('nine-am-tile--expandable--interactive');
     }
 
     if (this.expanded()) {
-      classes.push('ds-tile--is-expanded');
+      classes.push('nine-am-tile--is-expanded');
     }
 
     return classes.join(' ');
   });
 }
 
-export const DS_TILE = [
+export const NINE_AM_TILE = [
   Tile,
   ClickableTile,
   SelectableTile,

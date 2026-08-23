@@ -12,7 +12,7 @@ import {
 import { Popover } from './popover';
 import { parseAlign, type PopoverAlign } from './popover-position';
 
-export const DS_TOGGLETIP = new InjectionToken<Toggletip>('DS_TOGGLETIP');
+export const NINE_AM_TOGGLETIP = new InjectionToken<Toggletip>('NINE_AM_TOGGLETIP');
 
 /**
  * Carbon's toggletip: supplemental content opened by a click, which **may be
@@ -35,23 +35,23 @@ export const DS_TOGGLETIP = new InjectionToken<Toggletip>('DS_TOGGLETIP');
  * nothing by going into the overlay, and gained the flip.
  */
 @Component({
-  selector: 'ds-toggletip',
+  selector: 'nine-am-toggletip',
   encapsulation: ViewEncapsulation.None,
   imports: [Popover],
   styleUrl: './popover.scss',
-  providers: [{ provide: DS_TOGGLETIP, useExisting: Toggletip }],
+  providers: [{ provide: NINE_AM_TOGGLETIP, useExisting: Toggletip }],
   host: {
     '[class]': 'hostClass()',
     '(keydown.escape)': 'close(true)',
     '(document:click)': 'onDocumentClick($event)',
   },
   template: `
-    <ng-content select="[dsToggletipButton]" />
+    <ng-content select="[nineAmToggletipButton]" />
 
     @if (open()) {
-      <ds-popover class="ds-toggletip__panel" highContrast [side]="side()">
-        <div class="ds-toggletip__content"><ng-content /></div>
-      </ds-popover>
+      <nine-am-popover class="nine-am-toggletip__panel" highContrast [side]="side()">
+        <div class="nine-am-toggletip__content"><ng-content /></div>
+      </nine-am-popover>
     }
   `,
 })
@@ -67,7 +67,7 @@ export class Toggletip {
   protected readonly hostClass = computed(() => {
     const { side, alignment } = parseAlign(this.align());
 
-    return `ds-toggletip ds-toggletip--${side} ds-toggletip--${alignment}`;
+    return `nine-am-toggletip nine-am-toggletip--${side} nine-am-toggletip--${alignment}`;
   });
 
   toggle(): void {
@@ -87,7 +87,7 @@ export class Toggletip {
     this.open.set(false);
 
     if (returnFocus) {
-      this.host.nativeElement.querySelector<HTMLElement>('[dsToggletipButton]')?.focus();
+      this.host.nativeElement.querySelector<HTMLElement>('[nineAmToggletipButton]')?.focus();
     }
   }
 
@@ -111,14 +111,14 @@ export class Toggletip {
  * already has — usually an icon-only one.
  */
 @Directive({
-  selector: '[dsToggletipButton]',
+  selector: '[nineAmToggletipButton]',
   host: {
     '[attr.aria-expanded]': 'toggletip.open()',
     '(click)': 'toggletip.toggle()',
   },
 })
 export class ToggletipButton {
-  protected readonly toggletip = inject(DS_TOGGLETIP);
+  protected readonly toggletip = inject(NINE_AM_TOGGLETIP);
 }
 
-export const DS_TOGGLETIP_PARTS = [Toggletip, ToggletipButton] as const;
+export const NINE_AM_TOGGLETIP_PARTS = [Toggletip, ToggletipButton] as const;

@@ -6,7 +6,7 @@ import type { ToggleSize } from './toggle';
 @Component({
   imports: [Toggle],
   template: `
-    <ds-toggle
+    <nine-am-toggle
       label="Auto-scaling"
       [size]="size()"
       [disabled]="disabled()"
@@ -42,8 +42,8 @@ describe('Toggle', () => {
       host: fixture.componentInstance,
       el,
       button: () => el.querySelector('button') as HTMLButtonElement,
-      stateText: () => el.querySelector('.ds-toggle__text'),
-      check: () => el.querySelector('.ds-toggle__check'),
+      stateText: () => el.querySelector('.nine-am-toggle__text'),
+      check: () => el.querySelector('.nine-am-toggle__check'),
       apply(change: () => void) {
         change();
         fixture.detectChanges();
@@ -72,7 +72,7 @@ describe('Toggle', () => {
   it('takes its accessible name from the label alone, not the state text', () => {
     const { button, el } = setup();
 
-    const labelText = el.querySelector('.ds-toggle__label-text') as HTMLElement;
+    const labelText = el.querySelector('.nine-am-toggle__label-text') as HTMLElement;
 
     // Letting the whole <label> name the button would fold "Off" into the name,
     // and role=switch already announces that.

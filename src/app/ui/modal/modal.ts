@@ -23,27 +23,27 @@ let nextId = 0;
  *
  * Two of Carbon's props have no equivalent here, and deliberately so: both fall
  * out of the footer being projected rather than configured. `passiveModal` is a
- * modal with no footer, so it is one you did not write a `[dsModalFooter]` for.
+ * modal with no footer, so it is one you did not write a `[nineAmModalFooter]` for.
  * `danger` re-kinds the primary button, so it is
- * `<button dsButton kind="danger">`. Neither has a line of CSS in
+ * `<button nineAmButton kind="danger">`. Neither has a line of CSS in
  * `@carbon/styles` — they are React-side markup switches, and this API already
  * exposes the markup.
  */
 @Component({
-  selector: 'ds-modal',
+  selector: 'nine-am-modal',
   encapsulation: ViewEncapsulation.None,
   styleUrl: './modal.scss',
-  host: { class: 'ds-modal' },
+  host: { class: 'nine-am-modal' },
   template: `
-    <header class="ds-modal__header">
+    <header class="nine-am-modal__header">
       @if (label()) {
-        <p class="ds-modal__label">{{ label() }}</p>
+        <p class="nine-am-modal__label">{{ label() }}</p>
       }
 
-      <h2 class="ds-modal__heading" [id]="headingId">{{ heading() }}</h2>
+      <h2 class="nine-am-modal__heading" [id]="headingId">{{ heading() }}</h2>
 
       <button
-        class="ds-modal__close"
+        class="nine-am-modal__close"
         type="button"
         [attr.aria-label]="closeLabel()"
         (click)="requestClose()"
@@ -73,7 +73,7 @@ export class Modal {
   /** Fires before the dialog closes, so the caller can veto or clean up. */
   readonly closeRequested = output<void>();
 
-  protected readonly headingId = `ds-modal-heading-${nextId++}`;
+  protected readonly headingId = `nine-am-modal-heading-${nextId++}`;
 
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
@@ -100,16 +100,16 @@ export class Modal {
 
 /** Scrollable content region. Everything long goes in here, not in the shell. */
 @Directive({
-  selector: '[dsModalBody]',
-  host: { class: 'ds-modal__body' },
+  selector: '[nineAmModalBody]',
+  host: { class: 'nine-am-modal__body' },
 })
 export class ModalBody {}
 
 /** Action row. Carbon expects two or three buttons, at size `xl`. */
 @Directive({
-  selector: '[dsModalFooter]',
-  host: { class: 'ds-modal__footer' },
+  selector: '[nineAmModalFooter]',
+  host: { class: 'nine-am-modal__footer' },
 })
 export class ModalFooter {}
 
-export const DS_MODAL = [Modal, ModalBody, ModalFooter] as const;
+export const NINE_AM_MODAL = [Modal, ModalBody, ModalFooter] as const;

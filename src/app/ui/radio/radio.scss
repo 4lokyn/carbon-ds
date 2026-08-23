@@ -1,6 +1,6 @@
-@use 'ds' as *;
+@use 'nine-am' as *;
 
-.ds-radio-group {
+.nine-am-radio-group {
   display: block;
   width: 100%;
 }
@@ -8,26 +8,26 @@
 // A fieldset carries a default border, padding and min-width that nothing here
 // wants; `min-width: 0` is the one that matters, because the browser default of
 // min-content stops a fieldset from ever shrinking inside a grid.
-.ds-radio-group__fieldset {
+.nine-am-radio-group__fieldset {
   min-width: 0;
   padding: 0;
   border: 0;
   margin: 0;
 }
 
-.ds-radio-group__legend {
+.nine-am-radio-group__legend {
   @include field-label;
 
   padding: 0;
 }
 
-.ds-radio-group__items {
+.nine-am-radio-group__items {
   display: flex;
   align-items: center;
   gap: $spacing-05;
 }
 
-.ds-radio-group--vertical .ds-radio-group__items {
+.nine-am-radio-group--vertical .nine-am-radio-group__items {
   align-items: flex-start;
   flex-direction: column;
   gap: rem(6px);
@@ -35,18 +35,18 @@
 
 // ── One option ──────────────────────────────────────────────────────────────
 
-.ds-radio {
+.nine-am-radio {
   display: flex;
   align-items: flex-start;
 }
 
 // The real input keeps the semantics, the tab order and the :checked state we
 // style against. Not display:none, which would take it out of both.
-.ds-radio__input {
+.nine-am-radio__input {
   @include visually-hidden;
 }
 
-.ds-radio__label {
+.nine-am-radio__label {
   display: flex;
   align-items: center;
   color: $text-primary;
@@ -55,7 +55,7 @@
 
 // The ring. 18px rather than the checkbox's 16px — Carbon draws radios slightly
 // larger, because a circle reads smaller than a square of the same box.
-.ds-radio__appearance {
+.nine-am-radio__appearance {
   flex-shrink: 0;
   width: rem(18px);
   height: rem(18px);
@@ -65,26 +65,26 @@
   background-color: transparent;
 }
 
-.ds-radio__label-text {
+.nine-am-radio__label-text {
   @include type-style('body-compact-01');
 }
 
 // Label on the left. `row-reverse` moves the ring, but `margin-inline` is
 // logical and does not follow it — the 2/10 gutter has to be swapped by hand or
 // the text ends up 2px from the circle and 10px from nothing.
-.ds-radio-group--label-left {
-  .ds-radio__label {
+.nine-am-radio-group--label-left {
+  .nine-am-radio__label {
     flex-direction: row-reverse;
   }
 
-  .ds-radio__appearance {
+  .nine-am-radio__appearance {
     margin-inline: rem(10px) rem(2px);
   }
 }
 
 // The dot: the same circle scaled to half, not a second sized element. Scaling
 // means it stays centred and proportional if the 18px ever changes.
-.ds-radio__input:checked + .ds-radio__label .ds-radio__appearance {
+.nine-am-radio__input:checked + .nine-am-radio__label .nine-am-radio__appearance {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -102,7 +102,7 @@
 // On the ring, not the label — a ring around the whole label would be enormous
 // next to long option text. Offset outwards here, unlike every other control in
 // the system, because an inset ring on an 18px circle lands on the border.
-.ds-radio__input:focus + .ds-radio__label .ds-radio__appearance {
+.nine-am-radio__input:focus + .nine-am-radio__label .nine-am-radio__appearance {
   outline: rem(2px) solid $focus;
   outline-offset: rem(1.5px);
 }
@@ -112,12 +112,12 @@
 // Both the per-option `disabled` and the group's, which the browser cascades
 // from `<fieldset disabled>` down to every input inside — hence one selector.
 
-.ds-radio__input:disabled + .ds-radio__label {
+.nine-am-radio__input:disabled + .nine-am-radio__label {
   color: $text-disabled;
   cursor: not-allowed;
 }
 
-.ds-radio__input:disabled + .ds-radio__label .ds-radio__appearance {
+.nine-am-radio__input:disabled + .nine-am-radio__label .nine-am-radio__appearance {
   border-color: $icon-disabled;
 
   &::before {
@@ -125,8 +125,8 @@
   }
 }
 
-.ds-radio-group--disabled .ds-radio-group__legend,
-.ds-radio-group--disabled .ds-radio-group__helper {
+.nine-am-radio-group--disabled .nine-am-radio-group__legend,
+.nine-am-radio-group--disabled .nine-am-radio-group__helper {
   color: $text-disabled;
 }
 
@@ -135,17 +135,17 @@
 // The inputs stay enabled, so this is purely a look. The click handler is what
 // makes it read-only; see the note in radio.ts for why it cannot be `disabled`.
 
-.ds-radio-group--readonly {
-  .ds-radio__appearance {
+.nine-am-radio-group--readonly {
+  .nine-am-radio__appearance {
     border-color: $icon-disabled;
   }
 
-  .ds-radio__label {
+  .nine-am-radio__label {
     cursor: default;
   }
 
   // Read-only content is still content — let people select it.
-  .ds-radio__label-text {
+  .nine-am-radio__label-text {
     cursor: text;
     user-select: text;
   }
@@ -153,17 +153,17 @@
 
 // ── Invalid / warn ──────────────────────────────────────────────────────────
 
-.ds-radio-group--invalid .ds-radio__appearance {
+.nine-am-radio-group--invalid .nine-am-radio__appearance {
   border-color: $support-error;
 }
 
-.ds-radio-group__helper {
+.nine-am-radio-group__helper {
   @include field-helper-text;
 }
 
 // Unlike the single-value fields, the message sits next to an icon rather than
 // under one — a group has no field box to hang a trailing icon inside.
-.ds-radio-group__requirement {
+.nine-am-radio-group__requirement {
   @include field-requirement;
 
   display: flex;
@@ -171,11 +171,11 @@
   gap: $spacing-02;
 }
 
-.ds-radio-group--invalid .ds-radio-group__requirement {
+.nine-am-radio-group--invalid .nine-am-radio-group__requirement {
   @include field-requirement-invalid;
 }
 
-.ds-radio-group__status {
+.nine-am-radio-group__status {
   flex-shrink: 0;
 
   // Nudged down onto the text's baseline: the message is helper-text-01, whose
@@ -183,10 +183,10 @@
   margin-block-start: rem(1px);
 }
 
-.ds-radio-group--invalid .ds-radio-group__status {
+.nine-am-radio-group--invalid .nine-am-radio-group__status {
   @include field-status-icon-invalid;
 }
 
-.ds-radio-group--warn .ds-radio-group__status {
+.nine-am-radio-group--warn .nine-am-radio-group__status {
   @include field-status-icon-warn;
 }

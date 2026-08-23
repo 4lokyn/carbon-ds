@@ -53,7 +53,7 @@ const RANGE_SPLIT = /\s+(?:[–—-]|to)\s+/i;
  * markup does not care which of the two picker directives is above it.
  */
 @Component({
-  selector: 'ds-date-range-picker',
+  selector: 'nine-am-date-range-picker',
   encapsulation: ViewEncapsulation.None,
   imports: [
     Icon,
@@ -104,7 +104,7 @@ export class DateRangePicker {
 
   readonly blurred = output<void>();
 
-  protected readonly inputId = `ds-date-range-picker-${nextId++}`;
+  protected readonly inputId = `nine-am-date-range-picker-${nextId++}`;
   protected readonly helperId = `${this.inputId}-helper`;
   protected readonly messageId = `${this.inputId}-message`;
 
@@ -190,22 +190,22 @@ export class DateRangePicker {
 
   protected readonly hostClass = computed(() => {
     const classes = [
-      'ds-date-range-picker',
-      `ds-date-picker--${this.size()}`,
+      'nine-am-date-range-picker',
+      `nine-am-date-picker--${this.size()}`,
     ];
 
     if (this.invalid()) {
-      classes.push('ds-date-picker--invalid');
+      classes.push('nine-am-date-picker--invalid');
     } else if (this.warn()) {
-      classes.push('ds-date-picker--warn');
+      classes.push('nine-am-date-picker--warn');
     }
 
     if (this.disabled()) {
-      classes.push('ds-date-picker--disabled');
+      classes.push('nine-am-date-picker--disabled');
     }
 
     if (this.readOnly()) {
-      classes.push('ds-date-picker--readonly');
+      classes.push('nine-am-date-picker--readonly');
     }
 
     return classes.join(' ');

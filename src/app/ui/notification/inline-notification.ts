@@ -13,7 +13,7 @@ import { DismissibleNotification, type NotificationVariant } from './notificatio
  * an inline notification waits.
  */
 @Component({
-  selector: 'ds-inline-notification',
+  selector: 'nine-am-inline-notification',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
   templateUrl: './inline-notification.html',

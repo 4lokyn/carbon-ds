@@ -2,9 +2,9 @@
   "customSyntax": "postcss-scss",
   "rules": {
     "selector-class-pattern": [
-      "^ds-",
+      "^nine-am-",
       {
-        "message": "Every class in the design system starts with 'ds-'. These stylesheets are global — ViewEncapsulation.None emits them as plain CSS — so an unprefixed class styles the whole application, not this component. See src/app/ui/README.md.",
+        "message": "Every class in the design system starts with 'nine-am-'. These stylesheets are global — ViewEncapsulation.None emits them as plain CSS — so an unprefixed class styles the whole application, not this component. See src/app/ui/README.md.",
         "resolveNestedSelectors": true
       }
     ]

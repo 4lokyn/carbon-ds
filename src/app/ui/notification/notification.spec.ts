@@ -9,7 +9,7 @@ import type { NotificationStatus } from './notification-base';
 @Component({
   imports: [InlineNotification],
   template: `
-    <ds-inline-notification
+    <nine-am-inline-notification
       [status]="status()"
       [heading]="heading()"
       [subtitle]="subtitle()"
@@ -37,9 +37,9 @@ describe('InlineNotification', () => {
 
     return {
       host: fixture.componentInstance,
-      root: () => el.querySelector('ds-inline-notification') as HTMLElement,
-      close: () => el.querySelector('.ds-notification__close'),
-      iconPaths: () => Array.from(el.querySelectorAll('.ds-notification__icon path')),
+      root: () => el.querySelector('nine-am-inline-notification') as HTMLElement,
+      close: () => el.querySelector('.nine-am-notification__close'),
+      iconPaths: () => Array.from(el.querySelectorAll('.nine-am-notification__icon path')),
       apply(change: () => void) {
         change();
         fixture.detectChanges();
@@ -50,12 +50,12 @@ describe('InlineNotification', () => {
   it('pairs each status with its own icon and class', () => {
     const { root, apply, host } = setup();
 
-    expect(root().classList).toContain('ds-notification--info');
+    expect(root().classList).toContain('nine-am-notification--info');
 
     apply(() => host.status.set('error'));
 
-    expect(root().classList).toContain('ds-notification--error');
-    expect(root().classList).not.toContain('ds-notification--info');
+    expect(root().classList).toContain('nine-am-notification--error');
+    expect(root().classList).not.toContain('nine-am-notification--info');
   });
 
   it('keeps the warning exclamation as a paintable first path', () => {
@@ -104,11 +104,11 @@ describe('InlineNotification', () => {
   it('switches to the low-contrast surface', () => {
     const { root, apply, host } = setup();
 
-    expect(root().classList).not.toContain('ds-notification--low-contrast');
+    expect(root().classList).not.toContain('nine-am-notification--low-contrast');
 
     apply(() => host.lowContrast.set(true));
 
-    expect(root().classList).toContain('ds-notification--low-contrast');
+    expect(root().classList).toContain('nine-am-notification--low-contrast');
   });
 });
 
@@ -118,12 +118,12 @@ describe('NotificationService', () => {
   }
 
   function toasts(): HTMLElement[] {
-    return Array.from(document.querySelectorAll('ds-toast-notification'));
+    return Array.from(document.querySelectorAll('nine-am-toast-notification'));
   }
 
   function headings(): string[] {
     return toasts().map(
-      (toast) => toast.querySelector('.ds-notification__heading')?.textContent?.trim() ?? '',
+      (toast) => toast.querySelector('.nine-am-notification__heading')?.textContent?.trim() ?? '',
     );
   }
 
@@ -173,7 +173,7 @@ describe('NotificationService', () => {
     TestBed.tick();
 
     expect(toasts()).toHaveLength(0);
-    expect(document.querySelector('.ds-toast-stack')).toBeNull();
+    expect(document.querySelector('.nine-am-toast-stack')).toBeNull();
   });
 
   it('dismisses itself only when given a timeout', () => {
@@ -201,7 +201,7 @@ describe('NotificationService', () => {
     <button type="button" id="opener">Open</button>
 
     @if (open()) {
-      <ds-actionable-notification
+      <nine-am-actionable-notification
         status="error"
         heading="Deployment failed"
         subtitle="The cluster rejected the manifest."
@@ -235,9 +235,9 @@ describe('ActionableNotification', () => {
     return {
       host: fixture.componentInstance,
       opener: () => el.querySelector('#opener') as HTMLButtonElement,
-      root: () => el.querySelector('ds-actionable-notification') as HTMLElement,
-      action: () => el.querySelector('.ds-notification__action') as HTMLButtonElement | null,
-      close: () => el.querySelector('.ds-notification__close') as HTMLButtonElement | null,
+      root: () => el.querySelector('nine-am-actionable-notification') as HTMLElement,
+      action: () => el.querySelector('.nine-am-notification__action') as HTMLButtonElement | null,
+      close: () => el.querySelector('.nine-am-notification__close') as HTMLButtonElement | null,
       open(change: () => void = () => {}) {
         change();
         fixture.componentInstance.open.set(true);
@@ -298,13 +298,13 @@ describe('ActionableNotification', () => {
 
     // Carbon's default is the toast shape, and the button kinds follow the
     // layout rather than the caller: tertiary on a toast, ghost inline.
-    expect(root().classList).toContain('ds-notification--toast');
-    expect(action()?.classList).toContain('ds-btn--tertiary');
+    expect(root().classList).toContain('nine-am-notification--toast');
+    expect(action()?.classList).toContain('nine-am-btn--tertiary');
 
     apply(() => host.inline.set(true));
 
-    expect(root().classList).toContain('ds-notification--inline');
-    expect(action()?.classList).toContain('ds-btn--ghost');
+    expect(root().classList).toContain('nine-am-notification--inline');
+    expect(action()?.classList).toContain('nine-am-btn--ghost');
   });
 
   it('has no action button without a label, and reports the press', () => {
@@ -329,11 +329,11 @@ describe('ActionableNotification', () => {
     // trailing edge, the action button sits flush against it — measured at 0px
     // before this class existed, 8px after.
     expect(close()).toBeNull();
-    expect(root().classList).toContain('ds-notification--hide-close-button');
+    expect(root().classList).toContain('nine-am-notification--hide-close-button');
 
     apply(() => host.hideCloseButton.set(false));
 
-    expect(root().classList).not.toContain('ds-notification--hide-close-button');
+    expect(root().classList).not.toContain('nine-am-notification--hide-close-button');
   });
 
   it('closes on Escape, and stops when told not to', () => {
@@ -358,7 +358,7 @@ describe('ActionableNotification', () => {
 @Component({
   imports: [Callout],
   template: `
-    <ds-callout
+    <nine-am-callout
       [status]="status()"
       [headingId]="headingId()"
       heading="Limited region"
@@ -380,7 +380,7 @@ describe('Callout', () => {
 
     return {
       host: fixture.componentInstance,
-      root: () => el.querySelector('ds-callout') as HTMLElement,
+      root: () => el.querySelector('nine-am-callout') as HTMLElement,
       apply(change: () => void) {
         change();
         fixture.detectChanges();
@@ -396,7 +396,7 @@ describe('Callout', () => {
     // The three absences are the component. It loads with the page, so there is
     // nothing to announce and nothing to dismiss — a close button here would
     // offer to remove a condition the page is still in.
-    expect(el.querySelector('.ds-notification__close')).toBeNull();
+    expect(el.querySelector('.nine-am-notification__close')).toBeNull();
     expect(el.hasAttribute('role')).toBe(false);
     expect(el.hasAttribute('aria-live')).toBe(false);
   });
@@ -406,7 +406,7 @@ describe('Callout', () => {
     fixture.detectChanges();
 
     const el = fixture.nativeElement as HTMLElement;
-    const heading = () => el.querySelector('.ds-notification__heading') as HTMLElement;
+    const heading = () => el.querySelector('.nine-am-notification__heading') as HTMLElement;
 
     // Carbon's `titleId`, and the reason it exists is a link in the body that
     // wants `aria-describedby` on the sentence explaining why it is there.
@@ -421,11 +421,11 @@ describe('Callout', () => {
   it('takes the same statuses as every other variant', () => {
     const { root, apply, host } = setup();
 
-    expect(root().classList).toContain('ds-notification--callout');
-    expect(root().classList).toContain('ds-notification--info');
+    expect(root().classList).toContain('nine-am-notification--callout');
+    expect(root().classList).toContain('nine-am-notification--info');
 
     apply(() => host.status.set('warning'));
 
-    expect(root().classList).toContain('ds-notification--warning');
+    expect(root().classList).toContain('nine-am-notification--warning');
   });
 });

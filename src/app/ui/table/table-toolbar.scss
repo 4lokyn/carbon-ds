@@ -1,6 +1,6 @@
-@use 'ds' as *;
+@use 'nine-am' as *;
 
-.ds-toolbar {
+.nine-am-toolbar {
   position: relative;
   display: block;
   overflow: hidden;
@@ -8,7 +8,7 @@
   background-color: $layer-01;
 }
 
-.ds-toolbar__default {
+.nine-am-toolbar__default {
   display: flex;
   min-height: rem(48px);
   align-items: center;
@@ -22,12 +22,12 @@
 // changes and the table below never shifts. opacity 0 alone would leave the
 // controls in the tab order underneath the bar, hence pointer-events: none plus
 // the `inert`-like effect of the batch bar covering it.
-.ds-toolbar__default--dimmed {
+.nine-am-toolbar__default--dimmed {
   opacity: 0;
   pointer-events: none;
 }
 
-.ds-toolbar__batch {
+.nine-am-toolbar__batch {
   position: absolute;
   inset: 0;
   display: flex;
@@ -45,20 +45,20 @@
   pointer-events: none;
 }
 
-.ds-toolbar__batch--active {
+.nine-am-toolbar__batch--active {
   transform: translateY(0);
   opacity: 1;
   pointer-events: auto;
 }
 
-.ds-toolbar__count {
+.nine-am-toolbar__count {
   color: $text-on-color;
   white-space: nowrap;
 
   @include type-style('body-compact-01');
 }
 
-.ds-toolbar__batch-actions {
+.nine-am-toolbar__batch-actions {
   display: flex;
   align-items: center;
   margin-left: auto;
@@ -67,7 +67,7 @@
 
 // The batch bar sits on brand blue, so ghost buttons inside it have to invert —
 // $link-primary on blue fails contrast.
-.ds-toolbar__batch .ds-btn--ghost {
+.nine-am-toolbar__batch .nine-am-btn--ghost {
   color: $text-on-color;
 
   &:hover {
@@ -76,7 +76,7 @@
   }
 }
 
-.ds-toolbar__batch .ds-btn--primary {
+.nine-am-toolbar__batch .nine-am-btn--primary {
   background-color: transparent;
 
   &:hover {
@@ -84,14 +84,14 @@
   }
 }
 
-.ds-toolbar__cancel {
+.nine-am-toolbar__cancel {
   border-left: rem(1px) solid $text-on-color;
   margin-left: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-toolbar__batch,
-  .ds-toolbar__default {
+  .nine-am-toolbar__batch,
+  .nine-am-toolbar__default {
     transition: none;
   }
 }

@@ -1,12 +1,17 @@
-<div class="ds-inline-loading__animation">
+<div class="nine-am-inline-loading__animation">
   @if (icon(); as name) {
-    <ds-icon class="ds-inline-loading__icon" [name]="name" />
+    <nine-am-icon class="nine-am-inline-loading__icon" [name]="name" />
   } @else {
     <!-- `inactive` keeps the ring and stops it, which is what a queued or paused
          job looks like. Its own label is redundant here — the text beside it is
          the accessible name, and this host is the live region. -->
-    <ds-loading small [active]="status() === 'active'" [withOverlay]="false" [announce]="false" />
+    <nine-am-loading
+      small
+      [active]="status() === 'active'"
+      [withOverlay]="false"
+      [announce]="false"
+    />
   }
 </div>
 
-<p class="ds-inline-loading__text" [id]="labelId">{{ description() }}</p>
+<p class="nine-am-inline-loading__text" [id]="labelId">{{ description() }}</p>

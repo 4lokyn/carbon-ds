@@ -1,6 +1,6 @@
-@use 'ds' as *;
+@use 'nine-am' as *;
 
-.ds-search {
+.nine-am-search {
   position: relative;
   display: flex;
   width: 100%;
@@ -12,24 +12,24 @@
 // what keeps the text from sliding under either, and why the padding is stated
 // in terms of the height rather than a spacing token.
 @each $name, $height in $field-heights {
-  .ds-search--#{$name} {
-    .ds-search__input {
+  .nine-am-search--#{$name} {
+    .nine-am-search__input {
       height: $height;
       padding: 0 $height;
     }
 
-    .ds-search__magnifier {
+    .nine-am-search__magnifier {
       left: calc((#{$height} - #{rem(16px)}) / 2);
     }
 
-    .ds-search__clear {
+    .nine-am-search__clear {
       width: $height;
       height: $height;
     }
   }
 }
 
-.ds-search__input {
+.nine-am-search__input {
   @include field-surface;
 
   text-overflow: ellipsis;
@@ -53,7 +53,7 @@
   }
 }
 
-.ds-search__magnifier {
+.nine-am-search__magnifier {
   position: absolute;
 
   // Above the input, or the input's own background paints over it.
@@ -67,7 +67,7 @@
   inset-block-start: 50%;
 }
 
-.ds-search__clear {
+.nine-am-search__clear {
   @include unstyled-button;
 
   position: absolute;
@@ -102,7 +102,7 @@
 // the DOM at zero width — not removed — so expanding is a width transition
 // rather than a mount, and focus can move into it in the same tick.
 
-.ds-search--expandable {
+.nine-am-search--expandable {
   // Collapsed it is a fixed square; expanded it takes the row's leftover space
   // through flex-grow. Growing by `width` instead does not work here: with
   // `flex-basis: auto` and no grow, the row's free space goes to the auto
@@ -116,14 +116,14 @@
   // width can be transitioned; that is a markup change, not a CSS one.
   flex: 0 0 auto;
 
-  .ds-search__input {
+  .nine-am-search__input {
     width: 0;
     padding: 0;
   }
 
   // The magnifier is a button here, so it needs the button's own reset and a
   // hit area rather than pointer-events: none.
-  .ds-search__magnifier--button {
+  .nine-am-search__magnifier--button {
     @include unstyled-button;
 
     position: absolute;
@@ -146,20 +146,20 @@
 }
 
 @each $name, $height in $field-heights {
-  .ds-search--expandable.ds-search--#{$name} {
+  .nine-am-search--expandable.nine-am-search--#{$name} {
     width: $height;
 
-    .ds-search__magnifier--button {
+    .nine-am-search__magnifier--button {
       width: $height;
       height: $height;
     }
   }
 
-  .ds-search--expandable.ds-search--expanded.ds-search--#{$name} {
+  .nine-am-search--expandable.nine-am-search--expanded.nine-am-search--#{$name} {
     width: auto;
     flex: 1 1 auto;
 
-    .ds-search__input {
+    .nine-am-search__input {
       width: 100%;
       padding: 0 $height;
     }
@@ -168,7 +168,7 @@
 
 // Expanded, the magnifier goes back to being decoration — the field itself is
 // the target now, and a button sitting on top of it would swallow the click.
-.ds-search--expanded .ds-search__magnifier--button {
+.nine-am-search--expanded .nine-am-search__magnifier--button {
   pointer-events: none;
 
   &:hover {
@@ -181,7 +181,7 @@
 // the expanded field already spans a row of its own, and a grey square
 // appearing inside it reads as a separate control rather than part of the
 // field. The standalone search keeps its fill, where the contrast is useful.
-.ds-search--expandable .ds-search__clear {
+.nine-am-search--expandable .nine-am-search__clear {
   border-block-end-color: transparent;
 
   &:hover {
@@ -193,12 +193,12 @@
 // Disabled. The magnifier dims with the text; there is no clear button to dim,
 // because the template does not render one while disabled — a disabled field
 // whose contents can still be wiped is a bug, not a state.
-.ds-search--disabled {
-  .ds-search__input {
+.nine-am-search--disabled {
+  .nine-am-search__input {
     @include field-disabled;
   }
 
-  .ds-search__magnifier {
+  .nine-am-search__magnifier {
     color: $icon-disabled;
   }
 }

@@ -1,22 +1,22 @@
 @let expandTemplate = expandedContent();
 
-<div class="ds-table__container" [class.ds-table__container--sticky]="stickyHeader()">
+<div class="nine-am-table__container" [class.nine-am-table__container--sticky]="stickyHeader()">
   <table [class]="tableClass()">
     <!-- Visually hidden: the visible heading belongs in the toolbar above. Present
          so the table is announced by name rather than as an anonymous "table". -->
-    <caption class="ds-visually-hidden">{{ caption() }}</caption>
+    <caption class="nine-am-visually-hidden">{{ caption() }}</caption>
 
-    <thead class="ds-table__head">
-      <tr class="ds-table__head-row">
+    <thead class="nine-am-table__head">
+      <tr class="nine-am-table__head-row">
         @if (expandable()) {
-          <th class="ds-table__cell ds-table__cell--control" scope="col">
-            <span class="ds-visually-hidden">Expand</span>
+          <th class="nine-am-table__cell nine-am-table__cell--control" scope="col">
+            <span class="nine-am-visually-hidden">Expand</span>
           </th>
         }
 
         @if (selectable()) {
-          <th class="ds-table__cell ds-table__cell--control" scope="col">
-            <ds-checkbox
+          <th class="nine-am-table__cell nine-am-table__cell--control" scope="col">
+            <nine-am-checkbox
               hideLabel
               [label]="selectAllLabel()"
               [checked]="allSelected()"
@@ -28,35 +28,35 @@
 
         @for (column of columns(); track column.key) {
           <th
-            class="ds-table__cell ds-table__cell--header"
+            class="nine-am-table__cell nine-am-table__cell--header"
             scope="col"
-            [class.ds-table__cell--end]="column.align === 'end'"
-            [class.ds-table__cell--sortable]="column.sortable"
+            [class.nine-am-table__cell--end]="column.align === 'end'"
+            [class.nine-am-table__cell--sortable]="column.sortable"
             [style.width]="column.width"
             [attr.aria-sort]="ariaSort(column)"
           >
             @if (column.sortable) {
-              <button class="ds-table__sort" type="button" (click)="toggleSort(column)">
-                <span class="ds-table__sort-label">{{ column.header }}</span>
-                <ds-icon class="ds-table__sort-icon" [name]="sortIcon(column)" />
+              <button class="nine-am-table__sort" type="button" (click)="toggleSort(column)">
+                <span class="nine-am-table__sort-label">{{ column.header }}</span>
+                <nine-am-icon class="nine-am-table__sort-icon" [name]="sortIcon(column)" />
               </button>
             } @else {
-              <span class="ds-table__header-label">{{ column.header }}</span>
+              <span class="nine-am-table__header-label">{{ column.header }}</span>
             }
           </th>
         }
       </tr>
     </thead>
 
-    <tbody class="ds-table__body">
+    <tbody class="nine-am-table__body">
       @if (loading()) {
         <!-- aria-hidden, and the live region below is what actually gets announced.
              Otherwise a screen reader reads out a screenful of placeholder cells. -->
         @for (skeletonRow of skeletonRange(); track skeletonRow) {
-          <tr class="ds-table__row ds-table__row--skeleton" aria-hidden="true">
+          <tr class="nine-am-table__row nine-am-table__row--skeleton" aria-hidden="true">
             @for (skeletonCell of columnRange(); track skeletonCell) {
-              <td class="ds-table__cell">
-                <span class="ds-table__skeleton"></span>
+              <td class="nine-am-table__cell">
+                <span class="nine-am-table__skeleton"></span>
               </td>
             }
           </tr>
@@ -64,28 +64,28 @@
       } @else {
         @for (row of displayRows(); track rowKey()(row); let rowIndex = $index) {
           <tr
-            class="ds-table__row"
-            [class.ds-table__row--selected]="isSelected(row)"
-            [class.ds-table__row--expanded]="isExpanded(row)"
+            class="nine-am-table__row"
+            [class.nine-am-table__row--selected]="isSelected(row)"
+            [class.nine-am-table__row--expanded]="isExpanded(row)"
           >
             @if (expandable()) {
-              <td class="ds-table__cell ds-table__cell--control">
+              <td class="nine-am-table__cell nine-am-table__cell--control">
                 <button
-                  class="ds-table__expand"
+                  class="nine-am-table__expand"
                   type="button"
                   [attr.aria-expanded]="isExpanded(row)"
                   [attr.aria-controls]="expansionId(rowIndex)"
                   [attr.aria-label]="expandRowLabel()(row)"
                   (click)="toggleExpand(row)"
                 >
-                  <ds-icon name="chevron-right" />
+                  <nine-am-icon name="chevron-right" />
                 </button>
               </td>
             }
 
             @if (selectable()) {
-              <td class="ds-table__cell ds-table__cell--control">
-                <ds-checkbox
+              <td class="nine-am-table__cell nine-am-table__cell--control">
+                <nine-am-checkbox
                   hideLabel
                   [label]="selectRowLabel()(row)"
                   [checked]="isSelected(row)"
@@ -96,8 +96,8 @@
 
             @for (column of columns(); track column.key) {
               <td
-                class="ds-table__cell"
-                [class.ds-table__cell--end]="column.align === 'end'"
+                class="nine-am-table__cell"
+                [class.nine-am-table__cell--end]="column.align === 'end'"
               >
                 @if (column.cell) {
                   <ng-container
@@ -112,9 +112,9 @@
           </tr>
 
           @if (expandTemplate && isExpanded(row)) {
-            <tr class="ds-table__row ds-table__row--expansion" [id]="expansionId(rowIndex)">
+            <tr class="nine-am-table__row nine-am-table__row--expansion" [id]="expansionId(rowIndex)">
               <td
-                class="ds-table__cell ds-table__cell--expansion"
+                class="nine-am-table__cell nine-am-table__cell--expansion"
                 [attr.colspan]="columnCount()"
               >
                 <ng-container
@@ -125,9 +125,9 @@
             </tr>
           }
         } @empty {
-          <tr class="ds-table__row ds-table__row--empty">
-            <td class="ds-table__cell ds-table__cell--empty" [attr.colspan]="columnCount()">
-              <!-- Consumers override by projecting content into <ds-table>. -->
+          <tr class="nine-am-table__row nine-am-table__row--empty">
+            <td class="nine-am-table__cell nine-am-table__cell--empty" [attr.colspan]="columnCount()">
+              <!-- Consumers override by projecting content into <nine-am-table>. -->
               <ng-content>No data to display</ng-content>
             </td>
           </tr>
@@ -139,7 +139,7 @@
 
 <!-- Loading is a state change with no visual text, so it needs announcing.
      polite rather than assertive: a table refresh should not interrupt. -->
-<div class="ds-visually-hidden" role="status" aria-live="polite">
+<div class="nine-am-visually-hidden" role="status" aria-live="polite">
   @if (loading()) {
     Loading {{ caption() }}
   }

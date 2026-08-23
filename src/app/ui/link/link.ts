@@ -20,7 +20,7 @@ export type LinkSize = 'sm' | 'md' | 'lg';
  * reader it is no signal at all.
  */
 @Component({
-  selector: 'a[dsLink]',
+  selector: 'a[nineAmLink]',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
   styleUrl: './link.scss',
@@ -33,7 +33,7 @@ export type LinkSize = 'sm' | 'md' | 'lg';
     <ng-content />
 
     @if (icon(); as name) {
-      <span class="ds-link__icon"><ds-icon [name]="name" /></span>
+      <span class="nine-am-link__icon"><nine-am-icon [name]="name" /></span>
     }
   `,
 })
@@ -73,22 +73,22 @@ export class Link {
   readonly icon = input<IconName>();
 
   protected readonly hostClass = computed(() => {
-    const classes = ['ds-link', `ds-link--${this.size()}`];
+    const classes = ['nine-am-link', `nine-am-link--${this.size()}`];
 
     if (this.inline()) {
-      classes.push('ds-link--inline');
+      classes.push('nine-am-link--inline');
     }
 
     if (this.disabled()) {
-      classes.push('ds-link--disabled');
+      classes.push('nine-am-link--disabled');
     }
 
     if (this.visited()) {
-      classes.push('ds-link--visited');
+      classes.push('nine-am-link--visited');
     }
 
     if (this.icon()) {
-      classes.push('ds-link--icon');
+      classes.push('nine-am-link--icon');
     }
 
     return classes.join(' ');

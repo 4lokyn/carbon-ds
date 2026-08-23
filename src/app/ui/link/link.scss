@@ -1,11 +1,11 @@
-@use 'ds' as *;
+@use 'nine-am' as *;
 
 // Carbon specifies a fixed height per size — 16 / 18 / 22px. Nothing sets those
 // here because they already fall out of the type tokens: helper-text-01 is
 // 12px x 1.333 = 16, body-compact-01 is 14 x 1.286 = 18, body-compact-02 is
 // 16 x 1.375 = 22. Measured, not assumed. Hard-coding them would be a second
 // source of truth that drifts the first time Carbon retunes a line-height.
-.ds-link {
+.nine-am-link {
   display: inline-flex;
   color: $link-primary;
   text-decoration: none;
@@ -30,7 +30,7 @@
   // Pressed. Carbon's Sass and its style page disagree here — the page says
   // `$text-primary`, the shipped CSS says the link colour — and the shipped CSS
   // is what every Carbon application actually renders, so it wins.
-  &:active:not(.ds-link--disabled) {
+  &:active:not(.nine-am-link--disabled) {
     @include focus-ring;
 
     color: $link-primary;
@@ -48,32 +48,32 @@
   }
 }
 
-.ds-link--sm {
+.nine-am-link--sm {
   @include type-style('helper-text-01');
 }
 
-.ds-link--lg {
+.nine-am-link--lg {
   @include type-style('body-compact-02');
 }
 
 // Inline: part of a sentence, so it wraps with the text instead of sitting in
 // its own flex box, and it carries its underline at rest.
-.ds-link--inline {
+.nine-am-link--inline {
   display: inline;
   text-decoration: underline;
 }
 
-.ds-link--visited:visited {
+.nine-am-link--visited:visited {
   color: $link-visited;
 }
 
-.ds-link--visited:visited:hover {
+.nine-am-link--visited:visited:hover {
   color: $link-primary-hover;
 }
 
-.ds-link--disabled,
-.ds-link--disabled:hover,
-.ds-link--disabled:visited {
+.nine-am-link--disabled,
+.nine-am-link--disabled:hover,
+.nine-am-link--disabled:visited {
   color: $text-disabled;
   cursor: not-allowed;
   text-decoration: none;
@@ -82,19 +82,19 @@
 // An inline disabled link keeps its underline. Dropping it would leave a grey
 // run of words in the middle of a sentence with nothing marking it as a link
 // that used to work.
-.ds-link--disabled.ds-link--inline,
-.ds-link--disabled.ds-link--inline:hover {
+.nine-am-link--disabled.nine-am-link--inline,
+.nine-am-link--disabled.nine-am-link--inline:hover {
   text-decoration: underline;
 }
 
 // ── Paired with an icon ─────────────────────────────────────────────────────
 
-.ds-link--icon {
+.nine-am-link--icon {
   display: inline-flex;
   align-items: center;
 }
 
-.ds-link__icon {
+.nine-am-link__icon {
   display: inline-flex;
   align-items: center;
   margin-inline-start: $spacing-03;
@@ -105,7 +105,7 @@
   block-size: 1lh;
 }
 
-.ds-link--lg .ds-link__icon svg {
+.nine-am-link--lg .nine-am-link__icon svg {
   width: rem(20px);
   height: rem(20px);
 }

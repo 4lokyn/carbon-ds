@@ -24,7 +24,7 @@ Components are standalone. Put them in a component's `imports`:
 Multi-part components ship an array so you do not list the pieces one by one:
 
 ```ts
-imports: [...DS_SHELL, ...DS_TABS, ...DS_RADIO_GROUP]
+imports: [...NINE_AM_SHELL, ...NINE_AM_TABS, ...NINE_AM_RADIO_GROUP]
 ```
 
 ## Forms
@@ -54,7 +54,7 @@ readonly emailInvalid = computed(
 ```
 
 ```html
-<ds-input
+<nine-am-input
   label="Email"
   [value]="email()"
   (valueChange)="email.set($event)"
@@ -83,9 +83,9 @@ invalid.
 Values are `model()` signals, so `[(value)]` works:
 
 ```html
-<ds-input label="Cluster name" [(value)]="clusterName" />
-<ds-textarea label="Description" [(value)]="description" [rows]="4" />
-<ds-toggle label="Auto-scaling" [(checked)]="autoScaling" />
+<nine-am-input label="Cluster name" [(value)]="clusterName" />
+<nine-am-textarea label="Description" [(value)]="description" [rows]="4" />
+<nine-am-toggle label="Auto-scaling" [(checked)]="autoScaling" />
 ```
 
 That signal *is* the Signal Forms contract (`FormValueControl<T>` /
@@ -98,14 +98,14 @@ free; a multi-select's select-all has to know the whole set and its filter has
 to know each row's text, and projected elements expose neither.
 
 ```html
-<ds-select label="Region" [(value)]="region">
+<nine-am-select label="Region" [(value)]="region">
   <option value="">Choose a region</option>
   <optgroup label="Europe">
     <option value="eu-west">eu-west</option>
   </optgroup>
-</ds-select>
+</nine-am-select>
 
-<ds-multi-select
+<nine-am-multi-select
   label="Owners"
   selectAll
   filterable
@@ -123,9 +123,9 @@ Whatever the field shows has to be something it can read back. The default is IS
 because `03/04` is two different days depending on who is reading it.
 
 ```html
-<ds-date-picker label="Start date" [(value)]="startDate" />
+<nine-am-date-picker label="Start date" [(value)]="startDate" />
 
-<ds-date-range-picker
+<nine-am-date-range-picker
   label="Reporting period"
   [(start)]="rangeStart"
   [(end)]="rangeEnd"
@@ -172,7 +172,7 @@ submission failing, which is why Carbon asks for both:
 
 ```html
 @if (submitFailed()) {
-  <ds-inline-notification
+  <nine-am-inline-notification
     status="error"
     lowContrast
     heading="Could not create the cluster"
@@ -194,23 +194,23 @@ invisible reason looks broken. Always disable it on submit, to stop a duplicate.
 
 ```html
 <!-- blocks the page: overlay is on by default -->
-<ds-loading description="Loading the dashboard" />
+<nine-am-loading description="Loading the dashboard" />
 
 <!-- in a button row, and it reports the end as well as the middle -->
-<ds-inline-loading [status]="status()" [description]="text()" />
+<nine-am-inline-loading [status]="status()" [description]="text()" />
 ```
 
 **Three rules, all Carbon's, none of them visible in the API:**
 
 - **Only past three seconds.** Below that the indicator is more disruptive than
   the wait.
-- **For a full-screen load, prefer a skeleton.** `ds-table` has one. A skeleton
+- **For a full-screen load, prefer a skeleton.** `nine-am-table` has one. A skeleton
   shows the shape of what is arriving; a spinner shows nothing. Keep the overlay
   for a section that is genuinely blocked — a form mid-submit — not for a page
   that is merely still coming.
 - **One at a time.** Several spinners on one screen read as a broken page.
 
-`ds-inline-loading` is the one you will reach for most, and it is not a small
+`nine-am-inline-loading` is the one you will reach for most, and it is not a small
 spinner: `finished` and `error` swap the ring for an icon and leave the text
 saying what happened. A spinner that just disappears says nothing about whether
 the thing worked.
@@ -221,9 +221,9 @@ belongs to the code that set `finished` in the first place.
 ## Link
 
 ```html
-<a dsLink href="/docs">Carbon docs</a>
-<a dsLink inline href="/docs">inside a sentence</a>
-<a dsLink href="/docs" icon="arrow-up" size="lg">With an icon</a>
+<a nineAmLink href="/docs">Carbon docs</a>
+<a nineAmLink inline href="/docs">inside a sentence</a>
+<a nineAmLink href="/docs" icon="arrow-up" size="lg">With an icon</a>
 ```
 
 **Standalone or inline is the decision.** Standalone sits on its own and is
@@ -240,16 +240,16 @@ element the way Carbon React does. `visited` is opt-in; leave it off unless
 Four things share one surface. Pick by what the tile *does*.
 
 ```html
-<ds-tile>Holds content, does nothing else.</ds-tile>
+<nine-am-tile>Holds content, does nothing else.</nine-am-tile>
 
-<a dsClickableTile href="/clusters/prod-01">A whole tile that navigates</a>
+<a nineAmClickableTile href="/clusters/prod-01">A whole tile that navigates</a>
 
-<ds-selectable-tile [(selected)]="pro" name="plan" value="pro">Pro plan</ds-selectable-tile>
+<nine-am-selectable-tile [(selected)]="pro" name="plan" value="pro">Pro plan</nine-am-selectable-tile>
 
-<ds-expandable-tile [(expanded)]="open">
-  <div dsTileAboveFold>carbon-prod-01 — 3 services</div>
-  <div dsTileBelowFold>Region eu-central-1, last deploy 4 hours ago.</div>
-</ds-expandable-tile>
+<nine-am-expandable-tile [(expanded)]="open">
+  <div nineAmTileAboveFold>carbon-prod-01 — 3 services</div>
+  <div nineAmTileBelowFold>Region eu-central-1, last deploy 4 hours ago.</div>
+</nine-am-expandable-tile>
 ```
 
 **A tile has no border.** That is Carbon's default, not an omission — the border
@@ -265,10 +265,10 @@ unreachable by keyboard. The moment the tile holds anything clickable, set
 `interactive` — then only the chevron is a button:
 
 ```html
-<ds-expandable-tile [(expanded)]="open" interactive>
-  <div dsTileAboveFold>carbon-staging-02</div>
-  <div dsTileBelowFold><a dsLink href="/clusters/staging-02">Open the cluster</a></div>
-</ds-expandable-tile>
+<nine-am-expandable-tile [(expanded)]="open" interactive>
+  <div nineAmTileAboveFold>carbon-staging-02</div>
+  <div nineAmTileBelowFold><a nineAmLink href="/clusters/staging-02">Open the cluster</a></div>
+</nine-am-expandable-tile>
 ```
 
 `collapsedLabel` / `expandedLabel` name that chevron; they only matter in the
@@ -286,7 +286,7 @@ Pick by whether the message waits or arrives: an inline notification sits in the
 flow it concerns and stays until dismissed; a toast comes in over the page.
 
 ```html
-<ds-inline-notification
+<nine-am-inline-notification
   status="error"
   lowContrast
   heading="Deployment failed"
@@ -320,7 +320,7 @@ line in your global stylesheet, not per call:
 
 ```scss
 :root {
-  --ds-toast-inset-block-start: 4rem;   // 48px header + $spacing-05
+  --nine-am-toast-inset-block-start: 4rem;   // 48px header + $spacing-05
 }
 ```
 
@@ -342,14 +342,14 @@ Two Carbon rules that are not enforced in code and should be:
 
 ### When the user has to do something about it
 
-`ds-actionable-notification` is the inline or toast notification with one button
+`nine-am-actionable-notification` is the inline or toast notification with one button
 in it. Because there is something to do, it is a `role="alertdialog"`: it takes
 focus when it appears, keeps it until the action is taken or the notification is
 dismissed, and hands focus back to whatever raised it. Escape closes it.
 
 ```html
 @if (deployFailed()) {
-  <ds-actionable-notification
+  <nine-am-actionable-notification
     status="error"
     heading="Deployment failed"
     subtitle="The cluster rejected the manifest."
@@ -376,18 +376,18 @@ otherwise misleads a screen reader.
 
 ### When it is a condition rather than an event
 
-`ds-callout` is the fourth variant and the quiet one: it loads with the page and
+`nine-am-callout` is the fourth variant and the quiet one: it loads with the page and
 cannot be dismissed. No close button, no timeout, no live region — announcing it
 would interrupt a screen reader that is already reading the page it is part of.
 
 ```html
-<ds-callout
+<nine-am-callout
   status="info"
   heading="This region is read-only"
   subtitle="Resources here can be viewed but not changed."
 >
   <a routerLink="/access">Request write access</a>
-</ds-callout>
+</nine-am-callout>
 ```
 
 Put it next to what it is about — above the form whose fields it constrains,
@@ -400,9 +400,9 @@ tells a screen reader nothing about which access or why, so set `headingId` and
 point at it — this is what Carbon's `titleId` is for:
 
 ```html
-<ds-callout headingId="read-only" heading="This region is read-only" …>
+<nine-am-callout headingId="read-only" heading="This region is read-only" …>
   <a routerLink="/access" aria-describedby="read-only">Request write access</a>
-</ds-callout>
+</nine-am-callout>
 ```
 
 ## Shell
@@ -411,51 +411,51 @@ Composed, not configured. Every piece is optional — an app with no side nav
 simply does not write one.
 
 ```html
-<ds-shell>
-  <ds-shell-header class="ds-theme-inverse">
-    <button dsShellMenuButton aria-label="Open navigation"></button>
-    <a dsShellName href="/" prefix="Acme">Console</a>
+<nine-am-shell>
+  <nine-am-shell-header class="nine-am-theme-inverse">
+    <button nineAmShellMenuButton aria-label="Open navigation"></button>
+    <a nineAmShellName href="/" prefix="Acme">Console</a>
 
-    <nav dsShellNav aria-label="Sections">
-      <a dsShellLink routerLink="/overview" routerLinkActive
+    <nav nineAmShellNav aria-label="Sections">
+      <a nineAmShellLink routerLink="/overview" routerLinkActive
          ariaCurrentWhenActive="page">Overview</a>
 
-      <ds-shell-nav-menu label="More">
-        <a dsShellLink routerLink="/changelog">Changelog</a>
-      </ds-shell-nav-menu>
+      <nine-am-shell-nav-menu label="More">
+        <a nineAmShellLink routerLink="/changelog">Changelog</a>
+      </nine-am-shell-nav-menu>
     </nav>
 
-    <div dsShellActions>
-      <button dsShellAction icon="search" label="Search"></button>
-      <button dsShellAction icon="switcher" activeIcon="close"
+    <div nineAmShellActions>
+      <button nineAmShellAction icon="search" label="Search"></button>
+      <button nineAmShellAction icon="switcher" activeIcon="close"
               label="Switch sites" [active]="panelOpen()"
               (click)="panelOpen.set(!panelOpen())"></button>
     </div>
-  </ds-shell-header>
+  </nine-am-shell-header>
 
-  <ds-shell-side-nav>
-    <div dsShellSideNavItem>
-      <a dsShellLink routerLink="/overview" routerLinkActive
+  <nine-am-shell-side-nav>
+    <div nineAmShellSideNavItem>
+      <a nineAmShellLink routerLink="/overview" routerLinkActive
          ariaCurrentWhenActive="page">Overview</a>
     </div>
 
-    <ds-shell-side-nav-menu label="Settings">
-      <div dsShellSideNavItem><a dsShellLink routerLink="/settings/team">Team</a></div>
-    </ds-shell-side-nav-menu>
-  </ds-shell-side-nav>
+    <nine-am-shell-side-nav-menu label="Settings">
+      <div nineAmShellSideNavItem><a nineAmShellLink routerLink="/settings/team">Team</a></div>
+    </nine-am-shell-side-nav-menu>
+  </nine-am-shell-side-nav>
 
-  <ds-shell-overlay />
+  <nine-am-shell-overlay />
 
-  <ds-shell-panel class="ds-theme-inverse" [(expanded)]="panelOpen">
-    <ds-shell-panel-section label="Foundations">
-      <a dsShellLink href="#">Brand</a>
-    </ds-shell-panel-section>
-  </ds-shell-panel>
+  <nine-am-shell-panel class="nine-am-theme-inverse" [(expanded)]="panelOpen">
+    <nine-am-shell-panel-section label="Foundations">
+      <a nineAmShellLink href="#">Brand</a>
+    </nine-am-shell-panel-section>
+  </nine-am-shell-panel>
 
-  <ds-shell-content withSideNav>
+  <nine-am-shell-content withSideNav>
     <router-outlet />
-  </ds-shell-content>
-</ds-shell>
+  </nine-am-shell-content>
+</nine-am-shell>
 ```
 
 Three things to know:
@@ -464,7 +464,7 @@ Three things to know:
 `ariaCurrentWhenActive="page"` writes the attribute the shell styles against.
 Nested links inside a group get the same highlight.
 
-**`ds-theme-inverse` is what makes the shell dark.** Carbon's header is
+**`nine-am-theme-inverse` is what makes the shell dark.** Carbon's header is
 `$background` like everything else; it looks black in their screenshots because
 the shell sits in a g100 theme zone. Drop the class for a light shell.
 
@@ -477,33 +477,33 @@ Carbon's 2x grid: 16 columns from `lg`, 8 on `md`, 4 on `sm`. The count changing
 is the point — one class, three sensible layouts.
 
 ```html
-<div class="ds-grid ds-grid--row-gap">
-  <div class="ds-col-span-8">Half on a laptop, all of a tablet</div>
-  <div class="ds-col-span-8">…</div>
+<div class="nine-am-grid nine-am-grid--row-gap">
+  <div class="nine-am-col-span-8">Half on a laptop, all of a tablet</div>
+  <div class="nine-am-col-span-8">…</div>
 </div>
 ```
 
 Breakpoint-scoped spans read "from here up":
 
 ```html
-<div class="ds-col-span-4 ds-col-md-2 ds-col-lg-8">…</div>
+<div class="nine-am-col-span-4 nine-am-col-md-2 nine-am-col-lg-8">…</div>
 ```
 
 Modifiers: `--full-width` (ignore the max width), `--condensed` (1px gutters),
-`--narrow` (no gutters), `--row-gap`. Nest with `ds-grid__subgrid` so a column's
+`--narrow` (no gutters), `--row-gap`. Nest with `nine-am-grid__subgrid` so a column's
 children line up with the page rather than re-dividing their own space.
 
-Aspect ratios size a box from its column width: `ds-aspect-16x9`, `2x1`, `4x3`,
+Aspect ratios size a box from its column width: `nine-am-aspect-16x9`, `2x1`, `4x3`,
 `3x2`, `1x1` and their portrait flips.
 
 ## Icons
 
-`ds-icon` takes a name from an inlined set, and is always `aria-hidden` — the
+`nine-am-icon` takes a name from an inlined set, and is always `aria-hidden` — the
 thing around it supplies the name.
 
 ```html
-<button dsButton iconOnly aria-label="Settings">
-  <ds-icon name="settings" />
+<button nineAmButton iconOnly aria-label="Settings">
+  <nine-am-icon name="settings" />
 </button>
 ```
 
@@ -524,17 +524,17 @@ private readonly theme = inject(ThemeService);
 this.theme.set('g100');
 ```
 
-Any region can run a different theme with `ds-theme-inverse`, because Carbon
+Any region can run a different theme with `nine-am-theme-inverse`, because Carbon
 emits its custom properties on any selector rather than only on `:root`.
 
 ## Two things that will bite
 
 **Never `@use '@carbon/*'` from a component.** Component styles start with
-`@use 'ds' as *;`. One facade means swapping the token source touches one file.
+`@use 'nine-am' as *;`. One facade means swapping the token source touches one file.
 
 And specifically never `@use '@carbon/styles/scss/grid'` — it ends with a bare
 `@include`, so merely using it emits Carbon's entire grid. Reaching it through
 the facade once took the bundle from 786 kB to 1.3 MB.
 
 **Class names are the public API.** `ViewEncapsulation.None` everywhere with a
-`ds-` prefix, so consumers can override. Do not add an unprefixed class.
+`nine-am-` prefix, so consumers can override. Do not add an unprefixed class.

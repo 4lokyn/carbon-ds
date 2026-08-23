@@ -9,7 +9,7 @@
 @use './styles/fonts';
 @use './styles/themes';
 @use '@carbon/styles/scss/reset';
-@use './styles/ds' as *;
+@use './styles/nine-am' as *;
 @use './styles/grid' as *;
 
 @include reset.reset;
@@ -61,14 +61,14 @@ pre {
 // <body>, outside the shell, and cannot see that there is a header at all.
 // An app with no header leaves it alone and gets the 1rem default.
 :root {
-  --ds-toast-inset-block-start: #{rem(64px)};
+  --nine-am-toast-inset-block-start: #{rem(64px)};
 }
 
 // The one global utility class. Components reach for the visually-hidden mixin
 // directly; this exists for the cases where visibility is toggled by a binding
 // (an icon-only checkbox label, a table's select-all) and a mixin can't be
 // switched on and off from a template.
-.ds-visually-hidden {
+.nine-am-visually-hidden {
   @include visually-hidden;
 }
 

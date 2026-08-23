@@ -6,7 +6,7 @@ import { Link } from './link';
   imports: [Link],
   template: `
     <a
-      dsLink
+      nineAmLink
       href="/docs"
       [inline]="inline()"
       [disabled]="disabled()"
@@ -43,7 +43,7 @@ describe('Link', () => {
   it('stays a real anchor', () => {
     const { link } = setup();
 
-    // The whole reason this is an attribute and not <ds-link>: the href, the
+    // The whole reason this is an attribute and not <nine-am-link>: the href, the
     // middle-click, the status bar and the "link" role all come free.
     expect(link().tagName).toBe('A');
     expect(link().getAttribute('href')).toBe('/docs');
@@ -76,11 +76,11 @@ describe('Link', () => {
   it('flows with the sentence when inline', () => {
     const { link, apply, host } = setup();
 
-    expect(link().classList).not.toContain('ds-link--inline');
+    expect(link().classList).not.toContain('nine-am-link--inline');
 
     apply(() => host.inline.set(true));
 
-    expect(link().classList).toContain('ds-link--inline');
+    expect(link().classList).toContain('nine-am-link--inline');
   });
 
   it('leaves the visited colour off unless asked', () => {
@@ -88,10 +88,10 @@ describe('Link', () => {
 
     // In an application most links go somewhere you have already been, so
     // purple everywhere carries no information.
-    expect(link().classList).not.toContain('ds-link--visited');
+    expect(link().classList).not.toContain('nine-am-link--visited');
 
     apply(() => host.visited.set(true));
 
-    expect(link().classList).toContain('ds-link--visited');
+    expect(link().classList).toContain('nine-am-link--visited');
   });
 });

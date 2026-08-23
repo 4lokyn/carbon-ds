@@ -31,7 +31,7 @@ export type TabsSize = 'sm' | 'md' | 'lg';
  * minors. It is contained to these four classes on purpose.
  */
 @Component({
-  selector: '[dsTabs]',
+  selector: '[nineAmTabs]',
   encapsulation: ViewEncapsulation.None,
   template: '<ng-content />',
   styleUrl: './tabs.scss',
@@ -64,12 +64,12 @@ export class DsTabs {
 
   protected readonly hostClass = computed(() => {
     const variant = this.variant();
-    const classes = ['ds-tabs', `ds-tabs--${variant}`];
+    const classes = ['nine-am-tabs', `nine-am-tabs--${variant}`];
 
-    classes.push(`ds-tabs--${this.size() ?? (variant === 'contained' ? 'lg' : 'md')}`);
+    classes.push(`nine-am-tabs--${this.size() ?? (variant === 'contained' ? 'lg' : 'md')}`);
 
     if (this.fullWidth()) {
-      classes.push('ds-tabs--full-width');
+      classes.push('nine-am-tabs--full-width');
     }
 
     return classes.join(' ');
@@ -77,7 +77,7 @@ export class DsTabs {
 }
 
 @Component({
-  selector: '[dsTabList]',
+  selector: '[nineAmTabList]',
   encapsulation: ViewEncapsulation.None,
   template: '<ng-content />',
   hostDirectives: [
@@ -87,21 +87,21 @@ export class DsTabs {
       outputs: ['selectedTabChange'],
     },
   ],
-  host: { class: 'ds-tab-list' },
+  host: { class: 'nine-am-tab-list' },
 })
 export class DsTabList {}
 
 @Component({
-  selector: '[dsTab]',
+  selector: '[nineAmTab]',
   encapsulation: ViewEncapsulation.None,
   template: '<ng-content />',
   hostDirectives: [{ directive: Tab, inputs: ['value', 'disabled'] }],
   host: {
-    class: 'ds-tab',
+    class: 'nine-am-tab',
     // Read straight off Aria's signals — it already knows what is selected, so
     // we never keep a second copy of that state.
-    '[class.ds-tab--selected]': 'tab.selected()',
-    '[class.ds-tab--disabled]': 'tab.disabled()',
+    '[class.nine-am-tab--selected]': 'tab.selected()',
+    '[class.nine-am-tab--disabled]': 'tab.disabled()',
   },
 })
 export class DsTab {
@@ -109,13 +109,13 @@ export class DsTab {
 }
 
 @Component({
-  selector: '[dsTabPanel]',
+  selector: '[nineAmTabPanel]',
   encapsulation: ViewEncapsulation.None,
   template: '<ng-content />',
   hostDirectives: [{ directive: TabPanel, inputs: ['value'] }],
   host: {
-    class: 'ds-tab-panel',
-    '[class.ds-tab-panel--hidden]': '!panel.visible()',
+    class: 'nine-am-tab-panel',
+    '[class.nine-am-tab-panel--hidden]': '!panel.visible()',
   },
 })
 export class DsTabPanel {
@@ -123,4 +123,4 @@ export class DsTabPanel {
 }
 
 /** Import this in a consumer instead of the four classes one by one. */
-export const DS_TABS = [DsTabs, DsTabList, DsTab, DsTabPanel] as const;
+export const NINE_AM_TABS = [DsTabs, DsTabList, DsTab, DsTabPanel] as const;

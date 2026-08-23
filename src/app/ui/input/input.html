@@ -2,16 +2,16 @@
      the field box. Same DOM, different CSS — a second template would be two
      places to fix every label bug. -->
 <label
-  class="ds-input__label"
-  [class.ds-visually-hidden]="hideLabel()"
+  class="nine-am-input__label"
+  [class.nine-am-visually-hidden]="hideLabel()"
   [for]="inputId"
 >
   {{ label() }}
 </label>
 
-<div class="ds-input__field-wrapper">
+<div class="nine-am-input__field-wrapper">
   <input
-    class="ds-input__field"
+    class="nine-am-input__field"
     [id]="inputId"
     [type]="effectiveType()"
     [value]="value()"
@@ -25,19 +25,19 @@
   />
 
   @if (statusIcon(); as icon) {
-    <ds-icon class="ds-input__status" [name]="icon" />
+    <nine-am-icon class="nine-am-input__status" [name]="icon" />
   }
 
   @if (isPassword()) {
     <button
       type="button"
-      class="ds-input__reveal"
+      class="nine-am-input__reveal"
       [disabled]="disabled()"
       [attr.aria-label]="revealed() ? hidePasswordLabel() : showPasswordLabel()"
       [attr.aria-pressed]="revealed()"
       (click)="toggleReveal()"
     >
-      <ds-icon [name]="revealed() ? 'view-off' : 'view'" />
+      <nine-am-icon [name]="revealed() ? 'view-off' : 'view'" />
     </button>
   }
 
@@ -45,7 +45,7 @@
        this the message would sit flush against the value with nothing
        separating them. -->
   @if (fluid() && message()) {
-    <div class="ds-input__divider"></div>
+    <div class="nine-am-input__divider"></div>
   }
 </div>
 
@@ -53,7 +53,7 @@
      rather than stacking them: stacking moves every field below this one the
      instant it goes invalid. -->
 @if (message(); as text) {
-  <div class="ds-input__requirement" [id]="messageId">{{ text }}</div>
+  <div class="nine-am-input__requirement" [id]="messageId">{{ text }}</div>
 } @else if (helperText()) {
-  <div class="ds-input__helper" [id]="helperId">{{ helperText() }}</div>
+  <div class="nine-am-input__helper" [id]="helperId">{{ helperText() }}</div>
 }

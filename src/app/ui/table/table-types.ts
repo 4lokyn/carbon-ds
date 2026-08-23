@@ -51,7 +51,7 @@ export interface DsColumn<T> {
    * Template for cells that need markup. Receives the row as `$implicit`:
    *
    *     <ng-template #statusCell let-row>
-   *       <ds-tag [color]="hue(row)">{{ row.status }}</ds-tag>
+   *       <nine-am-tag [color]="hue(row)">{{ row.status }}</nine-am-tag>
    *     </ng-template>
    */
   readonly cell?: TemplateRef<{ $implicit: T }>;

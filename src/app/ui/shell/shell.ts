@@ -16,7 +16,7 @@ import type { IconName } from '../icon/icons';
 /**
  * Carbon UI Shell.
  *
- * Composed rather than configured: `ds-shell` holds the one piece of state the
+ * Composed rather than configured: `nine-am-shell` holds the one piece of state the
  * parts have to agree on — whether the side nav is open — and everything else
  * is a separate element the caller arranges. A single component with twenty
  * inputs would have to guess every layout; this way an app with no side nav
@@ -28,10 +28,10 @@ import type { IconName } from '../icon/icons';
  * At `lg` and up the side nav is part of the page and the hamburger goes away.
  */
 @Component({
-  selector: 'ds-shell',
+  selector: 'nine-am-shell',
   encapsulation: ViewEncapsulation.None,
   styleUrl: './shell.scss',
-  host: { class: 'ds-shell' },
+  host: { class: 'nine-am-shell' },
   template: '<ng-content />',
 })
 export class Shell {
@@ -48,10 +48,10 @@ export class Shell {
 
 /** The fixed 48px bar. */
 @Component({
-  selector: 'ds-shell-header',
+  selector: 'nine-am-shell-header',
   encapsulation: ViewEncapsulation.None,
   template: '<ng-content />',
-  host: { class: 'ds-shell-header', role: 'banner' },
+  host: { class: 'nine-am-shell-header', role: 'banner' },
 })
 export class ShellHeader {}
 
@@ -60,17 +60,17 @@ export class ShellHeader {}
  * control that opens it would have nothing to do.
  */
 @Component({
-  selector: 'button[dsShellMenuButton]',
+  selector: 'button[nineAmShellMenuButton]',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
   host: {
-    class: 'ds-shell-header__action ds-shell-header__menu',
+    class: 'nine-am-shell-header__action nine-am-shell-header__menu',
     type: 'button',
     '[attr.aria-label]': 'label()',
     '[attr.aria-expanded]': 'shell.sideNavOpen()',
     '(click)': 'shell.toggleSideNav()',
   },
-  template: `<ds-icon [name]="shell.sideNavOpen() ? 'close' : 'menu'" [size]="20" />`,
+  template: `<nine-am-icon [name]="shell.sideNavOpen() ? 'close' : 'menu'" [size]="20" />`,
 })
 export class ShellMenuButton {
   readonly label = input('Open menu');
@@ -83,12 +83,12 @@ export class ShellMenuButton {
  * a heading here would put a second h1 on every page.
  */
 @Component({
-  selector: 'a[dsShellName]',
+  selector: 'a[nineAmShellName]',
   encapsulation: ViewEncapsulation.None,
-  host: { class: 'ds-shell-header__name' },
+  host: { class: 'nine-am-shell-header__name' },
   template: `
     @if (prefix()) {
-      <span class="ds-shell-header__name-prefix">{{ prefix() }}</span>
+      <span class="nine-am-shell-header__name-prefix">{{ prefix() }}</span>
     }
     <ng-content />
   `,
@@ -100,10 +100,10 @@ export class ShellName {
 
 /** Header nav. Hidden below `lg`, where the side nav takes over. */
 @Component({
-  selector: 'nav[dsShellNav]',
+  selector: 'nav[nineAmShellNav]',
   encapsulation: ViewEncapsulation.None,
   template: '<ng-content />',
-  host: { class: 'ds-shell-header__nav' },
+  host: { class: 'nine-am-shell-header__nav' },
 })
 export class ShellNav {}
 
@@ -116,28 +116,28 @@ export class ShellNav {}
  * without the race, and it covers tabbing away as well as clicking away.
  */
 @Component({
-  selector: 'ds-shell-nav-menu',
+  selector: 'nine-am-shell-nav-menu',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
   host: {
-    class: 'ds-shell-header__submenu',
+    class: 'nine-am-shell-header__submenu',
     '(keydown.escape)': 'expanded.set(false)',
     '(focusout)': 'onFocusOut($event)',
   },
   template: `
     <button
       type="button"
-      class="ds-shell-header__submenu-title"
+      class="nine-am-shell-header__submenu-title"
       [attr.aria-expanded]="expanded()"
       (click)="expanded.set(!expanded())"
     >
       {{ label() }}
-      <span class="ds-shell-header__submenu-arrow">
-        <ds-icon name="chevron-down" />
+      <span class="nine-am-shell-header__submenu-arrow">
+        <nine-am-icon name="chevron-down" />
       </span>
     </button>
 
-    <div class="ds-shell-header__submenu-list" role="list">
+    <div class="nine-am-shell-header__submenu-list" role="list">
       <ng-content />
     </div>
   `,
@@ -162,10 +162,10 @@ export class ShellNavMenu {
 
 /** Right-hand cluster of icon actions. */
 @Component({
-  selector: 'div[dsShellActions]',
+  selector: 'div[nineAmShellActions]',
   encapsulation: ViewEncapsulation.None,
   template: '<ng-content />',
-  host: { class: 'ds-shell-header__global' },
+  host: { class: 'nine-am-shell-header__global' },
 })
 export class ShellActions {}
 
@@ -175,7 +175,7 @@ export class ShellActions {}
  * a class only changes the colour.
  */
 @Directive({
-  selector: 'a[dsShellLink]',
+  selector: 'a[nineAmShellLink]',
   host: {
     '[class]': 'hostClass()',
     '[attr.aria-current]': 'current() ? "page" : null',
@@ -185,7 +185,7 @@ export class ShellLink {
   readonly current = input(false, { transform: booleanAttribute });
 
   protected readonly hostClass = computed(() =>
-    this.current() ? 'ds-shell-link ds-shell-link--current' : 'ds-shell-link',
+    this.current() ? 'nine-am-shell-link nine-am-shell-link--current' : 'nine-am-shell-link',
   );
 }
 
@@ -198,7 +198,7 @@ export class ShellLink {
  * width — which is why it does not participate in the hamburger at all.
  */
 @Component({
-  selector: 'ds-shell-side-nav',
+  selector: 'nine-am-shell-side-nav',
   encapsulation: ViewEncapsulation.None,
   styleUrl: './shell-side-nav.scss',
   host: {
@@ -212,7 +212,7 @@ export class ShellLink {
          nested <li> in an Angular template the way Carbon writes it in JSX —
          the parser reparents them. Explicit roles give the same semantics with
          no implied end tags. -->
-    <div class="ds-shell-side-nav__items" role="list">
+    <div class="nine-am-shell-side-nav__items" role="list">
       <ng-content />
     </div>
   `,
@@ -226,14 +226,14 @@ export class ShellSideNav {
   private readonly shell = inject(Shell);
 
   protected readonly hostClass = computed(() => {
-    const classes = ['ds-shell-side-nav'];
+    const classes = ['nine-am-shell-side-nav'];
 
     classes.push(
-      this.rail() ? 'ds-shell-side-nav--rail' : 'ds-shell-side-nav--ux',
+      this.rail() ? 'nine-am-shell-side-nav--rail' : 'nine-am-shell-side-nav--ux',
     );
 
     if (this.shell.sideNavOpen()) {
-      classes.push('ds-shell-side-nav--expanded');
+      classes.push('nine-am-shell-side-nav--expanded');
     }
 
     return classes.join(' ');
@@ -250,24 +250,24 @@ export class ShellSideNav {
  * still rendered.
  */
 @Component({
-  selector: 'ds-shell-side-nav-menu',
+  selector: 'nine-am-shell-side-nav-menu',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
-  host: { class: 'ds-shell-side-nav__item', role: 'listitem' },
+  host: { class: 'nine-am-shell-side-nav__item', role: 'listitem' },
   template: `
     <button
       type="button"
-      class="ds-shell-side-nav__submenu"
+      class="nine-am-shell-side-nav__submenu"
       [attr.aria-expanded]="expanded()"
       (click)="expanded.set(!expanded())"
     >
-      <span class="ds-shell-side-nav__submenu-text">{{ label() }}</span>
-      <span class="ds-shell-side-nav__submenu-chevron">
-        <ds-icon name="chevron-down" />
+      <span class="nine-am-shell-side-nav__submenu-text">{{ label() }}</span>
+      <span class="nine-am-shell-side-nav__submenu-chevron">
+        <nine-am-icon name="chevron-down" />
       </span>
     </button>
 
-    <div class="ds-shell-side-nav__menu" role="list">
+    <div class="nine-am-shell-side-nav__menu" role="list">
       <ng-content />
     </div>
   `,
@@ -286,17 +286,17 @@ export class ShellSideNavMenu {
  * icon-only control here.
  */
 @Component({
-  selector: 'button[dsShellAction]',
+  selector: 'button[nineAmShellAction]',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
   host: {
-    class: 'ds-shell-header__action',
+    class: 'nine-am-shell-header__action',
     type: 'button',
     '[attr.aria-label]': 'label()',
-    '[class.ds-shell-header__action--active]': 'active()',
+    '[class.nine-am-shell-header__action--active]': 'active()',
     '[attr.aria-pressed]': 'active() ? true : null',
   },
-  template: `<ds-icon [name]="shown()" [size]="20" />`,
+  template: `<nine-am-icon [name]="shown()" [size]="20" />`,
 })
 export class ShellAction {
   readonly icon = input.required<IconName>();
@@ -323,13 +323,13 @@ export class ShellAction {
  * the heading would run the full width.
  */
 @Component({
-  selector: 'ds-shell-panel-section',
+  selector: 'nine-am-shell-panel-section',
   encapsulation: ViewEncapsulation.None,
-  host: { class: 'ds-shell-panel__section' },
+  host: { class: 'nine-am-shell-panel__section' },
   template: `
     @if (label()) {
-      <p class="ds-shell-panel__section-title">{{ label() }}</p>
-      <hr class="ds-shell-panel__divider" />
+      <p class="nine-am-shell-panel__section-title">{{ label() }}</p>
+      <hr class="nine-am-shell-panel__divider" />
     }
     <ng-content />
   `,
@@ -340,10 +340,10 @@ export class ShellPanelSection {
 
 /** A row in the side nav. Any element — see the note on the list container. */
 @Component({
-  selector: '[dsShellSideNavItem]',
+  selector: '[nineAmShellSideNavItem]',
   encapsulation: ViewEncapsulation.None,
   template: '<ng-content />',
-  host: { class: 'ds-shell-side-nav__item', role: 'listitem' },
+  host: { class: 'nine-am-shell-side-nav__item', role: 'listitem' },
 })
 export class ShellSideNavItem {}
 
@@ -355,7 +355,7 @@ export class ShellSideNavItem {}
  * below its own host.
  */
 @Component({
-  selector: 'ds-shell-overlay',
+  selector: 'nine-am-shell-overlay',
   encapsulation: ViewEncapsulation.None,
   template: '',
   host: {
@@ -378,8 +378,8 @@ export class ShellOverlay {
 
   protected readonly hostClass = computed(() =>
     this.shell.sideNavOpen()
-      ? 'ds-shell-overlay ds-shell-overlay--visible'
-      : 'ds-shell-overlay',
+      ? 'nine-am-shell-overlay nine-am-shell-overlay--visible'
+      : 'nine-am-shell-overlay',
   );
 }
 
@@ -393,7 +393,7 @@ export class ShellOverlay {
  * zero width.
  */
 @Component({
-  selector: 'ds-shell-panel',
+  selector: 'nine-am-shell-panel',
   encapsulation: ViewEncapsulation.None,
   template: '<ng-content />',
   host: {
@@ -406,8 +406,8 @@ export class ShellPanel {
 
   protected readonly hostClass = computed(() =>
     this.expanded()
-      ? 'ds-shell-panel ds-shell-panel--expanded'
-      : 'ds-shell-panel',
+      ? 'nine-am-shell-panel nine-am-shell-panel--expanded'
+      : 'nine-am-shell-panel',
   );
 }
 
@@ -422,7 +422,7 @@ export class ShellPanel {
  * the side nav. Owning the element means nothing else can write to it.
  */
 @Component({
-  selector: 'ds-shell-content',
+  selector: 'nine-am-shell-content',
   encapsulation: ViewEncapsulation.None,
   template: '<ng-content />',
   host: { '[class]': 'hostClass()', role: 'main' },
@@ -433,13 +433,13 @@ export class ShellContent {
 
   protected readonly hostClass = computed(() =>
     this.withSideNav()
-      ? 'ds-shell-content ds-shell-content--with-side-nav'
-      : 'ds-shell-content',
+      ? 'nine-am-shell-content nine-am-shell-content--with-side-nav'
+      : 'nine-am-shell-content',
   );
 }
 
 /** Import this instead of the nine pieces one by one. */
-export const DS_SHELL = [
+export const NINE_AM_SHELL = [
   Shell,
   ShellHeader,
   ShellMenuButton,

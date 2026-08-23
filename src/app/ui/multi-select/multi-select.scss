@@ -1,20 +1,20 @@
-@use 'ds' as *;
+@use 'nine-am' as *;
 
-.ds-multi-select {
+.nine-am-multi-select {
   display: flex;
   width: 100%;
   flex-direction: column;
   align-items: flex-start;
 }
 
-.ds-multi-select__label {
+.nine-am-multi-select__label {
   @include field-label;
 }
 
 // The bordered box. Carbon puts the fill and the bottom rule here rather than on
 // the button inside, so the focus ring can sit on the button without doubling up
 // with the border.
-.ds-multi-select__box {
+.nine-am-multi-select__box {
   position: relative;
   width: 100%;
   border-block-end: rem(1px) solid $border-strong-01;
@@ -28,11 +28,11 @@
 
 // Open, the rule under the field softens — the menu below now supplies the
 // visual edge, and two hard lines stacked read as a seam.
-.ds-multi-select--open .ds-multi-select__box {
+.nine-am-multi-select--open .nine-am-multi-select__box {
   border-block-end-color: $border-subtle-01;
 }
 
-.ds-multi-select__field {
+.nine-am-multi-select__field {
   @include unstyled-button;
   @include type-style('body-compact-01');
 
@@ -56,29 +56,29 @@
 }
 
 @each $name, $height in $field-heights {
-  .ds-multi-select--#{$name} {
-    .ds-multi-select__field {
+  .nine-am-multi-select--#{$name} {
+    .nine-am-multi-select__field {
       height: $height;
     }
   }
 
   // Off the menu's own modifier, not the host's — see the note in the template.
-  .ds-multi-select__menu--#{$name} {
+  .nine-am-multi-select__menu--#{$name} {
     // The filter is a field and takes the field height. `field-surface` supplies
     // the fill, the rule and the padding but deliberately not a height — every
     // other control sets that from the size scale, and this one has to as well
     // or the placeholder sits in a collapsed box.
-    .ds-multi-select__filter {
+    .nine-am-multi-select__filter {
       height: $height;
     }
 
     // 5.5 rows, not 5 or 6. The half row is the point: a list cut mid-item is
     // the only affordance saying there is more below it.
-    .ds-multi-select__list {
+    .nine-am-multi-select__list {
       max-height: calc(#{$height} * 5.5);
     }
 
-    .ds-multi-select__item {
+    .nine-am-multi-select__item {
       min-height: $height;
     }
   }
@@ -86,7 +86,7 @@
 
 // The count. A pill, not the values themselves — a field is one line and five
 // labels are not.
-.ds-multi-select__count {
+.nine-am-multi-select__count {
   @include type-style('label-01');
 
   display: flex;
@@ -101,13 +101,13 @@
   color: $text-inverse;
 }
 
-.ds-multi-select__value {
+.nine-am-multi-select__value {
   @include truncate;
 
   flex: 1 1 auto;
 }
 
-.ds-multi-select__chevron {
+.nine-am-multi-select__chevron {
   position: absolute;
   color: $icon-primary;
   inset-inline-end: $spacing-04;
@@ -115,11 +115,11 @@
   transition: transform $field-transition;
 }
 
-.ds-multi-select--open .ds-multi-select__chevron {
+.nine-am-multi-select--open .nine-am-multi-select__chevron {
   transform: rotate(180deg);
 }
 
-.ds-multi-select__status {
+.nine-am-multi-select__status {
   @include field-status-icon;
 
   // Left of the chevron rather than under it.
@@ -128,26 +128,26 @@
   inset-block-start: 50%;
 }
 
-.ds-multi-select--invalid .ds-multi-select__status {
+.nine-am-multi-select--invalid .nine-am-multi-select__status {
   @include field-status-icon-invalid;
 }
 
-.ds-multi-select--warn .ds-multi-select__status {
+.nine-am-multi-select--warn .nine-am-multi-select__status {
   @include field-status-icon-warn;
 }
 
-.ds-multi-select--invalid .ds-multi-select__box {
+.nine-am-multi-select--invalid .nine-am-multi-select__box {
   @include field-invalid;
 }
 
 // ── The menu ────────────────────────────────────────────────────────────────
 
-.ds-multi-select__menu {
+.nine-am-multi-select__menu {
   background-color: $layer-01;
   box-shadow: 0 rem(2px) rem(6px) $shadow;
 }
 
-.ds-multi-select__filter {
+.nine-am-multi-select__filter {
   @include field-surface;
 
   border-block-end: rem(1px) solid $border-subtle-01;
@@ -157,11 +157,11 @@
   }
 }
 
-.ds-multi-select__list {
+.nine-am-multi-select__list {
   overflow-y: auto;
 }
 
-.ds-multi-select__item {
+.nine-am-multi-select__item {
   @include type-style('body-compact-01');
 
   position: relative;
@@ -181,18 +181,18 @@
 
 // `data-active` is the roving focus, `data-selected` the value — the primitive's
 // own attributes, the same contract the date picker styles against.
-.ds-multi-select__item[data-active] {
+.nine-am-multi-select__item[data-active] {
   @include field-focus;
 
   color: $text-primary;
 }
 
-.ds-multi-select__item[data-selected] {
+.nine-am-multi-select__item[data-selected] {
   background-color: $layer-selected-01;
   color: $text-primary;
 }
 
-.ds-multi-select__item[data-disabled] {
+.nine-am-multi-select__item[data-disabled] {
   color: $text-disabled;
   cursor: not-allowed;
   pointer-events: none;
@@ -200,26 +200,26 @@
 
 // A divider between rows, drawn on the row itself rather than as a gap, so the
 // hover fill runs edge to edge.
-.ds-multi-select__item + .ds-multi-select__item {
+.nine-am-multi-select__item + .nine-am-multi-select__item {
   border-block-start: rem(1px) solid $border-subtle-01;
 }
 
-.ds-multi-select__item--select-all {
+.nine-am-multi-select__item--select-all {
   border-block-end: rem(1px) solid $border-subtle-01;
   font-weight: 600;
 }
 
 // The checkbox is decoration here: the row owns the click, and a checkbox that
 // also handled it would toggle twice.
-.ds-multi-select__check {
+.nine-am-multi-select__check {
   pointer-events: none;
 }
 
-.ds-multi-select__item-text {
+.nine-am-multi-select__item-text {
   @include truncate;
 }
 
-.ds-multi-select__empty {
+.nine-am-multi-select__empty {
   @include type-style('body-compact-01');
 
   padding: $spacing-05;
@@ -228,53 +228,53 @@
 
 // ── Messages / states ───────────────────────────────────────────────────────
 
-.ds-multi-select__helper {
+.nine-am-multi-select__helper {
   @include field-helper-text;
 }
 
-.ds-multi-select__requirement {
+.nine-am-multi-select__requirement {
   @include field-requirement;
 }
 
-.ds-multi-select--invalid .ds-multi-select__requirement {
+.nine-am-multi-select--invalid .nine-am-multi-select__requirement {
   @include field-requirement-invalid;
 }
 
-.ds-multi-select--disabled {
-  .ds-multi-select__box,
-  .ds-multi-select__box:hover {
+.nine-am-multi-select--disabled {
+  .nine-am-multi-select__box,
+  .nine-am-multi-select__box:hover {
     border-block-end-color: transparent;
     background-color: $field-01;
   }
 
-  .ds-multi-select__label,
-  .ds-multi-select__helper {
+  .nine-am-multi-select__label,
+  .nine-am-multi-select__helper {
     color: $text-disabled;
   }
 
-  .ds-multi-select__chevron {
+  .nine-am-multi-select__chevron {
     color: $icon-disabled;
   }
 
-  .ds-multi-select__count {
+  .nine-am-multi-select__count {
     background-color: $layer-01;
     color: $text-disabled;
   }
 }
 
-.ds-multi-select--readonly:not(.ds-multi-select--disabled) {
-  .ds-multi-select__box,
-  .ds-multi-select__box:hover {
+.nine-am-multi-select--readonly:not(.nine-am-multi-select--disabled) {
+  .nine-am-multi-select__box,
+  .nine-am-multi-select__box:hover {
     border-block-end-color: $border-subtle-01;
     background-color: transparent;
   }
 
-  .ds-multi-select__field {
+  .nine-am-multi-select__field {
     color: $text-primary;
     cursor: default;
   }
 
-  .ds-multi-select__chevron {
+  .nine-am-multi-select__chevron {
     color: $icon-disabled;
   }
 }

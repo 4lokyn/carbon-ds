@@ -23,7 +23,7 @@ export class ModalService {
   private readonly dialog = inject(Dialog);
 
   /**
-   * `size` is here rather than on `ds-modal` because the width belongs to the
+   * `size` is here rather than on `nine-am-modal` because the width belongs to the
    * overlay pane, which is the CDK's element and sits above the component in the
    * tree. A `size` input on the modal could not reach it.
    */
@@ -34,7 +34,7 @@ export class ModalService {
     const { size = 'md', ...dialogConfig } = config ?? {};
 
     return this.dialog.open<R, D, C>(component, {
-      panelClass: ['ds-modal-panel', `ds-modal-panel--${size}`],
+      panelClass: ['nine-am-modal-panel', `nine-am-modal-panel--${size}`],
 
       // Carbon's spec: focus lands on the first interactive control, not on the
       // container. 'first-tabbable' is what does that.

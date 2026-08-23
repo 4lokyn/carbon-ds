@@ -13,14 +13,14 @@ let nextId = 0;
 
 /**
  * Carbon pagination. Deliberately a sibling of the table rather than part of it:
- * the caller owns the slice, so the same `ds-table` serves a client-side array and
+ * the caller owns the slice, so the same `nine-am-table` serves a client-side array and
  * a server-paged endpoint with no mode switch.
  *
  * `page` is 1-based, matching what it displays. Converting to an offset is the
  * caller's job and is one line: `(page - 1) * pageSize`.
  */
 @Component({
-  selector: 'ds-pagination',
+  selector: 'nine-am-pagination',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
   templateUrl: './pagination.html',
@@ -84,8 +84,8 @@ export class Pagination {
   /** Shown in place of the page select when the page count is unknown. */
   readonly pageLabel = input<(page: number) => string>((page) => `Page ${page}`);
 
-  protected readonly sizeId = `ds-pagination-size-${nextId}`;
-  protected readonly pageId = `ds-pagination-page-${nextId++}`;
+  protected readonly sizeId = `nine-am-pagination-size-${nextId}`;
+  protected readonly pageId = `nine-am-pagination-page-${nextId++}`;
 
   protected readonly countKnown = computed(() => this.total() !== null);
 
@@ -118,10 +118,10 @@ export class Pagination {
   );
 
   protected readonly hostClass = computed(() => {
-    const classes = ['ds-pagination', `ds-pagination--${this.size()}`];
+    const classes = ['nine-am-pagination', `nine-am-pagination--${this.size()}`];
 
     if (this.disabled()) {
-      classes.push('ds-pagination--disabled');
+      classes.push('nine-am-pagination--disabled');
     }
 
     return classes.join(' ');

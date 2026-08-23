@@ -14,7 +14,7 @@ import { DismissibleNotification, type NotificationVariant } from './notificatio
  * is not part of the layout it covers; keep the message inside two lines.
  */
 @Component({
-  selector: 'ds-toast-notification',
+  selector: 'nine-am-toast-notification',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
   templateUrl: './toast-notification.html',

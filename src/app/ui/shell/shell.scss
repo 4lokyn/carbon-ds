@@ -1,4 +1,4 @@
-@use 'ds' as *;
+@use 'nine-am' as *;
 
 // Carbon sizes the shell in "mini units" of 8px rather than the spacing scale.
 // The two that matter: the header is 6 of them and the side nav is 32.
@@ -6,13 +6,13 @@ $shell-header-height: rem(48px);
 $shell-side-nav-width: rem(256px);
 $shell-rail-width: rem(48px);
 
-.ds-shell {
+.nine-am-shell {
   display: block;
 }
 
 // ── Header ──────────────────────────────────────────────────────────────────
 
-.ds-shell-header {
+.nine-am-shell-header {
   position: fixed;
   z-index: 8000;
   display: flex;
@@ -26,7 +26,7 @@ $shell-rail-width: rem(48px);
 
 // A square the height of the bar. The transparent 1px border is what lets the
 // focus border appear without the button changing size.
-.ds-shell-header__action {
+.nine-am-shell-header__action {
   @include unstyled-button;
 
   display: inline-flex;
@@ -58,13 +58,13 @@ $shell-rail-width: rem(48px);
 }
 
 // The hamburger only exists while the side nav is not permanent.
-.ds-shell-header__menu {
+.nine-am-shell-header__menu {
   @include breakpoint(lg) {
     display: none;
   }
 }
 
-.ds-shell-header__name {
+.nine-am-shell-header__name {
   @include type-style('body-compact-01');
 
   display: flex;
@@ -86,14 +86,14 @@ $shell-rail-width: rem(48px);
   }
 }
 
-.ds-shell-header__name-prefix {
+.nine-am-shell-header__name-prefix {
   margin-inline-end: rem(4px);
   font-weight: 400;
 }
 
 // Header nav is the large-screen half of the pair — below `lg` the side nav
 // carries the same links instead.
-.ds-shell-header__nav {
+.nine-am-shell-header__nav {
   position: relative;
   display: none;
   height: 100%;
@@ -117,7 +117,7 @@ $shell-rail-width: rem(48px);
   }
 }
 
-.ds-shell-header__nav .ds-shell-link {
+.nine-am-shell-header__nav .nine-am-shell-link {
   @include type-style('body-compact-01');
 
   display: inline-flex;
@@ -144,8 +144,8 @@ $shell-rail-width: rem(48px);
 // what Angular's router writes when you give `routerLinkActive` an
 // `ariaCurrentWhenActive="page"`, so a routed app needs no extra binding. Carbon
 // keys off the same attribute.
-.ds-shell-header__nav .ds-shell-link--current,
-.ds-shell-header__nav .ds-shell-link[aria-current='page'] {
+.nine-am-shell-header__nav .nine-am-shell-link--current,
+.nine-am-shell-header__nav .nine-am-shell-link[aria-current='page'] {
   color: $text-primary;
 
   // The selected link is marked with a rule under it rather than a fill, so it
@@ -161,19 +161,19 @@ $shell-rail-width: rem(48px);
   }
 }
 
-.ds-shell-header__nav .ds-shell-link {
+.nine-am-shell-header__nav .nine-am-shell-link {
   position: relative;
 }
 
 // ── Header sub-menu ─────────────────────────────────────────────────────────
 
-.ds-shell-header__submenu {
+.nine-am-shell-header__submenu {
   position: relative;
   display: inline-flex;
   height: 100%;
 }
 
-.ds-shell-header__submenu-title {
+.nine-am-shell-header__submenu-title {
   @include unstyled-button;
   @include type-style('body-compact-01');
 
@@ -199,27 +199,29 @@ $shell-rail-width: rem(48px);
 
 // Open, the trigger takes the panel's own surface so the two read as one shape
 // rather than as a button with a box under it.
-.ds-shell-header__submenu-title[aria-expanded='true'] {
+.nine-am-shell-header__submenu-title[aria-expanded='true'] {
   background-color: $layer-01;
 }
 
-.ds-shell-header__submenu-arrow ds-icon {
+.nine-am-shell-header__submenu-arrow nine-am-icon {
   display: flex;
   transition: transform $duration-fast-02 motion(standard, productive);
 }
 
-.ds-shell-header__submenu-title[aria-expanded='true'] .ds-shell-header__submenu-arrow ds-icon {
+.nine-am-shell-header__submenu-title[aria-expanded='true']
+  .nine-am-shell-header__submenu-arrow
+  nine-am-icon {
   transform: rotate(180deg);
 }
 
-.ds-shell-header__submenu-list {
+.nine-am-shell-header__submenu-list {
   display: none;
 }
 
 // Hung below the trigger with a full translate rather than `top: 100%`, which
 // is Carbon's approach and keeps the panel glued to the bar if the bar's height
 // ever changes.
-.ds-shell-header__submenu-title[aria-expanded='true'] + .ds-shell-header__submenu-list {
+.nine-am-shell-header__submenu-title[aria-expanded='true'] + .nine-am-shell-header__submenu-list {
   position: absolute;
   z-index: 1;
   display: flex;
@@ -232,7 +234,7 @@ $shell-rail-width: rem(48px);
   transform: translateY(100%);
 }
 
-.ds-shell-header__submenu-list .ds-shell-link {
+.nine-am-shell-header__submenu-list .nine-am-shell-link {
   @include type-style('body-compact-01');
 
   display: flex;
@@ -253,7 +255,7 @@ $shell-rail-width: rem(48px);
 }
 
 // Pushed to the far end, whatever is in front of it.
-.ds-shell-header__global {
+.nine-am-shell-header__global {
   display: flex;
   height: 100%;
   align-items: center;
@@ -262,7 +264,7 @@ $shell-rail-width: rem(48px);
 
 // ── Right-hand panel ────────────────────────────────────────────────────────
 
-.ds-shell-panel {
+.nine-am-shell-panel {
   position: fixed;
   z-index: 8000;
   overflow: hidden;
@@ -274,7 +276,7 @@ $shell-rail-width: rem(48px);
   transition: width $duration-fast-02 motion(exit, productive);
 }
 
-.ds-shell-panel--expanded {
+.nine-am-shell-panel--expanded {
   overflow-y: auto;
   width: $shell-side-nav-width;
   border-inline: rem(1px) solid $border-subtle-01;
@@ -283,19 +285,19 @@ $shell-rail-width: rem(48px);
 // Panel contents. Carbon calls this the switcher, and it is the shape the app
 // switcher uses: titled groups of links, each title followed by an inset rule.
 
-.ds-shell-panel__section {
+.nine-am-shell-panel__section {
   display: block;
   padding-block: $spacing-05 0;
 }
 
-.ds-shell-panel__section-title {
+.nine-am-shell-panel__section-title {
   @include type-style('label-01');
 
   padding-inline: $spacing-05;
   color: $text-secondary;
 }
 
-.ds-shell-panel__divider {
+.nine-am-shell-panel__divider {
   display: block;
   height: rem(1px);
   border: none;
@@ -303,7 +305,7 @@ $shell-rail-width: rem(48px);
   background: $border-subtle-01;
 }
 
-.ds-shell-panel .ds-shell-link {
+.nine-am-shell-panel .nine-am-shell-link {
   @include type-style('heading-compact-01');
 
   display: block;
@@ -328,7 +330,7 @@ $shell-rail-width: rem(48px);
 
 // Inverted while its panel is open, so the pair reads as one open thing rather
 // than as a button next to a panel.
-.ds-shell-header__action--active {
+.nine-am-shell-header__action--active {
   background-color: $layer-01;
   border-block-end-color: transparent;
   border-inline-color: $border-subtle-01;
@@ -336,7 +338,7 @@ $shell-rail-width: rem(48px);
 
 // ── Content ─────────────────────────────────────────────────────────────────
 
-.ds-shell-content {
+.nine-am-shell-content {
   display: block;
 
   // Clears the fixed header, which is out of flow and would otherwise sit on
@@ -346,7 +348,7 @@ $shell-rail-width: rem(48px);
 
 // Only from `lg`, because that is the only width where the side nav holds
 // space. Below it the nav is an overlay and the content runs full width.
-.ds-shell-content--with-side-nav {
+.nine-am-shell-content--with-side-nav {
   @include breakpoint(lg) {
     margin-inline-start: $shell-side-nav-width;
   }
@@ -354,7 +356,7 @@ $shell-rail-width: rem(48px);
 
 // ── Overlay ─────────────────────────────────────────────────────────────────
 
-.ds-shell-overlay {
+.nine-am-shell-overlay {
   position: fixed;
   width: 0;
   height: 0;
@@ -367,7 +369,7 @@ $shell-rail-width: rem(48px);
     background-color $duration-fast-02 motion(standard, productive);
 }
 
-.ds-shell-overlay--visible {
+.nine-am-shell-overlay--visible {
   @include breakpoint-down(lg) {
     z-index: 6000;
     width: 100vw;

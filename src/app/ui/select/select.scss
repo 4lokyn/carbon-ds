@@ -1,6 +1,6 @@
-@use 'ds' as *;
+@use 'nine-am' as *;
 
-.ds-select {
+.nine-am-select {
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -9,36 +9,36 @@
 
 // Two grid columns rather than Carbon's nested flex wrappers — see the same
 // block in input.scss for why, and for where the 142px comes from.
-.ds-select--inline {
+.nine-am-select--inline {
   display: grid;
   align-items: center;
   column-gap: $spacing-03;
   grid-template-columns: minmax(0, max-content) 1fr;
 
-  .ds-select__label {
+  .nine-am-select__label {
     max-width: rem(142px);
     margin-bottom: 0;
     overflow-wrap: break-word;
   }
 
-  .ds-select__helper,
-  .ds-select__requirement {
+  .nine-am-select__helper,
+  .nine-am-select__requirement {
     grid-column: 2;
   }
 }
 
-.ds-select__label {
+.nine-am-select__label {
   @include field-label;
 }
 
-.ds-select__field-wrapper {
+.nine-am-select__field-wrapper {
   position: relative;
   display: flex;
   width: 100%;
   align-items: center;
 }
 
-.ds-select__field {
+.nine-am-select__field {
   @include field-surface;
 
   // 48px on the right for the chevron, which is drawn over the field rather
@@ -72,13 +72,13 @@
 
 // Not fluid: there the host owns the ring, because the box includes the message.
 // See the note in input.scss.
-.ds-select:not(.ds-select--fluid).ds-select--invalid
-  .ds-select__field:not(:focus) {
+.nine-am-select:not(.nine-am-select--fluid).nine-am-select--invalid
+  .nine-am-select__field:not(:focus) {
   @include field-invalid;
 }
 
 @each $name, $height in $field-heights {
-  .ds-select--#{$name} .ds-select__field {
+  .nine-am-select--#{$name} .nine-am-select__field {
     height: $height;
   }
 }
@@ -91,24 +91,24 @@
 // Carbon sets $layer-hover here, with a comment saying it is so options show in
 // IE11. That makes every resting row look hovered, so we use the plain surface
 // token instead.
-.ds-select__field option,
-.ds-select__field optgroup {
+.nine-am-select__field option,
+.nine-am-select__field optgroup {
   background-color: $layer-01;
   color: $text-primary;
 }
 
-.ds-select__field option:disabled {
+.nine-am-select__field option:disabled {
   color: $text-disabled;
 }
 
 // Chevron and status icon share the right-hand gutter, so a field showing both
 // needs 64px rather than 48px.
-.ds-select--invalid .ds-select__field,
-.ds-select--warn .ds-select__field {
+.nine-am-select--invalid .nine-am-select__field,
+.nine-am-select--warn .nine-am-select__field {
   padding-inline-end: $spacing-10;
 }
 
-.ds-select__arrow {
+.nine-am-select__arrow {
   position: absolute;
   color: $icon-primary;
 
@@ -117,49 +117,49 @@
   inset-inline-end: $field-padding-inline;
 }
 
-.ds-select__status {
+.nine-am-select__status {
   @include field-status-icon;
 
   // Sits to the left of the chevron rather than replacing it.
   inset-inline-end: $field-icon-gutter;
 }
 
-.ds-select--invalid .ds-select__status {
+.nine-am-select--invalid .nine-am-select__status {
   @include field-status-icon-invalid;
 }
 
-.ds-select--warn .ds-select__status {
+.nine-am-select--warn .nine-am-select__status {
   @include field-status-icon-warn;
 }
 
 // ── Messages ────────────────────────────────────────────────────────────────
 
-.ds-select__helper {
+.nine-am-select__helper {
   @include field-helper-text;
 }
 
-.ds-select__requirement {
+.nine-am-select__requirement {
   @include field-requirement;
 }
 
-.ds-select--invalid .ds-select__requirement {
+.nine-am-select--invalid .nine-am-select__requirement {
   @include field-requirement-invalid;
 }
 
 // ── Disabled / read-only ────────────────────────────────────────────────────
 
-.ds-select--disabled {
-  .ds-select__field,
-  .ds-select__field:hover {
+.nine-am-select--disabled {
+  .nine-am-select__field,
+  .nine-am-select__field:hover {
     @include field-disabled;
   }
 
-  .ds-select__arrow {
+  .nine-am-select__arrow {
     color: $icon-disabled;
   }
 
-  .ds-select__label,
-  .ds-select__helper {
+  .nine-am-select__label,
+  .nine-am-select__helper {
     color: $text-disabled;
   }
 }
@@ -167,9 +167,9 @@
 // Read-only is disabled underneath (a native select has no readonly), so this
 // has to undo the disabled treatment rather than sit alongside it. Declared
 // after the disabled block so it wins.
-.ds-select--readonly:not(.ds-select--disabled) {
-  .ds-select__field,
-  .ds-select__field:hover {
+.nine-am-select--readonly:not(.nine-am-select--disabled) {
+  .nine-am-select__field,
+  .nine-am-select__field:hover {
     @include field-read-only;
 
     color: $text-primary;
@@ -177,22 +177,22 @@
     -webkit-text-fill-color: $text-primary;
   }
 
-  .ds-select__arrow {
+  .nine-am-select__arrow {
     color: $icon-disabled;
   }
 
-  .ds-select__label {
+  .nine-am-select__label {
     color: $text-secondary;
   }
 }
 
 // ── Fluid ───────────────────────────────────────────────────────────────────
 
-.ds-select--fluid {
+.nine-am-select--fluid {
   position: relative;
   background-color: $field-01;
 
-  .ds-select__label {
+  .nine-am-select__label {
     position: absolute;
     z-index: 1;
     display: flex;
@@ -210,11 +210,11 @@
     }
   }
 
-  .ds-select__helper {
+  .nine-am-select__helper {
     display: none;
   }
 
-  .ds-select__field {
+  .nine-am-select__field {
     height: auto;
     min-height: $field-fluid-height;
     padding: rem(32px) rem(32px) rem(13px) $field-padding-inline;
@@ -235,22 +235,22 @@
 
   // Carbon drops the chevron to 16px here and tucks it in to 8px, because the
   // taller box would otherwise leave it floating in the middle of nothing.
-  .ds-select__arrow {
+  .nine-am-select__arrow {
     inset-block-start: rem(34px);
     inset-inline-end: $spacing-04;
   }
 
-  .ds-select__status {
+  .nine-am-select__status {
     inset-block-start: rem(24px);
   }
 
   // Divider and message stack under the value inside the box.
-  .ds-select__field-wrapper {
+  .nine-am-select__field-wrapper {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .ds-select__requirement {
+  .nine-am-select__requirement {
     margin: 0;
     padding: $spacing-03 rem(40px) $spacing-03 $field-padding-inline;
   }
@@ -258,24 +258,24 @@
 
 // On the host, not the wrapper — see the note in input.scss. The wrapper holds
 // only the value, so a ring drawn there leaves the message outside the box.
-.ds-select--fluid:focus-within {
+.nine-am-select--fluid:focus-within {
   @include field-focus;
 }
 
-.ds-select--fluid.ds-select--invalid:not(:focus-within) {
+.nine-am-select--fluid.nine-am-select--invalid:not(:focus-within) {
   @include field-invalid;
 }
 
-.ds-select--fluid.ds-select--warn {
+.nine-am-select--fluid.nine-am-select--warn {
   border-block-end: rem(1px) solid $border-strong-01;
 }
 
-.ds-select--fluid.ds-select--invalid .ds-select__field,
-.ds-select--fluid.ds-select--warn .ds-select__field {
+.nine-am-select--fluid.nine-am-select--invalid .nine-am-select__field,
+.nine-am-select--fluid.nine-am-select--warn .nine-am-select__field {
   border-block-end: 0;
 }
 
-.ds-select__divider {
+.nine-am-select__divider {
   border-block-start: rem(1px) solid $border-subtle-01;
   margin: 0 $field-padding-inline;
 }

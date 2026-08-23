@@ -24,7 +24,7 @@ import { NotificationBase, type NotificationVariant } from './notification-base'
  * whole reason it may hold them and a toast may not.
  */
 @Component({
-  selector: 'ds-callout',
+  selector: 'nine-am-callout',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
   templateUrl: './callout.html',

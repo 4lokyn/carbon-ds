@@ -66,7 +66,7 @@ export const ISO_PARSE: DateParser = (text) => {
 /**
  * Carbon date picker: a text field with a calendar in a popover.
  *
- * Single date. `ds-date-range-picker` is the two-field version; both share the
+ * Single date. `nine-am-date-range-picker` is the two-field version; both share the
  * calendar panel, because the primitive's grid directives resolve either state.
  *
  * The popover is `@angular/cdk/overlay`, not ng-primitives' own — we already use
@@ -75,7 +75,7 @@ export const ISO_PARSE: DateParser = (text) => {
  * nothing imports, so it tree-shakes out.
  */
 @Component({
-  selector: 'ds-date-picker',
+  selector: 'nine-am-date-picker',
   encapsulation: ViewEncapsulation.None,
   imports: [
     Icon,
@@ -126,7 +126,7 @@ export class DatePicker {
 
   readonly blurred = output<void>();
 
-  protected readonly inputId = `ds-date-picker-${nextId++}`;
+  protected readonly inputId = `nine-am-date-picker-${nextId++}`;
   protected readonly helperId = `${this.inputId}-helper`;
   protected readonly messageId = `${this.inputId}-message`;
 
@@ -198,20 +198,20 @@ export class DatePicker {
   });
 
   protected readonly hostClass = computed(() => {
-    const classes = ['ds-date-picker', `ds-date-picker--${this.size()}`];
+    const classes = ['nine-am-date-picker', `nine-am-date-picker--${this.size()}`];
 
     if (this.invalid()) {
-      classes.push('ds-date-picker--invalid');
+      classes.push('nine-am-date-picker--invalid');
     } else if (this.warn()) {
-      classes.push('ds-date-picker--warn');
+      classes.push('nine-am-date-picker--warn');
     }
 
     if (this.disabled()) {
-      classes.push('ds-date-picker--disabled');
+      classes.push('nine-am-date-picker--disabled');
     }
 
     if (this.readOnly()) {
-      classes.push('ds-date-picker--readonly');
+      classes.push('nine-am-date-picker--readonly');
     }
 
     return classes.join(' ');

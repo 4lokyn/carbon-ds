@@ -13,7 +13,7 @@ import {
  */
 export type CarbonTheme = 'white' | 'g10' | 'g90' | 'g100';
 
-const STORAGE_KEY = 'ds-theme';
+const STORAGE_KEY = 'nine-am-theme';
 const DEFAULT_THEME: CarbonTheme = 'g10';
 const THEMES: readonly CarbonTheme[] = ['white', 'g10', 'g90', 'g100'];
 

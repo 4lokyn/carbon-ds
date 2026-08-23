@@ -25,7 +25,7 @@ let nextId = 0;
  * belongs where the expensive work is, not in the control.
  */
 @Component({
-  selector: 'ds-search',
+  selector: 'nine-am-search',
   encapsulation: ViewEncapsulation.None,
   imports: [Icon],
   templateUrl: './search.html',
@@ -67,26 +67,26 @@ export class Search {
   /** Only meaningful while `expandable`. */
   protected readonly expanded = signal(false);
 
-  protected readonly inputId = `ds-search-${nextId++}`;
+  protected readonly inputId = `nine-am-search-${nextId++}`;
 
   private readonly inputRef =
     viewChild.required<ElementRef<HTMLInputElement>>('input');
 
   protected readonly hostClass = computed(() => {
-    const classes = ['ds-search', `ds-search--${this.size()}`];
+    const classes = ['nine-am-search', `nine-am-search--${this.size()}`];
 
     if (this.expandable()) {
-      classes.push('ds-search--expandable');
+      classes.push('nine-am-search--expandable');
     }
 
     // Stays open while there is something in it: collapsing over a live filter
     // would hide the reason the list is short.
     if (this.expandable() && (this.expanded() || this.value())) {
-      classes.push('ds-search--expanded');
+      classes.push('nine-am-search--expanded');
     }
 
     if (this.disabled()) {
-      classes.push('ds-search--disabled');
+      classes.push('nine-am-search--disabled');
     }
 
     return classes.join(' ');

@@ -1,11 +1,11 @@
-@use 'ds' as *;
+@use 'nine-am' as *;
 
 // Carbon's $-icon-container-size: padding + a 16px icon + padding. The chevron
 // sits in a square this big, and the selectable tile reserves this much on its
 // trailing edge so text never runs under the checkmark.
 $-icon-container-size: calc(#{$spacing-05} * 2 + #{rem(16px)});
 
-.ds-tile {
+.nine-am-tile {
   @include type-style('body-compact-01');
 
   position: relative;
@@ -28,7 +28,7 @@ $-icon-container-size: calc(#{$spacing-05} * 2 + #{rem(16px)});
 
 // ── Clickable ───────────────────────────────────────────────────────────────
 
-.ds-tile--clickable {
+.nine-am-tile--clickable {
   color: $text-primary;
   cursor: pointer;
   text-decoration: none;
@@ -49,7 +49,7 @@ $-icon-container-size: calc(#{$spacing-05} * 2 + #{rem(16px)});
   }
 }
 
-.ds-tile--clickable.ds-tile--disabled {
+.nine-am-tile--clickable.nine-am-tile--disabled {
   color: $text-disabled;
   cursor: not-allowed;
 
@@ -60,21 +60,21 @@ $-icon-container-size: calc(#{$spacing-05} * 2 + #{rem(16px)});
 
 // ── Selectable ──────────────────────────────────────────────────────────────
 
-.ds-selectable-tile-host {
+.nine-am-selectable-tile-host {
   display: block;
 }
 
 // Hidden from the eye, not from the accessibility tree or the form. This is
 // what makes the tile a checkbox; the label beside it is only the picture.
-.ds-tile-input {
+.nine-am-tile-input {
   @include visually-hidden;
 }
 
-.ds-tile-input:focus + .ds-tile {
+.nine-am-tile-input:focus + .nine-am-tile {
   @include focus-ring;
 }
 
-.ds-tile--selectable {
+.nine-am-tile--selectable {
   // Matches the selected border, so selecting one does not nudge the layout.
   border: rem(1px) solid transparent;
   cursor: pointer;
@@ -90,11 +90,11 @@ $-icon-container-size: calc(#{$spacing-05} * 2 + #{rem(16px)});
 // $layer-selected-inverse instead. The two are the same colour in all four
 // themes, so this is a naming call and not a visual one — and a border is what
 // it is, so it takes the border token.
-.ds-tile--is-selected {
+.nine-am-tile--is-selected {
   border-color: $border-inverse;
 }
 
-.ds-tile__checkmark {
+.nine-am-tile__checkmark {
   position: absolute;
   display: flex;
   block-size: rem(16px);
@@ -111,11 +111,11 @@ $-icon-container-size: calc(#{$spacing-05} * 2 + #{rem(16px)});
   }
 }
 
-.ds-tile--is-selected .ds-tile__checkmark svg {
+.nine-am-tile--is-selected .nine-am-tile__checkmark svg {
   fill: $icon-primary;
 }
 
-.ds-tile--selectable.ds-tile--disabled {
+.nine-am-tile--selectable.nine-am-tile--disabled {
   color: $text-disabled;
   cursor: not-allowed;
 
@@ -123,18 +123,18 @@ $-icon-container-size: calc(#{$spacing-05} * 2 + #{rem(16px)});
     background-color: $layer-01;
   }
 
-  .ds-tile__checkmark svg {
+  .nine-am-tile__checkmark svg {
     fill: $icon-disabled;
   }
 }
 
-.ds-tile--is-selected.ds-tile--disabled {
+.nine-am-tile--is-selected.nine-am-tile--disabled {
   border-color: $border-disabled;
 }
 
 // ── Expandable ──────────────────────────────────────────────────────────────
 
-.ds-expandable-tile-host {
+.nine-am-expandable-tile-host {
   display: block;
 
   // Fills its column rather than shrinking to its content. Without this the
@@ -146,7 +146,7 @@ $-icon-container-size: calc(#{$spacing-05} * 2 + #{rem(16px)});
   min-inline-size: 0;
 }
 
-.ds-tile--expandable {
+.nine-am-tile--expandable {
   // Reset first, then the tile's own padding: the mixin zeroes padding and
   // border, so anything it should not win over has to come after it.
   @include unstyled-button;
@@ -183,7 +183,7 @@ $-icon-container-size: calc(#{$spacing-05} * 2 + #{rem(16px)});
 }
 
 // Not a button any more — the chevron is. So it loses the affordances of one.
-.ds-tile--expandable--interactive {
+.nine-am-tile--expandable--interactive {
   cursor: default;
 
   &:hover {
@@ -195,7 +195,7 @@ $-icon-container-size: calc(#{$spacing-05} * 2 + #{rem(16px)});
   }
 }
 
-.ds-tile__chevron {
+.nine-am-tile__chevron {
   position: absolute;
   display: flex;
   align-items: center;
@@ -212,7 +212,7 @@ $-icon-container-size: calc(#{$spacing-05} * 2 + #{rem(16px)});
   }
 }
 
-.ds-tile__chevron--interactive {
+.nine-am-tile__chevron--interactive {
   @include unstyled-button;
 
   position: absolute;
@@ -233,23 +233,23 @@ $-icon-container-size: calc(#{$spacing-05} * 2 + #{rem(16px)});
   }
 }
 
-.ds-tile--is-expanded .ds-tile__chevron svg {
+.nine-am-tile--is-expanded .nine-am-tile__chevron svg {
   transform: rotate(180deg);
 }
 
 // The reveal. Carbon measures the content in JS and writes a pixel max-height;
 // animating a grid row from 0fr to 1fr gets there without measuring anything.
-.ds-tile__below {
+.nine-am-tile__below {
   display: grid;
   grid-template-rows: 0fr;
   transition: grid-template-rows $duration-moderate-01 motion(standard, productive);
 }
 
-.ds-tile--is-expanded .ds-tile__below {
+.nine-am-tile--is-expanded .nine-am-tile__below {
   grid-template-rows: 1fr;
 }
 
-.ds-tile-content__below-the-fold {
+.nine-am-tile-content__below-the-fold {
   display: block;
   min-block-size: 0;
   opacity: 0;
@@ -265,15 +265,15 @@ $-icon-container-size: calc(#{$spacing-05} * 2 + #{rem(16px)});
     visibility $duration-fast-02 motion(standard, productive);
 }
 
-.ds-tile--is-expanded .ds-tile-content__below-the-fold {
+.nine-am-tile--is-expanded .nine-am-tile-content__below-the-fold {
   opacity: 1;
   visibility: visible;
 }
 
 @media screen and (prefers-reduced-motion: reduce) {
-  .ds-tile__below,
-  .ds-tile__chevron svg,
-  .ds-tile-content__below-the-fold {
+  .nine-am-tile__below,
+  .nine-am-tile__chevron svg,
+  .nine-am-tile-content__below-the-fold {
     transition: none;
   }
 }

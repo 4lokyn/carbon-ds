@@ -25,13 +25,13 @@ let nextId = 0;
 
 /** Internal. The thing the overlay actually renders. */
 @Component({
-  selector: 'ds-tooltip-panel',
+  selector: 'nine-am-tooltip-panel',
   encapsulation: ViewEncapsulation.None,
   imports: [Popover],
   template: `
-    <ds-popover highContrast [side]="side()">
-      <p class="ds-tooltip__text" [id]="panelId()" role="tooltip">{{ label() }}</p>
-    </ds-popover>
+    <nine-am-popover highContrast [side]="side()">
+      <p class="nine-am-tooltip__text" [id]="panelId()" role="tooltip">{{ label() }}</p>
+    </nine-am-popover>
   `,
   styleUrl: './popover.scss',
 })
@@ -59,7 +59,7 @@ export class TooltipPanel {
  *   nothing puts focus inside. Interactive content is what `Toggletip` is for.
  */
 @Directive({
-  selector: '[dsTooltip]',
+  selector: '[nineAmTooltip]',
   host: {
     '[attr.aria-describedby]': 'open() ? panelId : null',
     '(mouseenter)': 'scheduleOpen()',
@@ -72,7 +72,7 @@ export class TooltipPanel {
 })
 export class Tooltip {
   /** The text. An empty string turns the tooltip off entirely. */
-  readonly label = input.required<string>({ alias: 'dsTooltip' });
+  readonly label = input.required<string>({ alias: 'nineAmTooltip' });
 
   readonly align = input<PopoverAlign>('bottom', { alias: 'tooltipAlign' });
 
@@ -91,7 +91,7 @@ export class Tooltip {
     transform: numberAttribute,
   });
 
-  protected readonly panelId = `ds-tooltip-${nextId++}`;
+  protected readonly panelId = `nine-am-tooltip-${nextId++}`;
   protected readonly open = signal(false);
 
   private readonly overlay = inject(Overlay);

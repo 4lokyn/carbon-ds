@@ -1,4 +1,4 @@
-@use 'ds' as *;
+@use 'nine-am' as *;
 
 // Carbon row heights. The header row uses the same height as the body rows.
 $-heights: (
@@ -11,7 +11,7 @@ $-heights: (
 
 $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
 
-.ds-table__container {
+.nine-am-table__container {
   // Wide tables scroll sideways rather than squashing columns.
   overflow-x: auto;
 }
@@ -20,12 +20,12 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
 // the other from `visible` to `auto`. So the container above already prevents
 // page-level sticky — the header can only stick inside a bounded box. The
 // max-height is a default; override it on the container for a taller table.
-.ds-table__container--sticky {
+.nine-am-table__container--sticky {
   overflow-y: auto;
   max-height: 60vh;
 }
 
-.ds-table {
+.nine-am-table {
   width: 100%;
   border-collapse: collapse;
   border-spacing: 0;
@@ -35,17 +35,17 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
 // `auto` rather than `max-content`: the table still shrinks when the container
 // is narrower than its content, which max-content would refuse to do — and a
 // table that overflows its panel is worse than one that wraps.
-.ds-table--static-width {
+.nine-am-table--static-width {
   width: auto;
 }
 
 // ── Head ────────────────────────────────────────────────────────────────────
 
-.ds-table__head {
+.nine-am-table__head {
   background-color: $layer-accent-01;
 }
 
-.ds-table__cell--header {
+.nine-am-table__cell--header {
   color: $text-primary;
   text-align: left;
   vertical-align: middle;
@@ -53,7 +53,7 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
   @include type-style('heading-compact-01');
 }
 
-.ds-table__container--sticky .ds-table__cell--header {
+.nine-am-table__container--sticky .nine-am-table__cell--header {
   position: sticky;
   top: 0;
   z-index: 1;
@@ -63,13 +63,13 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
   background-color: $layer-accent-01;
 }
 
-.ds-table__cell--end {
+.nine-am-table__cell--end {
   text-align: right;
 }
 
 // ── Cells ───────────────────────────────────────────────────────────────────
 
-.ds-table__cell {
+.nine-am-table__cell {
   padding: 0 $spacing-05;
   border-top: 0;
   border-bottom: rem(1px) solid $border-subtle-01;
@@ -83,34 +83,37 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
 
 // Control columns hold a checkbox or a chevron and nothing else, so they get
 // only enough width for the target and no text padding.
-.ds-table__cell--control {
+.nine-am-table__cell--control {
   width: rem(40px);
   padding: 0 0 0 $spacing-04;
 }
 
 @each $name, $height in $-heights {
-  .ds-table--#{$name} .ds-table__cell {
+  .nine-am-table--#{$name} .nine-am-table__cell {
     height: $height;
   }
 }
 
 // ── Rows ────────────────────────────────────────────────────────────────────
 
-.ds-table__row {
+.nine-am-table__row {
   transition: background-color $-transition;
 }
 
-.ds-table__body .ds-table__row:hover .ds-table__cell {
+.nine-am-table__body .nine-am-table__row:hover .nine-am-table__cell {
   background-color: $layer-hover-01;
   color: $text-primary;
 }
 
 // Zebra striping. Declared before the selected/hover rules so those still win.
-.ds-table--zebra .ds-table__body .ds-table__row:nth-child(even) .ds-table__cell {
+.nine-am-table--zebra
+  .nine-am-table__body
+  .nine-am-table__row:nth-child(even)
+  .nine-am-table__cell {
   background-color: $layer-accent-01;
 }
 
-.ds-table__row--selected .ds-table__cell {
+.nine-am-table__row--selected .nine-am-table__cell {
   background-color: $layer-selected-01;
   color: $text-primary;
 
@@ -119,7 +122,7 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
   border-bottom-color: $layer-selected-01;
 }
 
-.ds-table__body .ds-table__row--selected:hover .ds-table__cell {
+.nine-am-table__body .nine-am-table__row--selected:hover .nine-am-table__cell {
   background-color: $layer-selected-hover-01;
 }
 
@@ -128,7 +131,7 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
 // zebra striping on, a selected row is pixel-identical to an unselected even row.
 // A leading accent bar makes selection unambiguous regardless of striping.
 // Drawn as an inset shadow rather than a border so it never shifts the layout.
-.ds-table__row--selected .ds-table__cell:first-child {
+.nine-am-table__row--selected .nine-am-table__cell:first-child {
   box-shadow: inset rem(3px) 0 0 0 $border-interactive;
 }
 
@@ -138,11 +141,11 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
 // gives up its own padding rather than the button using negative margins to
 // escape it — a button wider than the cell gets clipped by the cell's
 // overflow: hidden, which eats the start of right-aligned headers.
-.ds-table__cell--sortable {
+.nine-am-table__cell--sortable {
   padding: 0;
 }
 
-.ds-table__sort {
+.nine-am-table__sort {
   @include unstyled-button;
 
   display: flex;
@@ -163,11 +166,11 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
   }
 }
 
-.ds-table__cell--end .ds-table__sort {
+.nine-am-table__cell--end .nine-am-table__sort {
   justify-content: flex-end;
 }
 
-.ds-table__sort-icon {
+.nine-am-table__sort-icon {
   color: $icon-primary;
 
   // Carbon only reveals the double-arrow hint on hover or focus — showing it in
@@ -176,16 +179,16 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
   transition: opacity $-transition;
 }
 
-.ds-table__sort:hover .ds-table__sort-icon,
-.ds-table__sort:focus .ds-table__sort-icon,
-[aria-sort='ascending'] .ds-table__sort-icon,
-[aria-sort='descending'] .ds-table__sort-icon {
+.nine-am-table__sort:hover .nine-am-table__sort-icon,
+.nine-am-table__sort:focus .nine-am-table__sort-icon,
+[aria-sort='ascending'] .nine-am-table__sort-icon,
+[aria-sort='descending'] .nine-am-table__sort-icon {
   opacity: 1;
 }
 
 // ── Expansion ───────────────────────────────────────────────────────────────
 
-.ds-table__expand {
+.nine-am-table__expand {
   @include unstyled-button;
 
   display: flex;
@@ -199,20 +202,20 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
     @include focus-ring;
   }
 
-  ds-icon {
+  nine-am-icon {
     transition: transform 150ms cubic-bezier(0.2, 0, 0.38, 0.9);
   }
 }
 
-.ds-table__row--expanded .ds-table__expand ds-icon {
+.nine-am-table__row--expanded .nine-am-table__expand nine-am-icon {
   transform: rotate(90deg);
 }
 
-.ds-table__row--expanded .ds-table__cell {
+.nine-am-table__row--expanded .nine-am-table__cell {
   border-bottom-color: transparent;
 }
 
-.ds-table__cell--expansion {
+.nine-am-table__cell--expansion {
   height: auto;
   padding: $spacing-05;
   background-color: $layer-01;
@@ -224,7 +227,7 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
 
 // ── Empty and loading ───────────────────────────────────────────────────────
 
-.ds-table__cell--empty {
+.nine-am-table__cell--empty {
   height: auto;
   padding: $spacing-07 $spacing-05;
   color: $text-secondary;
@@ -232,12 +235,12 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
   white-space: normal;
 }
 
-.ds-table__body .ds-table__row--empty:hover .ds-table__cell,
-.ds-table__body .ds-table__row--skeleton:hover .ds-table__cell {
+.nine-am-table__body .nine-am-table__row--empty:hover .nine-am-table__cell,
+.nine-am-table__body .nine-am-table__row--skeleton:hover .nine-am-table__cell {
   background-color: transparent;
 }
 
-.ds-table__skeleton {
+.nine-am-table__skeleton {
   position: relative;
   display: block;
   overflow: hidden;
@@ -249,7 +252,7 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
   &::after {
     position: absolute;
     inset: 0;
-    animation: ds-table-shimmer 1200ms linear infinite;
+    animation: nine-am-table-shimmer 1200ms linear infinite;
     background-color: $skeleton-element;
     content: '';
     transform: translateX(-100%);
@@ -258,12 +261,12 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
 
 // Rows stagger so the table doesn't pulse as one block.
 @for $i from 1 through 10 {
-  .ds-table__row--skeleton:nth-child(#{$i}) .ds-table__skeleton::after {
+  .nine-am-table__row--skeleton:nth-child(#{$i}) .nine-am-table__skeleton::after {
     animation-delay: #{$i * 80}ms;
   }
 }
 
-@keyframes ds-table-shimmer {
+@keyframes nine-am-table-shimmer {
   from {
     transform: translateX(-100%);
   }
@@ -274,7 +277,7 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-table__skeleton::after {
+  .nine-am-table__skeleton::after {
     animation: none;
   }
 }
