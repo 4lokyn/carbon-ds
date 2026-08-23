@@ -1073,9 +1073,12 @@
       <section class="demo__section">
         <h2 class="demo__title">Overflow menu</h2>
         <p class="demo__note">
-          Behaviour is <code>&#64;angular/aria/menu</code> — roving focus, arrow keys, Home and End,
-          type-ahead, Escape, and focus back to the trigger. We wrote none of it. Open one and type
-          "d": it jumps to Delete.
+          Roving focus, arrow keys, Home and End, type-ahead, Escape, and focus back to the trigger
+          — all of it ours. It was <code>&#64;angular/aria/menu</code> until that turned out not to
+          work through <code>&lt;ng-content&gt;</code>: Aria collects its items with a content
+          query, projected items belong to the caller's template, and it was quietly managing an
+          empty list. Tab to the three dots and press ArrowDown, or open one and type "d": it jumps
+          to Delete.
         </p>
 
         <div class="demo__row">

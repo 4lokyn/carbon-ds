@@ -54,7 +54,7 @@ npm test           # vitest, via @angular/build:unit-test
 | `ToastNotification` + `NotificationService` | top-right stack, newest first, optional 5s timeout |
 | `ActionableNotification` | inline or toast, one action button, `role="alertdialog"` with a real focus trap |
 | `Callout` | loads with the page, never dismisses, no live region |
-| `OverflowMenu` | three-dot trigger, danger item, divider; `@angular/aria/menu` for the keyboard |
+| `OverflowMenu` | three-dot trigger, danger item, divider; the WAI-ARIA menu button keyboard, ours |
 | `Breadcrumb` | `nav` + `ol`, 2 sizes, current page, optional trailing slash |
 | `Tile` family | plain, clickable `<a>`, selectable on a real checkbox, expandable with a CSS-only reveal |
 | `Popover` + `Tooltip` + `Toggletip` | one surface; tooltip flips in a CDK overlay, toggletip stays in the DOM for focus order |
@@ -576,14 +576,23 @@ before that will be on the wrong branch.
 
 ### Not verified
 
-**The overflow menu moving focus into itself on open.** Everything else about it
-is measured — it opens and closes, `aria-expanded` follows, Escape closes and
-returns focus to the trigger, and Aria sets the roving tabindex (panel 0, items
--1). But a synthetic keydown leaves focus on the trigger, and there is a
-plausible reason that is not a bug: the panel is hidden with `display: none`
-until Angular applies the open class, so Aria's focus call may land on an
-unfocusable element one tick early. A real keypress goes through a different
-ordering. Press ArrowDown on it in a browser before trusting it.
+This section is empty, and the entry that used to sit here is worth keeping as a
+story rather than a note. It said the overflow menu's focus-on-open was unproven
+and asked for someone to press ArrowDown in a browser. Someone did, on
+2026-08-23, and the answer was worse than the doubt: **no key opened the menu at
+all, and every item sat at `tabindex="-1"`, so a keyboard could not reach a
+single action.** The cause was one line — Aria collects its items with
+`contentChildren(MenuItem)` on the panel, our items arrive through
+`<ng-content>`, and projected nodes belong to the template that declared them.
+Measured at zero items against five in the DOM. Nothing errored, the roles were
+all correct, and it read fine in DevTools. The keyboard is ours now, and
+`overflow-menu.spec.ts` covers it.
+
+Two things generalize from that. **A headless primitive wrapped in a component
+with `<ng-content>` loses its content queries**, silently — `tabs/` is untouched
+only because it attaches Aria through `hostDirectives`, which puts the query in
+the caller's own template. And **"not verified" is a debt, not a caveat.** It sat
+in this file for a day next to a component that did not work.
 
 **A caution about how any of this gets measured.** Reads through the browser
 bridge go stale, and they do it silently — while the tile work was going on,

@@ -227,7 +227,7 @@ breaking change is one file rather than a sweep.
 
 | primitive | used by | risk |
 |---|---|---|
-| `@angular/aria` | `tabs/` | `@developerPreview`, can shift between minors |
+| `@angular/aria` | `tabs/` only | `@developerPreview`, can shift between minors. `overflow-menu/` used it too until 2026-08-23; see the root README on why it had to stop. |
 | `ng-primitives` | `date-picker/` | pre-1.0 (0.128.x), ships minors fast |
 
 `ng-primitives` also peers on `@floating-ui/dom`. We do not use its popover — the

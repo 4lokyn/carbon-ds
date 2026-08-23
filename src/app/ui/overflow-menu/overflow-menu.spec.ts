@@ -24,72 +24,146 @@ describe('OverflowMenu', () => {
 
     const el = fixture.nativeElement as HTMLElement;
     const root = el.querySelector('ds-overflow-menu') as HTMLElement;
+    const trigger = root.querySelector('.ds-overflow-menu__trigger') as HTMLElement;
 
     return {
       fixture,
       host: fixture.componentInstance,
       root,
-      trigger: root.querySelector('.ds-overflow-menu__trigger') as HTMLElement,
+      trigger,
       panel: root.querySelector('.ds-overflow-menu__panel') as HTMLElement,
       items: () => Array.from(root.querySelectorAll<HTMLElement>('.ds-overflow-menu__item')),
+      expanded: () => trigger.getAttribute('aria-expanded'),
+      focused: () => (document.activeElement as HTMLElement | null)?.textContent?.trim() ?? '',
       click(target: EventTarget) {
         (target as HTMLElement).dispatchEvent(new MouseEvent('click', { bubbles: true }));
         fixture.detectChanges();
+      },
+      press(key: string, on: HTMLElement = trigger) {
+        on.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }));
+
+        // The menu focuses an item only after the panel has stopped being
+        // `display: none`, so the assertion has to wait for the same render.
+        TestBed.tick();
       },
     };
   }
 
   it('names the trigger, which is otherwise three dots and nothing else', () => {
-    const { trigger } = setup();
+    const { trigger, panel } = setup();
 
     expect(trigger.getAttribute('aria-label')).toBe('Row actions');
-    expect(trigger.getAttribute('aria-haspopup')).toBe('true');
+    expect(trigger.getAttribute('aria-haspopup')).toBe('menu');
+    expect(trigger.getAttribute('aria-controls')).toBe(panel.getAttribute('id'));
+    expect(panel.getAttribute('role')).toBe('menu');
+  });
+
+  it('opens from the keyboard, which it once could not do at all', () => {
+    const { press, expanded, focused, items } = setup();
+
+    // The whole reason this component stopped using @angular/aria: its item
+    // query could not see nodes that arrive by projection, so no key opened the
+    // menu and every item sat at tabindex -1, unreachable even by Tab.
+    press('ArrowDown');
+
+    expect(expanded()).toBe('true');
+    expect(focused()).toBe('Stop app');
+    expect(items()[0].getAttribute('tabindex')).toBe('0');
+    expect(items()[1].getAttribute('tabindex')).toBe('-1');
+  });
+
+  it('opens upward onto the last item', () => {
+    const { press, focused } = setup();
+
+    press('ArrowUp');
+
+    expect(focused()).toBe('Delete app');
+  });
+
+  it('roves with the arrows, wraps, and steps over the disabled item', () => {
+    const { press, panel, focused } = setup();
+
+    press('ArrowDown');
+    press('ArrowDown', panel);
+
+    // Straight past Clone, which is disabled — it keeps its place in the menu
+    // and is still announced, it simply cannot be landed on.
+    expect(focused()).toBe('Delete app');
+
+    press('ArrowDown', panel);
+
+    expect(focused()).toBe('Stop app');
+
+    press('ArrowUp', panel);
+
+    expect(focused()).toBe('Delete app');
+  });
+
+  it('jumps to the ends with Home and End', () => {
+    const { press, panel, focused } = setup();
+
+    press('ArrowDown');
+    press('End', panel);
+
+    expect(focused()).toBe('Delete app');
+
+    press('Home', panel);
+
+    expect(focused()).toBe('Stop app');
+  });
+
+  it('jumps to a label when you type', () => {
+    const { press, panel, focused } = setup();
+
+    press('ArrowDown');
+    press('d', panel);
+
+    // The demo page has always told the reader to open the menu and type "d".
+    // Until the keyboard was ours, that instruction was fiction.
+    expect(focused()).toBe('Delete app');
+  });
+
+  it('closes on Escape and gives focus back to the trigger', () => {
+    const { press, panel, expanded, trigger } = setup();
+
+    press('ArrowDown');
+    press('Escape', panel);
+
+    expect(expanded()).toBe('false');
+    expect(document.activeElement).toBe(trigger);
   });
 
   it('reports the chosen action and closes', () => {
-    const { trigger, items, host, click } = setup();
+    const { trigger, items, host, click, expanded } = setup();
 
     click(trigger);
-    expect(trigger.getAttribute('aria-expanded')).toBe('true');
+    expect(expanded()).toBe('true');
 
     click(items()[0]);
 
-    // Aria's own itemSelected does not fire for a pointer, and nothing in it
-    // closes the menu on a click — both were stuck open until this was ours.
     expect(host.picked()).toBe('stop');
-    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    expect(expanded()).toBe('false');
   });
 
   it('ignores a disabled item', () => {
-    const { trigger, items, host, click } = setup();
+    const { trigger, items, host, click, expanded } = setup();
 
     click(trigger);
     click(items()[1]);
 
     expect(host.picked()).toBe('');
-    expect(trigger.getAttribute('aria-expanded')).toBe('true');
+    expect(expanded()).toBe('true');
+    expect(items()[1].getAttribute('aria-disabled')).toBe('true');
   });
 
   it('closes on a click elsewhere', () => {
-    const { trigger, click } = setup();
+    const { trigger, click, expanded } = setup();
 
     click(trigger);
-    expect(trigger.getAttribute('aria-expanded')).toBe('true');
+    expect(expanded()).toBe('true');
 
     click(document.body);
 
-    expect(trigger.getAttribute('aria-expanded')).toBe('false');
-  });
-
-  it('gives Aria the roles and the roving tab order', () => {
-    const { trigger, panel, items, click } = setup();
-
-    click(trigger);
-
-    // All of this comes from @angular/aria/menu, not from us. If it stops being
-    // true, the hostDirective wiring is broken.
-    expect(panel.getAttribute('role')).toBe('menu');
-    expect(items().every((i) => i.getAttribute('role') === 'menuitem')).toBe(true);
-    expect(items().every((i) => i.getAttribute('tabindex') === '-1')).toBe(true);
+    expect(expanded()).toBe('false');
   });
 });
