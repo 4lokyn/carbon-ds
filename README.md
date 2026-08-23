@@ -54,6 +54,7 @@ npm test           # vitest, via @angular/build:unit-test
 | `ToastNotification` + `NotificationService` | top-right stack, newest first, optional 5s timeout |
 | `OverflowMenu` | three-dot trigger, danger item, divider; `@angular/aria/menu` for the keyboard |
 | `Breadcrumb` | `nav` + `ol`, 2 sizes, current page, optional trailing slash |
+| `Tile` family | plain, clickable `<a>`, selectable on a real checkbox, expandable with a CSS-only reveal |
 | `Popover` + `Tooltip` + `Toggletip` | one surface; tooltip flips in a CDK overlay, toggletip stays in the DOM for focus order |
 | `Link` | 3 sizes, standalone and inline, optional icon, disabled that stays an `<a>` |
 | `Loading` + `InlineLoading` | 88/16px ring; inline reports finished and error, not just busy |
@@ -100,6 +101,13 @@ Checked in the browser and locked into tests, not inferred:
 - The fluid box really encloses all three of label, value and message, in every
   control and both light and dark. Measured as rectangles, not eyeballed — three
   separate bugs hid here, and each one still looked plausible in a screenshot.
+- The expandable tile's chevron sits inside the tile, bottom-right, and its hover
+  fill stays inside it — measured by outlining the tile and the chevron and
+  looking, after `getComputedStyle` and `getBoundingClientRect` had both reported
+  the *collapsed* geometry of an open tile. See the note under "Not verified"
+  about reads through the browser bridge going stale; the outline is what settled
+  it. Two real bugs came out of that look: the tile shrink-wrapped and clipped its
+  own text, and its last line ran under the chevron.
 - Two radio-group behaviours, measured in Chrome because jsdom disagrees with it
   on both. A `<fieldset disabled>` makes its inputs match `:disabled` while
   `input.disabled` stays `false` — the property only ever reflects the input's
@@ -340,7 +348,7 @@ factors the same three into `components/form/_form.scss`. There is no
 
 ### Where we deviate from Carbon, and why
 
-Carbon decides by default. These four are the places it does not, each one a
+Carbon decides by default. These are the places it does not, each one a
 deliberate call rather than an oversight:
 
 **A textarea reserves a gutter for its status icon.** Carbon reserves none — the
@@ -363,6 +371,20 @@ not open a white list.
 **`invalid` with no `invalidText` keeps the helper text.** Carbon renders an empty
 message box and hides the helper. Neither explains the error, so we keep the one
 that at least still explains the field.
+
+**The selectable tile's checkmark is always visible.** Carbon leaves it at
+`opacity: 0` until the tile is chosen, so a selectable tile is pixel-identical to
+a plain one — nothing says it can be picked. Carbon treats that as the defect it
+is and fixes it behind `enable-v12-tile-radio-icons`, on its way to the v12
+default. Matching a default its own authors have already replaced is not
+fidelity.
+
+**The expandable tile keeps a gutter clear for its chevron.** Same reasoning as
+the textarea above, and found the same way — on screen, with an ordinary sentence
+in the tile, whose last line ran under the chevron. Carbon reserves nothing here
+and keeps its examples short instead. The gutter is exactly the width Carbon's
+*selectable* tile already reserves for its checkmark, so the idea is Carbon's
+even where the rule is not.
 
 **The range picker is one field, not two.** Carbon renders a range as two
 separate fields. This is one, holding `2026-08-13 – 2026-08-15`, by request. The
@@ -549,6 +571,15 @@ plausible reason that is not a bug: the panel is hidden with `display: none`
 until Angular applies the open class, so Aria's focus call may land on an
 unfocusable element one tick early. A real keypress goes through a different
 ordering. Press ArrowDown on it in a browser before trusting it.
+
+**A caution about how any of this gets measured.** Reads through the browser
+bridge go stale, and they do it silently — while the tile work was going on,
+`getComputedStyle` and `getBoundingClientRect` both kept reporting an open tile
+as collapsed, and a `visibility: visible !important` probe injected onto the
+element still read back `hidden`. A screenshot showed the tile plainly open the
+whole time. Numbers out of that bridge are worth having, but when one says
+something impossible, believe the picture. Outlining the boxes in question and
+looking is the tiebreak that works.
 
 ### Checking the responsive shell
 

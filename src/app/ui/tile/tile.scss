@@ -1,0 +1,279 @@
+@use 'ds' as *;
+
+// Carbon's $-icon-container-size: padding + a 16px icon + padding. The chevron
+// sits in a square this big, and the selectable tile reserves this much on its
+// trailing edge so text never runs under the checkmark.
+$-icon-container-size: calc(#{$spacing-05} * 2 + #{rem(16px)});
+
+.ds-tile {
+  @include type-style('body-compact-01');
+
+  position: relative;
+  display: block;
+  min-block-size: rem(64px);
+  min-inline-size: rem(128px);
+  padding: $spacing-05;
+  background-color: $layer-01;
+
+  // Transparent to start, so the ring on :focus does not move anything. No
+  // border here otherwise — see the class note in tile.ts; Carbon's is behind
+  // the enable-tile-contrast flag.
+  outline: rem(2px) solid transparent;
+  outline-offset: rem(-2px);
+
+  &:focus {
+    @include focus-ring;
+  }
+}
+
+// ── Clickable ───────────────────────────────────────────────────────────────
+
+.ds-tile--clickable {
+  color: $text-primary;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color $duration-moderate-01 motion(standard, productive);
+
+  // An anchor gets these from the user agent in states we do not otherwise
+  // touch, and Carbon holds the text one colour through all of them.
+  &:hover,
+  &:active,
+  &:visited,
+  &:visited:hover {
+    color: $text-primary;
+    text-decoration: none;
+  }
+
+  &:hover {
+    background-color: $layer-hover-01;
+  }
+}
+
+.ds-tile--clickable.ds-tile--disabled {
+  color: $text-disabled;
+  cursor: not-allowed;
+
+  &:hover {
+    background-color: $layer-01;
+  }
+}
+
+// ── Selectable ──────────────────────────────────────────────────────────────
+
+.ds-selectable-tile-host {
+  display: block;
+}
+
+// Hidden from the eye, not from the accessibility tree or the form. This is
+// what makes the tile a checkbox; the label beside it is only the picture.
+.ds-tile-input {
+  @include visually-hidden;
+}
+
+.ds-tile-input:focus + .ds-tile {
+  @include focus-ring;
+}
+
+.ds-tile--selectable {
+  // Matches the selected border, so selecting one does not nudge the layout.
+  border: rem(1px) solid transparent;
+  cursor: pointer;
+  padding-inline-end: $-icon-container-size;
+  transition: background-color $duration-moderate-01 motion(standard, productive);
+
+  &:hover {
+    background-color: $layer-hover-01;
+  }
+}
+
+// Carbon's style spec names this border $border-inverse; its Sass reaches for
+// $layer-selected-inverse instead. The two are the same colour in all four
+// themes, so this is a naming call and not a visual one — and a border is what
+// it is, so it takes the border token.
+.ds-tile--is-selected {
+  border-color: $border-inverse;
+}
+
+.ds-tile__checkmark {
+  position: absolute;
+  display: flex;
+  block-size: rem(16px);
+  inline-size: rem(16px);
+  inset-block-start: $spacing-05;
+  inset-inline-end: $spacing-05;
+  transition: fill $duration-fast-02 motion(standard, productive);
+
+  svg {
+    // The icon is a filled disc with the tick knocked out of it, so `fill` is
+    // the disc. Muted until chosen, full strength once it is.
+    border-radius: 50%;
+    fill: $icon-secondary;
+  }
+}
+
+.ds-tile--is-selected .ds-tile__checkmark svg {
+  fill: $icon-primary;
+}
+
+.ds-tile--selectable.ds-tile--disabled {
+  color: $text-disabled;
+  cursor: not-allowed;
+
+  &:hover {
+    background-color: $layer-01;
+  }
+
+  .ds-tile__checkmark svg {
+    fill: $icon-disabled;
+  }
+}
+
+.ds-tile--is-selected.ds-tile--disabled {
+  border-color: $border-disabled;
+}
+
+// ── Expandable ──────────────────────────────────────────────────────────────
+
+.ds-expandable-tile-host {
+  display: block;
+
+  // Fills its column rather than shrinking to its content. Without this the
+  // host becomes a shrink-to-fit box the moment it is a flex item — which the
+  // tile then fills, laying its text out wider than the box and letting
+  // `overflow: hidden` clip the overflow instead of wrapping it. Caught on
+  // screen: a paragraph ending in "open the clu".
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.ds-tile--expandable {
+  // Reset first, then the tile's own padding: the mixin zeroes padding and
+  // border, so anything it should not win over has to come after it.
+  @include unstyled-button;
+  @include type-style('body-compact-01');
+
+  position: relative;
+  display: block;
+  min-block-size: rem(64px);
+  padding: $spacing-05;
+  background-color: $layer-01;
+  color: inherit;
+  inline-size: 100%;
+
+  // Keeps text out of the chevron's corner. Carbon does not reserve this and
+  // its own examples simply keep the content short — put an ordinary sentence
+  // in one and the last line runs under the chevron, which is what happened
+  // here. This is the same gutter Carbon's *selectable* tile reserves for its
+  // checkmark, so the fix is at least Carbon's own idea.
+  padding-inline-end: $-icon-container-size;
+
+  outline: rem(2px) solid transparent;
+  outline-offset: rem(-2px);
+  overflow: hidden;
+  text-align: start;
+  transition: background-color $duration-moderate-01 motion(standard, productive);
+
+  &:hover {
+    background-color: $layer-hover-01;
+  }
+
+  &:focus {
+    @include focus-ring;
+  }
+}
+
+// Not a button any more — the chevron is. So it loses the affordances of one.
+.ds-tile--expandable--interactive {
+  cursor: default;
+
+  &:hover {
+    background-color: $layer-01;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.ds-tile__chevron {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  block-size: $-icon-container-size;
+  inline-size: $-icon-container-size;
+  inset-block-end: 0;
+  inset-inline-end: 0;
+
+  svg {
+    fill: $icon-primary;
+    transform-origin: center;
+    transition: transform $duration-fast-02 motion(standard, productive);
+  }
+}
+
+.ds-tile__chevron--interactive {
+  @include unstyled-button;
+
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  block-size: $-icon-container-size;
+  inline-size: $-icon-container-size;
+  inset-block-end: 0;
+  inset-inline-end: 0;
+
+  &:hover {
+    background-color: $layer-hover-01;
+  }
+
+  &:focus {
+    @include focus-ring;
+  }
+}
+
+.ds-tile--is-expanded .ds-tile__chevron svg {
+  transform: rotate(180deg);
+}
+
+// The reveal. Carbon measures the content in JS and writes a pixel max-height;
+// animating a grid row from 0fr to 1fr gets there without measuring anything.
+.ds-tile__below {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows $duration-moderate-01 motion(standard, productive);
+}
+
+.ds-tile--is-expanded .ds-tile__below {
+  grid-template-rows: 1fr;
+}
+
+.ds-tile-content__below-the-fold {
+  display: block;
+  min-block-size: 0;
+  opacity: 0;
+  overflow: hidden;
+
+  // `visibility` is the part that matters: it takes the hidden content out of
+  // the tab order. Clipping it with overflow alone would leave a keyboard user
+  // tabbing into things nobody can see.
+  visibility: hidden;
+
+  transition:
+    opacity $duration-fast-02 motion(standard, productive),
+    visibility $duration-fast-02 motion(standard, productive);
+}
+
+.ds-tile--is-expanded .ds-tile-content__below-the-fold {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  .ds-tile__below,
+  .ds-tile__chevron svg,
+  .ds-tile-content__below-the-fold {
+    transition: none;
+  }
+}

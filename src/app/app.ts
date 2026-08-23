@@ -28,6 +28,7 @@ import {
   Select,
   DS_TAG,
   type TagColor,
+  DS_TILE,
   Textarea,
   DS_TOGGLETIP_PARTS,
   Tooltip,
@@ -70,6 +71,7 @@ const INITIAL_TAGS: readonly TagColor[] = ['blue', 'green', 'red', 'purple'];
     ...DS_RADIO_GROUP,
     ...DS_SHELL,
     ...DS_TABS,
+    ...DS_TILE,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -89,14 +91,7 @@ export class App {
     'danger-ghost',
   ];
 
-  protected readonly sizes: readonly ButtonSize[] = [
-    'xs',
-    'sm',
-    'md',
-    'lg',
-    'xl',
-    '2xl',
-  ];
+  protected readonly sizes: readonly ButtonSize[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
 
   protected readonly colors: readonly TagColor[] = [
     'gray',
@@ -119,13 +114,7 @@ export class App {
     { path: '/guidelines', label: 'Guidelines' },
   ];
 
-  protected readonly formControls = [
-    'Input',
-    'Select',
-    'Textarea',
-    'Date picker',
-    'Multi-select',
-  ];
+  protected readonly formControls = ['Input', 'Select', 'Textarea', 'Date picker', 'Multi-select'];
 
   protected readonly formsOpen = signal(true);
 
@@ -270,6 +259,11 @@ export class App {
 
   protected readonly lastAction = signal('');
 
+  protected readonly planSelected = signal(true);
+  protected readonly addonSelected = signal(false);
+  protected readonly tileExpanded = signal(false);
+  protected readonly tileExpandedInteractive = signal(false);
+
   protected readonly filterFailing = signal(true);
   protected readonly filterRecent = signal(false);
 
@@ -288,11 +282,7 @@ export class App {
     setTimeout(() => this.deployStatus.set('finished'), 1500);
   }
 
-  protected readonly regions: readonly string[] = [
-    'us-south',
-    'eu-de',
-    'jp-tok',
-  ];
+  protected readonly regions: readonly string[] = ['us-south', 'eu-de', 'jp-tok'];
 
   protected readonly selectedRegions = signal<readonly string[]>([]);
 
@@ -302,9 +292,7 @@ export class App {
 
   protected toggleRegion(region: string): void {
     this.selectedRegions.update((current) =>
-      current.includes(region)
-        ? current.filter((r) => r !== region)
-        : [...current, region],
+      current.includes(region) ? current.filter((r) => r !== region) : [...current, region],
     );
   }
 
@@ -315,8 +303,7 @@ export class App {
   // The set is the control here, so the rule is about the set: none ticked is
   // the invalid state, and no single box can know that on its own.
   protected readonly notifyInvalid = computed(
-    () =>
-      !this.notifyDeploys() && !this.notifyIncidents() && !this.notifyDigest(),
+    () => !this.notifyDeploys() && !this.notifyIncidents() && !this.notifyDigest(),
   );
 
   protected readonly accepted = signal(false);

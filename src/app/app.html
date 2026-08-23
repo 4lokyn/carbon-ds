@@ -48,7 +48,9 @@
 
     <ds-shell-side-nav-menu label="Form controls" [(expanded)]="formsOpen">
       @for (item of formControls; track item) {
-        <div dsShellSideNavItem><a dsShellLink href="#">{{ item }}</a></div>
+        <div dsShellSideNavItem>
+          <a dsShellLink href="#">{{ item }}</a>
+        </div>
       }
     </ds-shell-side-nav-menu>
 
@@ -62,12 +64,7 @@
          the highlight follows the URL with no binding of our own. -->
     @for (item of routedNav; track item.path) {
       <div dsShellSideNavItem>
-        <a
-          dsShellLink
-          [routerLink]="item.path"
-          routerLinkActive
-          ariaCurrentWhenActive="page"
-        >
+        <a dsShellLink [routerLink]="item.path" routerLinkActive ariaCurrentWhenActive="page">
           {{ item.label }}
         </a>
       </div>
@@ -119,1306 +116,1361 @@
 
   <ds-shell-content withSideNav>
     <div class="demo">
-
-  <section class="demo__intro">
-    <h1>Carbon tokens, our components</h1>
-    <p>
-      No <code>carbon-components-angular</code> anywhere. The design language
-      comes from <code>&#64;carbon/styles</code> as Sass; behavior comes from
-      <code>&#64;angular/aria</code> and <code>&#64;angular/cdk</code>; the markup
-      and the class names are ours. Change the theme under the gear in the
-      header — nothing recompiles, only the <code>data-theme</code> attribute on
-      <code>&lt;html&gt;</code> changes.
-    </p>
-  </section>
-
-  <!-- ── Grid ─────────────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Grid</h2>
-    <p class="demo__note">
-      Carbon's 2x grid: 16 columns from <code>lg</code> up, 8 on
-      <code>md</code>, 4 on <code>sm</code>. The column count changing is the
-      whole idea — <code>ds-col-span-8</code> is half the page on a laptop and
-      the entire width of a tablet, from one class.
-    </p>
-    <p class="demo__note">
-      Resize the window and watch the row below re-flow. The gutter is padding on
-      the columns rather than <code>gap</code>, which is Carbon's choice: a gap
-      would leave visible stripes between filled columns, where padding lets a
-      column's background run edge to edge and insets only its content.
-    </p>
-
-    <div class="ds-grid ds-grid--full-width ds-grid--row-gap demo-grid">
-      @for (n of gridCells; track n) {
-        <div class="ds-col-span-4"><span class="demo-grid__cell">span 4</span></div>
-      }
-      <div class="ds-col-span-8"><span class="demo-grid__cell">span 8</span></div>
-      <div class="ds-col-span-8"><span class="demo-grid__cell">span 8</span></div>
-      <div class="ds-col-span-16"><span class="demo-grid__cell">span 16</span></div>
-    </div>
-
-    <p class="demo__note">
-      Breakpoint-scoped spans read "from here up", the same as Carbon:
-      <code>ds-col-md-4</code> applies from <code>md</code>, and anything below
-      it falls back to the unprefixed span or to a single track.
-    </p>
-
-    <div class="ds-grid ds-grid--full-width ds-grid--row-gap demo-grid">
-      <div class="ds-col-span-4 ds-col-md-2 ds-col-lg-8">
-        <span class="demo-grid__cell">4 / md 2 / lg 8</span>
-      </div>
-      <div class="ds-col-span-4 ds-col-md-6 ds-col-lg-8">
-        <span class="demo-grid__cell">4 / md 6 / lg 8</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Active route ─────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Active route</h2>
-    <p class="demo__note">
-      The last three side nav links are real routes. Click one and watch the
-      highlight follow the URL — nothing here binds it. `routerLinkActive` with
-      `ariaCurrentWhenActive` writes <code>aria-current="page"</code>, and the
-      shell styles against that attribute, which is what Carbon keys off too.
-    </p>
-
-    <router-outlet />
-  </section>
-
-  <!-- ── Button ──────────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Button</h2>
-    <p class="demo__note">
-      An attribute on a native <code>&lt;button&gt;</code>. Every color reads from
-      a <code>$button-*</code> component token, which is why all four themes work
-      without a single per-theme override.
-    </p>
-
-    <div class="demo__row">
-      @for (kind of kinds; track kind) {
-        <button dsButton [kind]="kind">{{ kind }}</button>
-      }
-    </div>
-
-    <div class="demo__row">
-      @for (size of sizes; track size) {
-        <button dsButton kind="secondary" [size]="size">size {{ size }}</button>
-      }
-    </div>
-
-    <div class="demo__row">
-      <button dsButton disabled>disabled</button>
-      <button dsButton kind="danger" disabled>danger, disabled</button>
-      <button dsButton kind="ghost">ghost</button>
-    </div>
-
-    <p class="demo__note">
-      Tab to a button, or click one, to see the focus ring — it is inset by 2px
-      so it never shifts layout. It stays until focus moves on, because Carbon
-      writes every focus style against <code>:focus</code>: the ring says where
-      focus is, not how it got there.
-    </p>
-  </section>
-
-  <!-- ── Tag ─────────────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Tag</h2>
-    <p class="demo__note">
-      Carbon ships background, text, border and hover as a contrast-checked set
-      per hue. The component takes the hue name and picks up all four.
-    </p>
-
-    <div class="demo__row">
-      @for (color of colors; track color) {
-        <ds-tag [color]="color">{{ color }}</ds-tag>
-      }
-    </div>
-
-    <div class="demo__row">
-      @for (color of removable(); track color) {
-        <ds-tag
-          [color]="color"
-          size="lg"
-          dismissible
-          [dismissLabel]="'Remove ' + color"
-          (dismissed)="remove(color)"
-        >
-          {{ color }}
-        </ds-tag>
-      } @empty {
-        <span class="demo__empty">All dismissed.</span>
-      }
-
-      @if (removable().length < 4) {
-        <button dsButton kind="ghost" size="sm" (click)="resetTags()">Reset</button>
-      }
-    </div>
-
-    <p class="demo__note">
-      A tag you can click is a <code>&lt;button&gt;</code>, not a span with a
-      role — the same split the button makes. Selectable takes no hue on purpose:
-      a chip that is both blue and selected has two things saying "picked".
-    </p>
-
-    <div class="demo__row">
-      @for (region of regions; track region) {
-        <button dsTag selectable [selected]="isRegionOn(region)" (toggled)="toggleRegion(region)">
-          {{ region }}
-        </button>
-      }
-
-      <span class="demo__result">
-        matching: <code>{{ selectedRegions().length || 'all' }}</code>
-      </span>
-    </div>
-
-    <div class="demo__row">
-      <button dsTag color="teal" icon="settings" (click)="openConfirm()">
-        operational, opens something
-      </button>
-
-      <ds-tag color="purple" icon="calendar">with an icon</ds-tag>
-      <ds-tag color="red" disabled>disabled</ds-tag>
-    </div>
-  </section>
-
-  <!-- ── Search ──────────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Search</h2>
-    <p class="demo__note">
-      Both gutters are one field-height wide — the left holds the magnifier, the
-      right is exactly the clear button's box — so the text never slides under
-      either. The label is always visually hidden, which is Carbon's rule and not
-      an option here: a placeholder stops being a label the moment you type.
-      Clear the field with the &times; and watch where focus lands.
-    </p>
-
-    <div class="demo__fields demo__fields--single">
-      <ds-search
-        label="Search components"
-        placeholder="Try typing something"
-        [(value)]="searchValue"
-      />
-    </div>
-
-    <div class="demo__row">
-      @for (size of fieldSizes; track size) {
-        <ds-search
-          [size]="size"
-          [label]="'Search, ' + size"
-          [placeholder]="'size ' + size"
-        />
-      }
-    </div>
-
-    <div class="demo__fields demo__fields--single">
-      <ds-search label="Disabled search" placeholder="Disabled" disabled />
-    </div>
-
-    <p class="demo__note">
-      The table's filter above is this same component — the demo no longer styles
-      an input of its own.
-    </p>
-  </section>
-
-  <!-- ── Input ───────────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Input</h2>
-    <p class="demo__note">
-      The label belongs to the control, not to a wrapper — that is Carbon's own
-      API shape and it keeps every field one element deep. Helper text and the
-      error line share one slot: the error <em>replaces</em> the helper rather
-      than stacking under it, so nothing below shifts when a field goes invalid.
-    </p>
-
-    <div class="demo__fields">
-      <ds-input
-        label="Cluster name"
-        placeholder="my-cluster"
-        helperText="Lowercase letters, digits and dashes."
-        [(value)]="clusterName"
-      />
-
-      <ds-input
-        label="Replicas"
-        type="number"
-        placeholder="3"
-        helperText="Value stays a string — the caller parses."
-        [(value)]="replicas"
-      />
-    </div>
-
-    <div class="demo__row">
-      @for (size of fieldSizes; track size) {
-        <ds-input [size]="size" [label]="'Size ' + size" [placeholder]="size" />
-      }
-    </div>
-
-    <p class="demo__note">
-      Invalid and warn. Only invalid draws a border — Carbon carries warn on the
-      icon and the message alone, because <code>$support-warning</code> is the
-      same yellow in all four themes and yellow text fails contrast on the light
-      ones. Focus an invalid field: the blue ring wins while you are in it, and
-      the red comes back on blur, which is also when validation runs.
-    </p>
-
-    <div class="demo__fields">
-      <ds-input
-        label="Namespace"
-        value="Production"
-        invalid
-        invalidText="That namespace already exists."
-      />
-
-      <ds-input
-        label="Memory limit"
-        value="512Mi"
-        warn
-        warnText="Below the recommended 1Gi for this image."
-      />
-    </div>
-
-    <p class="demo__note">
-      Password, disabled and read-only. The reveal toggle is an icon-only control,
-      so its name is an input rather than a hardcoded string.
-    </p>
-
-    <div class="demo__fields">
-      <ds-input
-        label="API token"
-        type="password"
-        value="hunter2-but-longer"
-        helperText="Click the eye to reveal."
-      />
-
-      <ds-input
-        label="Expired token"
-        type="password"
-        value="cannot-touch-this"
-        invalid
-        invalidText="This token expired 3 days ago."
-      />
-
-      <ds-input label="Disabled" value="Not editable" disabled />
-
-      <ds-input
-        label="Cluster ID"
-        value="clu_8f2a41"
-        readOnly
-        helperText="Read-only drops the fill entirely."
-      />
-    </div>
-
-    <p class="demo__note">
-      The fluid variant. Not a fourth size — the label moves inside a fixed 64px
-      box, so it is a different layout rather than a taller one. Helper text has
-      nowhere to go and is dropped; the error message moves inside the box, below
-      a divider.
-    </p>
-
-    <div class="demo__fields">
-      <ds-input fluid label="Cluster name" placeholder="my-cluster" />
-
-      <ds-input
-        fluid
-        label="Namespace"
-        value="Production"
-        invalid
-        invalidText="That namespace already exists."
-      />
-    </div>
-  </section>
-
-  <!-- ── Select ──────────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Select</h2>
-    <p class="demo__note">
-      A native <code>&lt;select&gt;</code> with the arrow drawn over it, because a
-      native arrow cannot be styled. Options are projected rather than configured
-      — <code>&lt;ds-select&gt;&lt;option&gt;</code> — which keeps
-      <code>&lt;optgroup&gt;</code>, disabled options and an empty placeholder row
-      working without re-exposing any of them.
-    </p>
-
-    <div class="demo__fields">
-      <ds-select
-        label="Region"
-        helperText="Where the cluster runs."
-        [(value)]="region"
-      >
-        <option value="">Choose a region</option>
-        <optgroup label="Europe">
-          <option value="eu-central">eu-central</option>
-          <option value="eu-west">eu-west</option>
-        </optgroup>
-        <optgroup label="North America">
-          <option value="us-east">us-east</option>
-          <option value="us-west" disabled>us-west (at capacity)</option>
-        </optgroup>
-      </ds-select>
-
-      <ds-select label="Tier" helperText="Selected: {{ tier() }}" [(value)]="tier">
-        <option value="dev">Development</option>
-        <option value="staging">Staging</option>
-        <option value="prod">Production</option>
-      </ds-select>
-    </div>
-
-    <div class="demo__row">
-      @for (size of fieldSizes; track size) {
-        <ds-select [size]="size" [label]="'Size ' + size">
-          <option>size {{ size }}</option>
-        </ds-select>
-      }
-    </div>
-
-    <div class="demo__fields">
-      <ds-select label="Instance type" invalid invalidText="No longer offered.">
-        <option>m4.large</option>
-      </ds-select>
-
-      <ds-select label="Storage class" warn warnText="Slower than the default.">
-        <option>cold-hdd</option>
-      </ds-select>
-
-      <ds-select label="Disabled" disabled>
-        <option>Not editable</option>
-      </ds-select>
-
-      <ds-select label="Provider" readOnly helperText="Read-only, set at creation.">
-        <option>aws</option>
-      </ds-select>
-    </div>
-
-    <div class="demo__fields">
-      <ds-select fluid label="Region">
-        <option value="">Choose a region</option>
-        <option>eu-central</option>
-      </ds-select>
-
-      <ds-select fluid label="Instance type" invalid invalidText="No longer offered.">
-        <option>m4.large</option>
-      </ds-select>
-    </div>
-
-    <p class="demo__note">
-      Read-only deserves a footnote: a native <code>&lt;select&gt;</code> has no
-      <code>readonly</code>, so <code>readOnly</code> sets <code>disabled</code>
-      underneath and puts the look back. The consequence is that a read-only
-      select is not submitted with its form — send the value yourself.
-    </p>
-  </section>
-
-  <!-- ── Textarea ────────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Textarea</h2>
-    <p class="demo__note">
-      No size scale — Carbon sizes a textarea with <code>rows</code>, not with the
-      32/40/48 field heights. The type style is <code>body-01</code> rather than
-      the compact one every single-line field uses: compact line height reads fine
-      on one line and cramped the moment text wraps. Drag the bottom-right corner
-      — vertical resize only.
-    </p>
-
-    <div class="demo__fields">
-      <ds-textarea
-        label="Description"
-        placeholder="What does this service do?"
-        helperText="Shown on the service detail page."
-        [(value)]="description"
-      />
-
-      <ds-textarea
-        label="Release notes"
-        [rows]="4"
-        [maxLength]="120"
-        showCounter
-        helperText="Up to 120 characters."
-        [(value)]="notes"
-      />
-    </div>
-
-    <div class="demo__fields">
-      <ds-textarea
-        label="Rollback reason"
-        value="Because"
-        invalid
-        invalidText="Give at least 20 characters of context."
-      />
-
-      <ds-textarea
-        label="Runbook"
-        value="See the wiki."
-        warn
-        warnText="Linking out means this is empty during an incident."
-      />
-
-      <ds-textarea label="Disabled" value="Not editable" disabled />
-
-      <ds-textarea
-        label="Audit note"
-        value="Created by the platform team."
-        readOnly
-        helperText="Read-only drops the fill and the resize handle."
-      />
-    </div>
-
-    <div class="demo__fields">
-      <ds-textarea fluid label="Description" placeholder="What does this do?" />
-
-      <ds-textarea
-        fluid
-        label="Rollback reason"
-        value="Because"
-        invalid
-        invalidText="Give at least 20 characters of context."
-      />
-    </div>
-
-    <p class="demo__note">
-      One deliberate deviation from Carbon here: Carbon reserves no right-hand
-      gutter for the status icon, so the first line of text runs underneath it. We
-      reserve it. An icon that hides the value it is complaining about is worse
-      than a field 40px narrower.
-    </p>
-  </section>
-
-  <!-- ── Radio group ─────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Radio group</h2>
-    <p class="demo__note">
-      Almost none of this is ours. Give native radios a shared <code>name</code>
-      and the browser supplies single selection, arrow-key navigation, and a tab
-      order where the whole group is <em>one</em> stop rather than one per option
-      — try it: Tab in, then arrow between them, then Tab out. The
-      <code>&lt;fieldset&gt;</code> is doing work too: its <code>disabled</code>
-      cascades to every input inside, and the <code>&lt;legend&gt;</code> is what
-      names the group to a screen reader.
-    </p>
-
-    <div class="demo__fields">
-      <ds-radio-group
-        legend="Deployment strategy"
-        helperText="Selected: {{ strategy() }}"
-        [(value)]="strategy"
-      >
-        <ds-radio label="Rolling" value="rolling" />
-        <ds-radio label="Blue-green" value="blue-green" />
-        <ds-radio label="Canary" value="canary" />
-      </ds-radio-group>
-    </div>
-
-    <div class="demo__fields">
-      <ds-radio-group
-        legend="Log level"
-        orientation="vertical"
-        helperText="Vertical, and one option disabled on its own."
-        [(value)]="logLevel"
-      >
-        <ds-radio label="Error" value="error" />
-        <ds-radio label="Warn" value="warn" />
-        <ds-radio label="Info" value="info" />
-        <ds-radio label="Debug (not on production)" value="debug" disabled />
-      </ds-radio-group>
-
-      <ds-radio-group
-        legend="Retention"
-        orientation="vertical"
-        value="30"
-        invalid
-        invalidText="Your plan caps retention at 7 days."
-      >
-        <ds-radio label="7 days" value="7" />
-        <ds-radio label="30 days" value="30" />
-        <ds-radio label="1 year" value="365" />
-      </ds-radio-group>
-    </div>
-
-    <div class="demo__fields">
-      <ds-radio-group legend="Disabled group" value="a" disabled>
-        <ds-radio label="Option A" value="a" />
-        <ds-radio label="Option B" value="b" />
-      </ds-radio-group>
-
-      <ds-radio-group
-        legend="Read-only group"
-        value="b"
-        readOnly
-        helperText="Focusable and readable, but it will not change."
-      >
-        <ds-radio label="Option A" value="a" />
-        <ds-radio label="Option B" value="b" />
-      </ds-radio-group>
-    </div>
-
-    <p class="demo__note">
-      Read-only is the one place the browser fights us. A radio has no native
-      <code>readonly</code>, and by the time <code>change</code> fires the browser
-      has already checked one option <em>and</em> unchecked another — which a
-      single input cannot undo. So it is cancelled on the click instead, before
-      any of it happens. Tab into the read-only group and press an arrow: focus
-      moves, the selection does not.
-    </p>
-  </section>
-
-  <!-- ── Checkbox ────────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Checkbox group</h2>
-    <p class="demo__note">
-      A group, unlike a radio group, owns no value. Each box keeps its own
-      <code>checked</code>; what the group owns is the legend, the message,
-      <code>disabled</code> and <code>readOnly</code> — the things the set
-      genuinely shares.
-    </p>
-
-    <div class="demo__fields">
-      <ds-checkbox-group
-        legend="Notify me about"
-        helperText="You can change this later."
-        [invalid]="notifyInvalid()"
-        invalidText="Pick at least one."
-      >
-        <ds-checkbox label="Deploys" [(checked)]="notifyDeploys" />
-        <ds-checkbox label="Incidents" [(checked)]="notifyIncidents" />
-        <ds-checkbox label="Weekly digest" [(checked)]="notifyDigest" />
-      </ds-checkbox-group>
-
-      <ds-checkbox-group legend="Read-only set" readOnly>
-        <ds-checkbox label="Deploys" [checked]="true" />
-        <ds-checkbox label="Incidents" />
-      </ds-checkbox-group>
-    </div>
-
-    <p class="demo__note">
-      Untick all three and the group goes invalid. Note that the message appears
-      <em>once</em>, not once per box — the boxes point their
-      <code>aria-describedby</code> at the group's single message, so a screen
-      reader hears the requirement one time however long the list is.
-    </p>
-
-    <div class="demo__fields demo__fields--single">
-      <ds-checkbox
-        label="I accept the terms"
-        [(checked)]="accepted"
-        [invalid]="termsSubmitted() && !accepted()"
-        invalidText="You must accept to continue."
-      />
-    </div>
-
-    <div class="demo__row">
-      <button dsButton size="sm" (click)="termsSubmitted.set(true)">Submit</button>
-      <button dsButton kind="ghost" size="sm" (click)="resetTerms()">Reset</button>
-    </div>
-
-    <p class="demo__note">
-      A lone checkbox carries its own message instead — the standalone case
-      Carbon keeps <code>invalid</code> on the checkbox for.
-    </p>
-  </section>
-
-  <!-- ── Toggle ──────────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Toggle</h2>
-    <p class="demo__note">
-      A <code>&lt;button role="switch"&gt;</code>, not a checkbox — Carbon's
-      choice and the right one. A switch takes effect immediately; a checkbox is a
-      value you submit later, and screen readers announce the two differently.
-      <code>checked</code> is a <code>model()</code>, so this already satisfies
-      <code>FormCheckboxControl</code> with no adapter.
-    </p>
-
-    <div class="demo__fields">
-      <ds-toggle label="Auto-scaling" [(checked)]="autoScaling" />
-      <ds-toggle label="Public endpoint" [(checked)]="publicEndpoint" />
-    </div>
-
-    <div class="demo__fields">
-      <ds-toggle label="Small" size="sm" [(checked)]="smallToggle" />
-      <ds-toggle label="No state text" hideStateText [(checked)]="terseToggle" />
-    </div>
-
-    <div class="demo__fields">
-      <ds-toggle label="Disabled, off" disabled />
-      <ds-toggle label="Disabled, on" disabled [checked]="true" />
-      <ds-toggle label="Read-only" readOnly [checked]="true" />
-      <ds-toggle
-        label="Custom state text"
-        onLabel="Enabled"
-        offLabel="Disabled"
-        [(checked)]="customToggle"
-      />
-    </div>
-
-    <p class="demo__note">
-      The check inside the switch appears on the small size only. It is positioned
-      for a 16px track, and at 24px the knob is large enough to read on its own —
-      which is why Carbon draws it in exactly one of the two.
-    </p>
-  </section>
-
-  <!-- ── Date picker ─────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Date picker</h2>
-    <p class="demo__note">
-      The one component here built on a third-party primitive.
-      <code>&#64;angular/aria</code> has no calendar, so the month grid, the
-      roving focus and the arrow / Home / End / PageUp / PageDown keys come from
-      <code>ng-primitives</code>; the markup, the class names and every pixel are
-      ours. Same split as Tabs, different vendor. The popover is CDK Overlay, not
-      the primitive's own — we already use the CDK for Modal, and taking theirs
-      would have meant a second positioning engine in the bundle.
-    </p>
-
-    <div class="demo__fields">
-      <ds-date-picker
-        label="Start date"
-        helperText="Selected: {{ startDate() ? startDate()!.toDateString() : 'nothing' }}"
-        [(value)]="startDate"
-      />
-
-      <ds-date-picker
-        label="Cutoff"
-        helperText="Only this month, and no weekends."
-        [min]="monthStart"
-        [max]="monthEnd"
-        [dateDisabled]="noWeekends"
-        [(value)]="cutoff"
-      />
-    </div>
-
-    <p class="demo__note">
-      Open one and use the keyboard: arrows move a day, PageUp / PageDown move a
-      month, Home / End jump to the ends of the week, Enter picks, Escape closes
-      and puts focus back in the field. None of that is our code.
-    </p>
-
-    <div class="demo__fields">
-      <ds-date-picker
-        label="Expiry"
-        invalid
-        invalidText="That date is in the past."
-      />
-
-      <ds-date-picker
-        label="Renewal"
-        warn
-        warnText="Falls on a public holiday."
-      />
-
-      <ds-date-picker label="Disabled" disabled />
-
-      <ds-date-picker
-        label="Created"
-        readOnly
-        helperText="Read-only closes the calendar button too."
-      />
-    </div>
-
-    <p class="demo__note">
-      The field is typeable, and the default format is ISO
-      <code>yyyy-mm-dd</code> — deliberately not a locale format. Whatever the
-      field shows has to be something the field can read back, and
-      <code>03/04</code> is two different days depending on who is reading it.
-      <code>formatDate</code> and <code>parseDate</code> are both inputs;
-      override them together, never one alone.
-    </p>
-
-    <div class="demo__fields demo__fields--single">
-      <ds-date-picker
-        label="Locale formatted"
-        placeholder="dd.mm.yyyy."
-        helperText="Same picker, both functions replaced."
-        [formatDate]="formatLocale"
-        [parseDate]="parseLocale"
-        [(value)]="localeDate"
-      />
-    </div>
-
-    <h3 class="demo__subtitle">Range</h3>
-    <p class="demo__note">
-      One field holding both ends, one calendar. Click a start day, then an end
-      day: the calendar closes on the second, because the primitive reports the
-      two as separate events and closing on the first would make the second
-      impossible. Carbon renders a range as two fields — this is deliberately
-      one.
-    </p>
-    <p class="demo__note">
-      A single field has to read its own separator back, so the parser accepts an
-      en dash, an em dash, a spaced hyphen or the word <em>to</em>. All of them
-      require surrounding whitespace, which is what stops them colliding with the
-      hyphens inside an ISO date — <code>2026-08-13-2026-08-15</code> has no
-      unambiguous split point, <code>2026-08-13 – 2026-08-15</code> does.
-    </p>
-    <p class="demo__note">
-      The panel here is the <em>same component</em> the single picker uses.
-      ng-primitives' grid directives resolve their state through a fallback, so
-      the markup does not care which of the two picker directives sits above it.
-    </p>
-
-    <div class="demo__fields demo__fields--single">
-      <ds-date-range-picker
-        label="Reporting period"
-        placeholder="yyyy-mm-dd – yyyy-mm-dd"
-        [(start)]="rangeStart"
-        [(end)]="rangeEnd"
-        helperText="Selected: {{ rangeSummary() }}"
-      />
-    </div>
-  </section>
-
-  <!-- ── Multi-select ────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Multi-select</h2>
-    <p class="demo__note">
-      Carbon's MultiSelect: a count in the field, a listbox of checkboxes below
-      it. <code>ng-primitives</code> owns selection, roving focus and the
-      keyboard; the field, the popover and the class names are ours. The rows
-      reuse <code>ds-checkbox</code>, which already does indeterminate — which is
-      exactly what a partial select-all needs.
-    </p>
-    <p class="demo__note">
-      Options are configured here rather than projected, the opposite of
-      <code>ds-select</code>, and for a concrete reason: select-all has to know
-      the whole set and the filter has to know each row's text. Projected
-      <code>&lt;option&gt;</code> elements expose neither.
-    </p>
-
-    <div class="demo__fields">
-      <ds-multi-select
-        label="Namespaces"
-        selectAll
-        helperText="Selected: {{ namespaces().length ? namespaces().join(', ') : 'nothing' }}"
-        [options]="namespaceOptions"
-        [(selected)]="namespaces"
-      />
-
-      <ds-multi-select
-        label="Owners"
-        selectAll
-        filterable
-        placeholder="Choose owners"
-        helperText="Filterable — this is Carbon's combo box shape."
-        [options]="ownerOptions"
-        [(selected)]="owners"
-      />
-    </div>
-
-    <p class="demo__note">
-      Type in the filterable one, then press <em>Select all</em>. It applies to
-      the rows the filter left, not to the hundred it is hiding — and clearing it
-      does not drop them either. That is the part implementations usually get
-      wrong.
-    </p>
-
-    <div class="demo__fields">
-      <ds-multi-select
-        label="Regions"
-        invalid
-        invalidText="Pick at least one region."
-        [options]="regionOptions"
-      />
-
-      <ds-multi-select label="Disabled" disabled [options]="regionOptions" />
-    </div>
-  </section>
-
-  <!-- ── Validation timing ───────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">When invalid appears</h2>
-    <p class="demo__note">
-      Carbon specifies the timing, not just the look, and this is it — one rule
-      for the whole app. Type a bad address: nothing happens. Tab away: it turns
-      red. Fix it: the error clears as you type, without waiting for another blur.
-      Press <em>Create</em> with the field untouched and it validates anyway.
-    </p>
-    <p class="demo__note">
-      The control has no part in this. <code>invalid</code> is a plain input and
-      the policy lives here, in the form — a control cannot see a submit it is not
-      part of.
-    </p>
-
-    <!-- Carbon: "use an inline notification as well as inline error messaging
+      <section class="demo__intro">
+        <h1>Carbon tokens, our components</h1>
+        <p>
+          No <code>carbon-components-angular</code> anywhere. The design language comes from
+          <code>&#64;carbon/styles</code> as Sass; behavior comes from
+          <code>&#64;angular/aria</code> and <code>&#64;angular/cdk</code>; the markup and the class
+          names are ours. Change the theme under the gear in the header — nothing recompiles, only
+          the <code>data-theme</code> attribute on <code>&lt;html&gt;</code> changes.
+        </p>
+      </section>
+
+      <!-- ── Grid ─────────────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Grid</h2>
+        <p class="demo__note">
+          Carbon's 2x grid: 16 columns from <code>lg</code> up, 8 on <code>md</code>, 4 on
+          <code>sm</code>. The column count changing is the whole idea —
+          <code>ds-col-span-8</code> is half the page on a laptop and the entire width of a tablet,
+          from one class.
+        </p>
+        <p class="demo__note">
+          Resize the window and watch the row below re-flow. The gutter is padding on the columns
+          rather than <code>gap</code>, which is Carbon's choice: a gap would leave visible stripes
+          between filled columns, where padding lets a column's background run edge to edge and
+          insets only its content.
+        </p>
+
+        <div class="ds-grid ds-grid--full-width ds-grid--row-gap demo-grid">
+          @for (n of gridCells; track n) {
+            <div class="ds-col-span-4"><span class="demo-grid__cell">span 4</span></div>
+          }
+          <div class="ds-col-span-8"><span class="demo-grid__cell">span 8</span></div>
+          <div class="ds-col-span-8"><span class="demo-grid__cell">span 8</span></div>
+          <div class="ds-col-span-16"><span class="demo-grid__cell">span 16</span></div>
+        </div>
+
+        <p class="demo__note">
+          Breakpoint-scoped spans read "from here up", the same as Carbon:
+          <code>ds-col-md-4</code> applies from <code>md</code>, and anything below it falls back to
+          the unprefixed span or to a single track.
+        </p>
+
+        <div class="ds-grid ds-grid--full-width ds-grid--row-gap demo-grid">
+          <div class="ds-col-span-4 ds-col-md-2 ds-col-lg-8">
+            <span class="demo-grid__cell">4 / md 2 / lg 8</span>
+          </div>
+          <div class="ds-col-span-4 ds-col-md-6 ds-col-lg-8">
+            <span class="demo-grid__cell">4 / md 6 / lg 8</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Active route ─────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Active route</h2>
+        <p class="demo__note">
+          The last three side nav links are real routes. Click one and watch the highlight follow
+          the URL — nothing here binds it. `routerLinkActive` with `ariaCurrentWhenActive` writes
+          <code>aria-current="page"</code>, and the shell styles against that attribute, which is
+          what Carbon keys off too.
+        </p>
+
+        <router-outlet />
+      </section>
+
+      <!-- ── Button ──────────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Button</h2>
+        <p class="demo__note">
+          An attribute on a native <code>&lt;button&gt;</code>. Every color reads from a
+          <code>$button-*</code> component token, which is why all four themes work without a single
+          per-theme override.
+        </p>
+
+        <div class="demo__row">
+          @for (kind of kinds; track kind) {
+            <button dsButton [kind]="kind">{{ kind }}</button>
+          }
+        </div>
+
+        <div class="demo__row">
+          @for (size of sizes; track size) {
+            <button dsButton kind="secondary" [size]="size">size {{ size }}</button>
+          }
+        </div>
+
+        <div class="demo__row">
+          <button dsButton disabled>disabled</button>
+          <button dsButton kind="danger" disabled>danger, disabled</button>
+          <button dsButton kind="ghost">ghost</button>
+        </div>
+
+        <p class="demo__note">
+          Tab to a button, or click one, to see the focus ring — it is inset by 2px so it never
+          shifts layout. It stays until focus moves on, because Carbon writes every focus style
+          against <code>:focus</code>: the ring says where focus is, not how it got there.
+        </p>
+      </section>
+
+      <!-- ── Tag ─────────────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Tag</h2>
+        <p class="demo__note">
+          Carbon ships background, text, border and hover as a contrast-checked set per hue. The
+          component takes the hue name and picks up all four.
+        </p>
+
+        <div class="demo__row">
+          @for (color of colors; track color) {
+            <ds-tag [color]="color">{{ color }}</ds-tag>
+          }
+        </div>
+
+        <div class="demo__row">
+          @for (color of removable(); track color) {
+            <ds-tag
+              [color]="color"
+              size="lg"
+              dismissible
+              [dismissLabel]="'Remove ' + color"
+              (dismissed)="remove(color)"
+            >
+              {{ color }}
+            </ds-tag>
+          } @empty {
+            <span class="demo__empty">All dismissed.</span>
+          }
+
+          @if (removable().length < 4) {
+            <button dsButton kind="ghost" size="sm" (click)="resetTags()">Reset</button>
+          }
+        </div>
+
+        <p class="demo__note">
+          A tag you can click is a <code>&lt;button&gt;</code>, not a span with a role — the same
+          split the button makes. Selectable takes no hue on purpose: a chip that is both blue and
+          selected has two things saying "picked".
+        </p>
+
+        <div class="demo__row">
+          @for (region of regions; track region) {
+            <button
+              dsTag
+              selectable
+              [selected]="isRegionOn(region)"
+              (toggled)="toggleRegion(region)"
+            >
+              {{ region }}
+            </button>
+          }
+
+          <span class="demo__result">
+            matching: <code>{{ selectedRegions().length || 'all' }}</code>
+          </span>
+        </div>
+
+        <div class="demo__row">
+          <button dsTag color="teal" icon="settings" (click)="openConfirm()">
+            operational, opens something
+          </button>
+
+          <ds-tag color="purple" icon="calendar">with an icon</ds-tag>
+          <ds-tag color="red" disabled>disabled</ds-tag>
+        </div>
+      </section>
+
+      <!-- ── Search ──────────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Search</h2>
+        <p class="demo__note">
+          Both gutters are one field-height wide — the left holds the magnifier, the right is
+          exactly the clear button's box — so the text never slides under either. The label is
+          always visually hidden, which is Carbon's rule and not an option here: a placeholder stops
+          being a label the moment you type. Clear the field with the &times; and watch where focus
+          lands.
+        </p>
+
+        <div class="demo__fields demo__fields--single">
+          <ds-search
+            label="Search components"
+            placeholder="Try typing something"
+            [(value)]="searchValue"
+          />
+        </div>
+
+        <div class="demo__row">
+          @for (size of fieldSizes; track size) {
+            <ds-search [size]="size" [label]="'Search, ' + size" [placeholder]="'size ' + size" />
+          }
+        </div>
+
+        <div class="demo__fields demo__fields--single">
+          <ds-search label="Disabled search" placeholder="Disabled" disabled />
+        </div>
+
+        <p class="demo__note">
+          The table's filter above is this same component — the demo no longer styles an input of
+          its own.
+        </p>
+      </section>
+
+      <!-- ── Input ───────────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Input</h2>
+        <p class="demo__note">
+          The label belongs to the control, not to a wrapper — that is Carbon's own API shape and it
+          keeps every field one element deep. Helper text and the error line share one slot: the
+          error <em>replaces</em> the helper rather than stacking under it, so nothing below shifts
+          when a field goes invalid.
+        </p>
+
+        <div class="demo__fields">
+          <ds-input
+            label="Cluster name"
+            placeholder="my-cluster"
+            helperText="Lowercase letters, digits and dashes."
+            [(value)]="clusterName"
+          />
+
+          <ds-input
+            label="Replicas"
+            type="number"
+            placeholder="3"
+            helperText="Value stays a string — the caller parses."
+            [(value)]="replicas"
+          />
+        </div>
+
+        <div class="demo__row">
+          @for (size of fieldSizes; track size) {
+            <ds-input [size]="size" [label]="'Size ' + size" [placeholder]="size" />
+          }
+        </div>
+
+        <p class="demo__note">
+          Invalid and warn. Only invalid draws a border — Carbon carries warn on the icon and the
+          message alone, because <code>$support-warning</code> is the same yellow in all four themes
+          and yellow text fails contrast on the light ones. Focus an invalid field: the blue ring
+          wins while you are in it, and the red comes back on blur, which is also when validation
+          runs.
+        </p>
+
+        <div class="demo__fields">
+          <ds-input
+            label="Namespace"
+            value="Production"
+            invalid
+            invalidText="That namespace already exists."
+          />
+
+          <ds-input
+            label="Memory limit"
+            value="512Mi"
+            warn
+            warnText="Below the recommended 1Gi for this image."
+          />
+        </div>
+
+        <p class="demo__note">
+          Password, disabled and read-only. The reveal toggle is an icon-only control, so its name
+          is an input rather than a hardcoded string.
+        </p>
+
+        <div class="demo__fields">
+          <ds-input
+            label="API token"
+            type="password"
+            value="hunter2-but-longer"
+            helperText="Click the eye to reveal."
+          />
+
+          <ds-input
+            label="Expired token"
+            type="password"
+            value="cannot-touch-this"
+            invalid
+            invalidText="This token expired 3 days ago."
+          />
+
+          <ds-input label="Disabled" value="Not editable" disabled />
+
+          <ds-input
+            label="Cluster ID"
+            value="clu_8f2a41"
+            readOnly
+            helperText="Read-only drops the fill entirely."
+          />
+        </div>
+
+        <p class="demo__note">
+          The fluid variant. Not a fourth size — the label moves inside a fixed 64px box, so it is a
+          different layout rather than a taller one. Helper text has nowhere to go and is dropped;
+          the error message moves inside the box, below a divider.
+        </p>
+
+        <div class="demo__fields">
+          <ds-input fluid label="Cluster name" placeholder="my-cluster" />
+
+          <ds-input
+            fluid
+            label="Namespace"
+            value="Production"
+            invalid
+            invalidText="That namespace already exists."
+          />
+        </div>
+      </section>
+
+      <!-- ── Select ──────────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Select</h2>
+        <p class="demo__note">
+          A native <code>&lt;select&gt;</code> with the arrow drawn over it, because a native arrow
+          cannot be styled. Options are projected rather than configured —
+          <code>&lt;ds-select&gt;&lt;option&gt;</code> — which keeps <code>&lt;optgroup&gt;</code>,
+          disabled options and an empty placeholder row working without re-exposing any of them.
+        </p>
+
+        <div class="demo__fields">
+          <ds-select label="Region" helperText="Where the cluster runs." [(value)]="region">
+            <option value="">Choose a region</option>
+            <optgroup label="Europe">
+              <option value="eu-central">eu-central</option>
+              <option value="eu-west">eu-west</option>
+            </optgroup>
+            <optgroup label="North America">
+              <option value="us-east">us-east</option>
+              <option value="us-west" disabled>us-west (at capacity)</option>
+            </optgroup>
+          </ds-select>
+
+          <ds-select label="Tier" helperText="Selected: {{ tier() }}" [(value)]="tier">
+            <option value="dev">Development</option>
+            <option value="staging">Staging</option>
+            <option value="prod">Production</option>
+          </ds-select>
+        </div>
+
+        <div class="demo__row">
+          @for (size of fieldSizes; track size) {
+            <ds-select [size]="size" [label]="'Size ' + size">
+              <option>size {{ size }}</option>
+            </ds-select>
+          }
+        </div>
+
+        <div class="demo__fields">
+          <ds-select label="Instance type" invalid invalidText="No longer offered.">
+            <option>m4.large</option>
+          </ds-select>
+
+          <ds-select label="Storage class" warn warnText="Slower than the default.">
+            <option>cold-hdd</option>
+          </ds-select>
+
+          <ds-select label="Disabled" disabled>
+            <option>Not editable</option>
+          </ds-select>
+
+          <ds-select label="Provider" readOnly helperText="Read-only, set at creation.">
+            <option>aws</option>
+          </ds-select>
+        </div>
+
+        <div class="demo__fields">
+          <ds-select fluid label="Region">
+            <option value="">Choose a region</option>
+            <option>eu-central</option>
+          </ds-select>
+
+          <ds-select fluid label="Instance type" invalid invalidText="No longer offered.">
+            <option>m4.large</option>
+          </ds-select>
+        </div>
+
+        <p class="demo__note">
+          Read-only deserves a footnote: a native <code>&lt;select&gt;</code> has no
+          <code>readonly</code>, so <code>readOnly</code> sets <code>disabled</code>
+          underneath and puts the look back. The consequence is that a read-only select is not
+          submitted with its form — send the value yourself.
+        </p>
+      </section>
+
+      <!-- ── Textarea ────────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Textarea</h2>
+        <p class="demo__note">
+          No size scale — Carbon sizes a textarea with <code>rows</code>, not with the 32/40/48
+          field heights. The type style is <code>body-01</code> rather than the compact one every
+          single-line field uses: compact line height reads fine on one line and cramped the moment
+          text wraps. Drag the bottom-right corner — vertical resize only.
+        </p>
+
+        <div class="demo__fields">
+          <ds-textarea
+            label="Description"
+            placeholder="What does this service do?"
+            helperText="Shown on the service detail page."
+            [(value)]="description"
+          />
+
+          <ds-textarea
+            label="Release notes"
+            [rows]="4"
+            [maxLength]="120"
+            showCounter
+            helperText="Up to 120 characters."
+            [(value)]="notes"
+          />
+        </div>
+
+        <div class="demo__fields">
+          <ds-textarea
+            label="Rollback reason"
+            value="Because"
+            invalid
+            invalidText="Give at least 20 characters of context."
+          />
+
+          <ds-textarea
+            label="Runbook"
+            value="See the wiki."
+            warn
+            warnText="Linking out means this is empty during an incident."
+          />
+
+          <ds-textarea label="Disabled" value="Not editable" disabled />
+
+          <ds-textarea
+            label="Audit note"
+            value="Created by the platform team."
+            readOnly
+            helperText="Read-only drops the fill and the resize handle."
+          />
+        </div>
+
+        <div class="demo__fields">
+          <ds-textarea fluid label="Description" placeholder="What does this do?" />
+
+          <ds-textarea
+            fluid
+            label="Rollback reason"
+            value="Because"
+            invalid
+            invalidText="Give at least 20 characters of context."
+          />
+        </div>
+
+        <p class="demo__note">
+          One deliberate deviation from Carbon here: Carbon reserves no right-hand gutter for the
+          status icon, so the first line of text runs underneath it. We reserve it. An icon that
+          hides the value it is complaining about is worse than a field 40px narrower.
+        </p>
+      </section>
+
+      <!-- ── Radio group ─────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Radio group</h2>
+        <p class="demo__note">
+          Almost none of this is ours. Give native radios a shared <code>name</code> and the browser
+          supplies single selection, arrow-key navigation, and a tab order where the whole group is
+          <em>one</em> stop rather than one per option — try it: Tab in, then arrow between them,
+          then Tab out. The <code>&lt;fieldset&gt;</code> is doing work too: its
+          <code>disabled</code> cascades to every input inside, and the
+          <code>&lt;legend&gt;</code> is what names the group to a screen reader.
+        </p>
+
+        <div class="demo__fields">
+          <ds-radio-group
+            legend="Deployment strategy"
+            helperText="Selected: {{ strategy() }}"
+            [(value)]="strategy"
+          >
+            <ds-radio label="Rolling" value="rolling" />
+            <ds-radio label="Blue-green" value="blue-green" />
+            <ds-radio label="Canary" value="canary" />
+          </ds-radio-group>
+        </div>
+
+        <div class="demo__fields">
+          <ds-radio-group
+            legend="Log level"
+            orientation="vertical"
+            helperText="Vertical, and one option disabled on its own."
+            [(value)]="logLevel"
+          >
+            <ds-radio label="Error" value="error" />
+            <ds-radio label="Warn" value="warn" />
+            <ds-radio label="Info" value="info" />
+            <ds-radio label="Debug (not on production)" value="debug" disabled />
+          </ds-radio-group>
+
+          <ds-radio-group
+            legend="Retention"
+            orientation="vertical"
+            value="30"
+            invalid
+            invalidText="Your plan caps retention at 7 days."
+          >
+            <ds-radio label="7 days" value="7" />
+            <ds-radio label="30 days" value="30" />
+            <ds-radio label="1 year" value="365" />
+          </ds-radio-group>
+        </div>
+
+        <div class="demo__fields">
+          <ds-radio-group legend="Disabled group" value="a" disabled>
+            <ds-radio label="Option A" value="a" />
+            <ds-radio label="Option B" value="b" />
+          </ds-radio-group>
+
+          <ds-radio-group
+            legend="Read-only group"
+            value="b"
+            readOnly
+            helperText="Focusable and readable, but it will not change."
+          >
+            <ds-radio label="Option A" value="a" />
+            <ds-radio label="Option B" value="b" />
+          </ds-radio-group>
+        </div>
+
+        <p class="demo__note">
+          Read-only is the one place the browser fights us. A radio has no native
+          <code>readonly</code>, and by the time <code>change</code> fires the browser has already
+          checked one option <em>and</em> unchecked another — which a single input cannot undo. So
+          it is cancelled on the click instead, before any of it happens. Tab into the read-only
+          group and press an arrow: focus moves, the selection does not.
+        </p>
+      </section>
+
+      <!-- ── Checkbox ────────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Checkbox group</h2>
+        <p class="demo__note">
+          A group, unlike a radio group, owns no value. Each box keeps its own
+          <code>checked</code>; what the group owns is the legend, the message,
+          <code>disabled</code> and <code>readOnly</code> — the things the set genuinely shares.
+        </p>
+
+        <div class="demo__fields">
+          <ds-checkbox-group
+            legend="Notify me about"
+            helperText="You can change this later."
+            [invalid]="notifyInvalid()"
+            invalidText="Pick at least one."
+          >
+            <ds-checkbox label="Deploys" [(checked)]="notifyDeploys" />
+            <ds-checkbox label="Incidents" [(checked)]="notifyIncidents" />
+            <ds-checkbox label="Weekly digest" [(checked)]="notifyDigest" />
+          </ds-checkbox-group>
+
+          <ds-checkbox-group legend="Read-only set" readOnly>
+            <ds-checkbox label="Deploys" [checked]="true" />
+            <ds-checkbox label="Incidents" />
+          </ds-checkbox-group>
+        </div>
+
+        <p class="demo__note">
+          Untick all three and the group goes invalid. Note that the message appears
+          <em>once</em>, not once per box — the boxes point their <code>aria-describedby</code> at
+          the group's single message, so a screen reader hears the requirement one time however long
+          the list is.
+        </p>
+
+        <div class="demo__fields demo__fields--single">
+          <ds-checkbox
+            label="I accept the terms"
+            [(checked)]="accepted"
+            [invalid]="termsSubmitted() && !accepted()"
+            invalidText="You must accept to continue."
+          />
+        </div>
+
+        <div class="demo__row">
+          <button dsButton size="sm" (click)="termsSubmitted.set(true)">Submit</button>
+          <button dsButton kind="ghost" size="sm" (click)="resetTerms()">Reset</button>
+        </div>
+
+        <p class="demo__note">
+          A lone checkbox carries its own message instead — the standalone case Carbon keeps
+          <code>invalid</code> on the checkbox for.
+        </p>
+      </section>
+
+      <!-- ── Toggle ──────────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Toggle</h2>
+        <p class="demo__note">
+          A <code>&lt;button role="switch"&gt;</code>, not a checkbox — Carbon's choice and the
+          right one. A switch takes effect immediately; a checkbox is a value you submit later, and
+          screen readers announce the two differently. <code>checked</code> is a
+          <code>model()</code>, so this already satisfies <code>FormCheckboxControl</code> with no
+          adapter.
+        </p>
+
+        <div class="demo__fields">
+          <ds-toggle label="Auto-scaling" [(checked)]="autoScaling" />
+          <ds-toggle label="Public endpoint" [(checked)]="publicEndpoint" />
+        </div>
+
+        <div class="demo__fields">
+          <ds-toggle label="Small" size="sm" [(checked)]="smallToggle" />
+          <ds-toggle label="No state text" hideStateText [(checked)]="terseToggle" />
+        </div>
+
+        <div class="demo__fields">
+          <ds-toggle label="Disabled, off" disabled />
+          <ds-toggle label="Disabled, on" disabled [checked]="true" />
+          <ds-toggle label="Read-only" readOnly [checked]="true" />
+          <ds-toggle
+            label="Custom state text"
+            onLabel="Enabled"
+            offLabel="Disabled"
+            [(checked)]="customToggle"
+          />
+        </div>
+
+        <p class="demo__note">
+          The check inside the switch appears on the small size only. It is positioned for a 16px
+          track, and at 24px the knob is large enough to read on its own — which is why Carbon draws
+          it in exactly one of the two.
+        </p>
+      </section>
+
+      <!-- ── Date picker ─────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Date picker</h2>
+        <p class="demo__note">
+          The one component here built on a third-party primitive.
+          <code>&#64;angular/aria</code> has no calendar, so the month grid, the roving focus and
+          the arrow / Home / End / PageUp / PageDown keys come from <code>ng-primitives</code>; the
+          markup, the class names and every pixel are ours. Same split as Tabs, different vendor.
+          The popover is CDK Overlay, not the primitive's own — we already use the CDK for Modal,
+          and taking theirs would have meant a second positioning engine in the bundle.
+        </p>
+
+        <div class="demo__fields">
+          <ds-date-picker
+            label="Start date"
+            helperText="Selected: {{ startDate() ? startDate()!.toDateString() : 'nothing' }}"
+            [(value)]="startDate"
+          />
+
+          <ds-date-picker
+            label="Cutoff"
+            helperText="Only this month, and no weekends."
+            [min]="monthStart"
+            [max]="monthEnd"
+            [dateDisabled]="noWeekends"
+            [(value)]="cutoff"
+          />
+        </div>
+
+        <p class="demo__note">
+          Open one and use the keyboard: arrows move a day, PageUp / PageDown move a month, Home /
+          End jump to the ends of the week, Enter picks, Escape closes and puts focus back in the
+          field. None of that is our code.
+        </p>
+
+        <div class="demo__fields">
+          <ds-date-picker label="Expiry" invalid invalidText="That date is in the past." />
+
+          <ds-date-picker label="Renewal" warn warnText="Falls on a public holiday." />
+
+          <ds-date-picker label="Disabled" disabled />
+
+          <ds-date-picker
+            label="Created"
+            readOnly
+            helperText="Read-only closes the calendar button too."
+          />
+        </div>
+
+        <p class="demo__note">
+          The field is typeable, and the default format is ISO
+          <code>yyyy-mm-dd</code> — deliberately not a locale format. Whatever the field shows has
+          to be something the field can read back, and <code>03/04</code> is two different days
+          depending on who is reading it. <code>formatDate</code> and <code>parseDate</code> are
+          both inputs; override them together, never one alone.
+        </p>
+
+        <div class="demo__fields demo__fields--single">
+          <ds-date-picker
+            label="Locale formatted"
+            placeholder="dd.mm.yyyy."
+            helperText="Same picker, both functions replaced."
+            [formatDate]="formatLocale"
+            [parseDate]="parseLocale"
+            [(value)]="localeDate"
+          />
+        </div>
+
+        <h3 class="demo__subtitle">Range</h3>
+        <p class="demo__note">
+          One field holding both ends, one calendar. Click a start day, then an end day: the
+          calendar closes on the second, because the primitive reports the two as separate events
+          and closing on the first would make the second impossible. Carbon renders a range as two
+          fields — this is deliberately one.
+        </p>
+        <p class="demo__note">
+          A single field has to read its own separator back, so the parser accepts an en dash, an em
+          dash, a spaced hyphen or the word <em>to</em>. All of them require surrounding whitespace,
+          which is what stops them colliding with the hyphens inside an ISO date —
+          <code>2026-08-13-2026-08-15</code> has no unambiguous split point,
+          <code>2026-08-13 – 2026-08-15</code> does.
+        </p>
+        <p class="demo__note">
+          The panel here is the <em>same component</em> the single picker uses. ng-primitives' grid
+          directives resolve their state through a fallback, so the markup does not care which of
+          the two picker directives sits above it.
+        </p>
+
+        <div class="demo__fields demo__fields--single">
+          <ds-date-range-picker
+            label="Reporting period"
+            placeholder="yyyy-mm-dd – yyyy-mm-dd"
+            [(start)]="rangeStart"
+            [(end)]="rangeEnd"
+            helperText="Selected: {{ rangeSummary() }}"
+          />
+        </div>
+      </section>
+
+      <!-- ── Multi-select ────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Multi-select</h2>
+        <p class="demo__note">
+          Carbon's MultiSelect: a count in the field, a listbox of checkboxes below it.
+          <code>ng-primitives</code> owns selection, roving focus and the keyboard; the field, the
+          popover and the class names are ours. The rows reuse <code>ds-checkbox</code>, which
+          already does indeterminate — which is exactly what a partial select-all needs.
+        </p>
+        <p class="demo__note">
+          Options are configured here rather than projected, the opposite of
+          <code>ds-select</code>, and for a concrete reason: select-all has to know the whole set
+          and the filter has to know each row's text. Projected <code>&lt;option&gt;</code> elements
+          expose neither.
+        </p>
+
+        <div class="demo__fields">
+          <ds-multi-select
+            label="Namespaces"
+            selectAll
+            helperText="Selected: {{ namespaces().length ? namespaces().join(', ') : 'nothing' }}"
+            [options]="namespaceOptions"
+            [(selected)]="namespaces"
+          />
+
+          <ds-multi-select
+            label="Owners"
+            selectAll
+            filterable
+            placeholder="Choose owners"
+            helperText="Filterable — this is Carbon's combo box shape."
+            [options]="ownerOptions"
+            [(selected)]="owners"
+          />
+        </div>
+
+        <p class="demo__note">
+          Type in the filterable one, then press <em>Select all</em>. It applies to the rows the
+          filter left, not to the hundred it is hiding — and clearing it does not drop them either.
+          That is the part implementations usually get wrong.
+        </p>
+
+        <div class="demo__fields">
+          <ds-multi-select
+            label="Regions"
+            invalid
+            invalidText="Pick at least one region."
+            [options]="regionOptions"
+          />
+
+          <ds-multi-select label="Disabled" disabled [options]="regionOptions" />
+        </div>
+      </section>
+
+      <!-- ── Validation timing ───────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">When invalid appears</h2>
+        <p class="demo__note">
+          Carbon specifies the timing, not just the look, and this is it — one rule for the whole
+          app. Type a bad address: nothing happens. Tab away: it turns red. Fix it: the error clears
+          as you type, without waiting for another blur. Press <em>Create</em> with the field
+          untouched and it validates anyway.
+        </p>
+        <p class="demo__note">
+          The control has no part in this. <code>invalid</code> is a plain input and the policy
+          lives here, in the form — a control cannot see a submit it is not part of.
+        </p>
+
+        <!-- Carbon: "use an inline notification as well as inline error messaging
          wherever possible". The field says which input is wrong; this says the
          submission failed at all — the part a user who scrolled past the field
          cannot otherwise see. -->
-    @if (submitFailed()) {
-      <div class="demo__stack">
-        <ds-inline-notification
-          status="error"
-          lowContrast
-          heading="Could not create the cluster"
-          subtitle="eu-west rejected the request: the vCPU quota is already spent."
-          (closed)="submitFailed.set(false)"
-        />
-      </div>
-    }
+        @if (submitFailed()) {
+          <div class="demo__stack">
+            <ds-inline-notification
+              status="error"
+              lowContrast
+              heading="Could not create the cluster"
+              subtitle="eu-west rejected the request: the vCPU quota is already spent."
+              (closed)="submitFailed.set(false)"
+            />
+          </div>
+        }
 
-    <div class="demo__fields demo__fields--single">
-      <ds-input
-        label="Email"
-        type="email"
-        placeholder="you@example.com"
-        helperText="We only use this for cluster alerts."
-        [value]="email()"
-        (valueChange)="email.set($event)"
-        (blurred)="emailTouched.set(true)"
-        [invalid]="emailInvalid()"
-        invalidText="Enter a valid email address."
-      />
-    </div>
-
-    <div class="demo__row">
-      <button dsButton (click)="submitForm()">Create</button>
-
-      <button dsButton kind="ghost" (click)="resetForm()">Reset</button>
-
-      @if (submitted() && !emailInvalid() && !submitFailed()) {
-        <span class="demo__result">submitted with: <code>{{ email() }}</code></span>
-      }
-    </div>
-
-    <p class="demo__note">
-      Submit a valid address twice: the second one comes back as a server error.
-      Note that the field's own message is untouched — the two say different
-      things, and Carbon asks for both rather than one instead of the other.
-    </p>
-  </section>
-
-  <!-- ── Data table ──────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Data table</h2>
-    <p class="demo__note">
-      Columns are described as data, not as templates — a text column is one line.
-      Sorting is tri-state (click a header three times to get back to unsorted),
-      empty cells stay last in both directions, and <code>CPU</code> /
-      <code>Updated</code> show one thing while sorting on another. Selection is
-      keyed by row id, so it survives sorting, filtering and paging.
-    </p>
-
-    <app-services-table />
-
-    <p class="demo__note" style="margin-top: 1rem">
-      Try: sort by <code>Updated</code> — the order follows the real timestamp, not
-      the string. Sort by <code>CPU</code> — the stopped services with no reading
-      sink to the bottom either way. Select rows, then page or sort, and the
-      selection count holds.
-    </p>
-  </section>
-
-  <!-- ── Tabs ────────────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Tabs</h2>
-    <p class="demo__note">
-      Behavior is <code>&#64;angular/aria</code>. Focus the tab strip and use
-      &larr; &rarr; Home End — roving tabindex, <code>aria-selected</code> and
-      <code>inert</code> on hidden panels all come from the primitive. We wrote
-      none of it.
-    </p>
-
-    <div dsTabs>
-      <div dsTabList [(selectedTab)]="selectedTab" aria-label="Implementation notes">
-        <button dsTab value="behavior">What Aria gives us</button>
-        <button dsTab value="tokens">What Carbon gives us</button>
-        <button dsTab value="ours">What is ours</button>
-        <button dsTab value="blocked" disabled>Disabled</button>
-      </div>
-
-      <div dsTabPanel value="behavior">
-        <ul class="demo__list">
-          <li>Roving tabindex — only the active tab is in the tab order</li>
-          <li>Arrow keys, Home and End move between tabs</li>
-          <li><code>role</code>, <code>aria-selected</code>, <code>aria-controls</code></li>
-          <li><code>inert</code> on hidden panels, so they leave the a11y tree</li>
-        </ul>
-      </div>
-
-      <div dsTabPanel value="tokens">
-        <ul class="demo__list">
-          <li><code>$border-interactive</code> — the 2px selected underline</li>
-          <li><code>$text-secondary</code> / <code>$text-primary</code> — unselected vs selected</li>
-          <li><code>$background-hover</code>, <code>$text-disabled</code></li>
-          <li><code>type-style('heading-compact-01')</code> for the selected weight</li>
-        </ul>
-      </div>
-
-      <div dsTabPanel value="ours">
-        <ul class="demo__list">
-          <li>The markup — which element carries which class</li>
-          <li>
-            The public API: <code>dsTab</code>, <code>dsTabPanel</code>, and only
-            the inputs we chose to re-expose
-          </li>
-          <li>
-            Selected state read straight off Aria's <code>selected()</code> signal,
-            so there is no second copy of that state to drift
-          </li>
-        </ul>
-      </div>
-
-      <div dsTabPanel value="blocked">Unreachable while disabled.</div>
-    </div>
-
-    <p class="demo__note">
-      Carbon's other style, <code>contained</code>, and it is not just a repaint:
-      the accent moves to the <em>top</em> edge. In the line style the rule sits
-      under the label and separates it from the panel; a contained tab is joined
-      to the panel, so an underline would cut it off from the thing it opens.
-    </p>
-
-    <div dsTabs variant="contained" fullWidth>
-      <div dsTabList [(selectedTab)]="containedTab" aria-label="Environments">
-        <button dsTab value="dev">Development</button>
-        <button dsTab value="stage">Staging</button>
-        <button dsTab value="prod">Production</button>
-      </div>
-
-      <div dsTabPanel value="dev">Two replicas, no autoscaling.</div>
-      <div dsTabPanel value="stage">Four replicas, autoscaling to eight.</div>
-      <div dsTabPanel value="prod">Twelve replicas across three zones.</div>
-    </div>
-  </section>
-
-  <!-- ── Modal ───────────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Modal</h2>
-    <p class="demo__note">
-      <code>&#64;angular/cdk/dialog</code> handles the focus trap, Escape,
-      scroll blocking and returning focus to the trigger. Open it, press Escape,
-      and note where focus lands.
-    </p>
-
-    <div class="demo__row">
-      <button dsButton kind="danger" (click)="openConfirm()">Delete cluster…</button>
-
-      @if (modalResult(); as result) {
-        <span class="demo__result">
-          closed with: <code>{{ result }}</code>
-        </span>
-      }
-    </div>
-  </section>
-
-  <!-- ── Overflow menu ───────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Overflow menu</h2>
-    <p class="demo__note">
-      Behaviour is <code>&#64;angular/aria/menu</code> — roving focus, arrow
-      keys, Home and End, type-ahead, Escape, and focus back to the trigger. We
-      wrote none of it. Open one and type "d": it jumps to Delete.
-    </p>
-
-    <div class="demo__row">
-      <ds-overflow-menu label="Row actions" (actionSelected)="lastAction.set($event)">
-        <button dsOverflowMenuItem value="stop">Stop app</button>
-        <button dsOverflowMenuItem value="restart">Restart app</button>
-        <button dsOverflowMenuItem value="rename">Rename app</button>
-        <button dsOverflowMenuItem value="clone" [disabled]="true">Clone and move</button>
-        <hr dsOverflowMenuDivider />
-        <button dsOverflowMenuItem value="delete" danger>Delete app</button>
-      </ds-overflow-menu>
-
-      <span class="demo__result">
-        last action: <code>{{ lastAction() || 'none' }}</code>
-      </span>
-    </div>
-
-    <p class="demo__note">
-      Every item is a real <code>&lt;button&gt;</code>, so Enter and Space work
-      with no help from us. The destructive one goes red on hover and focus
-      rather than at rest — a menu with a permanently red row pulls the eye
-      straight to the thing you least want clicked.
-    </p>
-
-    <p class="demo__note">
-      Like the toggletip, the panel is inline rather than in an overlay, because
-      that is how Aria drives it. So it does not flip at a viewport edge and an
-      ancestor with <code>overflow: hidden</code> will clip it — the same
-      limitation Carbon has, which they answer with a
-      <code>data-floating-menu-container</code> escape hatch.
-    </p>
-  </section>
-
-  <!-- ── Breadcrumb ──────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Breadcrumb</h2>
-    <p class="demo__note">
-      A <code>&lt;nav&gt;</code> around an <code>&lt;ol&gt;</code>, and the items
-      are real <code>&lt;li&gt;</code> elements projected into it. That is not
-      decoration: a screen reader announces "navigation, list, 3 items" and can
-      jump straight to it. The <code>/</code> is a CSS
-      <code>::after</code>, so it is never read aloud — the list carries the
-      structure instead.
-    </p>
-
-    <div class="demo__stack">
-      <ds-breadcrumb noTrailingSlash>
-        <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Home</a></li>
-        <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Clusters</a></li>
-        <li dsBreadcrumbItem current>carbon-prod-01</li>
-      </ds-breadcrumb>
-
-      <ds-breadcrumb size="sm" noTrailingSlash>
-        <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Home</a></li>
-        <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Clusters</a></li>
-        <li dsBreadcrumbItem current>carbon-prod-01</li>
-      </ds-breadcrumb>
-
-      <ds-breadcrumb>
-        <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Home</a></li>
-        <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Clusters</a></li>
-      </ds-breadcrumb>
-    </div>
-
-    <p class="demo__note">
-      The third leaves Carbon's default on, which keeps a slash after the last
-      crumb — pointing at a level that does not exist. Carbon's own examples all
-      switch it off. The default here matches Carbon rather than its examples, so
-      a port behaves the same, but set <code>noTrailingSlash</code> almost
-      everywhere.
-    </p>
-  </section>
-
-  <!-- ── Tooltip ─────────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Tooltip</h2>
-    <p class="demo__note">
-      An attribute, because a tooltip is something a control <em>has</em> rather
-      than something that wraps it. Hover or Tab to any of these. It is wired as
-      <code>aria-describedby</code>, never <code>aria-labelledby</code> — an
-      icon-only button still needs its own <code>aria-label</code>, because a
-      name that only exists on hover is not a name.
-    </p>
-
-    <div class="demo__row">
-      <button dsButton kind="tertiary" dsTooltip="Sits below by default">Bottom</button>
-      <button dsButton kind="tertiary" dsTooltip="Above the trigger" tooltipAlign="top">Top</button>
-      <button dsButton kind="tertiary" dsTooltip="Beside it" tooltipAlign="right">Right</button>
-      <button
-        dsButton
-        kind="tertiary"
-        dsTooltip="No wait before showing"
-        [tooltipEnterDelay]="0"
-      >
-        No delay
-      </button>
-    </div>
-
-    <p class="demo__note">
-      The caret follows the panel. Push the window narrow enough that the
-      <em>Right</em> one has no room and the CDK flips it — the caret moves to
-      the other side with it, because a caret that keeps pointing at where the
-      trigger used to be is worse than no caret.
-    </p>
-  </section>
-
-  <!-- ── Toggletip ───────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Toggletip</h2>
-    <p class="demo__note">
-      Carbon draws the line clearly: a tooltip is hover or focus and never
-      interactive; a toggletip is click or Enter and exists <em>so that</em>
-      something inside it can be operated. Open one and press Tab — focus goes
-      into the panel, not past it.
-    </p>
-
-    <div class="demo__row">
-      <ds-toggletip align="bottom">
-        <button dsToggletipButton dsButton kind="tertiary" size="sm">Filter</button>
-
-        <p>Show only the rows that match:</p>
-
-        <ds-checkbox label="Failing" [(checked)]="filterFailing" />
-        <ds-checkbox label="Recently changed" [(checked)]="filterRecent" />
-
-        <!-- Carbon's action row: a quiet link at one end, the real action at
-             the other. `space-between`, not a gap. -->
-        <div class="ds-toggletip__actions">
-          <a dsLink href="#toggletip">Learn more</a>
-          <button dsButton size="sm">Apply</button>
+        <div class="demo__fields demo__fields--single">
+          <ds-input
+            label="Email"
+            type="email"
+            placeholder="you@example.com"
+            helperText="We only use this for cluster alerts."
+            [value]="email()"
+            (valueChange)="email.set($event)"
+            (blurred)="emailTouched.set(true)"
+            [invalid]="emailInvalid()"
+            invalidText="Enter a valid email address."
+          />
         </div>
-      </ds-toggletip>
 
-      <ds-toggletip align="right">
-        <button dsToggletipButton dsButton kind="ghost" size="sm">To the right</button>
-        <p>Placed beside the trigger instead of below it.</p>
-      </ds-toggletip>
+        <div class="demo__row">
+          <button dsButton (click)="submitForm()">Create</button>
 
-      <span class="demo__result">
-        filters on: <code>{{ (filterFailing() ? 1 : 0) + (filterRecent() ? 1 : 0) }}</code>
-      </span>
-    </div>
+          <button dsButton kind="ghost" (click)="resetForm()">Reset</button>
 
-    <p class="demo__note">
-      This one is <em>not</em> in an overlay, unlike the tooltip above — and that
-      is the trade. Carbon requires a toggletip to maintain focus order, and the
-      CDK's overlay moves its panel to the end of the document, so Tab would skip
-      the content it just opened. Keeping the panel in place costs the flip at a
-      viewport edge; Carbon's own toggletip pays the same price.
-    </p>
-  </section>
+          @if (submitted() && !emailInvalid() && !submitFailed()) {
+            <span class="demo__result"
+              >submitted with: <code>{{ email() }}</code></span
+            >
+          }
+        </div>
 
-  <!-- ── Link ────────────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Link</h2>
-    <p class="demo__note">
-      An attribute on a native <code>&lt;a&gt;</code>, the same trade the button
-      makes — real navigation, middle-click, the target in the status bar, and
-      announced as a link. None of that survives on a <code>&lt;span&gt;</code>.
-    </p>
+        <p class="demo__note">
+          Submit a valid address twice: the second one comes back as a server error. Note that the
+          field's own message is untouched — the two say different things, and Carbon asks for both
+          rather than one instead of the other.
+        </p>
+      </section>
 
-    <div class="demo__row">
-      <a dsLink href="#link" size="sm">Small</a>
-      <a dsLink href="#link">Default</a>
-      <a dsLink href="#link" size="lg">Large</a>
-      <a dsLink href="#link" icon="arrow-up">With an icon</a>
-      <a dsLink href="#link" visited>Visited style on</a>
-      <a dsLink href="#link" disabled>Disabled</a>
-    </div>
+      <!-- ── Data table ──────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Data table</h2>
+        <p class="demo__note">
+          Columns are described as data, not as templates — a text column is one line. Sorting is
+          tri-state (click a header three times to get back to unsorted), empty cells stay last in
+          both directions, and <code>CPU</code> / <code>Updated</code> show one thing while sorting
+          on another. Selection is keyed by row id, so it survives sorting, filtering and paging.
+        </p>
 
-    <p class="demo__note">
-      The decision worth making is standalone versus inline. Those above are
-      standalone — underlined only on hover, because nothing around them competes
-      for the eye. In a sentence it is the other way round:
-      <a dsLink inline href="#link">this link is underlined at rest</a>, because
-      colour alone is not a reliable signal that something is clickable, and for
-      a colour-blind reader it is no signal at all.
-    </p>
+        <app-services-table />
 
-    <p class="demo__note">
-      Disabled keeps the <code>&lt;a&gt;</code> and marks it
-      <code>aria-disabled</code> rather than swapping it for a
-      <code>&lt;p&gt;</code> the way Carbon React does — a paragraph is not in
-      the accessibility tree as a link at all, so a screen reader user is never
-      told the thing exists. Tab to it and it still announces, as unavailable.
-    </p>
-  </section>
+        <p class="demo__note" style="margin-top: 1rem">
+          Try: sort by <code>Updated</code> — the order follows the real timestamp, not the string.
+          Sort by <code>CPU</code> — the stopped services with no reading sink to the bottom either
+          way. Select rows, then page or sort, and the selection count holds.
+        </p>
+      </section>
 
-  <!-- ── Loading ─────────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Loading</h2>
-    <p class="demo__note">
-      The ring is two circles: a faint track and the arc that travels around it.
-      An arc on its own reads as a broken circle rather than as progress. Both
-      sizes below — 88px and 16px.
-    </p>
+      <!-- ── Tabs ────────────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Tabs</h2>
+        <p class="demo__note">
+          Behavior is <code>&#64;angular/aria</code>. Focus the tab strip and use &larr; &rarr; Home
+          End — roving tabindex, <code>aria-selected</code> and <code>inert</code> on hidden panels
+          all come from the primitive. We wrote none of it.
+        </p>
 
-    <div class="demo__row">
-      <ds-loading [withOverlay]="false" description="Loading the page" />
-      <ds-loading small [withOverlay]="false" description="Loading" />
-      <ds-loading
-        small
-        [withOverlay]="false"
-        [active]="false"
-        description="Stopped"
-      />
-      <span class="demo__result">88px · 16px · 16px stopped</span>
-    </div>
+        <div dsTabs>
+          <div dsTabList [(selectedTab)]="selectedTab" aria-label="Implementation notes">
+            <button dsTab value="behavior">What Aria gives us</button>
+            <button dsTab value="tokens">What Carbon gives us</button>
+            <button dsTab value="ours">What is ours</button>
+            <button dsTab value="blocked" disabled>Disabled</button>
+          </div>
 
-    <p class="demo__note">
-      Stopping is two turns rather than a freeze: the ring finishes its rotation
-      while the arc closes into a full circle. A spinner that stops mid-turn
-      reads as a crash.
-    </p>
+          <div dsTabPanel value="behavior">
+            <ul class="demo__list">
+              <li>Roving tabindex — only the active tab is in the tab order</li>
+              <li>Arrow keys, Home and End move between tabs</li>
+              <li><code>role</code>, <code>aria-selected</code>, <code>aria-controls</code></li>
+              <li><code>inert</code> on hidden panels, so they leave the a11y tree</li>
+            </ul>
+          </div>
 
-    <p class="demo__note">
-      <code>ds-inline-loading</code> is the one that belongs in a button row. It
-      reports the end of the job as well as the middle — which is the whole
-      reason it is not just a small spinner, because a spinner that disappears
-      says nothing about whether the thing worked.
-    </p>
+          <div dsTabPanel value="tokens">
+            <ul class="demo__list">
+              <li><code>$border-interactive</code> — the 2px selected underline</li>
+              <li>
+                <code>$text-secondary</code> / <code>$text-primary</code> — unselected vs selected
+              </li>
+              <li><code>$background-hover</code>, <code>$text-disabled</code></li>
+              <li><code>type-style('heading-compact-01')</code> for the selected weight</li>
+            </ul>
+          </div>
 
-    <div class="demo__stack">
-      <ds-inline-loading status="active" description="Creating cluster…" />
-      <ds-inline-loading status="inactive" description="Queued behind two jobs" />
-      <ds-inline-loading status="finished" description="Cluster created" />
-      <ds-inline-loading status="error" description="Region rejected the request" />
-    </div>
+          <div dsTabPanel value="ours">
+            <ul class="demo__list">
+              <li>The markup — which element carries which class</li>
+              <li>
+                The public API: <code>dsTab</code>, <code>dsTabPanel</code>, and only the inputs we
+                chose to re-expose
+              </li>
+              <li>
+                Selected state read straight off Aria's <code>selected()</code> signal, so there is
+                no second copy of that state to drift
+              </li>
+            </ul>
+          </div>
 
-    <div class="demo__row">
-      <button dsButton kind="secondary" [disabled]="deploying()" (click)="deploy()">
-        {{ deployStatus() === 'active' ? 'Deploying…' : 'Deploy' }}
-      </button>
+          <div dsTabPanel value="blocked">Unreachable while disabled.</div>
+        </div>
 
-      @if (deployStatus(); as status) {
-        <ds-inline-loading [status]="status" [description]="deployText()" />
-      }
-    </div>
+        <p class="demo__note">
+          Carbon's other style, <code>contained</code>, and it is not just a repaint: the accent
+          moves to the <em>top</em> edge. In the line style the rule sits under the label and
+          separates it from the panel; a contained tab is joined to the panel, so an underline would
+          cut it off from the thing it opens.
+        </p>
 
-    <p class="demo__note">
-      Press <em>Deploy</em>: active for a second and a half, then finished. The
-      button stays disabled while it runs, which is Carbon's own rule for a
-      submitted form.
-    </p>
-  </section>
+        <div dsTabs variant="contained" fullWidth>
+          <div dsTabList [(selectedTab)]="containedTab" aria-label="Environments">
+            <button dsTab value="dev">Development</button>
+            <button dsTab value="stage">Staging</button>
+            <button dsTab value="prod">Production</button>
+          </div>
 
-  <!-- ── Notification ────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Notification</h2>
-    <p class="demo__note">
-      Two variants of the same four statuses. Inline notifications wait in the
-      flow; toasts arrive over it, top right, newest first. High contrast is the
-      default here because it is Carbon React's — Carbon's usage guidance says to
-      prefer low contrast and to never mix the two.
-    </p>
+          <div dsTabPanel value="dev">Two replicas, no autoscaling.</div>
+          <div dsTabPanel value="stage">Four replicas, autoscaling to eight.</div>
+          <div dsTabPanel value="prod">Twelve replicas across three zones.</div>
+        </div>
+      </section>
 
-    <div class="demo__row">
-      <ds-toggle
-        label="Low contrast"
-        onLabel="Low"
-        offLabel="High"
-        [(checked)]="notificationLowContrast"
-      />
-    </div>
+      <!-- ── Modal ───────────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Modal</h2>
+        <p class="demo__note">
+          <code>&#64;angular/cdk/dialog</code> handles the focus trap, Escape, scroll blocking and
+          returning focus to the trigger. Open it, press Escape, and note where focus lands.
+        </p>
 
-    <div class="demo__stack">
-      @for (status of notificationStatuses; track status) {
-        <ds-inline-notification
-          [status]="status"
-          [lowContrast]="notificationLowContrast()"
-          [heading]="notificationCopy[status].heading"
-          [subtitle]="notificationCopy[status].subtitle"
-        />
-      }
-    </div>
+        <div class="demo__row">
+          <button dsButton kind="danger" (click)="openConfirm()">Delete cluster…</button>
 
-    <p class="demo__note">
-      The toasts below are opened through <code>NotificationService</code>, which
-      owns the stack and the placement. The timed one uses Carbon's five seconds;
-      the rest wait, which is Carbon's default and the right one for anything the
-      user has to act on.
-    </p>
+          @if (modalResult(); as result) {
+            <span class="demo__result">
+              closed with: <code>{{ result }}</code>
+            </span>
+          }
+        </div>
+      </section>
 
-    <div class="demo__row">
-      @for (status of notificationStatuses; track status) {
-        <button dsButton kind="tertiary" size="sm" (click)="openToast(status)">
-          {{ status }}
-        </button>
-      }
+      <!-- ── Overflow menu ───────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Overflow menu</h2>
+        <p class="demo__note">
+          Behaviour is <code>&#64;angular/aria/menu</code> — roving focus, arrow keys, Home and End,
+          type-ahead, Escape, and focus back to the trigger. We wrote none of it. Open one and type
+          "d": it jumps to Delete.
+        </p>
 
-      <button dsButton kind="ghost" size="sm" (click)="openTimedToast()">
-        with a 5s timeout
-      </button>
-    </div>
-  </section>
+        <div class="demo__row">
+          <ds-overflow-menu label="Row actions" (actionSelected)="lastAction.set($event)">
+            <button dsOverflowMenuItem value="stop">Stop app</button>
+            <button dsOverflowMenuItem value="restart">Restart app</button>
+            <button dsOverflowMenuItem value="rename">Rename app</button>
+            <button dsOverflowMenuItem value="clone" [disabled]="true">Clone and move</button>
+            <hr dsOverflowMenuDivider />
+            <button dsOverflowMenuItem value="delete" danger>Delete app</button>
+          </ds-overflow-menu>
 
-  <!-- ── Nested theme ────────────────────────────────────────────────────── -->
-  <section class="demo__section">
-    <h2 class="demo__title">Nested theme</h2>
-    <p class="demo__note">
-      Carbon calls these theme zones. <code>theme()</code> emits custom properties
-      on any selector, not just <code>:root</code>, so a region can run dark on a
-      light page and every component inside adapts with no extra props.
-    </p>
+          <span class="demo__result">
+            last action: <code>{{ lastAction() || 'none' }}</code>
+          </span>
+        </div>
 
-    <div class="ds-theme-inverse demo__zone">
-      <div class="demo__row">
-        <button dsButton>primary</button>
-        <button dsButton kind="tertiary">tertiary</button>
-        <ds-tag color="teal">inverted</ds-tag>
-      </div>
-    </div>
-  </section>
+        <p class="demo__note">
+          Every item is a real <code>&lt;button&gt;</code>, so Enter and Space work with no help
+          from us. The destructive one goes red on hover and focus rather than at rest — a menu with
+          a permanently red row pulls the eye straight to the thing you least want clicked.
+        </p>
+
+        <p class="demo__note">
+          Like the toggletip, the panel is inline rather than in an overlay, because that is how
+          Aria drives it. So it does not flip at a viewport edge and an ancestor with
+          <code>overflow: hidden</code> will clip it — the same limitation Carbon has, which they
+          answer with a <code>data-floating-menu-container</code> escape hatch.
+        </p>
+      </section>
+
+      <!-- ── Breadcrumb ──────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Breadcrumb</h2>
+        <p class="demo__note">
+          A <code>&lt;nav&gt;</code> around an <code>&lt;ol&gt;</code>, and the items are real
+          <code>&lt;li&gt;</code> elements projected into it. That is not decoration: a screen
+          reader announces "navigation, list, 3 items" and can jump straight to it. The
+          <code>/</code> is a CSS <code>::after</code>, so it is never read aloud — the list carries
+          the structure instead.
+        </p>
+
+        <div class="demo__stack">
+          <ds-breadcrumb noTrailingSlash>
+            <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Home</a></li>
+            <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Clusters</a></li>
+            <li dsBreadcrumbItem current>carbon-prod-01</li>
+          </ds-breadcrumb>
+
+          <ds-breadcrumb size="sm" noTrailingSlash>
+            <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Home</a></li>
+            <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Clusters</a></li>
+            <li dsBreadcrumbItem current>carbon-prod-01</li>
+          </ds-breadcrumb>
+
+          <ds-breadcrumb>
+            <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Home</a></li>
+            <li dsBreadcrumbItem><a dsLink href="#breadcrumb">Clusters</a></li>
+          </ds-breadcrumb>
+        </div>
+
+        <p class="demo__note">
+          The third leaves Carbon's default on, which keeps a slash after the last crumb — pointing
+          at a level that does not exist. Carbon's own examples all switch it off. The default here
+          matches Carbon rather than its examples, so a port behaves the same, but set
+          <code>noTrailingSlash</code> almost everywhere.
+        </p>
+      </section>
+
+      <!-- ── Tile ────────────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Tile</h2>
+        <p class="demo__note">
+          A tile has no border, and that is Carbon's default rather than something we left out — in
+          <code>&#64;carbon/styles</code> the border sits behind the
+          <code>enable-tile-contrast</code> flag. What separates a tile from the page is its
+          surface: <code>$layer-01</code> against <code>$background</code>. Which also means a tile
+          put on ground that is already <code>$layer-01</code> — inside a modal, or inside another
+          tile — disappears. Carbon has the same problem; keep tiles on the page.
+        </p>
+
+        <div class="demo__row">
+          <ds-tile>Plain tile. It holds content and does nothing else.</ds-tile>
+
+          <a dsClickableTile href="#tile">Clickable tile. A real anchor, so it navigates.</a>
+
+          <a dsClickableTile href="#tile" disabled>Disabled. The href is gone, not just greyed.</a>
+        </div>
+
+        <p class="demo__note">
+          The disabled one drops its <code>href</code> rather than painting itself grey, because
+          there is no <code>disabled</code> on an <code>&lt;a&gt;</code> — removing the href is what
+          actually takes it out of the tab order. Tab through the three and the third is skipped.
+        </p>
+
+        <div class="demo__row">
+          <ds-selectable-tile [(selected)]="planSelected" name="plan" value="pro">
+            Pro plan
+          </ds-selectable-tile>
+
+          <ds-selectable-tile [(selected)]="addonSelected" name="addon" value="backups">
+            Nightly backups
+          </ds-selectable-tile>
+
+          <ds-selectable-tile [selected]="true" disabled
+            >Enterprise (contact sales)</ds-selectable-tile
+          >
+        </div>
+
+        <p class="demo__note">
+          Each of those is a visually hidden
+          <code>&lt;input type="checkbox"&gt;</code> with the tile as its label — which is what
+          makes it a checkbox to a screen reader, gives Space its meaning for free, and puts it in a
+          <code>&lt;form&gt;</code> on submit.
+          <strong>The checkmark stays visible here and Carbon's does not:</strong>
+          Carbon leaves it at <code>opacity: 0</code> until selected, so a selectable tile looks
+          exactly like a plain one. Carbon treats that as the defect it is and fixes it behind
+          <code>enable-v12-tile-radio-icons</code>, headed for the v12 default — so this follows
+          where Carbon is going, not where it stands.
+        </p>
+
+        <div class="demo__stack">
+          <ds-expandable-tile [(expanded)]="tileExpanded">
+            <div dsTileAboveFold>
+              <strong>carbon-prod-01</strong><br />
+              3 services, 12 replicas
+            </div>
+            <div dsTileBelowFold>
+              <p class="demo__note">
+                Region eu-central-1 · Kubernetes 1.29 · last deploy 4 hours ago.
+              </p>
+            </div>
+          </ds-expandable-tile>
+
+          <ds-expandable-tile [(expanded)]="tileExpandedInteractive" interactive>
+            <div dsTileAboveFold>
+              <strong>carbon-staging-02</strong><br />
+              1 service, 2 replicas
+            </div>
+            <div dsTileBelowFold>
+              <p class="demo__note">
+                This one holds a link, so the tile cannot be the button —
+                <a dsLink href="#tile">open the cluster</a>.
+              </p>
+            </div>
+          </ds-expandable-tile>
+        </div>
+
+        <p class="demo__note">
+          <code>interactive</code> is the input worth getting right. By default the whole tile is
+          one <code>&lt;button&gt;</code>, which is the nicer target — but a button may not contain
+          a link or another button, and the inner control becomes unreachable by keyboard. Set
+          <code>interactive</code>, as the second one does, and only the chevron is a button. Tab
+          into both: the first takes one stop, the second lets you reach the link inside it.
+        </p>
+
+        <p class="demo__note">
+          Collapsed content is hidden with <code>visibility</code>, not just clipped — that is what
+          keeps it out of the tab order. The open and close is <code>grid-template-rows</code> going
+          from <code>0fr</code> to <code>1fr</code>, where Carbon measures the content in JavaScript
+          and writes a pixel <code>max-height</code>. Same result, nothing to re-measure when the
+          content reflows or a font loads late.
+        </p>
+      </section>
+
+      <!-- ── Tooltip ─────────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Tooltip</h2>
+        <p class="demo__note">
+          An attribute, because a tooltip is something a control <em>has</em> rather than something
+          that wraps it. Hover or Tab to any of these. It is wired as <code>aria-describedby</code>,
+          never <code>aria-labelledby</code> — an icon-only button still needs its own
+          <code>aria-label</code>, because a name that only exists on hover is not a name.
+        </p>
+
+        <div class="demo__row">
+          <button dsButton kind="tertiary" dsTooltip="Sits below by default">Bottom</button>
+          <button dsButton kind="tertiary" dsTooltip="Above the trigger" tooltipAlign="top">
+            Top
+          </button>
+          <button dsButton kind="tertiary" dsTooltip="Beside it" tooltipAlign="right">Right</button>
+          <button
+            dsButton
+            kind="tertiary"
+            dsTooltip="No wait before showing"
+            [tooltipEnterDelay]="0"
+          >
+            No delay
+          </button>
+        </div>
+
+        <p class="demo__note">
+          The caret follows the panel. Push the window narrow enough that the
+          <em>Right</em> one has no room and the CDK flips it — the caret moves to the other side
+          with it, because a caret that keeps pointing at where the trigger used to be is worse than
+          no caret.
+        </p>
+      </section>
+
+      <!-- ── Toggletip ───────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Toggletip</h2>
+        <p class="demo__note">
+          Carbon draws the line clearly: a tooltip is hover or focus and never interactive; a
+          toggletip is click or Enter and exists <em>so that</em>
+          something inside it can be operated. Open one and press Tab — focus goes into the panel,
+          not past it.
+        </p>
+
+        <div class="demo__row">
+          <ds-toggletip align="bottom">
+            <button dsToggletipButton dsButton kind="tertiary" size="sm">Filter</button>
+
+            <p>Show only the rows that match:</p>
+
+            <ds-checkbox label="Failing" [(checked)]="filterFailing" />
+            <ds-checkbox label="Recently changed" [(checked)]="filterRecent" />
+
+            <!-- Carbon's action row: a quiet link at one end, the real action at
+             the other. `space-between`, not a gap. -->
+            <div class="ds-toggletip__actions">
+              <a dsLink href="#toggletip">Learn more</a>
+              <button dsButton size="sm">Apply</button>
+            </div>
+          </ds-toggletip>
+
+          <ds-toggletip align="right">
+            <button dsToggletipButton dsButton kind="ghost" size="sm">To the right</button>
+            <p>Placed beside the trigger instead of below it.</p>
+          </ds-toggletip>
+
+          <span class="demo__result">
+            filters on: <code>{{ (filterFailing() ? 1 : 0) + (filterRecent() ? 1 : 0) }}</code>
+          </span>
+        </div>
+
+        <p class="demo__note">
+          This one is <em>not</em> in an overlay, unlike the tooltip above — and that is the trade.
+          Carbon requires a toggletip to maintain focus order, and the CDK's overlay moves its panel
+          to the end of the document, so Tab would skip the content it just opened. Keeping the
+          panel in place costs the flip at a viewport edge; Carbon's own toggletip pays the same
+          price.
+        </p>
+      </section>
+
+      <!-- ── Link ────────────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Link</h2>
+        <p class="demo__note">
+          An attribute on a native <code>&lt;a&gt;</code>, the same trade the button makes — real
+          navigation, middle-click, the target in the status bar, and announced as a link. None of
+          that survives on a <code>&lt;span&gt;</code>.
+        </p>
+
+        <div class="demo__row">
+          <a dsLink href="#link" size="sm">Small</a>
+          <a dsLink href="#link">Default</a>
+          <a dsLink href="#link" size="lg">Large</a>
+          <a dsLink href="#link" icon="arrow-up">With an icon</a>
+          <a dsLink href="#link" visited>Visited style on</a>
+          <a dsLink href="#link" disabled>Disabled</a>
+        </div>
+
+        <p class="demo__note">
+          The decision worth making is standalone versus inline. Those above are standalone —
+          underlined only on hover, because nothing around them competes for the eye. In a sentence
+          it is the other way round:
+          <a dsLink inline href="#link">this link is underlined at rest</a>, because colour alone is
+          not a reliable signal that something is clickable, and for a colour-blind reader it is no
+          signal at all.
+        </p>
+
+        <p class="demo__note">
+          Disabled keeps the <code>&lt;a&gt;</code> and marks it <code>aria-disabled</code> rather
+          than swapping it for a <code>&lt;p&gt;</code> the way Carbon React does — a paragraph is
+          not in the accessibility tree as a link at all, so a screen reader user is never told the
+          thing exists. Tab to it and it still announces, as unavailable.
+        </p>
+      </section>
+
+      <!-- ── Loading ─────────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Loading</h2>
+        <p class="demo__note">
+          The ring is two circles: a faint track and the arc that travels around it. An arc on its
+          own reads as a broken circle rather than as progress. Both sizes below — 88px and 16px.
+        </p>
+
+        <div class="demo__row">
+          <ds-loading [withOverlay]="false" description="Loading the page" />
+          <ds-loading small [withOverlay]="false" description="Loading" />
+          <ds-loading small [withOverlay]="false" [active]="false" description="Stopped" />
+          <span class="demo__result">88px · 16px · 16px stopped</span>
+        </div>
+
+        <p class="demo__note">
+          Stopping is two turns rather than a freeze: the ring finishes its rotation while the arc
+          closes into a full circle. A spinner that stops mid-turn reads as a crash.
+        </p>
+
+        <p class="demo__note">
+          <code>ds-inline-loading</code> is the one that belongs in a button row. It reports the end
+          of the job as well as the middle — which is the whole reason it is not just a small
+          spinner, because a spinner that disappears says nothing about whether the thing worked.
+        </p>
+
+        <div class="demo__stack">
+          <ds-inline-loading status="active" description="Creating cluster…" />
+          <ds-inline-loading status="inactive" description="Queued behind two jobs" />
+          <ds-inline-loading status="finished" description="Cluster created" />
+          <ds-inline-loading status="error" description="Region rejected the request" />
+        </div>
+
+        <div class="demo__row">
+          <button dsButton kind="secondary" [disabled]="deploying()" (click)="deploy()">
+            {{ deployStatus() === 'active' ? 'Deploying…' : 'Deploy' }}
+          </button>
+
+          @if (deployStatus(); as status) {
+            <ds-inline-loading [status]="status" [description]="deployText()" />
+          }
+        </div>
+
+        <p class="demo__note">
+          Press <em>Deploy</em>: active for a second and a half, then finished. The button stays
+          disabled while it runs, which is Carbon's own rule for a submitted form.
+        </p>
+      </section>
+
+      <!-- ── Notification ────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Notification</h2>
+        <p class="demo__note">
+          Two variants of the same four statuses. Inline notifications wait in the flow; toasts
+          arrive over it, top right, newest first. High contrast is the default here because it is
+          Carbon React's — Carbon's usage guidance says to prefer low contrast and to never mix the
+          two.
+        </p>
+
+        <div class="demo__row">
+          <ds-toggle
+            label="Low contrast"
+            onLabel="Low"
+            offLabel="High"
+            [(checked)]="notificationLowContrast"
+          />
+        </div>
+
+        <div class="demo__stack">
+          @for (status of notificationStatuses; track status) {
+            <ds-inline-notification
+              [status]="status"
+              [lowContrast]="notificationLowContrast()"
+              [heading]="notificationCopy[status].heading"
+              [subtitle]="notificationCopy[status].subtitle"
+            />
+          }
+        </div>
+
+        <p class="demo__note">
+          The toasts below are opened through <code>NotificationService</code>, which owns the stack
+          and the placement. The timed one uses Carbon's five seconds; the rest wait, which is
+          Carbon's default and the right one for anything the user has to act on.
+        </p>
+
+        <div class="demo__row">
+          @for (status of notificationStatuses; track status) {
+            <button dsButton kind="tertiary" size="sm" (click)="openToast(status)">
+              {{ status }}
+            </button>
+          }
+
+          <button dsButton kind="ghost" size="sm" (click)="openTimedToast()">
+            with a 5s timeout
+          </button>
+        </div>
+      </section>
+
+      <!-- ── Nested theme ────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Nested theme</h2>
+        <p class="demo__note">
+          Carbon calls these theme zones. <code>theme()</code> emits custom properties on any
+          selector, not just <code>:root</code>, so a region can run dark on a light page and every
+          component inside adapts with no extra props.
+        </p>
+
+        <div class="ds-theme-inverse demo__zone">
+          <div class="demo__row">
+            <button dsButton>primary</button>
+            <button dsButton kind="tertiary">tertiary</button>
+            <ds-tag color="teal">inverted</ds-tag>
+          </div>
+        </div>
+      </section>
     </div>
   </ds-shell-content>
 </ds-shell>

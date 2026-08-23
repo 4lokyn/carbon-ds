@@ -130,5 +130,14 @@ export {
   type TagSize,
 } from './tag/tag';
 export { Textarea } from './textarea/textarea';
+export {
+  ClickableTile,
+  DS_TILE,
+  ExpandableTile,
+  SelectableTile,
+  Tile,
+  TileAboveFold,
+  TileBelowFold,
+} from './tile/tile';
 export { Toggle, type ToggleSize } from './toggle/toggle';
 export { type CarbonTheme, ThemeService } from './theme/theme.service';

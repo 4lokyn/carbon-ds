@@ -235,6 +235,50 @@ nothing at all.
 element the way Carbon React does. `visited` is opt-in; leave it off unless
 "have I read this?" is a question worth answering on that screen.
 
+## Tile
+
+Four things share one surface. Pick by what the tile *does*.
+
+```html
+<ds-tile>Holds content, does nothing else.</ds-tile>
+
+<a dsClickableTile href="/clusters/prod-01">A whole tile that navigates</a>
+
+<ds-selectable-tile [(selected)]="pro" name="plan" value="pro">Pro plan</ds-selectable-tile>
+
+<ds-expandable-tile [(expanded)]="open">
+  <div dsTileAboveFold>carbon-prod-01 — 3 services</div>
+  <div dsTileBelowFold>Region eu-central-1, last deploy 4 hours ago.</div>
+</ds-expandable-tile>
+```
+
+**A tile has no border.** That is Carbon's default, not an omission — the border
+lives behind Carbon's `enable-tile-contrast` flag, and what separates a tile from
+the page is its surface, `$layer-01` against `$background`. The consequence to
+plan around: a tile on ground that is already `$layer-01` — inside a modal, or
+inside another tile — is invisible. Keep tiles on the page.
+
+**`interactive` on the expandable tile is the one to get right.** By default the
+whole tile is a single `<button>`, which is the better target. But a `<button>`
+may not contain a link or another button, and if you put one in anyway it becomes
+unreachable by keyboard. The moment the tile holds anything clickable, set
+`interactive` — then only the chevron is a button:
+
+```html
+<ds-expandable-tile [(expanded)]="open" interactive>
+  <div dsTileAboveFold>carbon-staging-02</div>
+  <div dsTileBelowFold><a dsLink href="/clusters/staging-02">Open the cluster</a></div>
+</ds-expandable-tile>
+```
+
+`collapsedLabel` / `expandedLabel` name that chevron; they only matter in the
+`interactive` case, where the chevron is the only control and has no text of its
+own. The default tile is labelled by its own content.
+
+The selectable tile is a real `<input type="checkbox">` under the surface, so
+`name` and `value` are collected by a surrounding `<form>` on submit and Space
+toggles it with no help from us.
+
 ## Notification
 
 Two variants of the same four statuses (`error`, `success`, `warning`, `info`).
