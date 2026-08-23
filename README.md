@@ -44,6 +44,7 @@ npm test           # vitest, via @angular/build:unit-test
 | `Search` | magnifier, clear button, 3 sizes, expandable variant |
 | `Input` | text / number / password, label + helper, invalid + warn, 3 sizes, fluid, inline |
 | `Select` | native `<select>`, projected options, 3 sizes, fluid, inline |
+| `Dropdown` | the drawn one: configured options, single choice, invalid and warn, inline |
 | `Textarea` | `rows`, optional character counter, fluid |
 | `RadioGroup` + `Radio` | native radios in a `<fieldset>`, horizontal / vertical |
 | `Toggle` | `<button role="switch">`, 2 sizes, custom state text |
@@ -536,15 +537,14 @@ role to the chevron alone instead.
 
 ### What is left, in the order worth building it
 
-35 of Carbon's ~48 components exist, and the two that had missing variants no
+36 of Carbon's ~48 components exist, and the two that had missing variants no
 longer do: Notification has all four of Carbon's, and Tile has all of its
 subcomponents bar the AI label. Nothing built is half-built. What is left is the
 long tail.
 
 **The remaining form controls**, none of them urgent: `NumberInput` (the one
 with steppers — our `type="number"` is a passthrough and says so),
-`ContentSwitcher`, `FileUploader`, and Carbon's non-filterable `Dropdown` (a
-styled listbox, where `nine-am-select` is the native one).
+`ContentSwitcher`, and `FileUploader`.
 
 **Everything else**, roughly by how often it comes up: the list family
 (`List`, `StructuredList`, `ContainedList`) which is worth doing in one go,
