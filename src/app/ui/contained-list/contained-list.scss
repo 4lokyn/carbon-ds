@@ -1,0 +1,177 @@
+@use 'nine-am' as *;
+
+// Carbon's row heights, shared by the header and the rows so the two line up.
+$-heights: (
+  'sm': rem(32px),
+  'md': rem(40px),
+  'lg': rem(48px),
+  'xl': rem(64px),
+);
+
+.nine-am-contained-list {
+  display: block;
+  width: 100%;
+}
+
+// Sticky, which is the component's reason to exist: the title stays put while
+// the rows scroll under it, so a long list never loses what it is a list of.
+.nine-am-contained-list__header {
+  position: sticky;
+  z-index: 1;
+  top: 0;
+  display: flex;
+  align-items: center;
+  padding-inline: $spacing-05;
+  gap: $spacing-03;
+}
+
+.nine-am-contained-list__label {
+  @include type-style('heading-compact-01');
+
+  width: 100%;
+  margin: 0;
+  color: $text-primary;
+}
+
+.nine-am-contained-list__action {
+  flex-shrink: 0;
+  margin-inline-start: auto;
+}
+
+.nine-am-contained-list__list {
+  @include unstyled-list;
+}
+
+// ── Kinds ───────────────────────────────────────────────────────────────────
+
+.nine-am-contained-list--on-page {
+  .nine-am-contained-list__header {
+    background-color: $background;
+    border-block-end: rem(1px) solid $border-subtle-01;
+  }
+
+  .nine-am-contained-list-item__content {
+    background-color: $layer-01;
+  }
+}
+
+// Inside something that already draws its own edges — a panel, a popover — so
+// the fill comes from the layer above rather than from the page.
+.nine-am-contained-list--disclosed {
+  .nine-am-contained-list__header {
+    background-color: $layer-01;
+  }
+
+  .nine-am-contained-list-item__content {
+    background-color: $layer-01;
+  }
+}
+
+// ── Rows ────────────────────────────────────────────────────────────────────
+
+.nine-am-contained-list-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: $text-primary;
+}
+
+// The rule between rows, drawn on the row rather than as a border so a clickable
+// row's hover fill runs edge to edge over it.
+.nine-am-contained-list-item:not(:last-of-type)::after {
+  position: absolute;
+  background-color: $border-subtle-01;
+  content: '';
+  inset-block-end: 0;
+  inset-inline: 0;
+  block-size: rem(1px);
+}
+
+.nine-am-contained-list-item__content {
+  @include type-style('body-01');
+
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding-inline: $spacing-05;
+  color: $text-primary;
+  gap: $spacing-03;
+}
+
+// A clickable row is a button, which is what makes Enter and Space work without
+// help — and what forbids anything interactive inside it. See the item's action
+// slot.
+button.nine-am-contained-list-item__content {
+  @include unstyled-button;
+  @include focus-ring-state;
+
+  padding-inline: $spacing-05;
+  cursor: pointer;
+  text-align: start;
+  transition: background-color $duration-moderate-01 motion(standard, productive);
+
+  @media (any-hover: hover) {
+    &:hover {
+      background-color: $layer-hover-01;
+    }
+  }
+
+  &:active {
+    background-color: $layer-active-01;
+  }
+
+  &:disabled {
+    color: $text-disabled;
+    cursor: not-allowed;
+
+    @media (any-hover: hover) {
+      &:hover {
+        background-color: $layer-01;
+      }
+    }
+  }
+}
+
+.nine-am-contained-list-item__action {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  inset-block: 0;
+  inset-inline-end: $spacing-03;
+}
+
+// A row with an action beside it stops its own content before the control,
+// rather than running text under it.
+.nine-am-contained-list-item:has(.nine-am-contained-list-item__action)
+  .nine-am-contained-list-item__content {
+  padding-inline-end: $spacing-09;
+}
+
+// ── Sizes ───────────────────────────────────────────────────────────────────
+
+@each $name, $height in $-heights {
+  .nine-am-contained-list--#{$name} {
+    .nine-am-contained-list__header {
+      min-height: $height;
+    }
+
+    .nine-am-contained-list-item__content {
+      min-height: $height;
+    }
+  }
+}
+
+// Carbon's `--inset-rulers`: the rule stops short of the edges. For a list
+// inside something narrow, where a full-width rule reads as the container's own
+// edge rather than as a separator between two rows.
+.nine-am-contained-list--inset-rulers .nine-am-contained-list-item:not(:last-of-type)::after {
+  inset-inline: $spacing-05;
+}
+
+// Nudged down a pixel, which is Carbon's own adjustment: an icon sitting on the
+// text baseline reads as slightly high next to a line of type.
+.nine-am-contained-list-item__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  padding-block-start: $spacing-01;
+}

@@ -8,6 +8,10 @@ import {
   type ButtonKind,
   type ButtonSize,
   Callout,
+  ContainedList,
+  ContainedListAction,
+  ContainedListItem,
+  ContainedListItemAction,
   CopyButton,
   Dropdown,
   type DropdownOption,
@@ -35,6 +39,8 @@ import {
   type NineAmColumn,
   NINE_AM_RADIO_GROUP,
   NINE_AM_SHELL,
+  List,
+  ListItem,
   ProgressBar,
   Search,
   Select,
@@ -63,7 +69,13 @@ const INITIAL_TAGS: readonly TagColor[] = ['blue', 'green', 'red', 'purple'];
     ActionableNotification,
     Button,
     Callout,
+    ContainedList,
+    ContainedListAction,
+    ContainedListItem,
+    ContainedListItemAction,
     CopyButton,
+    List,
+    ListItem,
     Dropdown,
     ProgressBar,
     DatePicker,
@@ -337,6 +349,8 @@ export class App {
 
   protected readonly menuAction = signal('');
   protected readonly lastCopy = signal('');
+  protected readonly lastNamespace = signal('');
+  protected readonly listNamespaces = ['edge', 'identity', 'payments', 'commerce'];
   protected readonly dropdownRegion = signal<string | null>(null);
 
   protected readonly dropdownRegions: readonly DropdownOption<string>[] = [

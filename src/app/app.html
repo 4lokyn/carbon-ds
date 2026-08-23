@@ -1802,6 +1802,77 @@
         </nine-am-accordion>
       </section>
 
+      <!-- ── Lists ───────────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">List</h2>
+        <p class="demo__note">
+          Bullets and numbers in running text.
+          <strong>Two of Carbon's props are read from the markup instead of being asked for</strong
+          >: an <code>&lt;ol&gt;</code> is ordered and a list inside a list item is nested, because
+          a flag that can contradict the markup it sits on is one that will. The marks are Carbon's
+          — an en dash, not a disc — and <code>native</code> gives the browser's back.
+        </p>
+
+        <div class="demo__row">
+          <ul nineAmList>
+            <li nineAmListItem>
+              Cluster
+              <ul nineAmList>
+                <li nineAmListItem>Namespace</li>
+                <li nineAmListItem>Service</li>
+              </ul>
+            </li>
+            <li nineAmListItem>Registry</li>
+          </ul>
+
+          <ol nineAmList>
+            <li nineAmListItem>Create the cluster</li>
+            <li nineAmListItem>
+              Add a namespace
+              <ol nineAmList>
+                <li nineAmListItem>Name it</li>
+                <li nineAmListItem>Set the quota</li>
+              </ol>
+            </li>
+            <li nineAmListItem>Deploy</li>
+          </ol>
+        </div>
+
+        <h3 class="demo__subtitle">Contained list</h3>
+        <p class="demo__note">
+          The one for a panel: a title that stays put while the rows scroll under it. Rows are plain
+          by default and become buttons with <code>interactive</code> — and anything clickable that
+          belongs to a row goes in its own slot beside it, because a button may not contain another
+          button. That rule has now decided three layouts here.
+        </p>
+
+        <div class="demo__zone demo__zone--panel">
+          <nine-am-contained-list label="Namespaces" size="md">
+            <button nineAmButton kind="ghost" size="sm" nineAmContainedListAction>Add</button>
+
+            @for (space of listNamespaces; track space) {
+              <li nineAmContainedListItem interactive (selected)="lastNamespace.set(space)">
+                {{ space }}
+                <nine-am-overflow-menu
+                  nineAmContainedListItemAction
+                  label="Actions for {{ space }}"
+                  (actionSelected)="lastNamespace.set(space + ' — ' + $event)"
+                >
+                  <button nineAmMenuItem value="rename">Rename</button>
+                  <button nineAmMenuItem value="delete" danger>Delete</button>
+                </nine-am-overflow-menu>
+              </li>
+            }
+          </nine-am-contained-list>
+        </div>
+
+        <p class="demo__note">
+          Last: <code>{{ lastNamespace() || 'nothing' }}</code
+          >. The overflow menu in each row sits outside the row's button — reach it with Tab and it
+          is its own stop, which is the whole point of the slot.
+        </p>
+      </section>
+
       <!-- ── Nested theme ────────────────────────────────────────────────────── -->
 
       <section class="demo__section">

@@ -10,7 +10,18 @@ export {
   NINE_AM_ACCORDION,
 } from './accordion/accordion';
 export { Button, type ButtonKind, type ButtonSize } from './button/button';
+export {
+  ContainedList,
+  ContainedListAction,
+  ContainedListItem,
+  ContainedListItemAction,
+  ContainedListItemIcon,
+  type ContainedListKind,
+  type ContainedListSize,
+  NINE_AM_CONTAINED_LIST,
+} from './contained-list/contained-list';
 export { COPY_FEEDBACK_TIMEOUT, CopyButton } from './copy-button/copy-button';
+export { List, ListItem, NINE_AM_LIST } from './list/list';
 export {
   Breadcrumb,
   BreadcrumbItem,

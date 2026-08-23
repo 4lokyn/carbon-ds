@@ -1,0 +1,78 @@
+@use 'nine-am' as *;
+
+// Carbon draws its own marks rather than using the browser's: an en dash for a
+// bullet and a counter for a number. `--native` gives them back.
+.nine-am-list {
+  @include unstyled-list;
+  @include type-style('body-01');
+}
+
+.nine-am-list--expressive,
+.nine-am-list--expressive .nine-am-list {
+  @include type-style('body-02');
+}
+
+.nine-am-list__item {
+  color: $text-primary;
+}
+
+// Room for the mark, which is drawn outside the text column so wrapped lines
+// line up under the first one rather than under the dash.
+.nine-am-list--unordered:not(.nine-am-list--nested) {
+  margin-inline-start: $spacing-05;
+}
+
+.nine-am-list--nested {
+  margin-inline-start: rem(32px);
+
+  .nine-am-list__item {
+    padding-inline-start: $spacing-02;
+  }
+}
+
+.nine-am-list--unordered:not(.nine-am-list--native) > .nine-am-list__item {
+  position: relative;
+
+  // An en dash, not a disc. Carbon's own mark.
+  &::before {
+    position: absolute;
+    content: '\002013';
+    inset-inline-start: calc(-1 * #{$spacing-05});
+  }
+}
+
+.nine-am-list--ordered:not(.nine-am-list--native):not(.nine-am-list--nested) {
+  counter-reset: nine-am-list-item;
+
+  > .nine-am-list__item {
+    position: relative;
+
+    &::before {
+      position: absolute;
+      content: counter(nine-am-list-item) '.';
+      counter-increment: nine-am-list-item;
+      inset-inline-start: rem(-24px);
+    }
+  }
+}
+
+// A nested ordered list falls back to the browser's letters, which is Carbon's
+// own behaviour — a second counter would need a second numbering scheme, and
+// lower-latin is the one everyone already reads as a sub-item.
+.nine-am-list--ordered.nine-am-list--nested {
+  list-style-type: lower-latin;
+}
+
+// The browser draws its markers inside the box, so a native list needs the
+// indent the drawn one gets from a negative offset.
+.nine-am-list--native {
+  padding-inline-start: $spacing-06;
+
+  &.nine-am-list--unordered {
+    list-style: disc;
+  }
+
+  &.nine-am-list--ordered {
+    list-style: decimal;
+  }
+}

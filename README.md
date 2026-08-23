@@ -62,6 +62,8 @@ npm test           # vitest, via @angular/build:unit-test
 | `Tile` family | plain, clickable `<a>`, selectable on a real checkbox, single-select on real radios in a `<fieldset>`, expandable with a CSS-only reveal |
 | `Popover` + `Tooltip` + `Toggletip` | one surface; tooltip flips in a CDK overlay, toggletip stays in the DOM for focus order |
 | `Link` | 3 sizes, standalone and inline, optional icon, disabled that stays an `<a>` |
+| `List` | Carbon's own marks — an en dash, a counter — with the browser's available; ordered and nested read from the markup |
+| `ContainedList` | titled, sticky header, plain or clickable rows, header and per-row action slots, inset rulers |
 | `Loading` + `InlineLoading` | 88/16px ring; inline reports finished and error, not just busy |
 | `ProgressBar` | determinate and indeterminate, finished and error endings, 2 heights, inline and indented |
 | `CopyButton` | writes to the clipboard, says so, and never claims a copy it did not make |
@@ -512,6 +514,8 @@ person can tell a decision from an oversight.
 | `ActionableNotification` — `timeout` | Carbon accepts one and defaults it to 0. Auto-dismissing a notification that has trapped focus takes the focus with it and drops the user somewhere they did not ask to be. If it can time out, it did not need an action. |
 | `MultiSelect` — the highlight does not follow the mouse | Carbon's list is Downshift's, and Downshift moves `highlightedIndex` on `mousemove`, so the blue ring tracks the pointer. Here it is a focus indicator only: ng-primitives emits `data-active` while the *listbox* has focus, so hovering tints a row and the ring stays where the keyboard left it. Two indicators that mean two different things rather than one that means both. |
 | `Table` — cells truncate, Carbon's wrap | Carbon ellipsises only the header label and lets body cells wrap. One line per row is what makes a dense table scannable, so truncation is the default here and `wrapCells` turns Carbon's behaviour back on. The folded view wraps either way — a folded row has no column widths to protect. |
+| `List` — `nested`, `OrderedList`/`UnorderedList` | Carbon ships two components and a `nested` flag because in JSX the element is an implementation detail. Here the caller writes the element, so it is the answer: an `<ol>` is ordered and a list inside a list item is nested. One directive, no flag that can contradict the markup it sits on. |
+| `ContainedListItem` — `onClick` | Carbon infers a clickable row from the presence of a handler. An Angular output is always present, so interactivity is asked for with `interactive` — the same call `ExpandableTile` makes, and for the same reason: it decides whether the row is a `<button>`, which decides what may go inside it. |
 | `CodeSnippet` | Dropped on 2026-08-23. Not needed here, and it is the one component on the list whose absence costs nothing else: `CopyButton` was built partly for it and stands on its own — an image reference, an id, a url. Build it if a docs surface ever appears. |
 | `Slider`, `TimePicker` | Dropped on 2026-08-23, not overlooked: neither is used in what this system is being built for, and both are large — a slider is a drag interaction with a keyboard equivalent, a time picker is a parser and a locale question. Build either when something actually asks. |
 | `PageHeader` | Not a core Carbon component at all — Carbon has a UI shell header and a *global header pattern*, and `PageHeader` lives in Carbon for IBM Products, which this repo does not use. So it is a design decision rather than a port, and it is not on the queue as if it were one. |
@@ -527,8 +531,9 @@ Names that differ from Carbon's, all for a stated reason, none of them silent:
 `offLabel`/`onLabel` for `labelA`/`labelB`, `actionLabel` for
 `actionButtonLabel` (to match the `closeLabel` beside it),
 `collapsedLabel`/`expandedLabel` for `tileCollapsedIconText`/
-`tileExpandedIconText`, `headingId` for `titleId`, and `total: number | null`
-for `totalItems` + `pagesUnknown`.
+`tileExpandedIconText`, `headingId` for `titleId`, `expressive` for
+`isExpressive`, `insetRulers` for `insetRulers`' React spelling, and
+`total: number | null` for `totalItems` + `pagesUnknown`.
 
 One input has no Carbon counterpart at all: `ExpandableTile`'s `interactive`.
 Carbon's own "expandable with interactive" story puts a `Button` and a
@@ -538,7 +543,7 @@ role to the chevron alone instead.
 
 ### What is left, in the order worth building it
 
-36 of Carbon's ~48 components exist, and the two that had missing variants no
+38 of Carbon's ~48 components exist, and the two that had missing variants no
 longer do: Notification has all four of Carbon's, and Tile has all of its
 subcomponents bar the AI label. Nothing built is half-built. What is left is the
 long tail.
@@ -547,8 +552,7 @@ long tail.
 with steppers — our `type="number"` is a passthrough and says so),
 `ContentSwitcher`, and `FileUploader`.
 
-**Everything else**, roughly by how often it comes up: the list family
-(`List`, `StructuredList`, `ContainedList`) which is worth doing in one go,
+**Everything else**, roughly by how often it comes up: `StructuredList`,
 `ProgressIndicator`, `PaginationNav`, and `TreeView` — the last of which borrows
 nothing from anything here and deserves its own sitting.
 
