@@ -209,6 +209,24 @@
   font-weight: 600;
 }
 
+// Carbon clears the divider above the highlighted row *and* above the row after
+// it, so its 2px ring is not sliced by a 1px line at either edge. Easy to miss
+// until you look: the ring and the rule are both drawn, one over the other.
+//
+// This has to sit after the divider rule above rather than beside the other
+// `[data-active]` styles — `.item[data-active]` and `.item + .item` carry the
+// same specificity, so source order is the whole of what decides it.
+.nine-am-multi-select__item[data-active],
+.nine-am-multi-select__item[data-active] + .nine-am-multi-select__item {
+  border-block-start-color: transparent;
+}
+
+// The select-all row draws a rule underneath itself as well, which Carbon has no
+// equivalent for because the row is ours. Same treatment, same reason.
+.nine-am-multi-select__item--select-all[data-active] {
+  border-block-end-color: transparent;
+}
+
 // The checkbox is decoration here: the row owns the click, and a checkbox that
 // also handled it would toggle twice.
 .nine-am-multi-select__check {
