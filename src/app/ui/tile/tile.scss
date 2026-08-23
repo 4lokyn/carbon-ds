@@ -277,3 +277,41 @@ $-icon-container-size: calc(#{$spacing-05} * 2 + #{rem(16px)});
     transition: none;
   }
 }
+
+// ── Tile group (single select) ──────────────────────────────────────────────
+
+.nine-am-tile-group {
+  display: block;
+}
+
+// min-content stops a fieldset from ever shrinking inside a grid. Same note as
+// the radio group, same reason.
+.nine-am-tile-group__fieldset {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  margin: 0;
+}
+
+.nine-am-tile-group__legend {
+  @include field-label;
+
+  padding: 0;
+}
+
+// A column, because a tile is a block of content rather than a word — Carbon's
+// own examples stack them and put half a spacing step between. Callers wanting
+// a row have the grid for it.
+.nine-am-tile-group__tiles {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-03;
+}
+
+.nine-am-tile-group--disabled .nine-am-tile-group__legend {
+  color: $text-disabled;
+}
+
+.nine-am-radio-tile-host {
+  display: block;
+}

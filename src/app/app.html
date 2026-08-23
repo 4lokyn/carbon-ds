@@ -1207,6 +1207,44 @@
           where Carbon is going, not where it stands.
         </p>
 
+        <p class="demo__note">
+          The checkbox form answers <em>which of these</em>. Below is the other question,
+          <em>which one of these</em>, and the markup is what carries the difference: a
+          <code>&lt;fieldset&gt;</code> with a <code>&lt;legend&gt;</code>, holding radios that
+          share one <code>name</code>. Single selection, the arrow keys, and a group that is one tab
+          stop all come from the browser.
+        </p>
+
+        <div class="demo__row">
+          <nine-am-tile-group legend="Cluster size" [(value)]="clusterSize">
+            <nine-am-radio-tile value="small">
+              <strong>Small</strong><br />
+              2 vCPU, 8 GB — for a staging cluster
+            </nine-am-radio-tile>
+
+            <nine-am-radio-tile value="medium">
+              <strong>Medium</strong><br />
+              8 vCPU, 32 GB — the usual starting point
+            </nine-am-radio-tile>
+
+            <nine-am-radio-tile value="dedicated" disabled>
+              <strong>Dedicated</strong><br />
+              Contact sales
+            </nine-am-radio-tile>
+          </nine-am-tile-group>
+
+          <span class="demo__result">
+            chosen: <code>{{ clusterSize() || 'nothing' }}</code>
+          </span>
+        </div>
+
+        <p class="demo__note">
+          Tab into it and use the arrows: focus moves between the tiles and selects as it goes,
+          because that is what a radio group does. The disabled one is skipped. The ring is filled
+          only on the chosen tile — two drawings rather than one recoloured, so the state survives
+          without colour.
+        </p>
+
         <div class="demo__stack">
           <nine-am-expandable-tile [(expanded)]="tileExpanded">
             <div nineAmTileAboveFold>

@@ -4,8 +4,10 @@ import {
   Component,
   computed,
   Directive,
+  inject,
   input,
   model,
+  output,
   ViewEncapsulation,
 } from '@angular/core';
 import { Icon } from '../icon/icon';
@@ -262,11 +264,141 @@ export class ExpandableTile {
   });
 }
 
+/**
+ * The single-select tile: a group of tiles where exactly one is chosen.
+ *
+ * A `<fieldset>` with a `<legend>`, and the same trade `RadioGroup` makes for
+ * the same return. Native radios sharing a `name` give single selection, arrow
+ * keys, wrapping, and a group that is *one* tab stop — none of it code we wrote
+ * — and the `<fieldset>` cascades `disabled` to every tile inside while the
+ * `<legend>` names the group to a screen reader.
+ *
+ * Use it where `SelectableTile` would be wrong: that one is a checkbox, so it
+ * answers "which of these", and this one answers "which one of these". The
+ * markup is what carries the difference, not the styling.
+ */
+@Component({
+  selector: 'nine-am-tile-group',
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: './tile.scss',
+  host: { '[class]': 'hostClass()' },
+  template: `
+    <fieldset class="nine-am-tile-group__fieldset" [disabled]="disabled()">
+      <legend class="nine-am-tile-group__legend" [class.nine-am-visually-hidden]="hideLegend()">
+        {{ legend() }}
+      </legend>
+
+      <div class="nine-am-tile-group__tiles"><ng-content /></div>
+    </fieldset>
+  `,
+})
+export class TileGroup {
+  /**
+   * Names the group. Required, because a set of radios without one is a set of
+   * options nobody has said what they are options *for* — `hideLegend` covers
+   * the case where the page already says it visually.
+   */
+  readonly legend = input.required<string>();
+
+  /** The `value` of the chosen tile. Carbon splits this into `defaultSelected` and `valueSelected`. */
+  readonly value = model('');
+
+  /** Disables every tile in the group. The `<fieldset>` does the work. */
+  readonly disabled = input(false, { transform: booleanAttribute });
+
+  readonly hideLegend = input(false, { transform: booleanAttribute });
+
+  /** Fires only on user interaction, unlike writes to the `value` model. */
+  readonly selected = output<string>();
+
+  /** Shared by every radio in the group. One `name` is what makes them one group. */
+  readonly name = `nine-am-tile-group-${nextId++}`;
+
+  protected readonly hostClass = computed(() =>
+    this.disabled() ? 'nine-am-tile-group nine-am-tile-group--disabled' : 'nine-am-tile-group',
+  );
+
+  /** Called by a tile when it is chosen. */
+  select(next: string): void {
+    this.value.set(next);
+    this.selected.emit(next);
+  }
+}
+
+/**
+ * One tile in a `nine-am-tile-group`.
+ *
+ * Built the way `SelectableTile` is and for the same reasons — a visually
+ * hidden real `<input>`, here a radio, paired with a `<label>` that carries the
+ * tile styling. The input is what a form submits, what a screen reader
+ * announces, and what makes the arrow keys work without a line of code.
+ *
+ * It has to be inside a group: the `name`, the chosen value and `disabled` all
+ * live there, and a lone radio tile has nothing to be single-select *against*.
+ *
+ * The icon is always visible here too, and Carbon's own `enable-v12-tile-radio-icons`
+ * is where that comes from — see `SelectableTile` for the argument. Two drawings
+ * rather than one recoloured: an empty ring, and a ring with a disc in it.
+ */
+@Component({
+  selector: 'nine-am-radio-tile',
+  encapsulation: ViewEncapsulation.None,
+  imports: [Icon],
+  styleUrl: './tile.scss',
+  host: { class: 'nine-am-radio-tile-host' },
+  template: `
+    <input
+      type="radio"
+      class="nine-am-tile-input"
+      [id]="inputId"
+      [name]="group.name"
+      [value]="value()"
+      [checked]="group.value() === value()"
+      [disabled]="disabled()"
+      (change)="group.select(value())"
+    />
+
+    <label [attr.for]="inputId" [class]="tileClass()">
+      <span class="nine-am-tile-content"><ng-content /></span>
+      <span class="nine-am-tile__checkmark">
+        <nine-am-icon
+          [name]="group.value() === value() ? 'radio-button-checked' : 'radio-button'"
+        />
+      </span>
+    </label>
+  `,
+})
+export class RadioTile {
+  readonly value = input.required<string>();
+
+  /** Disables this tile alone. The group's own `disabled` covers all of them. */
+  readonly disabled = input(false, { transform: booleanAttribute });
+
+  protected readonly group = inject(TileGroup);
+  protected readonly inputId = `nine-am-radio-tile-${nextId++}`;
+
+  protected readonly tileClass = computed(() => {
+    const classes = ['nine-am-tile', 'nine-am-tile--selectable'];
+
+    if (this.group.value() === this.value()) {
+      classes.push('nine-am-tile--is-selected');
+    }
+
+    if (this.disabled()) {
+      classes.push('nine-am-tile--disabled');
+    }
+
+    return classes.join(' ');
+  });
+}
+
 export const NINE_AM_TILE = [
   Tile,
   ClickableTile,
   SelectableTile,
   ExpandableTile,
+  TileGroup,
+  RadioTile,
   TileAboveFold,
   TileBelowFold,
 ] as const;

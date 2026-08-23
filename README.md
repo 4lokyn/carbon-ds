@@ -56,7 +56,7 @@ npm test           # vitest, via @angular/build:unit-test
 | `Callout` | loads with the page, never dismisses, no live region |
 | `OverflowMenu` | three-dot trigger, danger item, divider; the WAI-ARIA menu button keyboard, ours |
 | `Breadcrumb` | `nav` + `ol`, 2 sizes, current page, optional trailing slash |
-| `Tile` family | plain, clickable `<a>`, selectable on a real checkbox, expandable with a CSS-only reveal |
+| `Tile` family | plain, clickable `<a>`, selectable on a real checkbox, single-select on real radios in a `<fieldset>`, expandable with a CSS-only reveal |
 | `Popover` + `Tooltip` + `Toggletip` | one surface; tooltip flips in a CDK overlay, toggletip stays in the DOM for focus order |
 | `Link` | 3 sizes, standalone and inline, optional icon, disabled that stays an `<a>` |
 | `Loading` + `InlineLoading` | 88/16px ring; inline reports finished and error, not just busy |
@@ -529,21 +529,16 @@ role to the chevron alone instead.
 
 ### What is left, in the order worth building it
 
-30 of Carbon's ~48 components exist. Notification is complete — all four of
-Carbon's variants — and so is the layer of the system that turns up on the first
-real screen anyone writes. What is left is the long tail.
+30 of Carbon's ~48 components exist, and the two that had missing variants no
+longer do: Notification has all four of Carbon's, and Tile has all of its
+subcomponents bar the AI label. Nothing built is half-built. What is left is the
+long tail.
 
 **The remaining form controls**, none of them urgent: `NumberInput` (the one
 with steppers — our `type="number"` is a passthrough and says so), `Slider`,
 `FileUploader`, `TimePicker`, `ContentSwitcher`, and Carbon's non-filterable
 `Dropdown` (a styled listbox, where `nine-am-select` is the native one). `TimePicker`
 and `Slider` may never be needed.
-
-**The one gap in a component that already exists:** Carbon's `RadioTile` and
-`TileGroup` — the single-select form of the tile, with a `<fieldset>`, a legend
-and one `name` across the group. What is built is the checkbox form, so "pick
-several" works and "pick one" does not. `RadioGroup` next door is the shape to
-copy.
 
 **Everything else**, roughly by how often it comes up: `Accordion`,
 `ProgressIndicator`, `ProgressBar`, `PageHeader`, `Menu` / `MenuButton` /

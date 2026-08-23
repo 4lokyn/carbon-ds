@@ -318,6 +318,8 @@ export class App {
     this.termsSubmitted.set(false);
   }
 
+  protected readonly clusterSize = signal('medium');
+
   protected readonly notificationStatuses: readonly NotificationStatus[] = [
     'error',
     'success',

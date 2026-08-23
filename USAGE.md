@@ -237,7 +237,7 @@ element the way Carbon React does. `visited` is opt-in; leave it off unless
 
 ## Tile
 
-Four things share one surface. Pick by what the tile *does*.
+Five things share one surface. Pick by what the tile *does*.
 
 ```html
 <nine-am-tile>Holds content, does nothing else.</nine-am-tile>
@@ -278,6 +278,34 @@ own. The default tile is labelled by its own content.
 The selectable tile is a real `<input type="checkbox">` under the surface, so
 `name` and `value` are collected by a surrounding `<form>` on submit and Space
 toggles it with no help from us.
+
+### Which of these, or which one of these
+
+Those are different questions and they take different components. The selectable
+tile is a checkbox, so a row of them answers *which of these*. For *which one of
+these*, group radio tiles instead:
+
+```html
+<nine-am-tile-group legend="Cluster size" [(value)]="size" (selected)="price($event)">
+  <nine-am-radio-tile value="small">Small — 2 vCPU, 8 GB</nine-am-radio-tile>
+  <nine-am-radio-tile value="medium">Medium — 8 vCPU, 32 GB</nine-am-radio-tile>
+  <nine-am-radio-tile value="dedicated" disabled>Dedicated — contact sales</nine-am-radio-tile>
+</nine-am-tile-group>
+```
+
+`legend` is required, and it is the thing a screen reader reads before the
+options — set `hideLegend` if the page already says it in a heading, but say it
+somewhere. The group's `disabled` goes through the `<fieldset>` and covers every
+tile; a tile's own `disabled` covers one.
+
+**None of the keyboard is ours.** One `name` across the group gives single
+selection, arrow keys that move *and* select, wrapping, skipping the disabled
+one, and a group that is a single tab stop. Same trade `RadioGroup` makes, and
+the reason both are built on native inputs rather than on `div`s with a role.
+
+**`(selected)` fires only on user interaction.** Writing to `[(value)]` from your
+own code does not echo back through it, which is what makes it safe to use for
+things like recalculating a price.
 
 ## Notification
 

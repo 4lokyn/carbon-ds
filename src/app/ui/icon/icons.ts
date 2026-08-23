@@ -49,12 +49,7 @@ export const ICON_PATHS = {
     'M14,16a2,2 0 1,0 4,0a2,2 0 1,0 -4,0',
     'M14,24a2,2 0 1,0 4,0a2,2 0 1,0 -4,0',
   ],
-  menu: [
-    'M4 6H28V8H4z',
-    'M4 24H28V26H4z',
-    'M4 12H28V14H4z',
-    'M4 18H28V20H4z',
-  ],
+  menu: ['M4 6H28V8H4z', 'M4 24H28V26H4z', 'M4 12H28V14H4z', 'M4 18H28V20H4z'],
   'chevron-left': ['M10 16 20 6 21.4 7.4 12.8 16 21.4 24.6 20 26z'],
   'chevron-down': ['M16 22 6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z'],
   close: [
@@ -142,6 +137,25 @@ export const ICON_PATHS = {
     'M5.24,22.51l1.43-1.42A14.06,14.06,0,0,1,3.07,16C5.1,10.93,10.7,7,16,7a12.38,12.38,0,0,1,4,.72l1.55-1.56A14.72,14.72,0,0,0,16,5,16.69,16.69,0,0,0,1.06,15.66a1,1,0,0,0,0,.68A16,16,0,0,0,5.24,22.51Z',
     'M12,15.73a4,4,0,0,1,3.7-3.7l1.81-1.82a6,6,0,0,0-7.33,7.33Z',
     'M30.94,15.66A16.4,16.4,0,0,0,25.2,8.22L30,3.41,28.59,2,2,28.59,3.41,30l5.1-5.1A15.29,15.29,0,0,0,16,27,16.69,16.69,0,0,0,30.94,16.34,1,1,0,0,0,30.94,15.66ZM20,16a4,4,0,0,1-6,3.44L19.44,14A4,4,0,0,1,20,16Zm-4,9a13.05,13.05,0,0,1-6-1.58l2.54-2.54a6,6,0,0,0,8.35-8.35l2.87-2.87A14.54,14.54,0,0,1,28.93,16C26.9,21.07,21.3,25,16,25Z',
+  ],
+
+  /**
+   * The radio tile's two states. Unlike `checkmark-filled`, which is one glyph
+   * recoloured, these are two drawings: an empty ring and a ring with a disc in
+   * it. That is what a radio looks like everywhere, and it is legible without
+   * colour — which matters, because the difference between chosen and not is the
+   * only thing this icon is for.
+   *
+   * `radio-button--checked` ships two paths and keeps both: the inner disc is a
+   * solid circle rather than one of Carbon's `inner-path` knockouts, so filling
+   * it with `currentColor` is exactly right.
+   */
+  'radio-button': [
+    'M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2Zm0,26A12,12,0,1,1,28,16,12,12,0,0,1,16,28Z',
+  ],
+  'radio-button-checked': [
+    'M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2Zm0,26A12,12,0,1,1,28,16,12,12,0,0,1,16,28Z',
+    'M16,10a6,6,0,1,0,6,6A6,6,0,0,0,16,10Z',
   ],
 
   settings: [

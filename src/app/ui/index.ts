@@ -16,11 +16,7 @@ export {
   NINE_AM_CHECKBOX_GROUP,
 } from './checkbox/checkbox';
 export { type DateFormatter } from './date-picker/date-picker-panel';
-export {
-  DatePicker,
-  type DateParser,
-  type FirstDayOfWeek,
-} from './date-picker/date-picker';
+export { DatePicker, type DateParser, type FirstDayOfWeek } from './date-picker/date-picker';
 export { DateRangePicker } from './date-picker/date-range-picker';
 export { type FieldSize } from './field/field-types';
 export { Icon } from './icon/icon';
@@ -125,22 +121,18 @@ export {
   type SortDirection,
   type TableSize,
 } from './table/table-types';
-export {
-  NINE_AM_TAG,
-  InteractiveTag,
-  Tag,
-  type TagColor,
-  type TagSize,
-} from './tag/tag';
+export { NINE_AM_TAG, InteractiveTag, Tag, type TagColor, type TagSize } from './tag/tag';
 export { Textarea } from './textarea/textarea';
 export {
   ClickableTile,
   NINE_AM_TILE,
   ExpandableTile,
+  RadioTile,
   SelectableTile,
   Tile,
   TileAboveFold,
   TileBelowFold,
+  TileGroup,
 } from './tile/tile';
 export { Toggle, type ToggleSize } from './toggle/toggle';
 export { type CarbonTheme, ThemeService } from './theme/theme.service';
