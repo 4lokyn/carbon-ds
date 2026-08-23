@@ -190,9 +190,11 @@ serves those better. `foldTitle` defaults to the first column.
 
 What carries over and what does not:
 
-- **Selection carries over.** The checkbox moves beside the heading rather than
-  inside it, because the heading is a `<button>` and a button may not contain a
-  checkbox.
+- **Selection carries over**, select-all included. The row checkbox moves beside
+  the heading rather than inside it, because the heading is a `<button>` and a
+  button may not contain a checkbox. Select-all moves above the list, where the
+  header row would have been, and shows its label — nothing else on a folded row
+  explains what a lone checkbox at the top would select.
 - **Expansion carries over**, and it is the same open state — a row expanded in
   the table is open when it folds. `expandedContent` renders under the fields.
 - **Sorting does not.** The header row is where sorting lives and it is gone, so

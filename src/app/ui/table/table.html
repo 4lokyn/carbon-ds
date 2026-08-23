@@ -1,6 +1,22 @@
 @let expandTemplate = expandedContent();
 
 @if (folded()) {
+  <!-- Select-all, which lives in the header row when there is a header row.
+       Above the list rather than inside it: the accordion renders a <ul>, and a
+       <ul> may only own <li> elements. Its label shows here, unlike in the
+       header cell, because nothing else on a folded row explains what a lone
+       checkbox at the top would select. -->
+  @if (selectable() && !loading()) {
+    <div class="nine-am-table__folded-select-all">
+      <nine-am-checkbox
+        [label]="selectAllLabel()"
+        [checked]="allSelected()"
+        [indeterminate]="partiallySelected()"
+        (toggled)="toggleAll()"
+      />
+    </div>
+  }
+
   <!-- One accordion item per row. The heading is the title column, the body is
        every other column as a label/value pair, and the expansion template — if
        there is one — follows them. Sorting has no home here: the header row is

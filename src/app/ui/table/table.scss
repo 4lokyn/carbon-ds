@@ -328,3 +328,14 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
   color: $text-secondary;
   text-align: center;
 }
+
+// Select-all when folded. Indented to the same place the row checkboxes sit —
+// the accordion's lead slot — so the column of boxes reads as one column.
+.nine-am-table__folded-select-all {
+  display: flex;
+  align-items: center;
+  min-height: rem(40px);
+  padding-inline: $spacing-05;
+  border-block-end: rem(1px) solid $border-subtle-01;
+  background-color: $layer-accent-01;
+}

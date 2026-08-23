@@ -380,6 +380,46 @@ describe('Table, folded', () => {
     expect(labels()).toEqual(['Name', 'Seats', 'Name', 'Seats']);
   });
 
+  it('offers select-all above the list, where the header row would have been', () => {
+    // Stubbed here rather than leaning on a previous test having done it —
+    // a spec that passes because of the one before it is not a spec.
+    stubMatchMedia(true);
+
+    const fixture = TestBed.createComponent(FoldHost);
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement as HTMLElement;
+    const selectAll = el.querySelector<HTMLInputElement>('.nine-am-table__folded-select-all input');
+
+    // Above the accordion, not inside it: the accordion renders a <ul>, and a
+    // <ul> may only own <li> elements.
+    expect(selectAll).not.toBeNull();
+    expect(el.querySelector('.nine-am-accordion')?.contains(selectAll)).toBe(false);
+
+    selectAll!.click();
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.selection().map((row) => row.id)).toEqual(['a', 'b']);
+
+    selectAll!.click();
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.selection()).toEqual([]);
+  });
+
+  it('shows the select-all label, which no header row is left to explain', () => {
+    const { apply, host } = setup(true);
+
+    const label = document.querySelector('.nine-am-table__folded-select-all label');
+
+    expect(label?.textContent?.trim()).toBe('Select all rows on this page');
+
+    apply(() => host.foldBelow.set(null));
+
+    // And it is gone with the fold, because the header cell takes over.
+    expect(document.querySelector('.nine-am-table__folded-select-all')).toBeNull();
+  });
+
   it('keeps selection, with the checkbox outside the heading button', () => {
     const { headings, host } = setup(true);
 
