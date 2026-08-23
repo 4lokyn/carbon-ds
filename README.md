@@ -512,6 +512,7 @@ person can tell a decision from an oversight.
 | `ActionableNotification` — `timeout` | Carbon accepts one and defaults it to 0. Auto-dismissing a notification that has trapped focus takes the focus with it and drops the user somewhere they did not ask to be. If it can time out, it did not need an action. |
 | `MultiSelect` — the highlight does not follow the mouse | Carbon's list is Downshift's, and Downshift moves `highlightedIndex` on `mousemove`, so the blue ring tracks the pointer. Here it is a focus indicator only: ng-primitives emits `data-active` while the *listbox* has focus, so hovering tints a row and the ring stays where the keyboard left it. Two indicators that mean two different things rather than one that means both. |
 | `Table` — cells truncate, Carbon's wrap | Carbon ellipsises only the header label and lets body cells wrap. One line per row is what makes a dense table scannable, so truncation is the default here and `wrapCells` turns Carbon's behaviour back on. The folded view wraps either way — a folded row has no column widths to protect. |
+| `CodeSnippet` | Dropped on 2026-08-23. Not needed here, and it is the one component on the list whose absence costs nothing else: `CopyButton` was built partly for it and stands on its own — an image reference, an id, a url. Build it if a docs surface ever appears. |
 | `Slider`, `TimePicker` | Dropped on 2026-08-23, not overlooked: neither is used in what this system is being built for, and both are large — a slider is a drag interaction with a keyboard equivalent, a time picker is a parser and a locale question. Build either when something actually asks. |
 | `PageHeader` | Not a core Carbon component at all — Carbon has a UI shell header and a *global header pattern*, and `PageHeader` lives in Carbon for IBM Products, which this repo does not use. So it is a design decision rather than a port, and it is not on the queue as if it were one. |
 | `Tabs` — `dismissable` | Carbon puts a close button *inside* the tab. Aria owns the keyboard here, and a second focusable control inside a roving-focus item needs its own answer for how it is reached. Worth doing properly or not at all. |
@@ -548,9 +549,8 @@ with steppers — our `type="number"` is a passthrough and says so),
 
 **Everything else**, roughly by how often it comes up: the list family
 (`List`, `StructuredList`, `ContainedList`) which is worth doing in one go,
-`ProgressIndicator`, `CodeSnippet` (which wanted `CopyButton` first, and now has
-it), `PaginationNav`, and `TreeView` — the last of which borrows nothing from
-anything here and deserves its own sitting.
+`ProgressIndicator`, `PaginationNav`, and `TreeView` — the last of which borrows
+nothing from anything here and deserves its own sitting.
 
 - **Table extras:** column resize/reorder, row overflow menu, CSV export, and
   virtual scroll for very large pages (`@angular/cdk/scrolling`).
