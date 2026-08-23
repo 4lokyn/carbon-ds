@@ -90,6 +90,21 @@ export class Table<T> {
    */
   readonly zebra = input(false, { transform: booleanAttribute });
 
+  /**
+   * Let cell text wrap onto a second line instead of being cut with an ellipsis.
+   *
+   * Off by default, and that default is a deviation from Carbon — Carbon
+   * truncates only the header label and lets body cells wrap. Truncation is kept
+   * because it is what makes a dense table scannable: every row one line, the
+   * eye running down a column rather than hunting for where the next one starts.
+   *
+   * Turn it on when the content matters more than the grid — a description, a
+   * path, an image reference: anything a reader has to take in whole rather than
+   * recognise at a glance. The folded view wraps either way, because a folded
+   * row has no column widths to protect.
+   */
+  readonly wrapCells = input(false, { transform: booleanAttribute });
+
   readonly stickyHeader = input(false, { transform: booleanAttribute });
 
   /**
@@ -216,6 +231,10 @@ export class Table<T> {
 
     if (this.zebra()) {
       classes.push('nine-am-table--zebra');
+    }
+
+    if (this.wrapCells()) {
+      classes.push('nine-am-table--wrap');
     }
 
     if (this.staticWidth()) {

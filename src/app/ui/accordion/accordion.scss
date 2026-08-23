@@ -100,8 +100,15 @@ $-heights: (
   @include type-style('body-01');
 
   width: 100%;
+
+  // `min-width: 0` first, or the flex item refuses to shrink below its longest
+  // word and pushes the chevron off the row. `anywhere` rather than
+  // `break-word` because it also lets the item shrink — a url or an image ref
+  // has no space to break at, and without this it decides the width.
+  min-width: 0;
   padding-block: $spacing-03;
   padding-inline-start: $spacing-05;
+  overflow-wrap: anywhere;
 }
 
 .nine-am-accordion__arrow {
@@ -138,6 +145,7 @@ $-heights: (
 .nine-am-accordion__content {
   min-height: 0;
   padding-inline: $spacing-05;
+  overflow-wrap: anywhere;
   opacity: 0;
   overflow: hidden;
 
@@ -187,10 +195,11 @@ $-heights: (
     padding-inline: $spacing-05 0;
   }
 
-  // Indented to clear the chevron, so the content lines up with the title above
-  // it rather than with the arrow.
+  // Indented past the chevron and the gap after it, so the content lines up with
+  // the title above rather than with the arrow. The chain is the heading's own
+  // padding, the 16px chevron, and the gap.
   .nine-am-accordion__content {
-    padding-inline-start: calc(#{$spacing-05} + #{rem(16px)} + #{$spacing-05});
+    padding-inline-start: calc(#{$spacing-05} + #{rem(16px)} + #{$spacing-03});
   }
 }
 
@@ -215,6 +224,14 @@ $-heights: (
   }
 }
 
+// Flush removes side padding, which is its job, and would take the start
+// indent with it — leaving the content against the edge while the title sits a
+// chevron's width in. Restated for the combination, without the heading padding
+// flush has just removed.
+.nine-am-accordion--flush.nine-am-accordion--start .nine-am-accordion__content {
+  padding-inline-start: calc(#{rem(16px)} + #{$spacing-03});
+}
+
 @media screen and (prefers-reduced-motion: reduce) {
   .nine-am-accordion__wrapper,
   .nine-am-accordion__content,
@@ -235,8 +252,11 @@ $-heights: (
   column-gap: $spacing-03;
   grid-template-columns: auto 1fr;
 
+  // The second column, not both: the content belongs under the heading, not
+  // under the checkbox beside it. Everything that indents it further is then
+  // measured from the same place the title starts.
   .nine-am-accordion__wrapper {
-    grid-column: 1 / -1;
+    grid-column: 2 / -1;
   }
 }
 

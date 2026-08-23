@@ -296,6 +296,7 @@ interface Plan {
       [rowKey]="rowKey"
       [foldBelow]="foldBelow()"
       [foldTitle]="foldTitle()"
+      [wrapCells]="wrapCells()"
       [(selection)]="selection"
     />
   `,
@@ -303,6 +304,7 @@ interface Plan {
 class FoldHost {
   readonly foldBelow = signal<'md' | null>('md');
   readonly foldTitle = signal<string | undefined>(undefined);
+  readonly wrapCells = signal(false);
   readonly selection = signal<readonly Plan[]>([]);
 
   readonly rows: readonly Plan[] = [
@@ -318,6 +320,28 @@ class FoldHost {
 
   readonly rowKey = (row: Plan) => row.id;
 }
+
+describe('Table, wrapping', () => {
+  it('truncates by default and wraps when asked', () => {
+    stubMatchMedia(false);
+
+    const fixture = TestBed.createComponent(FoldHost);
+    fixture.componentInstance.foldBelow.set(null);
+    fixture.detectChanges();
+
+    const table = () => fixture.nativeElement.querySelector('table') as HTMLElement;
+
+    // Truncation is the default and it is a deviation from Carbon, which lets
+    // body cells wrap. It is kept because one line per row is what makes a
+    // dense table scannable.
+    expect(table().classList).not.toContain('nine-am-table--wrap');
+
+    fixture.componentInstance.wrapCells.set(true);
+    fixture.detectChanges();
+
+    expect(table().classList).toContain('nine-am-table--wrap');
+  });
+});
 
 describe('Table, folded', () => {
   function setup(matches: boolean) {

@@ -282,6 +282,22 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
   }
 }
 
+// ── Wrapping cells ──────────────────────────────────────────────────────────
+//
+// Off by default, which is a deviation from Carbon: Carbon truncates only the
+// header label and lets body cells wrap. Truncation is kept as the default here
+// because it is what makes a dense table scannable — every row one line, the
+// eye running down a column instead of hunting for where the next one starts.
+//
+// Turn it on where the content matters more than the grid: a description, a
+// path, anything a user has to read in full rather than recognise.
+.nine-am-table--wrap .nine-am-table__cell {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 // ── Folded ──────────────────────────────────────────────────────────────────
 //
 // What the table becomes under `foldBelow`: one accordion item per row. The
@@ -302,17 +318,21 @@ $-transition: 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
   grid-template-columns: auto 1fr;
 }
 
+// Both wrap. A folded row has no column widths to protect, and the values that
+// arrive here — image refs, urls, ids — are exactly the ones with nowhere to
+// break on a space.
 .nine-am-table__field-label {
   @include type-style('label-01');
 
   color: $text-secondary;
+  overflow-wrap: anywhere;
 }
 
 .nine-am-table__field-value {
   @include type-style('body-compact-01');
 
   margin: 0;
-  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .nine-am-table__folded-skeleton,

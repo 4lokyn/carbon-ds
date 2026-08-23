@@ -165,6 +165,25 @@ can see. `demo/services-table.ts` is the worked example.
 Do not combine `zebra` with `selectable`: the stripe and the selected background
 are the same token in every Carbon theme.
 
+### Long text
+
+**Cells truncate with an ellipsis by default**, which is a deviation from Carbon
+— Carbon ellipsises only the header label and lets body cells wrap. One line per
+row is what makes a dense table scannable, so it is kept, and `wrapCells` turns
+Carbon's behaviour back on:
+
+```html
+<nine-am-table wrapCells … />
+```
+
+Use it where the content matters more than the grid — a description, a path, an
+image reference: anything a reader takes in whole rather than recognises at a
+glance. Words with nowhere to break on a space break anyway rather than deciding
+the column's width.
+
+**The folded view wraps either way**, because a folded row has no column widths
+to protect, and the values that end up there are exactly the ones without spaces.
+
 ### Folding it into accordions on a narrow screen
 
 Off unless asked for. `foldBelow` names a Carbon breakpoint, and under it the
