@@ -149,6 +149,12 @@ button.nine-am-contained-list-item__content {
 
 // ── Sizes ───────────────────────────────────────────────────────────────────
 
+// The row's vertical padding is derived rather than picked, which is Carbon's
+// own arithmetic: half of whatever is left after one line of `body-01` sits in
+// the row's height. A single-line row is exactly the height; a row whose text
+// wraps grows symmetrically instead of pressing against both edges.
+$-line-height: rem(20px);
+
 @each $name, $height in $-heights {
   .nine-am-contained-list--#{$name} {
     .nine-am-contained-list__header {
@@ -157,6 +163,7 @@ button.nine-am-contained-list-item__content {
 
     .nine-am-contained-list-item__content {
       min-height: $height;
+      padding-block: calc((#{$height} - #{$-line-height}) / 2);
     }
   }
 }

@@ -41,6 +41,16 @@
   }
 }
 
+// A nested unordered list gets a square instead, which is how Carbon tells the
+// second level from the first without indenting further. The `\00FE0E` is a
+// variation selector asking for the text glyph rather than an emoji square, and
+// the offset is smaller because the square is narrower than the dash.
+.nine-am-list--unordered.nine-am-list--nested:not(.nine-am-list--native)
+  > .nine-am-list__item::before {
+  content: '\0025AA\00FE0E';
+  inset-inline-start: calc(-1 * #{$spacing-04});
+}
+
 .nine-am-list--ordered:not(.nine-am-list--native):not(.nine-am-list--nested) {
   counter-reset: nine-am-list-item;
 
