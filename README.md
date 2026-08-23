@@ -552,9 +552,17 @@ long tail.
 with steppers — our `type="number"` is a passthrough and says so),
 `ContentSwitcher`, and `FileUploader`.
 
-**Everything else**, roughly by how often it comes up: `StructuredList`,
-`ProgressIndicator`, `PaginationNav`, and `TreeView` — the last of which borrows
-nothing from anything here and deserves its own sitting.
+**Everything else**, roughly by how often it comes up: `ProgressIndicator`,
+`PaginationNav`, and `TreeView` — the last of which borrows nothing from
+anything here and deserves its own sitting.
+
+**`StructuredList` is deferred rather than dropped**, and the difference
+matters: it was not overlooked and it was not rejected. It is a grid of rows and
+columns without table semantics or behaviour, and this system already has a
+`Table` with sorting, keyed selection, expansion and a folded narrow-screen
+view. Whether a second, quieter grid earns its place is a question about a real
+screen, and no screen has asked yet. Build it when one does — the answer may
+well be that the table's own `size="xs"` covers it.
 
 - **Table extras:** column resize/reorder, row overflow menu, CSV export, and
   virtual scroll for very large pages (`@angular/cdk/scrolling`).
