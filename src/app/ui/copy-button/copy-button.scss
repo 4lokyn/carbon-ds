@@ -1,0 +1,74 @@
+@use 'nine-am' as *;
+
+.nine-am-copy-button-host {
+  display: inline-flex;
+}
+
+// A square the size of a small field, so it sits inside a code snippet or beside
+// an input without setting the row height itself.
+.nine-am-copy-button {
+  @include unstyled-button;
+  @include focus-ring-state;
+
+  position: relative;
+  display: flex;
+  width: rem(32px);
+  height: rem(32px);
+  align-items: center;
+  justify-content: center;
+  background-color: $layer-01;
+  color: $icon-primary;
+  transition: background-color $duration-fast-01 motion(standard, productive);
+
+  @media (any-hover: hover) {
+    &:hover {
+      background-color: $layer-hover-01;
+    }
+  }
+
+  &:active {
+    background-color: $layer-active-01;
+  }
+
+  &:disabled {
+    color: $icon-disabled;
+    cursor: not-allowed;
+
+    @media (any-hover: hover) {
+      &:hover {
+        background-color: $layer-01;
+      }
+    }
+  }
+}
+
+// The bubble. Hidden rather than absent so it can fade, and `pointer-events`
+// off so it never stands between the pointer and a second copy.
+.nine-am-copy-button__feedback {
+  @include type-style('body-compact-01');
+
+  position: absolute;
+  z-index: 10;
+  bottom: calc(100% + #{$spacing-02});
+  left: 50%;
+  padding: $spacing-02 $spacing-03;
+  border-radius: rem(2px);
+  background-color: $background-inverse;
+  color: $text-inverse;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%);
+  transition: opacity $duration-fast-02 motion(standard, productive);
+  white-space: nowrap;
+}
+
+.nine-am-copy-button--showing .nine-am-copy-button__feedback {
+  opacity: 1;
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  .nine-am-copy-button,
+  .nine-am-copy-button__feedback {
+    transition: none;
+  }
+}

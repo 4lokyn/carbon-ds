@@ -279,6 +279,58 @@ the thing worked.
 Carbon's `successDelay` / `onSuccess` are deliberately absent — that timer
 belongs to the code that set `finished` in the first place.
 
+## Progress bar
+
+For something with a duration the user is waiting through — a download, an
+install, a transfer. For "the page is doing something", that is `Loading`.
+
+```html
+<!-- Indeterminate: no value yet. -->
+<nine-am-progress-bar label="Waiting for the server" helperText="No estimate yet" />
+
+<!-- Determinate, once the process can say. -->
+<nine-am-progress-bar
+  label="Export data"
+  [value]="done()"
+  [max]="total()"
+  [status]="failed() ? 'error' : done() === total() ? 'finished' : 'active'"
+  [helperText]="done() + ' of ' + total() + ' records'"
+/>
+```
+
+**Leaving `value` unset is the indeterminate switch**, and it is the honest one:
+a bar reporting a percentage it cannot know is worse than one admitting it is
+still working. `null` counts as unset for the same reason — a value that has not
+arrived is not zero.
+
+`status` carries the ending. A finished or failed bar draws full whatever the
+number says, because the ending is what it is reporting, not the arithmetic that
+got there. `helperText` is announced politely when it changes, so "Upload
+failed" reaches a screen reader without a second live region.
+
+`size="small"` halves the track to 4px. `type="inline"` puts the label beside
+the track and takes the helper text off the screen while keeping it for a screen
+reader, because an inline bar is one row.
+
+## Copy button
+
+```html
+<nine-am-copy-button [value]="image" (copyFailed)="offerManually()" />
+```
+
+**The feedback is the component.** Copying changes nothing on screen and opens
+no dialog, so without it a user cannot tell a successful copy from a dead
+button. It is announced as well as shown.
+
+**It never claims a copy it did not make.** `navigator.clipboard` is absent on
+insecure origins and its write can be refused, so the bubble waits for the
+promise rather than appearing on the click, and a refusal emits `(copyFailed)`
+with the reason instead of pretending. Handle it if the value matters — offering
+the text in a field the user can select is the usual answer.
+
+`feedback` and `feedbackTimeout` change what it says and for how long; the
+default is Carbon's two seconds.
+
 ## Link
 
 ```html

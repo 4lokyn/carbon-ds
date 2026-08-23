@@ -10,6 +10,7 @@ export {
   NINE_AM_ACCORDION,
 } from './accordion/accordion';
 export { Button, type ButtonKind, type ButtonSize } from './button/button';
+export { COPY_FEEDBACK_TIMEOUT, CopyButton } from './copy-button/copy-button';
 export {
   Breadcrumb,
   BreadcrumbItem,
@@ -38,6 +39,12 @@ export {
   OverflowMenu,
   type OverflowMenuAlign,
 } from './overflow-menu/overflow-menu';
+export {
+  ProgressBar,
+  type ProgressSize,
+  type ProgressStatus,
+  type ProgressType,
+} from './progress-bar/progress-bar';
 export { Popover } from './popover/popover';
 export {
   type PopoverAlign,

@@ -8,6 +8,7 @@ import {
   type ButtonKind,
   type ButtonSize,
   Callout,
+  CopyButton,
   NINE_AM_BREADCRUMB,
   NINE_AM_MENU,
   NINE_AM_OVERFLOW_MENU,
@@ -32,6 +33,7 @@ import {
   type NineAmColumn,
   NINE_AM_RADIO_GROUP,
   NINE_AM_SHELL,
+  ProgressBar,
   Search,
   Select,
   NINE_AM_TAG,
@@ -59,6 +61,8 @@ const INITIAL_TAGS: readonly TagColor[] = ['blue', 'green', 'red', 'purple'];
     ActionableNotification,
     Button,
     Callout,
+    CopyButton,
+    ProgressBar,
     DatePicker,
     DateRangePicker,
     InlineLoading,
@@ -329,6 +333,21 @@ export class App {
   }
 
   protected readonly menuAction = signal('');
+  protected readonly lastCopy = signal('');
+  protected readonly exportProgress = signal(35);
+
+  /** Walks the determinate bar to 100 so the transition is visible on screen. */
+  protected runExport(): void {
+    this.exportProgress.set(0);
+
+    const step = setInterval(() => {
+      this.exportProgress.update((value) => Math.min(value + 10, 100));
+
+      if (this.exportProgress() === 100) {
+        clearInterval(step);
+      }
+    }, 250);
+  }
 
   protected readonly clusterSize = signal('medium');
 

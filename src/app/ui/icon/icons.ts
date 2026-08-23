@@ -140,6 +140,16 @@ export const ICON_PATHS = {
   ],
 
   /**
+   * Two paths, both kept: the outline of the front sheet and the corner of the
+   * one behind it. Neither is a knockout — they are two shapes, and the icon is
+   * only legible as a copy when both are drawn.
+   */
+  copy: [
+    'M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z',
+    'M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z',
+  ],
+
+  /**
    * The radio tile's two states. Unlike `checkmark-filled`, which is one glyph
    * recoloured, these are two drawings: an empty ring and a ring with a disc in
    * it. That is what a radio looks like everywhere, and it is legible without

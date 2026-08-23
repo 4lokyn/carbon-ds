@@ -62,6 +62,8 @@ npm test           # vitest, via @angular/build:unit-test
 | `Popover` + `Tooltip` + `Toggletip` | one surface; tooltip flips in a CDK overlay, toggletip stays in the DOM for focus order |
 | `Link` | 3 sizes, standalone and inline, optional icon, disabled that stays an `<a>` |
 | `Loading` + `InlineLoading` | 88/16px ring; inline reports finished and error, not just busy |
+| `ProgressBar` | determinate and indeterminate, finished and error endings, 2 heights, inline and indented |
+| `CopyButton` | writes to the clipboard, says so, and never claims a copy it did not make |
 | `Icon` | Carbon paths inlined; no `@carbon/icons-angular` |
 | `Tabs` | line and contained, 3 sizes, full width; `@angular/aria` for behavior |
 | `Modal` | 4 widths; `@angular/cdk/dialog` for focus trap / Escape / restore focus |
@@ -509,6 +511,8 @@ person can tell a decision from an oversight.
 | `ActionableNotification` — `timeout` | Carbon accepts one and defaults it to 0. Auto-dismissing a notification that has trapped focus takes the focus with it and drops the user somewhere they did not ask to be. If it can time out, it did not need an action. |
 | `MultiSelect` — the highlight does not follow the mouse | Carbon's list is Downshift's, and Downshift moves `highlightedIndex` on `mousemove`, so the blue ring tracks the pointer. Here it is a focus indicator only: ng-primitives emits `data-active` while the *listbox* has focus, so hovering tints a row and the ring stays where the keyboard left it. Two indicators that mean two different things rather than one that means both. |
 | `Table` — cells truncate, Carbon's wrap | Carbon ellipsises only the header label and lets body cells wrap. One line per row is what makes a dense table scannable, so truncation is the default here and `wrapCells` turns Carbon's behaviour back on. The folded view wraps either way — a folded row has no column widths to protect. |
+| `Slider`, `TimePicker` | Dropped on 2026-08-23, not overlooked: neither is used in what this system is being built for, and both are large — a slider is a drag interaction with a keyboard equivalent, a time picker is a parser and a locale question. Build either when something actually asks. |
+| `PageHeader` | Not a core Carbon component at all — Carbon has a UI shell header and a *global header pattern*, and `PageHeader` lives in Carbon for IBM Products, which this repo does not use. So it is a design decision rather than a port, and it is not on the queue as if it were one. |
 | `Tabs` — `dismissable` | Carbon puts a close button *inside* the tab. Aria owns the keyboard here, and a second focusable control inside a roving-focus item needs its own answer for how it is reached. Worth doing properly or not at all. |
 | `Modal` — `danger`, `passiveModal` | Neither has any CSS in `@carbon/styles`; both are React markup switches. Our footer is projected, so they are `kind="danger"` and "do not write a footer". |
 | `Search`, `MultiSelect` | Carbon splits each into two components (`ExpandableSearch`, `FilterableMultiSelect`). One component with a flag here — a composition choice, not a missing feature. |
@@ -532,20 +536,21 @@ role to the chevron alone instead.
 
 ### What is left, in the order worth building it
 
-33 of Carbon's ~48 components exist, and the two that had missing variants no
+35 of Carbon's ~48 components exist, and the two that had missing variants no
 longer do: Notification has all four of Carbon's, and Tile has all of its
 subcomponents bar the AI label. Nothing built is half-built. What is left is the
 long tail.
 
 **The remaining form controls**, none of them urgent: `NumberInput` (the one
-with steppers — our `type="number"` is a passthrough and says so), `Slider`,
-`FileUploader`, `TimePicker`, `ContentSwitcher`, and Carbon's non-filterable
-`Dropdown` (a styled listbox, where `nine-am-select` is the native one). `TimePicker`
-and `Slider` may never be needed.
+with steppers — our `type="number"` is a passthrough and says so),
+`ContentSwitcher`, `FileUploader`, and Carbon's non-filterable `Dropdown` (a
+styled listbox, where `nine-am-select` is the native one).
 
-**Everything else**, roughly by how often it comes up: `ProgressIndicator`,
-`ProgressBar`, `PageHeader`, `CopyButton`, `CodeSnippet`, `StructuredList`,
-`ContainedList`, `List`, `TreeView`, `PaginationNav`.
+**Everything else**, roughly by how often it comes up: the list family
+(`List`, `StructuredList`, `ContainedList`) which is worth doing in one go,
+`ProgressIndicator`, `CodeSnippet` (which wanted `CopyButton` first, and now has
+it), `PaginationNav`, and `TreeView` — the last of which borrows nothing from
+anything here and deserves its own sitting.
 
 - **Table extras:** column resize/reorder, row overflow menu, CSV export, and
   virtual scroll for very large pages (`@angular/cdk/scrolling`).

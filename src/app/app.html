@@ -1455,6 +1455,76 @@
         </p>
       </section>
 
+      <!-- ── Progress bar and copy button ────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Progress bar</h2>
+        <p class="demo__note">
+          For something with a duration a user is waiting through — a download, an install, a
+          transfer. <strong>Leave <code>value</code> unset and the bar is indeterminate</strong>,
+          which is Carbon's own switch and the honest one: a bar reporting a percentage it cannot
+          know is worse than one admitting it is still working.
+        </p>
+
+        <div class="demo__stack">
+          <nine-am-progress-bar label="Waiting for the server" helperText="No estimate yet" />
+
+          <nine-am-progress-bar
+            label="Export data"
+            [value]="exportProgress()"
+            helperText="{{ exportProgress() }} of 100 records"
+          />
+
+          <nine-am-progress-bar
+            label="Install complete"
+            [value]="100"
+            status="finished"
+            helperText="12 packages"
+          />
+
+          <nine-am-progress-bar
+            label="Upload"
+            [value]="40"
+            status="error"
+            helperText="The connection dropped at 40%."
+          />
+
+          <nine-am-progress-bar label="Reindexing" [value]="72" size="small" type="inline" />
+        </div>
+
+        <div class="demo__row">
+          <button nineAmButton kind="tertiary" size="sm" (click)="runExport()">
+            Run the export
+          </button>
+        </div>
+
+        <p class="demo__note">
+          A finished or failed bar is full whatever the number says — the ending is what it is
+          reporting, not the arithmetic that got there. The inline one hides its helper text on
+          screen and keeps it for a screen reader, because an inline bar is one row.
+        </p>
+
+        <h3 class="demo__subtitle">Copy button</h3>
+        <p class="demo__note">
+          Copying is invisible: nothing changes, no dialog appears, and without feedback a user
+          cannot tell a successful copy from a dead button. So the feedback is the component — and
+          it is announced as well as shown. It also
+          <strong>never claims a copy it did not make</strong>: the bubble waits for the clipboard
+          to resolve, and a refusal reports itself instead.
+        </p>
+
+        <div class="demo__row">
+          <code>ghcr.io/acme/gateway:2.14.1</code>
+          <nine-am-copy-button
+            value="ghcr.io/acme/gateway:2.14.1"
+            (copied)="lastCopy.set('copied')"
+            (copyFailed)="lastCopy.set('refused')"
+          />
+          <span class="demo__result">
+            last attempt: <code>{{ lastCopy() || 'none' }}</code>
+          </span>
+        </div>
+      </section>
+
       <!-- ── Loading ─────────────────────────────────────────────────────────── -->
       <section class="demo__section">
         <h2 class="demo__title">Loading</h2>

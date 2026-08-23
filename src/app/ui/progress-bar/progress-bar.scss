@@ -1,0 +1,147 @@
+@use 'nine-am' as *;
+
+.nine-am-progress-bar {
+  display: block;
+}
+
+.nine-am-progress-bar__label {
+  @include type-style('body-compact-01');
+
+  display: flex;
+  min-width: rem(48px);
+  justify-content: space-between;
+  margin-block-end: $spacing-03;
+  color: $text-primary;
+}
+
+// One line. The label names a process, and a process whose name needs two lines
+// needs a shorter name.
+.nine-am-progress-bar__label-text {
+  @include truncate;
+}
+
+.nine-am-progress-bar__status-icon {
+  flex-shrink: 0;
+  margin-inline-start: $spacing-05;
+}
+
+.nine-am-progress-bar__track {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  min-width: rem(48px);
+  height: rem(8px);
+  background-color: $border-subtle-01;
+}
+
+.nine-am-progress-bar--small .nine-am-progress-bar__track {
+  height: rem(4px);
+}
+
+// Scaled rather than widened: a transform animates on the compositor, where a
+// width relays out the track on every tick of a download.
+.nine-am-progress-bar__bar {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: currentcolor;
+  color: $interactive;
+  transform: scaleX(0);
+  transform-origin: 0 center;
+  transition: transform $duration-fast-02 motion(standard, productive);
+}
+
+// ── Endings ─────────────────────────────────────────────────────────────────
+
+.nine-am-progress-bar--finished {
+  .nine-am-progress-bar__bar,
+  .nine-am-progress-bar__status-icon {
+    color: $support-success;
+  }
+}
+
+.nine-am-progress-bar--error {
+  .nine-am-progress-bar__bar,
+  .nine-am-progress-bar__status-icon {
+    color: $support-error;
+  }
+
+  .nine-am-progress-bar__helper-text {
+    color: $text-error;
+  }
+}
+
+// ── Indeterminate ───────────────────────────────────────────────────────────
+//
+// A stripe travelling the track, drawn as a gradient on the track's own
+// pseudo-element so the bar underneath stays at zero and nothing has to lie
+// about a percentage it does not know.
+
+.nine-am-progress-bar--indeterminate .nine-am-progress-bar__track::after {
+  position: absolute;
+  animation: nine-am-progress-bar-indeterminate 1400ms linear infinite;
+  background-image: linear-gradient(90deg, $interactive 12.5%, transparent 12.5%);
+  background-position-x: 0%;
+  background-size: 200% 100%;
+  content: '';
+  inset: 0;
+}
+
+@keyframes nine-am-progress-bar-indeterminate {
+  0% {
+    background-position-x: 25%;
+  }
+
+  80%,
+  100% {
+    background-position-x: -105%;
+  }
+}
+
+// ── Layouts ─────────────────────────────────────────────────────────────────
+
+.nine-am-progress-bar--inline {
+  display: flex;
+  align-items: center;
+
+  .nine-am-progress-bar__label {
+    flex-shrink: 0;
+    margin-block-end: 0;
+    margin-inline-end: $spacing-05;
+  }
+
+  .nine-am-progress-bar__track {
+    flex-basis: 0;
+    flex-grow: 1;
+  }
+
+  // Kept for a screen reader and taken off the screen: an inline bar is one
+  // row, and Carbon puts the detail out of it rather than wrapping the row.
+  .nine-am-progress-bar__helper-text {
+    @include visually-hidden;
+  }
+}
+
+.nine-am-progress-bar--indented {
+  .nine-am-progress-bar__label,
+  .nine-am-progress-bar__helper-text {
+    padding-inline: $spacing-05;
+  }
+}
+
+.nine-am-progress-bar__helper-text {
+  @include type-style('helper-text-01');
+
+  margin-block-start: $spacing-03;
+  color: $text-secondary;
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  .nine-am-progress-bar__bar {
+    transition: none;
+  }
+
+  .nine-am-progress-bar--indeterminate .nine-am-progress-bar__track::after {
+    animation: none;
+  }
+}
