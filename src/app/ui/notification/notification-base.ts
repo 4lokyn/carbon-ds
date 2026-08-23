@@ -1,4 +1,12 @@
-import { booleanAttribute, computed, Directive, input, output } from '@angular/core';
+import {
+  booleanAttribute,
+  computed,
+  Directive,
+  input,
+  output,
+  signal,
+  type Signal,
+} from '@angular/core';
 import type { IconName } from '../icon/icons';
 
 /**
@@ -9,13 +17,27 @@ import type { IconName } from '../icon/icons';
 export type NotificationStatus = 'error' | 'success' | 'warning' | 'info';
 
 /**
+ * Carbon's four variants, which are four layouts rather than four components:
+ * `inline` waits in the flow, `toast` arrives over the page, `callout` loads
+ * with the page and never leaves. `actionable` is not in this list because it is
+ * not a layout of its own — it borrows `inline` or `toast` and adds a button.
+ */
+export type NotificationVariant = 'inline' | 'toast' | 'callout';
+
+/**
  * Carbon's accessibility guidance names `alert`, `log` and `status` for a
  * notification that needs no user action, and warns against venturing past
  * them. `status` is polite: the screen reader finishes its sentence first.
  * `alert` interrupts, which is right for a failure the user has to know about
  * now and wrong for everything else.
+ *
+ * `alertdialog` is the fourth, and it is the one that comes with obligations:
+ * Carbon asks for it when the notification *requires* an action, and a dialog
+ * role without a focus trap and an accessible name is a lie to a screen reader.
+ * `ActionableNotification` is the only thing here that provides both, which is
+ * why it is the only thing here that defaults to it.
  */
-export type NotificationRole = 'status' | 'alert' | 'log';
+export type NotificationRole = 'status' | 'alert' | 'log' | 'alertdialog';
 
 const STATUS_ICON: Record<NotificationStatus, IconName> = {
   error: 'error-filled',
@@ -29,13 +51,12 @@ const STATUS_ICON: Record<NotificationStatus, IconName> = {
 };
 
 /**
- * What the inline and toast notifications share. Not a component of its own —
- * Carbon has no such thing, and neither should the public API.
+ * What every notification shares, dismissible or not. Not a component of its own
+ * — Carbon has no such thing, and neither should the public API.
  *
- * The two variants differ in layout and in nothing else: same statuses, same
- * contrast switch, same close button, same content. Keeping that agreement in
- * one place is what stops them from drifting into two components that merely
- * look related.
+ * The variants differ in layout and in nothing else: same statuses, same
+ * contrast switch, same content. Keeping that agreement in one place is what
+ * stops them from drifting into components that merely look related.
  */
 @Directive()
 export abstract class NotificationBase {
@@ -66,6 +87,49 @@ export abstract class NotificationBase {
   readonly lowContrast = input(false, { transform: booleanAttribute });
 
   /**
+   * The layout this notification wears. A signal rather than a constant because
+   * `ActionableNotification` chooses between two of them at runtime, and the
+   * host class has to follow.
+   */
+  protected abstract readonly variant: Signal<NotificationVariant>;
+
+  /**
+   * Modifiers this variant adds on top of the layout and the status.
+   *
+   * There is exactly one so far and it is the reason this exists:
+   * `ActionableNotification` wears `--inline` or `--toast` like everything else
+   * *and* has to be reachable as itself, because its arrangement of the same
+   * pieces differs from both.
+   */
+  protected readonly modifiers: Signal<readonly string[]> = signal([]);
+
+  protected readonly icon = computed(() => STATUS_ICON[this.status()]);
+
+  protected readonly hostClass = computed(() => {
+    const classes = [
+      'ds-notification',
+      `ds-notification--${this.variant()}`,
+      `ds-notification--${this.status()}`,
+      ...this.modifiers().map((modifier) => `ds-notification--${modifier}`),
+    ];
+
+    if (this.lowContrast()) {
+      classes.push('ds-notification--low-contrast');
+    }
+
+    return classes.join(' ');
+  });
+}
+
+/**
+ * The three variants a user can get rid of: inline, toast and actionable.
+ * `Callout` deliberately stops one level up — it has no close button, no live
+ * region and nothing to emit, and giving it those inputs would advertise
+ * behavior it does not have.
+ */
+@Directive()
+export abstract class DismissibleNotification extends NotificationBase {
+  /**
    * Carbon: the close button is optional, and should be left out when it is
    * critical that the user reads or acts on the notification.
    */
@@ -75,13 +139,14 @@ export abstract class NotificationBase {
   readonly closeLabel = input('Close notification');
 
   /**
-   * See `NotificationRole`. Defaults to the polite one.
+   * See `NotificationRole`. Left unset it is the variant's own default —
+   * `status` for inline and toast, `alertdialog` for actionable.
    *
    * `null` removes the attribute, for the case where something else is doing
    * the announcing — which is what `NotificationService` does, and why. A
    * notification that is announced twice is worse than one announced once.
    */
-  readonly role = input<NotificationRole | null>('status');
+  readonly role = input<NotificationRole | null | undefined>(undefined);
 
   /**
    * The close button was pressed. Nothing is removed for you — the notification
@@ -91,21 +156,11 @@ export abstract class NotificationBase {
    */
   readonly closed = output<void>();
 
-  protected abstract readonly variant: 'inline' | 'toast';
+  protected abstract readonly defaultRole: NotificationRole;
 
-  protected readonly icon = computed(() => STATUS_ICON[this.status()]);
-
-  protected readonly hostClass = computed(() => {
-    const classes = [
-      'ds-notification',
-      `ds-notification--${this.variant}`,
-      `ds-notification--${this.status()}`,
-    ];
-
-    if (this.lowContrast()) {
-      classes.push('ds-notification--low-contrast');
-    }
-
-    return classes.join(' ');
+  /** What actually reaches the DOM: the caller's answer if they gave one, ours otherwise. */
+  protected readonly resolvedRole = computed(() => {
+    const role = this.role();
+    return role === undefined ? this.defaultRole : role;
   });
 }

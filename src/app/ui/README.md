@@ -197,10 +197,10 @@ people are picking rows out of.
 
 ## Known gaps
 
-The full list, with a build order, is in the root `README.md`. The short version:
-19 of Carbon's ~48 components exist, the forms are nearly complete, and the next
-thing worth building is not a form control — it is `Loading`, `Link`, `Tooltip`,
-`Breadcrumb` and `Tile`, which is what a real screen reaches for first.
+The full list, with a build order, is in the root `README.md` — kept in one place
+rather than summarized here, because a count repeated in two files is a count that
+goes stale in one of them. The short version: 30 of Carbon's ~48 components exist,
+and what is left is the long tail rather than anything a first screen reaches for.
 
 One note belongs here rather than there, because it is about the act of adding
 a component rather than about which one to add next:

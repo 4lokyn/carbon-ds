@@ -1,6 +1,6 @@
-import { Component, input, ViewEncapsulation } from '@angular/core';
+import { Component, input, signal, ViewEncapsulation } from '@angular/core';
 import { Icon } from '../icon/icon';
-import { NotificationBase } from './notification-base';
+import { DismissibleNotification, type NotificationVariant } from './notification-base';
 
 /**
  * Carbon's toast notification: a short, non-modal message that arrives over the
@@ -21,11 +21,12 @@ import { NotificationBase } from './notification-base';
   styleUrl: './notification.scss',
   host: {
     '[class]': 'hostClass()',
-    '[attr.role]': 'role()',
+    '[attr.role]': 'resolvedRole()',
   },
 })
-export class ToastNotification extends NotificationBase {
-  protected readonly variant = 'toast' as const;
+export class ToastNotification extends DismissibleNotification {
+  protected readonly variant = signal<NotificationVariant>('toast');
+  protected readonly defaultRole = 'status' as const;
 
   /**
    * The time the notification was sent, already formatted — a toast is not the

@@ -60,10 +60,13 @@ export {
   type MultiSelectOption,
   type SelectionFeedback,
 } from './multi-select/multi-select';
+export { ActionableNotification } from './notification/actionable-notification';
+export { Callout } from './notification/callout';
 export { InlineNotification } from './notification/inline-notification';
 export {
   type NotificationRole,
   type NotificationStatus,
+  type NotificationVariant,
 } from './notification/notification-base';
 export {
   NotificationService,

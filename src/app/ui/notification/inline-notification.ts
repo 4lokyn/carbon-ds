@@ -1,6 +1,6 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, signal, ViewEncapsulation } from '@angular/core';
 import { Icon } from '../icon/icon';
-import { NotificationBase } from './notification-base';
+import { DismissibleNotification, type NotificationVariant } from './notification-base';
 
 /**
  * Carbon's inline notification: the status of an action, shown in the flow it
@@ -20,9 +20,10 @@ import { NotificationBase } from './notification-base';
   styleUrl: './notification.scss',
   host: {
     '[class]': 'hostClass()',
-    '[attr.role]': 'role()',
+    '[attr.role]': 'resolvedRole()',
   },
 })
-export class InlineNotification extends NotificationBase {
-  protected readonly variant = 'inline' as const;
+export class InlineNotification extends DismissibleNotification {
+  protected readonly variant = signal<NotificationVariant>('inline');
+  protected readonly defaultRole = 'status' as const;
 }

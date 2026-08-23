@@ -1,8 +1,10 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import {
+  ActionableNotification,
   Button,
   type ButtonKind,
   type ButtonSize,
+  Callout,
   DS_BREADCRUMB,
   DS_OVERFLOW_MENU,
   DS_CHECKBOX,
@@ -45,7 +47,9 @@ const INITIAL_TAGS: readonly TagColor[] = ['blue', 'green', 'red', 'purple'];
 @Component({
   selector: 'app-root',
   imports: [
+    ActionableNotification,
     Button,
+    Callout,
     DatePicker,
     DateRangePicker,
     InlineLoading,
@@ -363,6 +367,28 @@ export class App {
       subtitle: 'Gone in five seconds, which is Carbon’s number for a timed toast.',
       timeout: TOAST_TIMEOUT,
     });
+  }
+
+  // The actionable notification takes focus when it appears, so the demo raises
+  // it the way an application would — in answer to something — rather than
+  // rendering it with the page and stealing focus on load.
+  protected readonly actionableOpen = signal(false);
+  protected readonly actionableInline = signal(false);
+  protected readonly actionableOutcome = signal('');
+
+  protected openActionable(): void {
+    this.actionableOutcome.set('');
+    this.actionableOpen.set(true);
+  }
+
+  protected retryDeployment(): void {
+    this.actionableOutcome.set('Retry pressed — focus is back on the button that opened it.');
+    this.actionableOpen.set(false);
+  }
+
+  protected dismissActionable(): void {
+    this.actionableOutcome.set('Dismissed — Escape and the close button both land here.');
+    this.actionableOpen.set(false);
   }
 
   protected openConfirm(): void {

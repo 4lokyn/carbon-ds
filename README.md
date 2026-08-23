@@ -52,6 +52,8 @@ npm test           # vitest, via @angular/build:unit-test
 | `MultiSelect` | count in the field, checkbox listbox, select-all, optional filter, Carbon's selection ordering |
 | `InlineNotification` | 4 statuses × high / low contrast, optional close |
 | `ToastNotification` + `NotificationService` | top-right stack, newest first, optional 5s timeout |
+| `ActionableNotification` | inline or toast, one action button, `role="alertdialog"` with a real focus trap |
+| `Callout` | loads with the page, never dismisses, no live region |
 | `OverflowMenu` | three-dot trigger, danger item, divider; `@angular/aria/menu` for the keyboard |
 | `Breadcrumb` | `nav` + `ol`, 2 sizes, current page, optional trailing slash |
 | `Tile` family | plain, clickable `<a>`, selectable on a real checkbox, expandable with a CSS-only reveal |
@@ -471,15 +473,18 @@ up when the boxes were measured:
   select-all row and an optional filter (which is Carbon's combo box shape).
   Select-all applies to the *filtered* rows and nothing else — the part
   implementations usually get wrong.
-- ~~**Notification.**~~ Built, in two of Carbon's four variants: `InlineNotification`
-  waits in the flow, `ToastNotification` arrives over it, and `NotificationService`
-  owns the stack, the placement and the optional timeout. Carbon's other two are
-  deliberately not in it. **Actionable** is not "a notification with a button" —
-  it grabs and traps focus until the user acts, which makes it an `alertdialog`
-  and a different component; building the button without the trap would look
-  right and behave wrong. **Callout** is the inverse case: it loads with the page,
-  never dismisses, and has no `aria-live` at all, so it shares the styling and
-  none of the behavior.
+- ~~**Notification.**~~ Built, in all four of Carbon's variants.
+  `InlineNotification` waits in the flow, `ToastNotification` arrives over it,
+  and `NotificationService` owns the stack, the placement and the optional
+  timeout. The other two are behavioral rather than visual, which is why they
+  were built last and separately. **`ActionableNotification`** is not "a
+  notification with a button" — it grabs and traps focus until the user acts,
+  which makes it an `alertdialog`: it names itself from its own heading, holds
+  focus until the action is taken or it is dismissed, and hands focus back to
+  whatever raised it. Building the button without the trap would look right and
+  behave wrong. **`Callout`** is the inverse case: it loads with the page, never
+  dismisses, and has no `aria-live` at all, so it shares the paint and none of
+  the behavior — no close button, no role, nothing to emit.
 - ~~**UI Shell.**~~ Built, and composed rather than configured — every piece is
   a separate element, so an app with no side nav simply does not write one. See
   ui/README.md for the two things that had to differ from Carbon's own markup.
@@ -496,7 +501,10 @@ person can tell a decision from an oversight.
 | | why not |
 |---|---|
 | `Notification` — `info-square`, `warning-alt` | Alternate icon treatments, not statuses. Carbon documents four statuses and we have four. |
-| `Notification` — Actionable, Callout | Actionable traps focus and is an `alertdialog`; Callout loads with the page and has no live region. Both are different components wearing the same paint. On the queue below. |
+| `NotificationService` — actionable toasts | Ours, not Carbon's: the service owns the stack and does the announcing through `LiveAnnouncer`, while an actionable notification owns focus and announces itself as a dialog. Two of those stacked is a focus question nobody has asked yet, so `ds-actionable-notification` is placed in the page instead. |
+| `Tile` — `light`, `hasRoundedCorners`, `decorator` | `light` is deprecated in Carbon v11 in favour of `Layer`, and this system has `Layer`. `hasRoundedCorners` is a v12 direction we have not taken anywhere else. `decorator` is the AI label slot, and there are no AI components here. |
+| `Tile` — `clicked`, `renderIcon` | `clicked` is a visited state Carbon paints but does not track for you; nothing here has asked for one. `renderIcon` is the corner glyph on a clickable tile — our tile projects its content, so the icon goes in the markup rather than through a prop, and it is unpositioned. Worth revisiting the moment a second caller wants it. |
+| `ActionableNotification` — `timeout` | Carbon accepts one and defaults it to 0. Auto-dismissing a notification that has trapped focus takes the focus with it and drops the user somewhere they did not ask to be. If it can time out, it did not need an action. |
 | `Tabs` — `dismissable` | Carbon puts a close button *inside* the tab. Aria owns the keyboard here, and a second focusable control inside a roving-focus item needs its own answer for how it is reached. Worth doing properly or not at all. |
 | `Modal` — `danger`, `passiveModal` | Neither has any CSS in `@carbon/styles`; both are React markup switches. Our footer is projected, so they are `kind="danger"` and "do not write a footer". |
 | `Search`, `MultiSelect` | Carbon splits each into two components (`ExpandableSearch`, `FilterableMultiSelect`). One component with a flag here — a composition choice, not a missing feature. |
@@ -506,20 +514,23 @@ person can tell a decision from an oversight.
 Names that differ from Carbon's, all for a stated reason, none of them silent:
 `heading` for `title` (a static `title` leaves a native tooltip), `status` for
 `kind`, `showCounter`/`maxLength` for `enableCounter`/`maxCount`,
-`offLabel`/`onLabel` for `labelA`/`labelB`, and `total: number | null` for
-`totalItems` + `pagesUnknown`.
+`offLabel`/`onLabel` for `labelA`/`labelB`, `actionLabel` for
+`actionButtonLabel` (to match the `closeLabel` beside it),
+`collapsedLabel`/`expandedLabel` for `tileCollapsedIconText`/
+`tileExpandedIconText`, `headingId` for `titleId`, and `total: number | null`
+for `totalItems` + `pagesUnknown`.
+
+One input has no Carbon counterpart at all: `ExpandableTile`'s `interactive`.
+Carbon's own "expandable with interactive" story puts a `Button` and a
+`TextInput` inside a tile that is itself a button, which is invalid markup and
+leaves the inner controls unreachable by keyboard. `interactive` hands the button
+role to the chevron alone instead.
 
 ### What is left, in the order worth building it
 
-27 of Carbon's ~48 components exist. The forms are nearly complete; the system
-around them is not, and the gap that bites first is not a form control.
-
-**Build these before any remaining input.** Each turns up on the first real
-screen anyone writes:
-
-| | why it comes first |
-|---|---|
-| `Tile` | Carbon's card |
+30 of Carbon's ~48 components exist. Notification is complete — all four of
+Carbon's variants — and so is the layer of the system that turns up on the first
+real screen anyone writes. What is left is the long tail.
 
 **The remaining form controls**, none of them urgent: `NumberInput` (the one
 with steppers — our `type="number"` is a passthrough and says so), `Slider`,
@@ -527,9 +538,11 @@ with steppers — our `type="number"` is a passthrough and says so), `Slider`,
 `Dropdown` (a styled listbox, where `ds-select` is the native one). `TimePicker`
 and `Slider` may never be needed.
 
-**The two notification variants left**, both behavioral rather than visual:
-`ActionableNotification` (focus trap, `role="alertdialog"`) and `Callout` (loads
-with the page, never dismisses, no live region). See the note above.
+**The one gap in a component that already exists:** Carbon's `RadioTile` and
+`TileGroup` — the single-select form of the tile, with a `<fieldset>`, a legend
+and one `name` across the group. What is built is the checkbox form, so "pick
+several" works and "pick one" does not. `RadioGroup` next door is the shape to
+copy.
 
 **Everything else**, roughly by how often it comes up: `Accordion`,
 `ProgressIndicator`, `ProgressBar`, `PageHeader`, `Menu` / `MenuButton` /

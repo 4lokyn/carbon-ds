@@ -284,3 +284,237 @@ $-statuses: (
     margin-inline-start: auto;
   }
 }
+
+// ─── Actionable ──────────────────────────────────────────────────────────────
+//
+// Not a layout of its own: it borrows `--inline` or `--toast` above and adds a
+// button. What it does need is its own arrangement of the pieces, because
+// Carbon's actionable markup is the same in both layouts — icon and text always
+// sit inside `__details` — while the plain toast puts its text there directly.
+// These rules come after the two variants on purpose; at equal specificity that
+// is what decides.
+
+.ds-notification--actionable {
+  // Both layouts pin the close button to the corner, and the toast keeps it
+  // there at every width — an actionable toast wraps its button onto a second
+  // row, and a close button in that flow would follow it down.
+  position: relative;
+  flex-wrap: wrap;
+  padding-inline-start: 0;
+
+  // The container itself takes focus, so it gets a ring like anything else that
+  // does. `:focus` rather than `:focus-visible`, matching the rest of the
+  // system, and inverse-aware because the default surface here is the dark one.
+  @include focus-ring-state($focus-inverse);
+
+  .ds-notification__details {
+    display: flex;
+    flex-grow: 1;
+
+    // The action button belongs on its own row under the text, and the row is
+    // claimed rather than left to chance: `flex-wrap` alone only wraps once the
+    // words happen to overflow, which makes the layout depend on the copy.
+    flex-basis: 100%;
+
+    // Right gutter wide enough to clear the absolutely positioned close button.
+    margin: 0 $spacing-09 0 rem(13px);
+  }
+
+  .ds-notification__icon {
+    // Centers the 20px glyph against the first line of text, which sits under
+    // 15px of padding. Same arithmetic as the plain inline notification.
+    margin-block-start: rem(14px);
+    margin-inline-end: $spacing-05;
+  }
+
+  .ds-notification__text {
+    display: flex;
+    flex-wrap: wrap;
+    padding: rem(15px) 0;
+  }
+
+  .ds-notification__heading {
+    margin-block-start: 0;
+    margin-inline-end: $spacing-02;
+  }
+
+  .ds-notification__subtitle {
+    margin-block: 0;
+  }
+
+  .ds-notification__close {
+    position: absolute;
+    margin-inline-start: 0;
+    inset-block-start: 0;
+    inset-inline-end: 0;
+  }
+}
+
+// From md the inline layout has room for the whole row, so it stops wrapping and
+// the close button rejoins the flow. The toast never does — it is 288px wide.
+@include breakpoint(md) {
+  .ds-notification--actionable:not(.ds-notification--toast) {
+    flex-wrap: nowrap;
+
+    .ds-notification__details {
+      // Back beside the button rather than above it, now that the row is wide
+      // enough for both.
+      flex-basis: auto;
+      margin: 0 rem(13px);
+    }
+
+    .ds-notification__close {
+      position: static;
+    }
+  }
+}
+
+.ds-notification--actionable.ds-notification--toast {
+  // 288px at every breakpoint, where a plain toast widens to 352px at `max`.
+  // Carbon pins the actionable one; the button below the text is what fixes the
+  // shape, so widening it would only stretch the line above the button.
+  width: rem(288px);
+
+  @include breakpoint(max) {
+    width: rem(288px);
+  }
+
+  .ds-notification__text {
+    // The extra 8px below is Carbon's: the action button sits under this block
+    // rather than beside it, and the gap is what keeps them from reading as one.
+    padding-block-end: rem(23px);
+  }
+
+  .ds-notification__caption {
+    padding-block-start: $spacing-06;
+  }
+}
+
+// ─── The action button ───────────────────────────────────────────────────────
+//
+// Carbon pairs ghost with the inline layout and tertiary with the toast, and
+// re-themes both: the surface under them is the inverse one by default, so a
+// button reading from the ordinary interactive tokens would be dark on dark.
+//
+// Every rule here is written one class deeper than the `.ds-btn--*` rule it
+// overrides. Equal specificity would leave it to stylesheet order, and the order
+// of two components' styles is not something this file can decide.
+
+.ds-notification__action.ds-btn {
+  flex-shrink: 0;
+}
+
+.ds-notification--actionable {
+  .ds-notification__action.ds-btn--ghost {
+    // 32px, and the indent clears the icon column so the button lines up with
+    // the text above it rather than with the accent bar.
+    min-height: rem(32px);
+    margin-block-end: $spacing-03;
+    margin-inline-start: $spacing-08;
+    color: $link-inverse;
+
+    @include breakpoint(md) {
+      margin: $spacing-03 0;
+    }
+
+    &:hover,
+    &:active {
+      background-color: $background-inverse-hover;
+      color: $link-inverse;
+    }
+
+    @include focus-ring-state($focus-inverse);
+  }
+
+  .ds-notification__action.ds-btn--tertiary {
+    min-height: rem(32px);
+    padding-inline: $spacing-05;
+    margin-block-end: $spacing-05;
+
+    // Left-aligned with the text, not with the icon: $spacing-07 of gutter plus
+    // the 20px glyph, less the 2px the accent bar has already taken.
+    margin-inline-start: calc(#{$spacing-07} + #{rem(20px)} - #{rem(2px)});
+    border-color: $notification-action-tertiary-inverse;
+    color: $notification-action-tertiary-inverse;
+
+    &:hover {
+      background-color: $notification-action-tertiary-inverse-hover;
+      color: $notification-action-tertiary-inverse-text;
+    }
+
+    &:active {
+      border-color: transparent;
+      background-color: $notification-action-tertiary-inverse-active;
+      color: $notification-action-tertiary-inverse-text;
+    }
+
+    @include focus-ring-state($focus-inverse);
+  }
+}
+
+// No close button means nothing is holding the trailing edge, so the action
+// button would sit flush against it. Carbon's own compensation, and its 8px.
+.ds-notification--actionable.ds-notification--hide-close-button .ds-notification__action.ds-btn {
+  margin-inline-end: $spacing-03;
+}
+
+// On the tinted surface the ordinary button tokens are right again — the only
+// thing that has to change back is the hover fill and the ring.
+.ds-notification--actionable.ds-notification--low-contrast {
+  .ds-notification__action.ds-btn--ghost {
+    color: $link-primary;
+
+    &:hover,
+    &:active {
+      background-color: $notification-action-hover;
+      color: $link-primary-hover;
+    }
+  }
+
+  .ds-notification__action.ds-btn--tertiary {
+    border-color: $button-tertiary;
+    color: $button-tertiary;
+
+    &:hover,
+    &:active {
+      background-color: $button-tertiary-hover;
+      color: $text-inverse;
+    }
+  }
+
+  .ds-notification__action.ds-btn {
+    @include focus-ring-state;
+  }
+
+  @include focus-ring-state;
+}
+
+// ─── Callout ─────────────────────────────────────────────────────────────────
+
+.ds-notification--callout {
+  // No cap and no fixed width. A callout is laid out with the content it belongs
+  // to, so its width is the container's business — the one variant of the four
+  // where that is true.
+  width: 100%;
+  min-height: rem(48px);
+  padding-inline: $spacing-05;
+
+  .ds-notification__icon {
+    // 11px against the callout's 12px of padding, for the same reason the inline
+    // notification uses 14px against 15px: the 20px glyph is centered on an 18px
+    // first line, not aligned to its top.
+    margin-block-start: rem(11px);
+    margin-inline-end: $spacing-05;
+  }
+
+  .ds-notification__text {
+    padding-block: $spacing-04;
+  }
+
+  // Deliberately without the 1px overlay border the low-contrast inline
+  // notification draws. @carbon/styles ships no callout CSS at all — the
+  // component is React markup over these same classes — so this is a decision
+  // rather than a port: a callout sits inside the content it belongs to, and an
+  // outline around it makes it read as an interruption, which is the one thing
+  // it is not.
+}

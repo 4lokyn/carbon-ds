@@ -1,0 +1,12 @@
+<ds-icon class="ds-notification__icon" [name]="icon()" [size]="20" />
+
+<div class="ds-notification__text">
+  <p class="ds-notification__heading" [attr.id]="headingId()">{{ heading() }}</p>
+
+  @if (subtitle()) {
+    <p class="ds-notification__subtitle">{{ subtitle() }}</p>
+  }
+
+  <!-- Carbon's callout is the one variant that expects links in its body. -->
+  <ng-content />
+</div>

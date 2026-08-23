@@ -1454,6 +1454,81 @@
         </div>
       </section>
 
+      <!-- ── Actionable notification ─────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Actionable notification</h2>
+        <p class="demo__note">
+          The variant with a button in it. Because the user has something to do here, it is a
+          <code>role="alertdialog"</code>: it takes focus when it appears, keeps it until the action
+          is taken or the notification is dismissed, and hands it back to whatever raised it.
+          <em>Esc</em> closes it too.
+        </p>
+
+        <div class="demo__row">
+          <button dsButton kind="tertiary" size="sm" (click)="openActionable()">Raise one</button>
+
+          <ds-toggle
+            label="Inline layout"
+            onLabel="Inline"
+            offLabel="Toast"
+            [(checked)]="actionableInline"
+          />
+        </div>
+
+        @if (actionableOpen()) {
+          <div class="demo__stack">
+            <ds-actionable-notification
+              status="error"
+              heading="Deployment failed"
+              subtitle="The cluster rejected the manifest. Check the image tag and retry."
+              actionLabel="Retry"
+              caption="11:24:07 AM"
+              [inline]="actionableInline()"
+              [lowContrast]="notificationLowContrast()"
+              (actionClicked)="retryDeployment()"
+              (closed)="dismissActionable()"
+            />
+          </div>
+        }
+
+        @if (actionableOutcome()) {
+          <p class="demo__note">{{ actionableOutcome() }}</p>
+        }
+
+        <p class="demo__note">
+          The button kind follows the layout rather than the caller: ghost inline, tertiary on a
+          toast. That is Carbon's pairing, and both are re-themed here because the surface under
+          them is the inverse one.
+        </p>
+      </section>
+
+      <!-- ── Callout ─────────────────────────────────────────────────────────── -->
+      <section class="demo__section">
+        <h2 class="demo__title">Callout</h2>
+        <p class="demo__note">
+          The fourth variant, and the quiet one. A callout loads with the page and cannot be
+          dismissed, so it has no close button, no timeout and no live region — announcing it would
+          interrupt a screen reader that is already reading the page it belongs to. Its width comes
+          from the container instead of from a breakpoint cap.
+        </p>
+
+        <ds-callout
+          status="info"
+          heading="This region is read-only"
+          subtitle="Resources here can be viewed but not changed."
+          [lowContrast]="notificationLowContrast()"
+        >
+          <a href="https://carbondesignsystem.com/components/notification/usage/">
+            Where to request write access
+          </a>
+        </ds-callout>
+
+        <p class="demo__note">
+          Links inside it are reached with Tab like any other content, which is the whole reason a
+          callout may hold them and a toast may not.
+        </p>
+      </section>
+
       <!-- ── Nested theme ────────────────────────────────────────────────────── -->
       <section class="demo__section">
         <h2 class="demo__title">Nested theme</h2>

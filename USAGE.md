@@ -340,6 +340,71 @@ Two Carbon rules that are not enforced in code and should be:
 - **Two lines, no more.** Longer than that and the message belongs somewhere you
   can link to.
 
+### When the user has to do something about it
+
+`ds-actionable-notification` is the inline or toast notification with one button
+in it. Because there is something to do, it is a `role="alertdialog"`: it takes
+focus when it appears, keeps it until the action is taken or the notification is
+dismissed, and hands focus back to whatever raised it. Escape closes it.
+
+```html
+@if (deployFailed()) {
+  <ds-actionable-notification
+    status="error"
+    heading="Deployment failed"
+    subtitle="The cluster rejected the manifest."
+    actionLabel="Retry"
+    (actionClicked)="retry()"
+    (closed)="deployFailed.set(false)"
+  />
+}
+```
+
+**Raise it, do not render it.** The `@if` is the point: it takes focus on
+arrival, so an actionable notification that is in the template from page load
+steals focus from the page. If it belongs to the page rather than to an event,
+you want a callout.
+
+**One button.** Two means the user is being asked to choose, and that is a modal.
+
+`[inline]="true"` swaps the toast shape for the inline one; the button kind
+follows the layout (ghost inline, tertiary on a toast) rather than the caller.
+
+`[trapFocus]="false"` turns the trap off, and if you reach for it, set `[role]`
+as well — without the trap this is a `status`, not an `alertdialog`, and saying
+otherwise misleads a screen reader.
+
+### When it is a condition rather than an event
+
+`ds-callout` is the fourth variant and the quiet one: it loads with the page and
+cannot be dismissed. No close button, no timeout, no live region — announcing it
+would interrupt a screen reader that is already reading the page it is part of.
+
+```html
+<ds-callout
+  status="info"
+  heading="This region is read-only"
+  subtitle="Resources here can be viewed but not changed."
+>
+  <a routerLink="/access">Request write access</a>
+</ds-callout>
+```
+
+Put it next to what it is about — above the form whose fields it constrains,
+inside the panel whose limits it states. Its width comes from the container
+rather than from a breakpoint cap, and it is the one variant that expects links
+in its body: they are reached with Tab like any other content.
+
+**Give the link something to be described by.** "Request write access" on its own
+tells a screen reader nothing about which access or why, so set `headingId` and
+point at it — this is what Carbon's `titleId` is for:
+
+```html
+<ds-callout headingId="read-only" heading="This region is read-only" …>
+  <a routerLink="/access" aria-describedby="read-only">Request write access</a>
+</ds-callout>
+```
+
 ## Shell
 
 Composed, not configured. Every piece is optional — an app with no side nav
