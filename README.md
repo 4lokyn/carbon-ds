@@ -548,6 +548,16 @@ longer do: Notification has all four of Carbon's, and Tile has all of its
 subcomponents bar the AI label. Nothing built is half-built. What is left is the
 long tail.
 
+Agreed on 2026-08-23, and worth keeping because the order is not arbitrary —
+each wave is grouped by what it borrows and how big it is:
+
+| wave | what | why together |
+|---|---|---|
+| ~~1~~ | ~~`ProgressBar`, `CopyButton`, `Dropdown`, single-select table rows~~ | done — small, and each unlocked something |
+| ~~2~~ | ~~`List`, `ContainedList`~~ | done |
+| **3** | `ContentSwitcher`, `NumberInput`, `PaginationNav`, `ProgressIndicator` | middling, independent, no shared parts |
+| **4** | `FileUploader`, then `TreeView` | each its own sitting; `TreeView` borrows nothing and is the largest thing left |
+
 **The remaining form controls**, none of them urgent: `NumberInput` (the one
 with steppers — our `type="number"` is a passthrough and says so),
 `ContentSwitcher`, and `FileUploader`.
