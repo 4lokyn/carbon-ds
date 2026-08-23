@@ -1,5 +1,5 @@
 // ═════════════════════════════════════════════════════════════════════════════
-//  DS facade — the ONLY point of contact with @carbon/*.
+//  The facade — the ONLY point of contact with @carbon/*.
 //
 //  Rule: components write `@use 'nine-am' as *;` and never import @carbon/* directly.
 //  When the token source changes — or we drop Carbon entirely — this file

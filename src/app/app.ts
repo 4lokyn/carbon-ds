@@ -28,7 +28,7 @@ import {
   DatePicker,
   DateRangePicker,
   displayAccessorFor,
-  type DsColumn,
+  type NineAmColumn,
   NINE_AM_RADIO_GROUP,
   NINE_AM_SHELL,
   Search,
@@ -330,7 +330,7 @@ export class App {
 
   // ── Accordion, and the table's own column model ──────────────────────────
   //
-  // These are `DsColumn` objects, the same shape `nine-am-table` takes, and the
+  // These are `NineAmColumn` objects, the same shape `nine-am-table` takes, and the
   // fields below are read with `displayAccessorFor` — the table's own accessor.
   // Nothing here is accordion-specific: a row folded into a list item is the
   // same data with a different shape around it, which is what makes a
@@ -348,11 +348,12 @@ export class App {
     { id: 'd3', name: 'cdn-purge', namespace: 'edge', status: 'stopped', replicas: 0, cpu: null },
   ] as const;
 
-  protected readonly deploymentColumns: readonly DsColumn<(typeof this.deployments)[number]>[] = [
-    { key: 'namespace', header: 'Namespace' },
-    { key: 'replicas', header: 'Replicas' },
-    { key: 'cpu', header: 'CPU', value: (row) => (row.cpu === null ? '—' : `${row.cpu}%`) },
-  ];
+  protected readonly deploymentColumns: readonly NineAmColumn<(typeof this.deployments)[number]>[] =
+    [
+      { key: 'namespace', header: 'Namespace' },
+      { key: 'replicas', header: 'Replicas' },
+      { key: 'cpu', header: 'CPU', value: (row) => (row.cpu === null ? '—' : `${row.cpu}%`) },
+    ];
 
   /** Open state keyed by row id, the way the table keys selection. */
   protected readonly openRows = signal<ReadonlySet<string>>(new Set(['d2']));
@@ -370,7 +371,7 @@ export class App {
   }
 
   protected field(
-    column: DsColumn<(typeof this.deployments)[number]>,
+    column: NineAmColumn<(typeof this.deployments)[number]>,
     row: (typeof this.deployments)[number],
   ): string {
     return String(displayAccessorFor(column)(row) ?? '');

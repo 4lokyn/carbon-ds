@@ -15,7 +15,7 @@ import { Checkbox } from '../checkbox/checkbox';
 import { Icon } from '../icon/icon';
 import type { IconName } from '../icon/icons';
 import { displayAccessorFor, nextSort, sortRows } from './table-sort';
-import type { DsColumn, DsSort, TableBreakpoint, TableSize } from './table-types';
+import type { NineAmColumn, NineAmSort, TableBreakpoint, TableSize } from './table-types';
 
 let nextTableId = 0;
 
@@ -60,7 +60,7 @@ const BREAKPOINTS: Record<TableBreakpoint, number> = {
   styleUrl: './table.scss',
 })
 export class Table<T> {
-  readonly columns = input.required<readonly DsColumn<T>[]>();
+  readonly columns = input.required<readonly NineAmColumn<T>[]>();
   readonly rows = input.required<readonly T[]>();
 
   /**
@@ -105,7 +105,7 @@ export class Table<T> {
   readonly loading = input(false, { transform: booleanAttribute });
   readonly skeletonRows = input(5);
 
-  readonly sort = model<DsSort | null>(null);
+  readonly sort = model<NineAmSort | null>(null);
 
   /**
    * Render `rows` in the given order and only emit `sort` changes — the caller
@@ -256,13 +256,13 @@ export class Table<T> {
     return this.displayRows().some((row) => keys.has(this.rowKey()(row))) && !this.allSelected();
   });
 
-  protected cellText(column: DsColumn<T>, row: T): string {
+  protected cellText(column: NineAmColumn<T>, row: T): string {
     const value = this.accessors().get(column.key)?.(row);
 
     return value == null ? '' : String(value);
   }
 
-  protected sortIcon(column: DsColumn<T>): IconName {
+  protected sortIcon(column: NineAmColumn<T>): IconName {
     const sort = this.sort();
 
     if (sort === null || sort.column !== column.key) {
@@ -272,7 +272,7 @@ export class Table<T> {
     return sort.direction === 'asc' ? 'arrow-up' : 'arrow-down';
   }
 
-  protected ariaSort(column: DsColumn<T>): 'ascending' | 'descending' | 'none' | null {
+  protected ariaSort(column: NineAmColumn<T>): 'ascending' | 'descending' | 'none' | null {
     if (column.sortable !== true) {
       return null;
     }
@@ -286,7 +286,7 @@ export class Table<T> {
     return sort.direction === 'asc' ? 'ascending' : 'descending';
   }
 
-  protected toggleSort(column: DsColumn<T>): void {
+  protected toggleSort(column: NineAmColumn<T>): void {
     if (column.sortable !== true) {
       return;
     }

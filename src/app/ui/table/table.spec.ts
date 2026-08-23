@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Table } from './table';
-import type { DsColumn, DsSort } from './table-types';
+import type { NineAmColumn, NineAmSort } from './table-types';
 
 interface Widget {
   readonly id: string;
@@ -34,12 +34,12 @@ const WIDGETS: readonly Widget[] = [
 })
 class Host {
   readonly rows = signal(WIDGETS);
-  readonly sort = signal<DsSort | null>(null);
+  readonly sort = signal<NineAmSort | null>(null);
   readonly selection = signal<readonly Widget[]>([]);
 
   readonly rowKey = (row: Widget): string => row.id;
 
-  readonly columns: readonly DsColumn<Widget>[] = [
+  readonly columns: readonly NineAmColumn<Widget>[] = [
     { key: 'name', header: 'Name', sortable: true },
     { key: 'qty', header: 'Qty', sortable: true, align: 'end' },
     { key: 'note', header: 'Note', value: () => 'static' },
@@ -246,7 +246,7 @@ describe('Table', () => {
     class LoadingHost {
       readonly rows = WIDGETS;
       readonly rowKey = (row: Widget): string => row.id;
-      readonly columns: readonly DsColumn<Widget>[] = [{ key: 'name', header: 'Name' }];
+      readonly columns: readonly NineAmColumn<Widget>[] = [{ key: 'name', header: 'Name' }];
     }
 
     const fixture = TestBed.createComponent(LoadingHost);
@@ -310,7 +310,7 @@ class FoldHost {
     { id: 'b', name: 'billing', region: 'us-east', seats: 2 },
   ];
 
-  readonly columns: readonly DsColumn<Plan>[] = [
+  readonly columns: readonly NineAmColumn<Plan>[] = [
     { key: 'name', header: 'Name' },
     { key: 'region', header: 'Region' },
     { key: 'seats', header: 'Seats' },

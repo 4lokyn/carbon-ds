@@ -1,23 +1,11 @@
-import {
-  booleanAttribute,
-  Component,
-  computed,
-  input,
-  ViewEncapsulation,
-} from '@angular/core';
+import { booleanAttribute, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 /**
  * Carbon button kinds. `tertiary` is the outlined one, `ghost` the lowest emphasis.
  * Carbon's guidance: exactly one primary per view.
  */
 export type ButtonKind =
-  | 'primary'
-  | 'secondary'
-  | 'tertiary'
-  | 'ghost'
-  | 'danger'
-  | 'danger-tertiary'
-  | 'danger-ghost';
+  'primary' | 'secondary' | 'tertiary' | 'ghost' | 'danger' | 'danger-tertiary' | 'danger-ghost';
 
 /**
  * Carbon's size scale: 24 / 32 / 40 / 48 / 64 / 80 px.
@@ -34,7 +22,7 @@ export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
  * `disabled` property, implicit `type=submit` — instead of us reimplementing them.
  * No headless primitive needed here: a button is already a button.
  *
- * Encapsulation is None across the whole DS. See ui/README.md for why.
+ * Encapsulation is None across the whole system. See ui/README.md for why.
  */
 @Component({
   selector: 'button[nineAmButton]',
@@ -70,11 +58,7 @@ export class Button {
   // One computed string rather than several [class.x] bindings — a single source
   // of truth for the host class list, and easier to read in devtools.
   protected readonly hostClass = computed(() => {
-    const classes = [
-      'nine-am-btn',
-      `nine-am-btn--${this.kind()}`,
-      `nine-am-btn--${this.size()}`,
-    ];
+    const classes = ['nine-am-btn', `nine-am-btn--${this.kind()}`, `nine-am-btn--${this.size()}`];
 
     if (this.fullWidth()) {
       classes.push('nine-am-btn--full');

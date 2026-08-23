@@ -8,8 +8,8 @@ import {
 } from '@angular/core';
 import {
   Button,
-  type DsColumn,
-  type DsSort,
+  type NineAmColumn,
+  type NineAmSort,
   Icon,
   Pagination,
   Search,
@@ -443,7 +443,7 @@ export class ServicesTable {
   private readonly all = signal<readonly Service[]>(SERVICES);
 
   protected readonly filter = signal('');
-  protected readonly sort = signal<DsSort | null>({
+  protected readonly sort = signal<NineAmSort | null>({
     column: 'name',
     direction: 'asc',
   });
@@ -465,7 +465,7 @@ export class ServicesTable {
   protected readonly countLabel = (count: number): string =>
     `${count} ${count === 1 ? 'service' : 'services'} selected`;
 
-  protected readonly columns = computed<readonly DsColumn<Service>[]>(() => [
+  protected readonly columns = computed<readonly NineAmColumn<Service>[]>(() => [
     { key: 'name', header: 'Name', sortable: true },
     { key: 'namespace', header: 'Namespace', sortable: true },
     {

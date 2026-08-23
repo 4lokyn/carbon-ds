@@ -23,10 +23,22 @@ components later, it was **2003 `ds-`, 197 `dsCamel` and 56 `DS_` — 2285
 replacements across 121 files.** The warning that it doubles if you wait was, if
 anything, mild.
 
-What the prediction got right: the specs caught the miss. Exactly one
-substitution slipped through every anchored rule — `expect(tag.tagName).toBe(
-'DS-TAG')`, uppercase because `tagName` is, and a case no pattern covered.
-Nothing else in the build, the type checker or stylelint would have found it.
+**Two escapes, not one, and the second is the instructive one.** The first was
+`expect(tag.tagName).toBe('DS-TAG')` — uppercase because `tagName` is — and a
+spec caught it within the hour, which is what this file predicted.
+
+The second took a day and a user's question to surface: **64 occurrences of
+`Ds` with a capital D and a lowercase s** — `DsColumn`, `DsSort`, `DsTab`,
+`DsTabs`, `DsTabList`, `DsTabPanel`. The rules covered `ds-`, `dsCamel`, `DS_`
+and `DS-` and simply had no case for that one.
+
+Nothing was ever going to catch it. A type renamed consistently still compiles,
+the tests still pass, stylelint has no opinion about TypeScript identifiers, and
+the app renders exactly as before. It was only visible by reading the public API,
+which is what the user did. The lesson for the next sweep of this kind is to
+enumerate the case variants *first* — `foo-`, `fooBar`, `FooBar`, `FOO_`, `FOO-`,
+bare `foo` — and grep each one to zero, rather than writing the rules that seem
+obvious and trusting the build to find the rest.
 
 What it did not mention, and what actually needed care: the replacement has to
 be anchored on a word boundary. A bare `ds-` → `nine-am-` also rewrites Carbon's

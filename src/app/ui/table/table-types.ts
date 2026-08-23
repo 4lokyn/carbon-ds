@@ -2,7 +2,7 @@ import type { TemplateRef } from '@angular/core';
 
 export type SortDirection = 'asc' | 'desc';
 
-export interface DsSort {
+export interface NineAmSort {
   readonly column: string;
   readonly direction: SortDirection;
 }
@@ -25,7 +25,7 @@ export type TableBreakpoint = 'sm' | 'md' | 'lg' | 'xlg' | 'max';
  * only when the cell needs markup — a tag, a link, a button. That is the whole
  * bet of this API: the common case should not cost eight lines of template.
  */
-export interface DsColumn<T> {
+export interface NineAmColumn<T> {
   /**
    * Stable id. Used as the sort key, as the `@for` track key, and — when `value`
    * is omitted — as the property name to read off the row.

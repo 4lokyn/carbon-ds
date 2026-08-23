@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { Tab, TabList, TabPanel, Tabs } from '@angular/aria/tabs';
 
-/** Carbon's two tab styles. See `variant` on `DsTabs`. */
+/** Carbon's two tab styles. See `variant` on `NineAmTabs`. */
 export type TabsVariant = 'line' | 'contained';
 
 /** 32 / 40 / 48px. `line` defaults to md, `contained` to lg. */
@@ -38,7 +38,7 @@ export type TabsSize = 'sm' | 'md' | 'lg';
   hostDirectives: [Tabs],
   host: { '[class]': 'hostClass()' },
 })
-export class DsTabs {
+export class NineAmTabs {
   /**
    * `line` — labels with a rule under the selected one. The default, and right
    * for tabs that switch a view inside a page.
@@ -89,7 +89,7 @@ export class DsTabs {
   ],
   host: { class: 'nine-am-tab-list' },
 })
-export class DsTabList {}
+export class NineAmTabList {}
 
 @Component({
   selector: '[nineAmTab]',
@@ -104,7 +104,7 @@ export class DsTabList {}
     '[class.nine-am-tab--disabled]': 'tab.disabled()',
   },
 })
-export class DsTab {
+export class NineAmTab {
   protected readonly tab = inject(Tab);
 }
 
@@ -118,9 +118,9 @@ export class DsTab {
     '[class.nine-am-tab-panel--hidden]': '!panel.visible()',
   },
 })
-export class DsTabPanel {
+export class NineAmTabPanel {
   protected readonly panel = inject(TabPanel);
 }
 
 /** Import this in a consumer instead of the four classes one by one. */
-export const NINE_AM_TABS = [DsTabs, DsTabList, DsTab, DsTabPanel] as const;
+export const NINE_AM_TABS = [NineAmTabs, NineAmTabList, NineAmTab, NineAmTabPanel] as const;

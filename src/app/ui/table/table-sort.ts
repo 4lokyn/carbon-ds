@@ -1,4 +1,4 @@
-import type { DsColumn, DsSort, SortDirection } from './table-types';
+import type { NineAmColumn, NineAmSort, SortDirection } from './table-types';
 
 type CellValue = string | number | null | undefined;
 
@@ -12,14 +12,14 @@ const collator = new Intl.Collator(undefined, {
 });
 
 /** Reads the property named by `key`. The fallback when nothing else is given. */
-function keyReader<T>(column: DsColumn<T>): (row: T) => CellValue {
+function keyReader<T>(column: NineAmColumn<T>): (row: T) => CellValue {
   // The cast is the price of letting `key` be a plain string rather than
-  // `keyof T` — see the note on DsColumn.key.
+  // `keyof T` — see the note on NineAmColumn.key.
   return (row) => (row as Record<string, unknown>)[column.key] as CellValue;
 }
 
 /** What the cell renders. */
-export function displayAccessorFor<T>(column: DsColumn<T>): (row: T) => CellValue {
+export function displayAccessorFor<T>(column: NineAmColumn<T>): (row: T) => CellValue {
   return column.value ?? keyReader(column);
 }
 
@@ -30,7 +30,7 @@ export function displayAccessorFor<T>(column: DsColumn<T>): (row: T) => CellValu
  * formatted string and gives no `sortBy` sorts on that string. That is usually
  * fine for text and wrong for anything formatted — hence `sortBy`.
  */
-export function sortAccessorFor<T>(column: DsColumn<T>): (row: T) => CellValue {
+export function sortAccessorFor<T>(column: NineAmColumn<T>): (row: T) => CellValue {
   return column.sortBy ?? column.value ?? keyReader(column);
 }
 
@@ -43,7 +43,7 @@ function isEmpty(value: CellValue): boolean {
 
 /** Builds a comparator with the direction already baked in. */
 export function comparatorFor<T>(
-  column: DsColumn<T>,
+  column: NineAmColumn<T>,
   direction: SortDirection,
 ): (a: T, b: T) => number {
   const sign = direction === 'asc' ? 1 : -1;
@@ -85,8 +85,8 @@ export function comparatorFor<T>(
 /** Returns a sorted copy. Never mutates the input — it may be a signal's value. */
 export function sortRows<T>(
   rows: readonly T[],
-  columns: readonly DsColumn<T>[],
-  sort: DsSort | null,
+  columns: readonly NineAmColumn<T>[],
+  sort: NineAmSort | null,
 ): readonly T[] {
   if (!sort) {
     return rows;
@@ -109,7 +109,7 @@ export function sortRows<T>(
  * The third state matters. Without it there is no way back to the order the
  * server sent, which for a lot of lists is itself meaningful (most recent first).
  */
-export function nextSort(current: DsSort | null, key: string): DsSort | null {
+export function nextSort(current: NineAmSort | null, key: string): NineAmSort | null {
   if (current === null || current.column !== key) {
     return { column: key, direction: 'asc' };
   }

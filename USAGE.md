@@ -9,7 +9,7 @@ Everything comes from one place. Never reach into a component folder — the fil
 layout is free to change, the barrel is not.
 
 ```ts
-import { Button, Input, Table, type DsColumn } from './ui';
+import { Button, Input, Table, type NineAmColumn } from './ui';
 ```
 
 Components are standalone. Put them in a component's `imports`:
@@ -140,7 +140,7 @@ reads a spaced en dash, em dash, hyphen or "to" back.
 Columns are data, not templates — a text column is one line.
 
 ```ts
-readonly columns: DsColumn<Service>[] = [
+readonly columns: NineAmColumn<Service>[] = [
   { key: 'name', header: 'Name', sortable: true },
   { key: 'cpu', header: 'CPU', sortable: true,
     value: (r) => r.cpu === null ? '' : `${r.cpu}%`,
@@ -507,7 +507,7 @@ time it is asked for".
 ### Folding a table row into one
 
 The accordion takes no data of its own, which is the point: a row folded into a
-list item is the same `DsColumn` model the table takes, read with the table's own
+list item is the same `NineAmColumn` model the table takes, read with the table's own
 `displayAccessorFor`.
 
 ```html

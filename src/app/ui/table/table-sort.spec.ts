@@ -1,5 +1,5 @@
 import { nextSort, sortRows } from './table-sort';
-import type { DsColumn } from './table-types';
+import type { NineAmColumn } from './table-types';
 
 interface Row {
   readonly name: string;
@@ -7,9 +7,9 @@ interface Row {
   readonly rank: string;
 }
 
-const nameColumn: DsColumn<Row> = { key: 'name', header: 'Name', sortable: true };
-const sizeColumn: DsColumn<Row> = { key: 'size', header: 'Size', sortable: true };
-const plainColumn: DsColumn<Row> = { key: 'rank', header: 'Rank' };
+const nameColumn: NineAmColumn<Row> = { key: 'name', header: 'Name', sortable: true };
+const sizeColumn: NineAmColumn<Row> = { key: 'size', header: 'Size', sortable: true };
+const plainColumn: NineAmColumn<Row> = { key: 'rank', header: 'Rank' };
 
 const columns = [nameColumn, sizeColumn, plainColumn];
 
@@ -123,7 +123,7 @@ describe('sortRows', () => {
   });
 
   it('uses a custom comparator when the column supplies one', () => {
-    const ranked: DsColumn<Row> = {
+    const ranked: NineAmColumn<Row> = {
       key: 'rank',
       header: 'Rank',
       sortable: true,
@@ -141,7 +141,7 @@ describe('sortRows', () => {
   });
 
   it('sorts on sortBy in preference to value and key', () => {
-    const column: DsColumn<Row> = {
+    const column: NineAmColumn<Row> = {
       key: 'name',
       header: 'Name',
       sortable: true,
@@ -161,7 +161,7 @@ describe('sortRows', () => {
   it('judges emptiness from sortBy, not from the formatted value', () => {
     // Mirrors the CPU column in the demo: displays an em dash for a missing
     // reading, which is not an empty string, so emptiness has to come from sortBy.
-    const column: DsColumn<Row> = {
+    const column: NineAmColumn<Row> = {
       key: 'size',
       header: 'CPU',
       sortable: true,
@@ -188,7 +188,7 @@ describe('sortRows', () => {
     // nullable numeric comparator, and a NaN result makes Array.sort emit
     // arbitrary order for the ENTIRE array. Emptiness is settled before `compare`
     // runs, so this comparator only ever sees numbers.
-    const naive: DsColumn<Row> = {
+    const naive: NineAmColumn<Row> = {
       key: 'size',
       header: 'Size',
       sortable: true,
@@ -223,7 +223,7 @@ describe('sortRows', () => {
   });
 
   it('clamps a NaN comparator result instead of letting it scramble the array', () => {
-    const broken: DsColumn<Row> = {
+    const broken: NineAmColumn<Row> = {
       key: 'size',
       header: 'Size',
       sortable: true,
@@ -242,7 +242,7 @@ describe('sortRows', () => {
   });
 
   it('reads a value function in preference to the key', () => {
-    const reversed: DsColumn<Row> = {
+    const reversed: NineAmColumn<Row> = {
       key: 'name',
       header: 'Name',
       sortable: true,

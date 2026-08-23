@@ -105,10 +105,10 @@ export {
 export { Select } from './select/select';
 export {
   NINE_AM_TABS,
-  DsTab,
-  DsTabList,
-  DsTabPanel,
-  DsTabs,
+  NineAmTab,
+  NineAmTabList,
+  NineAmTabPanel,
+  NineAmTabs,
   type TabsSize,
   type TabsVariant,
 } from './tabs/tabs';
@@ -124,8 +124,8 @@ export {
 } from './table/table-sort';
 export {
   type CellAlign,
-  type DsColumn,
-  type DsSort,
+  type NineAmColumn,
+  type NineAmSort,
   type SortDirection,
   type TableSize,
 } from './table/table-types';
