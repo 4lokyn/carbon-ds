@@ -67,6 +67,32 @@
       />
     }
 
+    <!-- Outside the listbox, not inside it, and both reasons matter. A
+         `role="listbox"` may only own options, so a button in there is invalid
+         ARIA; and while it holds focus the listbox would still count as focused,
+         so ng-primitives kept marking an option active and two rows drew a focus
+         ring at once. It selects the other options rather than being one. -->
+    @if (selectAll() && visible().length) {
+      <div
+        class="nine-am-multi-select__item nine-am-multi-select__item--select-all"
+        role="button"
+        tabindex="0"
+        [attr.aria-pressed]="allVisibleSelected()"
+        (click)="toggleAll()"
+        (keydown.enter)="toggleAll()"
+        (keydown.space)="$event.preventDefault(); toggleAll()"
+      >
+        <nine-am-checkbox
+          class="nine-am-multi-select__check"
+          [label]="selectAllLabel()"
+          hideLabel
+          [checked]="allVisibleSelected()"
+          [indeterminate]="someVisibleSelected()"
+        />
+        <span class="nine-am-multi-select__item-text">{{ selectAllLabel() }}</span>
+      </div>
+    }
+
     <div
       class="nine-am-multi-select__list"
       ngpListbox
@@ -76,29 +102,6 @@
       (ngpListboxValueChange)="selected.set($event)"
       [attr.aria-label]="label()"
     >
-      <!-- Not a listbox option: it selects the other options rather than
-           being one, so giving it a value would put it in the model. -->
-      @if (selectAll() && visible().length) {
-        <div
-          class="nine-am-multi-select__item nine-am-multi-select__item--select-all"
-          role="button"
-          tabindex="0"
-          [attr.aria-pressed]="allVisibleSelected()"
-          (click)="toggleAll()"
-          (keydown.enter)="toggleAll()"
-          (keydown.space)="$event.preventDefault(); toggleAll()"
-        >
-          <nine-am-checkbox
-            class="nine-am-multi-select__check"
-            [label]="selectAllLabel()"
-            hideLabel
-            [checked]="allVisibleSelected()"
-            [indeterminate]="someVisibleSelected()"
-          />
-          <span class="nine-am-multi-select__item-text">{{ selectAllLabel() }}</span>
-        </div>
-      }
-
       @for (option of visible(); track option.value) {
         <div
           class="nine-am-multi-select__item"

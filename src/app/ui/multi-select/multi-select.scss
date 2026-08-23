@@ -239,9 +239,11 @@
   border-block-start-color: transparent;
 }
 
-// The select-all row draws a rule underneath itself as well, which Carbon has no
-// equivalent for because the row is ours. Same treatment, same reason.
-.nine-am-multi-select__item--select-all[data-active] {
+// The select-all row draws a rule underneath itself as well, and it needs the
+// same treatment for the same reason. `:focus` rather than `[data-active]`,
+// which it never gets: it is not a listbox option, so ng-primitives does not
+// track it — it is an ordinary button holding real focus.
+.nine-am-multi-select__item--select-all:focus {
   border-block-end-color: transparent;
 }
 
